@@ -278,7 +278,7 @@
   }
   .cat-scroll::-webkit-scrollbar{display:none;}
   .cat-chip{
-    display:flex; align-items:center;
+    display:flex; align-items:center; gap:6px;
     flex-shrink:0;
     padding:6px 2px;
     font-family:'Oswald', 'Inter', sans-serif;
@@ -290,31 +290,25 @@
     cursor:pointer;
     white-space:nowrap;
   }
+  .cat-chip svg{width:15px;height:15px; flex-shrink:0;}
   .cat-chip:hover{border-bottom-color:var(--accent); color:var(--ink);}
   .cat-chip + .cat-chip{margin-left:22px;}
-  .cat-chip .dot{display:none;}
 
   /* ---------- hero ----------
-     BikeOne's own site opens on a full-bleed, dark, cinematic workshop/product
-     photo with white overlay type — reproduced here as a full-bleed hatched
-     placeholder with a dark scrim, instead of the boxed hero card. */
+     Full-bleed campaign photo (foggy sunrise ride, Northern-German flatland)
+     with a dark scrim for text legibility, instead of a boxed hero card. */
   .hero{ position:relative; }
   .hero-inner{
     position:relative;
     min-height:400px;
     display:flex; align-items:flex-end;
     background-color:var(--hero-bg);
-    background-image:var(--hatch), linear-gradient(0deg, var(--hero-bg) 0%, rgba(20,18,16,.35) 55%, rgba(20,18,16,.15) 100%);
+    background-image:
+      linear-gradient(0deg, var(--hero-bg) 0%, rgba(18,16,14,.45) 45%, rgba(18,16,14,.1) 100%),
+      url('Gemini_Generated_Image_lq5w8ilq5w8ilq5w.jpg');
+    background-size:cover;
+    background-position:center 65%;
     overflow:hidden;
-  }
-  .hero-inner .tag{ background:var(--hero-bg); color:var(--hero-muted); }
-  .hero-media{
-    position:absolute; inset:0;
-    z-index:0;
-    border:none; border-radius:0;
-    background-color:var(--hero-bg);
-    color:var(--hero-muted);
-    opacity:.6;
   }
   .hero-copy{
     position:relative; z-index:1;
@@ -528,7 +522,7 @@
     text-decoration:none; color:var(--ink);
   }
   .drawer-list a:hover{background:var(--surface-2);}
-  .drawer-list .dot{width:8px;height:8px;border-radius:2px;background:var(--line-strong);}
+  .drawer-list a svg{width:19px;height:19px; flex-shrink:0; color:var(--ink-muted);}
   .drawer-foot{margin-top:auto; padding:16px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-faint);}
 
   @media (min-width:640px){
@@ -568,11 +562,12 @@
     </button>
   </div>
   <ul class="drawer-list">
-    <li><a href="#cats"><span class="dot"></span> Rennrad</a></li>
-    <li><a href="#cats"><span class="dot"></span> Gravel</a></li>
-    <li><a href="#cats"><span class="dot"></span> Zubehör</a></li>
-    <li><a href="#cats"><span class="dot"></span> Komponenten</a></li>
-    <li><a href="#cats"><span class="dot"></span> Bekleidung</a></li>
+    <li><a href="#cats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M5.5 17.5 10 8h4l4.5 9.5M10 8h3.5M8.5 17.5h10"/></svg>Rennrad</a></li>
+    <li><a href="#cats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.8"/><circle cx="5.5" cy="17.5" r="1.5"/><circle cx="18.5" cy="17.5" r="3.8"/><circle cx="18.5" cy="17.5" r="1.5"/><path d="M5.5 17.5 10 8h4l4.5 9.5M10 8h3.5M8.5 17.5h10"/></svg>Gravel</a></li>
+    <li><a href="#cats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c0-5 3.5-9 8-9s8 4 8 9"/><path d="M4 14h16v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M9 5.5V9M12 5V9M15 5.5V9"/></svg>Zubehör</a></li>
+    <li><a href="#cats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.6"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg>Komponenten</a></li>
+    <li><a href="#cats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4 4 7l2 3 2-1.5V20h8V8.5L18 10l2-3-4-3-2 2h-4z"/></svg>Bekleidung</a></li>
+    <li><a href="#cats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2-2z"/></svg>Werkstatt/Service</a></li>
   </ul>
   <div class="drawer-foot mono">[ MENÜ — PLATZHALTER-NAVIGATION ]<br>Werkstatt · Bikefitting · Filialen</div>
 </div>
@@ -639,18 +634,17 @@
 
 <nav class="categories" id="cats">
   <div class="cat-scroll">
-    <div class="cat-chip"><span class="dot"></span>Rennrad</div>
-    <div class="cat-chip"><span class="dot"></span>Gravel</div>
-    <div class="cat-chip"><span class="dot"></span>Zubehör</div>
-    <div class="cat-chip"><span class="dot"></span>Komponenten</div>
-    <div class="cat-chip"><span class="dot"></span>Bekleidung</div>
+    <div class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M5.5 17.5 10 8h4l4.5 9.5M10 8h3.5M8.5 17.5h10"/></svg>Rennrad</div>
+    <div class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.8"/><circle cx="5.5" cy="17.5" r="1.5"/><circle cx="18.5" cy="17.5" r="3.8"/><circle cx="18.5" cy="17.5" r="1.5"/><path d="M5.5 17.5 10 8h4l4.5 9.5M10 8h3.5M8.5 17.5h10"/></svg>Gravel</div>
+    <div class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14c0-5 3.5-9 8-9s8 4 8 9"/><path d="M4 14h16v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M9 5.5V9M12 5V9M15 5.5V9"/></svg>Zubehör</div>
+    <div class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.6"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg>Komponenten</div>
+    <div class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4 4 7l2 3 2-1.5V20h8V8.5L18 10l2-3-4-3-2 2h-4z"/></svg>Bekleidung</div>
+    <div class="cat-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2-2z"/></svg>Werkstatt/Service</div>
   </div>
 </nav>
 
 <section class="hero">
   <div class="hero-inner">
-    <span class="tag">[ Hero — Vollflächiges Werkstattfoto ]</span>
-    <div class="hero-media placeholder-img">Bildmotiv 1920×1080 · Werkstatt / Bike-Fitting-Session, Oldenburg</div>
     <div class="hero-copy">
       <div class="hero-eyebrow">Herbst-Saison 2026</div>
       <h1>Dein Bike beginnt mit einem Gespräch.</h1>
