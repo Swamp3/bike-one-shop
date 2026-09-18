@@ -28,6 +28,12 @@ At launch we support card (Visa/Mastercard) and PayPal, both handled natively th
 
 Angular runs with server-side rendering (`@angular/ssr`) rather than pure client-side rendering, so Google and the Merchant Center feed crawler receive fully-rendered HTML instead of an empty shell. Paired with schema.org `Product` structured data, canonical URLs, and a generated `sitemap.xml` for product/category pages, per the Google Shopping eligibility requirement in [planning/2-Product_Requirements/questions.md](../2-Product_Requirements/questions.md).
 
+## Frontend architecture / CSS conventions
+
+Prefer container queries (`@container`) over media queries for component-level responsive behavior. A component (product card, filter panel, store-selector, etc.) should adapt to the width of its own container, not the viewport — this is what lets the same component work correctly whether it's rendered full-width on a page or embedded narrow inside a sidebar (e.g. a cart summary), which media queries can't do since they only see the viewport. Media queries stay fine for page-level layout shifts (e.g. switching a page from a single column to a sidebar+content grid).
+
+Build every reusable piece of UI — buttons, cards, common layouts (sidebar+content, tab/step nav, etc.) — as a standalone, reusable Angular component, not one-off markup duplicated per page. This is what the [Click & Collect store-selector wireframe](../../wireframes/click-collect-filiale.html) demonstrated: one component definition, mounted both as a full standalone page and embedded in a narrower checkout context, adapting via its own container query rather than needing two different implementations.
+
 ## Hosting — open
 
 3-stage setup decided: dev / staging / prod, dockerized. Provider not yet decided — leaning toward a managed cloud (AWS or Azure) for security, plus interest in a managed Shopware host (e.g. mittwald) instead of self-managing PHP/MySQL/Redis/OpenSearch. Still needs a final pick. Constraints that narrow the field:
