@@ -7,7 +7,7 @@
 | 1. Market & competitor research                    | ✅ Done         | **Gemini**                                         | Huge context ingests many pages/reviews at once; strong web grounding                                  |
 | 2. Product requirements / project plan             | 🟢 Started, not blocking | **Claude**                               | Structured long-form reasoning, Projects + Memory keep it consistent                                   |
 | 3. Architecture & tech stack decisions             | 🟢 Started, not blocking | **Claude**                               | Trade-off reasoning, Opus for the hard calls                                                           |
-| 4. UI/UX wireframes & visual concepts              | ⚪ Open         | **Claude** (Artifacts) + Gemini for image concepts | Claude renders interactive mockups; Gemini strong on image gen                                         |
+| 4. UI/UX wireframes & visual concepts              | 🟢 Started, not blocking | **Claude** (Artifacts) + Gemini for image concepts | Claude renders interactive mockups; Gemini strong on image gen                                         |
 | 5. Database schema                                 | ⚪ Open         | **Claude**                                         | Precision + explainable reasoning                                                                      |
 | 6. Backend build (API, business logic, payments)   | ⚪ Open         | **Claude Code**                                    | Agentic — writes, runs, debugs in your actual repo                                                     |
 | 7. Frontend build (storefront, cart, checkout)     | ⚪ Open         | **Claude Code**                                    | Same repo continuity, iterates with you                                                                |
@@ -25,9 +25,10 @@ Status legend:
 - ⚪ Open — not started
 - ⬛ N/A (not applicable — fresh build, no legacy codebase to onboard)
 
-Detail on the two "Started" phases:
+Detail on the three "Started" phases:
 - **Phase 2** — most open questions answered inline in [2-Product_Requirements/questions.md](2-Product_Requirements/questions.md); the actual product requirements doc + project plan write-up is still missing, but every downstream phase (3-7) has already been drawing directly on the answered questions, so the missing write-up is a documentation gap, not a blocker.
 - **Phase 3** — payment provider, frontend framework, shop system, backend/Wawi integration, auth approach, payment methods, and SEO rendering strategy are decided in [3-Architecture_Tech_Stack/decisions.md](3-Architecture_Tech_Stack/decisions.md); local dev environment is specced in [3-Architecture_Tech_Stack/local-dev-setup.md](3-Architecture_Tech_Stack/local-dev-setup.md) and doesn't need the hosting pick to start. Only the hosting provider is still open — it gates phase 10 (deployment) but not phases 4-9, which can proceed against local Docker regardless of which cloud is picked.
+- **Phase 4** — six interactive, mobile-first HTML wireframes covering the full customer journey live in [wireframes/](../wireframes/): homepage, Gravelbikes category/listing, a product detail page, the cart + 4-step checkout, a reusable Click & Collect store-selector component, and the customer account area. All share one design system (dark header, Oswald/Inter/JetBrains Mono, category icons) refined against Gemini-generated moodboards and a real campaign photo now used on the homepage hero. The brand accent color is still an open call — a "Premium Multi-Brand Hub" blue direction from the moodboards was prototyped and then reverted back to the original red pending an actual decision — everything else in this phase is settled enough for phase 5+ to build against.
 
 ## How to actually work
 
