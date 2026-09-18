@@ -1,0 +1,840 @@
+<title>Bike One Produktseite Wireframe</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --bg:#f8f9fa;
+    --surface:#ffffff;
+    --surface-2:#f1f3f5;
+    --line:#dee2e6;
+    --line-strong:#adb5bd;
+    --ink:#212529;
+    --ink-muted:#495057;
+    --ink-faint:#868e96;
+    --accent:#e63946;
+    --accent-ink:#ffffff;
+    --ok:#2b8a3e;
+    --ok-bg:#ebfbee;
+    --wait:#e67700;
+    --wait-bg:#fff3bf;
+    --focus:#e63946;
+    --header-bg:#121212;
+    --header-text:#ffffff;
+    --header-line:#333333;
+    --header-surface:#1e1e1e;
+    --header-surface-2:#222222;
+    --header-muted:#888888;
+    --hatch: repeating-linear-gradient(135deg, var(--line) 0px, var(--line) 1px, transparent 1px, transparent 9px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#121212;
+      --surface:#1e1e1e;
+      --surface-2:#2c2c2c;
+      --line:#3d3d3d;
+      --line-strong:#606060;
+      --ink:#f8f9fa;
+      --ink-muted:#ced4da;
+      --ink-faint:#868e96;
+      --accent:#e63946;
+      --accent-ink:#ffffff;
+      --ok:#51cf66;
+      --ok-bg:#193420;
+      --wait:#fcc419;
+      --wait-bg:#3b2d0d;
+      --hatch: repeating-linear-gradient(135deg, var(--line) 0px, var(--line) 1px, transparent 1px, transparent 9px);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#121212;
+    --surface:#1e1e1e;
+    --surface-2:#2c2c2c;
+    --line:#3d3d3d;
+    --line-strong:#606060;
+    --ink:#f8f9fa;
+    --ink-muted:#ced4da;
+    --ink-faint:#868e96;
+    --accent:#e63946;
+    --accent-ink:#ffffff;
+    --ok:#51cf66;
+    --ok-bg:#193420;
+    --wait:#fcc419;
+    --wait-bg:#3b2d0d;
+    --hatch: repeating-linear-gradient(135deg, var(--line) 0px, var(--line) 1px, transparent 1px, transparent 9px);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;}
+  ::selection{background:var(--accent);color:var(--accent-ink);}
+  :focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+
+  .mono{font-family:'JetBrains Mono', ui-monospace, monospace;}
+
+  .tag{
+    position:absolute;
+    top:0; left:0;
+    transform:translate(10px,-50%);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    background:var(--bg);
+    padding:0 6px;
+    white-space:nowrap;
+    z-index:2;
+  }
+  .placeholder-img{
+    background-image:var(--hatch);
+    background-color:var(--surface-2);
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--ink-faint);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    text-align:center;
+    padding:8px;
+  }
+
+  .wrap{max-width:1240px; margin:0 auto; padding-inline:16px;}
+
+  /* ---------- header (dark, theme-invariant chrome — matches roadbikes-gemini reference) ---------- */
+  header.site{ position:sticky; top:0; z-index:40; background:var(--header-bg); color:var(--header-text); border-bottom:1px solid var(--header-line); }
+  .header-top{ display:flex; align-items:center; gap:10px; padding:10px 16px; position:relative; }
+  .store-toggle-btn-mobile{ display:flex; }
+  .logo{
+    font-family:'Oswald', 'Inter', sans-serif; font-weight:700; font-size:20px; letter-spacing:.01em;
+    text-transform:uppercase; font-style:italic; line-height:1; flex-shrink:0;
+  }
+  .logo .logo-dot{ color:var(--accent); font-size:1.05em; padding:0 .04em; }
+  .icon-btn{
+    position:relative; width:38px; height:38px; display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--header-line); background:var(--header-surface); border-radius:8px; cursor:pointer; color:var(--header-text); flex-shrink:0;
+  }
+  .icon-btn:hover{border-color:var(--header-muted);}
+  .icon-btn svg{width:18px;height:18px;}
+  .cart-count{
+    position:absolute; top:-6px; right:-6px; background:var(--accent); color:var(--accent-ink);
+    font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700;
+    min-width:17px; height:17px; border-radius:999px; display:flex; align-items:center; justify-content:center;
+    padding:0 3px; transition:transform .15s ease;
+  }
+  .cart-count.bump{transform:scale(1.25);}
+  .header-actions{display:flex; align-items:center; gap:8px; margin-left:auto;}
+  .lang-switch{ display:flex; border:1px solid var(--header-line); border-radius:8px; overflow:hidden; font-family:'JetBrains Mono', monospace; font-size:11px; font-weight:600; }
+  .lang-switch button{ background:var(--header-surface); color:var(--header-muted); border:none; padding:8px 9px; cursor:pointer; }
+  .lang-switch button.active{background:var(--header-text); color:var(--header-bg);}
+  .header-search{ display:none; padding:0 16px 12px; }
+  .header-search.open{ display:block; }
+  .search-field{
+    display:flex; align-items:center; gap:8px; border:1px solid var(--header-line); border-radius:9px; padding:9px 12px;
+    background:var(--header-surface-2); transition:border-color .15s ease, background .15s ease;
+  }
+  .search-field.focused{ border-color:var(--accent); background:#111111; box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent); }
+  .search-field svg{width:16px;height:16px; color:var(--header-muted); flex-shrink:0;}
+  .search-field input{ border:none; background:transparent; outline:none; color:var(--header-text); font-size:14px; width:100%; font-family:'Inter', sans-serif; }
+  .search-field input::placeholder{color:var(--header-muted);}
+  .search-suggest{ display:none; border:1px solid var(--header-line); border-top:none; background:var(--header-surface); border-radius:0 0 9px 9px; margin-top:-1px; font-size:13px; }
+  .search-suggest.open{display:block;}
+  .search-suggest div{ padding:9px 14px; color:var(--header-muted); border-top:1px solid var(--header-line); }
+  .search-suggest div:first-child{border-top:none;}
+  .search-suggest b{color:var(--header-text); font-weight:600;}
+  .store-strip{ display:none; align-items:center; gap:8px; padding:6px 16px; background:var(--header-surface); border-top:1px solid var(--header-line); font-size:12.5px; position:relative; }
+  .store-strip svg{width:14px;height:14px; color:var(--accent); flex-shrink:0;}
+  .store-strip .label{color:var(--header-muted);}
+  .store-strip .val{font-weight:600; color:var(--header-text);}
+  .store-toggle{ margin-left:auto; background:none; border:none; color:var(--accent); font-size:12.5px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; text-decoration:underline dashed; text-underline-offset:3px; }
+  .store-panel{ display:none; position:absolute; top:100%; right:16px; left:16px; background:var(--header-surface); border:1px solid var(--header-line); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.35); padding:8px; margin-top:6px; z-index:30; }
+  .store-panel.open{display:block;}
+  .store-opt{ display:flex; justify-content:space-between; gap:10px; padding:10px 10px; border-radius:7px; cursor:pointer; font-size:13px; color:var(--header-text); }
+  .store-opt:hover{background:var(--header-surface-2);}
+  .store-opt .name{font-weight:600;}
+  .store-opt .addr{color:var(--header-muted); font-size:11.5px;}
+  .store-opt .status{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ok);}
+
+  /* ---------- category nav ---------- */
+  nav.categories{ display:none; border-bottom:1px solid var(--line); background:var(--surface); }
+  .cat-scroll{ display:flex; gap:8px; justify-content:center; overflow-x:auto; padding:8px 16px; scrollbar-width:none; }
+  .cat-scroll::-webkit-scrollbar{display:none;}
+  .cat-chip{
+    display:flex; align-items:center; flex-shrink:0; padding:6px 2px;
+    font-family:'Oswald', 'Inter', sans-serif; font-size:13px; font-weight:500;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--ink-muted);
+    border-bottom:2px solid transparent; cursor:pointer; white-space:nowrap; text-decoration:none;
+  }
+  .cat-chip:hover{border-bottom-color:var(--accent); color:var(--ink);}
+  .cat-chip.active{color:var(--accent); border-bottom-color:var(--accent); font-weight:600;}
+  .cat-chip + .cat-chip{margin-left:22px;}
+
+  .btn{
+    font-family:'Inter', sans-serif; font-weight:600; font-size:14.5px;
+    border-radius:4px; padding:13px 22px; border:1.5px solid var(--ink);
+    cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-primary{background:var(--ink); color:var(--bg);}
+  .btn-primary:hover{background:var(--accent); border-color:var(--accent); color:var(--accent-ink);}
+  .btn-primary:disabled{background:var(--surface-2); border-color:var(--line); color:var(--ink-faint); cursor:not-allowed;}
+  .btn-secondary{background:transparent; color:var(--ink); border-color:var(--line-strong);}
+  .btn-secondary:hover{border-color:var(--ink);}
+  .btn-block{width:100%;}
+
+  /* ---------- breadcrumb ---------- */
+  .breadcrumb{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; padding:10px 16px 0; font-size:12.5px; color:var(--ink-muted); }
+  .breadcrumb a{color:var(--ink-muted); text-decoration:none;}
+  .breadcrumb a:hover{color:var(--accent); text-decoration:underline;}
+  .breadcrumb .sep{color:var(--ink-faint);}
+  .breadcrumb .current{color:var(--ink); font-weight:600;}
+
+  /* ---------- product top: gallery + info ---------- */
+  .product-top{ padding:16px; display:flex; flex-direction:column; gap:24px; }
+
+  .gallery{ display:flex; flex-direction:column; gap:10px; }
+  .gallery-main{ aspect-ratio:4/3; border-radius:12px; font-size:12px; position:relative; }
+  .gallery-main .badge-sale{
+    position:absolute; top:12px; left:12px;
+    background:var(--accent); color:var(--accent-ink);
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:11px;
+    letter-spacing:.03em; text-transform:uppercase; padding:5px 10px; border-radius:5px;
+  }
+  .gallery-thumbs{ display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; }
+  .gallery-thumbs::-webkit-scrollbar{display:none;}
+  .thumb{
+    flex-shrink:0; width:64px; height:64px; border-radius:8px; font-size:8.5px; line-height:1.2;
+    border:2px solid var(--line); cursor:pointer; padding:4px;
+  }
+  .thumb.active{ border-color:var(--accent); color:var(--accent); }
+
+  .product-info{ display:flex; flex-direction:column; gap:14px; }
+  .product-brand{ font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); }
+  .product-title{ font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:clamp(24px,6vw,32px); margin:0; letter-spacing:.005em; text-wrap:balance; }
+  .product-tagline{ font-size:14px; color:var(--ink-muted); margin:0; line-height:1.5; }
+
+  .price-row{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .price-now{ font-size:28px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .price-was{ font-size:15px; color:var(--ink-faint); text-decoration:line-through; font-variant-numeric:tabular-nums; }
+  .price-badge{
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:700; letter-spacing:.03em;
+    background:var(--accent); color:var(--accent-ink); padding:3px 8px; border-radius:5px; text-transform:uppercase;
+  }
+  .price-note{ font-size:11.5px; color:var(--ink-faint); }
+
+  .stock-row{ display:flex; align-items:center; gap:8px; font-size:13.5px; }
+  .stock-dot{ width:9px; height:9px; border-radius:999px; background:var(--ok); flex-shrink:0; }
+  .stock-row.wait .stock-dot{background:var(--wait);}
+  .stock-text{font-weight:600;}
+  .stock-sub{ color:var(--ink-muted); font-size:12.5px; }
+
+  .size-block{ display:flex; flex-direction:column; gap:10px; padding-top:4px; }
+  .size-block-head{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .size-block-head .label{ font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:13.5px; letter-spacing:.03em; text-transform:uppercase; }
+  .size-fit-link{ font-size:12.5px; color:var(--accent); text-decoration:underline dashed; text-underline-offset:3px; background:none; border:none; cursor:pointer; font-family:'Inter',sans-serif; font-weight:600; padding:0; }
+  .size-grid-product{ display:grid; grid-template-columns:repeat(6,1fr); gap:8px; }
+  .size-opt-product{
+    border:1.5px solid var(--line); border-radius:7px; padding:10px 2px; text-align:center;
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; cursor:pointer; background:var(--surface); color:var(--ink);
+    position:relative;
+  }
+  .size-opt-product.active{ border-color:var(--accent); color:var(--accent); background:color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+  .size-opt-product.oos{ color:var(--ink-faint); border-color:var(--line); cursor:not-allowed; background:var(--surface-2); text-decoration:line-through; }
+  .size-selected-note{ font-size:12.5px; color:var(--ink-muted); }
+  .size-selected-note b{color:var(--ink);}
+  .fit-confirm{ display:none; font-size:12px; color:var(--accent); font-weight:600; }
+  .fit-confirm.show{display:block;}
+
+  .cta-block{ display:flex; flex-direction:column; gap:10px; padding-top:4px; }
+  .cta-row{ display:flex; flex-direction:column; gap:10px; }
+  .cta-delivery-note{ display:flex; gap:8px; font-size:12px; color:var(--ink-muted); align-items:flex-start; }
+  .cta-delivery-note svg{width:14px;height:14px; flex-shrink:0; margin-top:1px; color:var(--ink-faint);}
+  .cart-confirm{
+    display:none; align-items:center; gap:10px; border:1px solid var(--ok); background:var(--ok-bg);
+    color:var(--ok); border-radius:9px; padding:11px 14px; font-size:13px; font-weight:600;
+  }
+  .cart-confirm.show{display:flex;}
+  .cart-confirm svg{width:18px;height:18px; flex-shrink:0;}
+
+  .mini-trust{ display:flex; flex-direction:column; gap:8px; padding-top:6px; border-top:1px solid var(--line); }
+  .mini-trust-item{ display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--ink-muted); }
+  .mini-trust-item svg{width:16px;height:16px; color:var(--accent); flex-shrink:0;}
+
+  /* ---------- sections ---------- */
+  .section{ padding:28px 16px; }
+  .section-title{ font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:20px; margin:0 0 16px; letter-spacing:.01em; }
+
+  /* ---------- spec table ---------- */
+  .spec-table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  .spec-table tr{ border-bottom:1px solid var(--line); }
+  .spec-table tr:last-child{border-bottom:none;}
+  .spec-table th{
+    text-align:left; padding:11px 12px 11px 0; width:42%; vertical-align:top;
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.03em; text-transform:uppercase;
+    color:var(--ink-faint); font-weight:600;
+  }
+  .spec-table td{ padding:11px 0; color:var(--ink); }
+
+  /* ---------- description ---------- */
+  .description{ font-size:15px; line-height:1.7; color:var(--ink-muted); max-width:70ch; }
+  .description p{margin:0 0 16px;}
+  .description p:last-child{margin-bottom:0;}
+  .description h3{ font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:17px; color:var(--ink); margin:22px 0 8px; letter-spacing:.005em; }
+  .description h3:first-child{margin-top:0;}
+
+  /* ---------- cross-sell ---------- */
+  .crosssell-scroll{ display:flex; gap:12px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
+  .crosssell-scroll::-webkit-scrollbar{display:none;}
+  .cs-card{
+    flex-shrink:0; width:150px; border:1px solid var(--line); border-radius:12px; background:var(--surface);
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  .cs-media{ aspect-ratio:4/3; border-radius:0; border-left:none; border-right:none; border-top:none; }
+  .cs-body{ padding:9px 10px 11px; display:flex; flex-direction:column; gap:5px; }
+  .cs-brand{ font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-faint); }
+  .cs-name{ font-size:12.5px; font-weight:600; line-height:1.3; margin:0; min-height:2.6em; }
+  .cs-price{ font-size:13.5px; font-weight:800; font-variant-numeric:tabular-nums; }
+
+  /* ---------- delivery/returns ---------- */
+  .info-grid{ display:grid; grid-template-columns:1fr; gap:10px; }
+  .info-item{ display:flex; gap:12px; border:1px solid var(--line); border-radius:10px; padding:14px; background:var(--surface); }
+  .info-item .ico{
+    width:36px; height:36px; border-radius:8px; background:var(--surface-2); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--accent);
+  }
+  .info-item .ico svg{width:18px;height:18px;}
+  .info-item h3{margin:0 0 3px; font-size:14px; font-family:'Oswald','Inter',sans-serif; font-weight:600;}
+  .info-item p{margin:0; font-size:12.5px; color:var(--ink-muted); line-height:1.45;}
+
+  /* ---------- footer (shared) ---------- */
+  footer.site{ margin-top:20px; border-top:1px solid var(--line); background:var(--surface); }
+  .footer-newsletter{ padding:26px 16px; background:var(--surface-2); border-bottom:1px solid var(--line); }
+  .footer-newsletter h3{ margin:0 0 4px; font-size:19px; font-family:'Oswald','Inter',sans-serif; font-weight:600; letter-spacing:.01em; }
+  .footer-newsletter p{ margin:0 0 14px; color:var(--ink-muted); font-size:13px; max-width:48ch; }
+  .newsletter-form{ display:flex; gap:8px; max-width:420px; flex-wrap:wrap; }
+  .newsletter-form input{ flex:1; min-width:160px; border:1px solid var(--line); border-radius:8px; padding:11px 12px; font-size:13.5px; background:var(--surface); color:var(--ink); }
+  .newsletter-form input:focus{border-color:var(--accent); outline:none;}
+  .newsletter-msg{ font-size:12.5px; color:var(--ok); margin-top:8px; display:none; font-weight:600; }
+  .newsletter-msg.show{display:block;}
+  .footer-cols{ padding:26px 16px; display:grid; grid-template-columns:1fr 1fr; gap:22px 16px; }
+  .footer-col h4{ font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 10px; }
+  .footer-col ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+  .footer-col a{font-size:13px; color:var(--ink-muted); text-decoration:none;}
+  .footer-col a:hover{color:var(--accent); text-decoration:underline;}
+  .footer-store{font-size:12.5px; color:var(--ink-muted); line-height:1.5; margin-bottom:10px;}
+  .footer-store b{color:var(--ink); display:block; font-size:13px; margin-bottom:2px;}
+  .footer-legal{ padding:16px; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; font-size:11.5px; color:var(--ink-faint); }
+  .footer-legal .mono{font-size:10.5px;}
+
+  /* mobile off-canvas nav (shared) */
+  .menu-btn{ display:flex; width:38px;height:38px; border:1px solid var(--line); border-radius:8px; align-items:center; justify-content:center; background:var(--surface); cursor:pointer; flex-shrink:0; }
+  .menu-btn svg{width:18px;height:18px;}
+  .drawer-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:49; display:none; }
+  .drawer-backdrop.open{display:block;}
+  .drawer{
+    position:fixed; top:0; left:-340px; bottom:0; width:82%; max-width:320px; background:var(--surface); z-index:50;
+    transition:left .22s ease; display:flex; flex-direction:column; box-shadow:2px 0 20px rgba(0,0,0,.2);
+  }
+  .drawer.open{left:0;}
+  .drawer-head{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--line); }
+  .drawer-close{background:none;border:none;cursor:pointer;color:var(--ink);}
+  .drawer-close svg{width:20px;height:20px;}
+  .drawer-list{list-style:none; margin:0; padding:8px; display:flex; flex-direction:column; gap:2px;}
+  .drawer-list a{ display:flex; align-items:center; gap:10px; padding:12px 10px; border-radius:8px; font-size:14.5px; font-weight:600; text-decoration:none; color:var(--ink); }
+  .drawer-list a:hover{background:var(--surface-2);}
+  .drawer-list a.active{color:var(--accent);}
+  .drawer-list .dot{width:8px;height:8px;border-radius:2px;background:var(--line-strong);}
+  .drawer-foot{margin-top:auto; padding:16px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-faint);}
+
+  @media (min-width:640px){
+    .footer-cols{grid-template-columns:repeat(2,1fr);}
+    .cta-row{flex-direction:row;}
+    .cta-row .btn{flex:1;}
+  }
+
+  @media (min-width:900px){
+    .header-top{padding:14px 24px;}
+    .header-search{display:block !important; padding:0 24px 14px; max-width:480px;}
+    .search-toggle-btn{display:none;}
+    .store-toggle-btn-mobile{display:none;}
+    .store-strip{display:flex;}
+    nav.categories{display:block;}
+    .menu-btn{display:none;}
+    .breadcrumb{padding-left:24px; padding-right:24px;}
+    .product-top{ max-width:1240px; margin:0 auto; padding:28px 24px; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
+    .gallery{position:sticky; top:172px;}
+    .section{ max-width:1240px; margin:0 auto; padding:36px 24px; }
+    .footer-cols{grid-template-columns:repeat(4,1fr); padding:32px 24px;}
+    .footer-newsletter{padding:32px 24px;}
+    .description{columns:2; column-gap:40px;}
+    .description h3{break-after:avoid;}
+    .description p{break-inside:avoid;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; animation:none !important;}
+  }
+</style>
+
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <span class="logo">BIKE<span class="logo-dot">•</span>ONE</span>
+    <button class="drawer-close" id="drawerClose" aria-label="Menü schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <ul class="drawer-list">
+    <li><a href="#">Rennrad</a></li>
+    <li><a href="#" class="active">Gravel</a></li>
+    <li><a href="#">Zubehör</a></li>
+    <li><a href="#">Komponenten</a></li>
+    <li><a href="#">Bekleidung</a></li>
+  </ul>
+  <div class="drawer-foot mono">[ MENÜ — PLATZHALTER-NAVIGATION ]<br>Werkstatt · Bikefitting · Filialen</div>
+</div>
+
+<header class="site">
+  <div class="header-top">
+    <button class="menu-btn" id="menuBtn" aria-label="Menü öffnen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <span class="logo">BIKE<span class="logo-dot">•</span>ONE</span>
+    <div class="header-actions">
+      <button class="icon-btn search-toggle-btn" id="searchToggleBtn" aria-label="Suche öffnen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <div class="lang-switch" role="group" aria-label="Sprache">
+        <button class="active" id="langDE">DE</button>
+        <button id="langEN">EN</button>
+      </div>
+      <button class="icon-btn store-toggle-btn-mobile" id="storeToggleMobile" aria-label="Filiale wählen: Oldenburg, Rheinstr. 16">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      </button>
+      <button class="icon-btn" id="cartBtn" aria-label="Warenkorb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+    <div class="store-panel" id="storePanel">
+      <div class="store-opt" data-name="Oldenburg, Rheinstr. 16">
+        <div><div class="name">Oldenburg</div><div class="addr">Rheinstr. 16, 26135 Oldenburg</div></div>
+        <div class="status mono">● VORRÄTIG</div>
+      </div>
+      <div class="store-opt" data-name="Osnabrück, Lengericher Landstr. 30">
+        <div><div class="name">Osnabrück</div><div class="addr">Lengericher Landstraße 30, 49078 Osnabrück</div></div>
+        <div class="status mono">● VORRÄTIG</div>
+      </div>
+    </div>
+  </div>
+  <div class="header-search">
+    <div class="search-field" id="searchField">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" placeholder="Rennrad, Gravelbike, Bremsbeläge …">
+    </div>
+    <div class="search-suggest" id="searchSuggest">
+      <div>Häufig gesucht: <b>Trek Checkpoint</b></div>
+      <div>Häufig gesucht: <b>Specialized Diverge</b></div>
+      <div>Kategorie: <b>Zubehör → Schutzbleche</b></div>
+    </div>
+  </div>
+  <div class="store-strip">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+    <span class="label">Abholung:</span>
+    <span class="val" id="storeVal">Oldenburg, Rheinstr. 16</span>
+    <button class="store-toggle" id="storeToggle">ändern</button>
+  </div>
+</header>
+
+<nav class="categories" id="cats">
+  <div class="cat-scroll">
+    <a href="#" class="cat-chip">Rennrad</a>
+    <a href="#" class="cat-chip active" aria-current="page">Gravel</a>
+    <a href="#" class="cat-chip">Zubehör</a>
+    <a href="#" class="cat-chip">Komponenten</a>
+    <a href="#" class="cat-chip">Bekleidung</a>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="#">Start</a><span class="sep">/</span>
+  <a href="#">Fahrräder</a><span class="sep">/</span>
+  <a href="#">Gravelbikes</a><span class="sep">/</span>
+  <span class="current">Trek Checkpoint SL 6 AXS</span>
+</div>
+
+<div class="product-top">
+
+  <div class="gallery">
+    <div class="gallery-main placeholder-img" id="galleryMain">
+      <span class="badge-sale">Aktion −5%</span>
+      Produktfoto 1600×1200<br>Trek Checkpoint SL 6 AXS — Seitenansicht
+    </div>
+    <div class="gallery-thumbs" id="galleryThumbs">
+      <button class="thumb placeholder-img active" type="button" data-label="Produktfoto 1600×1200&lt;br&gt;Trek Checkpoint SL 6 AXS — Seitenansicht">Seiten&shy;ansicht</button>
+      <button class="thumb placeholder-img" type="button" data-label="Produktfoto 1600×1200&lt;br&gt;Cockpit &amp; SRAM AXS-Schaltung">Cockpit</button>
+      <button class="thumb placeholder-img" type="button" data-label="Produktfoto 1600×1200&lt;br&gt;Laufradsatz &amp; Tubeless-Reifen">Laufrad</button>
+      <button class="thumb placeholder-img" type="button" data-label="Produktfoto 1600×1200&lt;br&gt;IsoSpeed-Decoupler &amp; Rahmendetail">Rahmen&shy;detail</button>
+      <button class="thumb placeholder-img" type="button" data-label="Produktfoto 1600×1200&lt;br&gt;Actionfoto auf Schotterpiste">Action</button>
+    </div>
+  </div>
+
+  <div class="product-info">
+    <div>
+      <div class="product-brand mono">Trek</div>
+      <h1 class="product-title">Checkpoint SL 6 AXS</h1>
+      <p class="product-tagline">Carbon-Gravelbike für lange Distanzen — SRAM AXS Funkschaltung, IsoSpeed-Komfort, tubeless-ready ab Werk.</p>
+    </div>
+
+    <div class="price-row">
+      <span class="price-now">3.799,00 €</span>
+      <span class="price-was">3.999,00 €</span>
+      <span class="price-badge">Aktion</span>
+    </div>
+    <div class="price-note">inkl. MwSt., zzgl. Versand · Grundmontage &amp; Erst-Check inklusive</div>
+
+    <div class="stock-row" id="stockRow">
+      <span class="stock-dot"></span>
+      <span class="stock-text" id="stockText">Verfügbar</span>
+      <span class="stock-sub" id="stockSub">— ab Lager Oldenburg, heute reserviert</span>
+    </div>
+
+    <div class="size-block">
+      <div class="size-block-head">
+        <span class="label">Rahmengröße</span>
+        <button class="size-fit-link" id="fitLink" type="button">Größe im Store anprobieren</button>
+      </div>
+      <div class="size-grid-product" id="sizeGridProduct">
+        <button class="size-opt-product oos" type="button" data-size="48" data-stock="oos">48</button>
+        <button class="size-opt-product" type="button" data-size="51" data-stock="lager">51</button>
+        <button class="size-opt-product" type="button" data-size="54" data-stock="lager">54</button>
+        <button class="size-opt-product active" type="button" data-size="56" data-stock="lager">56</button>
+        <button class="size-opt-product" type="button" data-size="58" data-stock="bestellbar">58</button>
+        <button class="size-opt-product oos" type="button" data-size="61" data-stock="oos">61</button>
+      </div>
+      <div class="size-selected-note" id="sizeSelectedNote">Ausgewählt: <b>56 cm</b> — ab Lager verfügbar</div>
+      <div class="fit-confirm" id="fitConfirm">✓ Terminvorschlag notiert — Bikefitting für Größe 56 cm in Oldenburg. Ein Berater meldet sich zur Bestätigung.</div>
+    </div>
+
+    <div class="cta-block">
+      <div class="cta-row">
+        <button class="btn btn-primary btn-block" id="addToCartBtn" type="button">In den Warenkorb — 3.799,00 €</button>
+        <button class="btn btn-secondary btn-block" id="clickCollectBtn" type="button">Click &amp; Collect in <span id="ccStoreName">Oldenburg</span></button>
+      </div>
+      <div class="cta-delivery-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/></svg>
+        <span>Versand in 3–5 Werktagen per Spedition (Fahrrad vormontiert) — oder heute ab 16:00 Uhr abholbereit in Oldenburg.</span>
+      </div>
+      <div class="cart-confirm" id="cartConfirm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+        <span id="cartConfirmText">Zum Warenkorb hinzugefügt — Checkpoint SL 6 AXS, Größe 56 cm</span>
+      </div>
+    </div>
+
+    <div class="mini-trust">
+      <div class="mini-trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        Bikefitting vor Ort — Oldenburg &amp; Osnabrück
+      </div>
+      <div class="mini-trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        30 Tage Rückgabe, unkompliziert im Store
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <h2 class="section-title">Technische Daten</h2>
+  <div style="overflow-x:auto;">
+    <table class="spec-table">
+      <tr><th>Rahmen</th><td>Trek OCLV Carbon, Gravel-Geometrie mit IsoSpeed-Decoupler</td></tr>
+      <tr><th>Gabel</th><td>Carbon-Gabel, Durchsteckachse 12×100 mm</td></tr>
+      <tr><th>Schaltung</th><td>SRAM Rival eTap AXS XPLR, 1×12-fach (Funkschaltung)</td></tr>
+      <tr><th>Bremsen</th><td>SRAM Rival hydraulisch, Scheiben 160/160 mm</td></tr>
+      <tr><th>Laufräder</th><td>Bontrager GR Elite, 28″ / 700c, tubeless-ready</td></tr>
+      <tr><th>Reifen</th><td>Bontrager GR1 Team Issue, 40 mm</td></tr>
+      <tr><th>Sattelstütze</th><td>Bontrager IsoCore, Ø 27,2 mm</td></tr>
+      <tr><th>Gewicht</th><td>ca. 9,8 kg (Größe 56, ohne Pedale)</td></tr>
+      <tr><th>Max. Zuladung</th><td>125 kg (Fahrer, Gepäck &amp; Zubehör)</td></tr>
+      <tr><th>Rahmengrößen</th><td>48 / 51 / 54 / 56 / 58 / 61 cm</td></tr>
+      <tr><th>Farbe</th><td>Satin Trek Black</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Produktbeschreibung</h2>
+  <div class="description">
+    <h3>Ein Gravelbike für die lange Distanz</h3>
+    <p>Das Checkpoint SL 6 AXS ist auf eines ausgelegt: Kilometer sammeln, egal ob auf Asphalt, Waldweg oder Schotterpiste. Der IsoSpeed-Decoupler im Sitzrohr entkoppelt Sattel und Rahmen mechanisch und filtert Vibrationen heraus, bevor sie im Rücken ankommen — auch nach der fünften Stunde im Sattel. Reifenfreiheit bis 45 mm lässt Raum für mehr Grip, wenn der Untergrund es verlangt.</p>
+    <p>Die SRAM Rival eTap AXS XPLR wurde speziell für den Gravel-Einsatz entwickelt: kabellose, funkbasierte Schaltvorgänge, ein Übersetzungsbereich für steile Rampen und zuverlässige Präzision auch bei Vibrationen auf grobem Untergrund. In Kombination mit den tubeless-ready Bontrager GR Elite Laufrädern und Bontrager GR1 Reifen ist das Checkpoint ab Werk bereit für niedrigeren Reifendruck und weniger Pannenrisiko.</p>
+    <h3>Von Oldenburg und Osnabrück aus in die Weite</h3>
+    <p>Ob Wochenend-Ausfahrt Richtung Ammerland, Bikepacking-Tour an der Hunte entlang oder der tägliche Weg ins Büro über Feldwege — das Checkpoint SL 6 AXS wechselt mühelos zwischen Einsatzzwecken. Rahmenösen für Gepäckträger und zusätzliche Flaschenhalter machen es bikepacking-tauglich, ohne dass du dafür ein zweites Rad brauchst.</p>
+    <p>Wie bei jedem Bike aus unserem Sortiment empfehlen wir vor dem Kauf ein kurzes Bikefitting in einer unserer Filialen in Oldenburg oder Osnabrück. Zehn Minuten Sitzpositions-Check verhindern zuverlässiger Rückenschmerzen als jede Herstellerangabe zur Rahmengröße — und sind bei uns unverbindlich und kostenlos.</p>
+    <h3>Direkt startklar</h3>
+    <p>Jedes Checkpoint SL 6 AXS verlässt unsere Werkstatt fahrfertig eingestellt: Schaltung justiert, Bremsen entlüftet, Reifendruck geprüft. Bei Abholung im Store bekommst du zusätzlich eine kurze Einweisung in Pflege und erste Wartungsintervalle.</p>
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Passendes Zubehör</h2>
+  <div class="crosssell-scroll" id="crosssellRow"></div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">Versand &amp; Rückgabe</h2>
+  <div class="info-grid">
+    <div class="info-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/></svg></div>
+      <div>
+        <h3>Versand per Spedition</h3>
+        <p>Lieferzeit 3–5 Werktage, Fahrrad vormontiert und fahrfertig eingestellt. Versandkosten werden im Warenkorb berechnet.</p>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg></div>
+      <div>
+        <h3>Click &amp; Collect</h3>
+        <p>Online reservieren, ab 16:00 Uhr abholbereit in Oldenburg oder Osnabrück. Zahlung wahlweise online oder direkt im Store.</p>
+      </div>
+    </div>
+    <div class="info-item">
+      <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></div>
+      <div>
+        <h3>Rückgabe im Store</h3>
+        <p>30 Tage Rückgaberecht, unkompliziert an beiden Standorten — ohne Versandetikett, ohne Rückfragen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="footer-newsletter">
+    <h3>Neuigkeiten, bevor sie im Laden stehen</h3>
+    <p>Neue Modelle, Werkstatt-Termine und Filial-Events — max. zweimal im Monat, jederzeit abbestellbar.</p>
+    <form class="newsletter-form" id="newsletterForm">
+      <input type="email" required placeholder="deine.email@beispiel.de" aria-label="E-Mail-Adresse">
+      <button class="btn btn-primary" type="submit">Abonnieren</button>
+    </form>
+    <div class="newsletter-msg" id="newsletterMsg">✓ Bestätigungsmail wurde verschickt (Platzhalter).</div>
+  </div>
+  <div class="footer-cols">
+    <div class="footer-col">
+      <h4>Standorte</h4>
+      <div class="footer-store">
+        <b>Oldenburg</b>
+        Rheinstr. 16, 26135 Oldenburg<br>
+        Mo–Fr 10:00–18:00, Sa 10:00–14:00<br>
+        0441 984 894 83 · OL@bike-one.de
+      </div>
+      <div class="footer-store">
+        <b>Osnabrück</b>
+        Lengericher Landstraße 30, 49078 Osnabrück<br>
+        Di–Fr 10:00–18:00, Sa 10:00–14:00<br>
+        0541 440 952 84 · OS@bike-one.de
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Service</h4>
+      <ul>
+        <li><a href="#">Bikefitting-Termin</a></li>
+        <li><a href="#">Werkstatt &amp; Inspektion</a></li>
+        <li><a href="#">Versand &amp; Rückgabe</a></li>
+        <li><a href="#">Größenberatung</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Unternehmen</h4>
+      <ul>
+        <li><a href="#">Über Bike One</a></li>
+        <li><a href="#">Marken &amp; Partner</a></li>
+        <li><a href="#">Karriere</a></li>
+        <li><a href="#">Kontakt</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Rechtliches</h4>
+      <ul>
+        <li><a href="#">Impressum</a></li>
+        <li><a href="#">AGB</a></li>
+        <li><a href="#">Datenschutz</a></li>
+        <li><a href="#">Widerrufsrecht</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span class="mono">© 2026 BIKE ONE — WIREFRAME, NICHT PRODUKTIV</span>
+    <span>Oldenburg · Osnabrück</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ---- cross-sell data ----
+  var crosssell = [
+    {brand:"Lazer", name:"Aero-Helm ProLine", price:"189,00 €"},
+    {brand:"Garmin", name:"GPS-Radcomputer Edge", price:"349,00 €"},
+    {brand:"SKS", name:"Schutzblech-Set Gravel", price:"39,00 €"},
+    {brand:"Tubus", name:"Gepäckträger Gravel Rack", price:"69,00 €"},
+    {brand:"Ortlieb", name:"Rahmentasche Frame-Pack", price:"79,00 €"}
+  ];
+  var csRow = document.getElementById('crosssellRow');
+  crosssell.forEach(function(p){
+    var card = document.createElement('div');
+    card.className = 'cs-card';
+    card.innerHTML =
+      '<div class="cs-media placeholder-img">Produktbild 400×300</div>' +
+      '<div class="cs-body">' +
+        '<div class="cs-brand mono">' + p.brand + '</div>' +
+        '<p class="cs-name">' + p.name + '</p>' +
+        '<div class="cs-price">' + p.price + '</div>' +
+      '</div>';
+    csRow.appendChild(card);
+  });
+
+  // ---- gallery thumbnails ----
+  var galleryMain = document.getElementById('galleryMain');
+  document.querySelectorAll('.thumb').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('.thumb').forEach(function(x){ x.classList.remove('active'); });
+      t.classList.add('active');
+      galleryMain.innerHTML = '<span class="badge-sale">Aktion −8%</span>' + t.getAttribute('data-label');
+    });
+  });
+
+  // ---- size selector ----
+  var STOCK_TEXT = {
+    lager: "ab Lager verfügbar",
+    bestellbar: "2–3 Wochen Lieferzeit",
+    oos: "ausverkauft"
+  };
+  var sizeNote = document.getElementById('sizeSelectedNote');
+  var addBtn = document.getElementById('addToCartBtn');
+  var fitConfirm = document.getElementById('fitConfirm');
+
+  function selectSize(btn){
+    document.querySelectorAll('.size-opt-product').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var size = btn.getAttribute('data-size');
+    var stock = btn.getAttribute('data-stock');
+    sizeNote.innerHTML = 'Ausgewählt: <b>' + size + ' cm</b> — ' + STOCK_TEXT[stock];
+    addBtn.disabled = false;
+    fitConfirm.classList.remove('show');
+  }
+
+  document.querySelectorAll('.size-opt-product').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if (btn.classList.contains('oos')) return;
+      selectSize(btn);
+    });
+  });
+
+  document.getElementById('fitLink').addEventListener('click', function(){
+    var active = document.querySelector('.size-opt-product.active');
+    var size = active ? active.getAttribute('data-size') : '54';
+    fitConfirm.textContent = '✓ Terminvorschlag notiert — Bikefitting für Größe ' + size + ' cm in ' + document.getElementById('storeVal').textContent.split(',')[0] + '. Ein Berater meldet sich zur Bestätigung.';
+    fitConfirm.classList.add('show');
+  });
+
+  // ---- cart ----
+  var cartCount = 0;
+  var cartCountEl = document.getElementById('cartCount');
+  function addToCart(){
+    cartCount++;
+    cartCountEl.textContent = cartCount;
+    cartCountEl.classList.add('bump');
+    setTimeout(function(){ cartCountEl.classList.remove('bump'); }, 200);
+  }
+  document.getElementById('cartBtn').addEventListener('click', addToCart);
+
+  var cartConfirm = document.getElementById('cartConfirm');
+  var cartConfirmText = document.getElementById('cartConfirmText');
+  addBtn.addEventListener('click', function(){
+    var active = document.querySelector('.size-opt-product.active');
+    var size = active ? active.getAttribute('data-size') : '54';
+    addToCart();
+    cartConfirmText.textContent = 'Zum Warenkorb hinzugefügt — Checkpoint SL 6 AXS, Größe ' + size + ' cm';
+    cartConfirm.classList.add('show');
+    setTimeout(function(){ cartConfirm.classList.remove('show'); }, 3200);
+  });
+
+  document.getElementById('clickCollectBtn').addEventListener('click', function(){
+    var active = document.querySelector('.size-opt-product.active');
+    var size = active ? active.getAttribute('data-size') : '54';
+    var store = document.getElementById('storeVal').textContent.split(',')[0];
+    addToCart();
+    cartConfirmText.textContent = 'Für Click & Collect reserviert — Checkpoint SL 6 AXS, Größe ' + size + ' cm, Abholung in ' + store;
+    cartConfirm.classList.add('show');
+    setTimeout(function(){ cartConfirm.classList.remove('show'); }, 3200);
+  });
+
+  // ---- mobile search toggle (search bar hidden behind icon below 900px) ----
+  var searchToggleBtn = document.getElementById('searchToggleBtn');
+  var headerSearch = document.querySelector('.header-search');
+  searchToggleBtn.addEventListener('click', function(){
+    var isOpen = headerSearch.classList.toggle('open');
+    if (isOpen) setTimeout(function(){ searchInput.focus(); }, 0);
+  });
+
+  // ---- search focus / suggestions ----
+  var searchField = document.getElementById('searchField');
+  var searchInput = document.getElementById('searchInput');
+  var searchSuggest = document.getElementById('searchSuggest');
+  searchInput.addEventListener('focus', function(){ searchField.classList.add('focused'); searchSuggest.classList.add('open'); });
+  searchInput.addEventListener('blur', function(){ setTimeout(function(){ searchField.classList.remove('focused'); searchSuggest.classList.remove('open'); }, 150); });
+
+  // ---- store panel (opened from the desktop "ändern" link or the mobile pin icon) ----
+  var storeToggle = document.getElementById('storeToggle');
+  var storeToggleMobile = document.getElementById('storeToggleMobile');
+  var storePanel = document.getElementById('storePanel');
+  var storeVal = document.getElementById('storeVal');
+  var ccStoreName = document.getElementById('ccStoreName');
+  function toggleStorePanel(){ storePanel.classList.toggle('open'); }
+  storeToggle.addEventListener('click', toggleStorePanel);
+  storeToggleMobile.addEventListener('click', toggleStorePanel);
+  document.querySelectorAll('.store-opt').forEach(function(opt){
+    opt.addEventListener('click', function(){
+      var full = opt.getAttribute('data-name');
+      storeVal.textContent = full;
+      ccStoreName.textContent = full.split(',')[0];
+      storePanel.classList.remove('open');
+    });
+  });
+  document.addEventListener('click', function(e){
+    if (!storePanel.contains(e.target) && !storeToggle.contains(e.target) && !storeToggleMobile.contains(e.target)){ storePanel.classList.remove('open'); }
+  });
+
+  // ---- mobile nav drawer ----
+  var menuBtn = document.getElementById('menuBtn');
+  var drawer = document.getElementById('drawer');
+  var backdrop = document.getElementById('drawerBackdrop');
+  var drawerClose = document.getElementById('drawerClose');
+  function openDrawer(){ drawer.classList.add('open'); backdrop.classList.add('open'); }
+  function closeDrawer(){ drawer.classList.remove('open'); backdrop.classList.remove('open'); }
+  menuBtn.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  backdrop.addEventListener('click', closeDrawer);
+  drawer.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeDrawer); });
+
+  // ---- language switch ----
+  var langDE = document.getElementById('langDE');
+  var langEN = document.getElementById('langEN');
+  langDE.addEventListener('click', function(){ langDE.classList.add('active'); langEN.classList.remove('active'); });
+  langEN.addEventListener('click', function(){ langEN.classList.add('active'); langDE.classList.remove('active'); });
+
+  // ---- newsletter ----
+  document.getElementById('newsletterForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('newsletterMsg').classList.add('show');
+  });
+})();
+</script>

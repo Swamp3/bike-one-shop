@@ -1,0 +1,466 @@
+<title>Bike One Click & Collect Wireframe</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --bg:#f8f9fa;
+    --surface:#ffffff;
+    --surface-2:#f1f3f5;
+    --line:#dee2e6;
+    --line-strong:#adb5bd;
+    --ink:#212529;
+    --ink-muted:#495057;
+    --ink-faint:#868e96;
+    --accent:#e63946;
+    --accent-ink:#ffffff;
+    --ok:#2b8a3e;
+    --ok-bg:#ebfbee;
+    --wait:#e67700;
+    --wait-bg:#fff3bf;
+    --focus:#e63946;
+    --header-bg:#121212;
+    --header-text:#ffffff;
+    --header-line:#333333;
+    --header-surface:#1e1e1e;
+    --header-muted:#888888;
+    --hatch: repeating-linear-gradient(135deg, var(--line) 0px, var(--line) 1px, transparent 1px, transparent 9px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#121212;
+      --surface:#1e1e1e;
+      --surface-2:#2c2c2c;
+      --line:#3d3d3d;
+      --line-strong:#606060;
+      --ink:#f8f9fa;
+      --ink-muted:#ced4da;
+      --ink-faint:#868e96;
+      --accent:#e63946;
+      --accent-ink:#ffffff;
+      --ok:#51cf66;
+      --ok-bg:#193420;
+      --wait:#fcc419;
+      --wait-bg:#3b2d0d;
+      --hatch: repeating-linear-gradient(135deg, var(--line) 0px, var(--line) 1px, transparent 1px, transparent 9px);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#121212;
+    --surface:#1e1e1e;
+    --surface-2:#2c2c2c;
+    --line:#3d3d3d;
+    --line-strong:#606060;
+    --ink:#f8f9fa;
+    --ink-muted:#ced4da;
+    --ink-faint:#868e96;
+    --accent:#e63946;
+    --accent-ink:#ffffff;
+    --ok:#51cf66;
+    --ok-bg:#193420;
+    --wait:#fcc419;
+    --wait-bg:#3b2d0d;
+    --hatch: repeating-linear-gradient(135deg, var(--line) 0px, var(--line) 1px, transparent 1px, transparent 9px);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;}
+  ::selection{background:var(--accent);color:var(--accent-ink);}
+  :focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+  [hidden]{display:none !important;}
+  .mono{font-family:'JetBrains Mono', ui-monospace, monospace;}
+  .placeholder-img{
+    background-image:var(--hatch); background-color:var(--surface-2); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; color:var(--ink-faint);
+    font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:.03em;
+    text-transform:uppercase; text-align:center; padding:6px;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding-inline:16px;}
+
+  /* ---------- minimal header (component lives inside checkout-adjacent flows) ---------- */
+  header.site{ position:sticky; top:0; z-index:40; background:var(--header-bg); color:var(--header-text); border-bottom:1px solid var(--header-line); }
+  .header-top{ display:flex; align-items:center; gap:12px; padding:12px 16px; max-width:900px; margin:0 auto; }
+  .logo{ font-family:'Oswald','Inter',sans-serif; font-weight:700; font-size:20px; letter-spacing:.01em; text-transform:uppercase; font-style:italic; line-height:1; }
+  .logo .logo-dot{ color:var(--accent); font-size:1.05em; padding:0 .04em; }
+  .icon-btn{
+    position:relative; width:38px; height:38px; margin-left:auto;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--header-line); background:var(--header-surface);
+    border-radius:8px; cursor:pointer; color:var(--header-text);
+  }
+  .icon-btn svg{width:18px;height:18px;}
+  .cart-count{
+    position:absolute; top:-6px; right:-6px; background:var(--accent); color:var(--accent-ink);
+    font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700;
+    min-width:17px; height:17px; border-radius:999px; display:flex; align-items:center; justify-content:center; padding:0 3px;
+  }
+
+  .breadcrumb{ display:flex; gap:6px; align-items:center; flex-wrap:wrap; padding:14px 0 0; font-size:12.5px; color:var(--ink-muted); }
+  .breadcrumb a{color:var(--ink-muted); text-decoration:none;}
+  .breadcrumb a:hover{color:var(--accent); text-decoration:underline;}
+  .breadcrumb .sep{color:var(--ink-faint);}
+  .breadcrumb .current{color:var(--ink); font-weight:600;}
+
+  .page-title{ font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:clamp(22px,5.5vw,28px); margin:14px 0 4px; letter-spacing:.01em; }
+  .page-sub{ font-size:13.5px; color:var(--ink-muted); margin:0 0 18px; max-width:56ch; line-height:1.5; }
+
+  /* ---------- demo meta controls (not part of the component itself) ---------- */
+  .demo-controls{
+    position:relative; border:1px dashed var(--line-strong); border-radius:10px;
+    padding:14px 14px 16px; margin-bottom:22px; background:var(--surface-2);
+  }
+  .demo-tag{
+    position:absolute; top:0; left:12px; transform:translateY(-50%);
+    background:var(--bg); padding:0 6px; font-family:'JetBrains Mono',monospace;
+    font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-faint);
+  }
+  .demo-controls-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .mode-toggle{ display:flex; border:1px solid var(--line-strong); border-radius:8px; overflow:hidden; }
+  .mode-toggle button{
+    background:var(--surface); color:var(--ink-muted); border:none; padding:9px 14px;
+    font-size:12.5px; font-weight:600; cursor:pointer;
+  }
+  .mode-toggle button.active{ background:var(--ink); color:var(--bg); }
+  .demo-hint{ font-size:12px; color:var(--ink-faint); margin:0; }
+
+  /* ---------- fake surrounding chrome for "embedded" preview ---------- */
+  .fake-cart-frame{ display:none; }
+  .fake-cart-frame.show{ display:block; }
+  .fake-cart-outer{ max-width:380px; margin:0 auto; }
+  .fake-cart-card{
+    border:1px solid var(--line); border-radius:12px; background:var(--surface); padding:14px; margin-bottom:0;
+  }
+  .fake-cart-card + .embed-mount{ margin-top:0; }
+  .fake-cart-title{ font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:13px; text-transform:uppercase; letter-spacing:.03em; margin:0 0 10px; color:var(--ink-muted); }
+  .fake-cart-row{ display:flex; justify-content:space-between; font-size:12.5px; color:var(--ink-muted); padding:4px 0; }
+  .fake-cart-row b{ color:var(--ink); }
+  .embed-wrap-top, .embed-wrap-bottom{
+    border-left:1px solid var(--line); border-right:1px solid var(--line);
+    background:var(--surface); padding:0 14px;
+  }
+  .embed-wrap-top{ border-top:1px solid var(--line); border-radius:12px 12px 0 0; padding-top:14px; }
+  .embed-wrap-bottom{ border-bottom:1px solid var(--line); border-radius:0 0 12px 12px; padding-bottom:14px; }
+  .embed-divider{ height:1px; background:var(--line); margin:0 14px; }
+
+  /* ============ THE COMPONENT ============ */
+  .cc-frame{ container-type: inline-size; }
+  .cc-widget{ display:flex; flex-direction:column; gap:16px; }
+  .cc-widget.embedded{ gap:12px; }
+
+  .cc-map{
+    position:relative; aspect-ratio:16/10; border-radius:10px; overflow:hidden;
+    background-color:var(--surface-2); background-image:var(--hatch); border:1px solid var(--line);
+  }
+  .cc-map-label{
+    position:absolute; top:8px; left:8px; font-family:'JetBrains Mono',monospace; font-size:9px;
+    letter-spacing:.04em; text-transform:uppercase; color:var(--ink-faint); background:var(--bg);
+    padding:2px 6px; border-radius:4px;
+  }
+  .cc-pin{
+    position:absolute; transform:translate(-50%,-100%); display:flex; flex-direction:column; align-items:center;
+    cursor:pointer; background:none; border:none; padding:0;
+  }
+  .cc-pin svg{ width:22px; height:22px; color:var(--line-strong); filter:drop-shadow(0 1px 2px rgba(0,0,0,.25)); transition:color .15s ease, transform .15s ease; }
+  .cc-pin .pin-name{
+    font-size:10px; font-weight:700; color:var(--ink-muted); background:var(--surface);
+    border:1px solid var(--line); border-radius:4px; padding:1px 5px; margin-top:2px; white-space:nowrap;
+  }
+  .cc-pin.selected svg{ color:var(--accent); transform:scale(1.25); }
+  .cc-pin.selected .pin-name{ color:var(--accent); border-color:var(--accent); font-weight:700; }
+
+  .cc-stores{ display:flex; flex-direction:column; gap:10px; }
+  .cc-store{
+    display:flex; gap:12px; align-items:flex-start; border:1.5px solid var(--line); border-radius:10px;
+    padding:14px; cursor:pointer; background:var(--surface);
+  }
+  .cc-store input{ margin-top:3px; width:17px; height:17px; accent-color:var(--accent); flex-shrink:0; cursor:pointer; }
+  .cc-store.selected{ border-color:var(--accent); background:color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+  .cc-store-body{ flex:1; min-width:0; }
+  .cc-store-head{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+  .cc-store-name{ font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:16px; }
+  .cc-store-addr{ font-size:12.5px; color:var(--ink-muted); margin-top:2px; }
+  .cc-store-hours{ font-size:12px; color:var(--ink-faint); margin-top:6px; display:flex; align-items:center; gap:6px; }
+  .cc-store-hours svg{ width:13px; height:13px; flex-shrink:0; }
+  .cc-stock{
+    display:inline-flex; align-items:center; gap:5px; margin-top:8px; font-size:11.5px; font-weight:700;
+    letter-spacing:.02em; padding:3px 8px; border-radius:5px;
+  }
+  .cc-stock.ok{ background:var(--ok-bg); color:var(--ok); }
+  .cc-stock.wait{ background:var(--wait-bg); color:var(--wait); }
+  .cc-stock .dot{ width:6px; height:6px; border-radius:999px; background:currentColor; }
+
+  .cc-fit-row{ margin-top:10px; display:flex; flex-direction:column; gap:4px; }
+  .cc-fit-link{
+    align-self:flex-start; background:none; border:none; padding:0; cursor:pointer;
+    font-size:12px; font-weight:600; color:var(--accent); text-decoration:underline dashed; text-underline-offset:3px;
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .cc-fit-link svg{ width:13px; height:13px; }
+  .cc-fit-confirm{ font-size:11.5px; color:var(--ok); font-weight:600; display:none; }
+  .cc-fit-confirm.show{ display:block; }
+
+  .cc-devstate{
+    border:1px solid var(--line); border-radius:9px; background:var(--surface-2); padding:10px 12px;
+  }
+  .cc-devstate summary{
+    cursor:pointer; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.03em;
+    text-transform:uppercase; color:var(--ink-faint); list-style:none;
+  }
+  .cc-devstate summary::-webkit-details-marker{ display:none; }
+  .cc-devstate pre{
+    margin:10px 0 0; font-family:'JetBrains Mono',monospace; font-size:11.5px; line-height:1.6;
+    color:var(--ink-muted); white-space:pre-wrap; word-break:break-word;
+  }
+  .cc-devstate pre .k{color:var(--accent);}
+
+  .cc-actions{ display:flex; gap:10px; }
+  .cc-actions .btn{ flex:1; }
+
+  .btn{
+    font-family:'Inter', sans-serif; font-weight:600; font-size:14px;
+    border-radius:4px; padding:12px 18px; border:1.5px solid var(--ink);
+    cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-primary{ background:var(--ink); color:var(--bg); }
+  .btn-primary:hover{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+  .btn-secondary{ background:transparent; color:var(--ink); border-color:var(--line-strong); }
+  .btn-secondary:hover{ border-color:var(--ink); }
+
+  /* container-query breakpoint: map beside the store list once the component
+     itself has enough width — true regardless of the surrounding page, which
+     is what makes it safe to drop into a narrow checkout sidebar or a full page. */
+  @container (min-width: 560px){
+    .cc-widget{ flex-direction:row; align-items:stretch; }
+    .cc-map{ width:42%; flex-shrink:0; aspect-ratio:auto; min-height:280px; }
+    .cc-stores-col{ flex:1; display:flex; flex-direction:column; gap:16px; min-width:0; }
+  }
+
+  footer.site{ margin-top:32px; border-top:1px solid var(--line); background:var(--surface); }
+  .footer-inner{ max-width:900px; margin:0 auto; padding:20px 16px; display:flex; flex-direction:column; gap:10px; }
+  .footer-legal-links{ display:flex; flex-wrap:wrap; gap:6px 16px; font-size:12.5px; }
+  .footer-legal-links a{ color:var(--ink-muted); text-decoration:none; }
+  .footer-legal-links a:hover{ color:var(--accent); text-decoration:underline; }
+  .footer-legal-links + span{ font-size:11.5px; color:var(--ink-faint); }
+
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important;} }
+</style>
+
+<header class="site">
+  <div class="header-top">
+    <span class="logo">BIKE<span class="logo-dot">•</span>ONE</span>
+    <button class="icon-btn" aria-label="Warenkorb">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-count">5</span>
+    </button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="breadcrumb">
+    <a href="#">Start</a><span class="sep">/</span>
+    <a href="#">Warenkorb</a><span class="sep">/</span>
+    <span class="current">Filiale wählen</span>
+  </div>
+
+  <h1 class="page-title">Filiale für Click &amp; Collect wählen</h1>
+  <p class="page-sub">Reservieren, im Store abholen. Die Verfügbarkeit bezieht sich auf deine aktuelle Bestellung — wir legen den Artikel für dich zur Seite.</p>
+
+  <div class="demo-controls">
+    <span class="demo-tag">Demo-Steuerung — nicht Teil der Komponente</span>
+    <div class="demo-controls-row">
+      <div class="mode-toggle" role="group" aria-label="Ansichtsmodus">
+        <button type="button" class="active" data-mode="standalone">Eigenständige Seite</button>
+        <button type="button" data-mode="embedded">Eingebettet im Warenkorb</button>
+      </div>
+      <p class="demo-hint" id="demoHint">So sieht die Komponente auf einer eigenen Seite aus.</p>
+    </div>
+  </div>
+
+  <!-- ============ EMBEDDED PREVIEW FRAME ============ -->
+  <div class="fake-cart-frame" id="fakeCartFrame">
+    <div class="fake-cart-outer">
+      <div class="embed-wrap-top">
+        <div class="fake-cart-title">Bestellübersicht</div>
+        <div class="fake-cart-row"><span>Checkpoint SL 6 AXS × 1</span><b>3.799,00 €</b></div>
+        <div class="fake-cart-row"><span>Aero-Helm ProLine × 1</span><b>189,00 €</b></div>
+        <div class="fake-cart-row" style="padding-top:8px; border-top:1px solid var(--line); margin-top:6px;"><span>Gesamt</span><b>3.988,00 €</b></div>
+      </div>
+      <div class="embed-divider"></div>
+      <div class="embed-mount" id="embedMount"></div>
+    </div>
+  </div>
+
+  <!-- ============ STANDALONE PREVIEW FRAME ============ -->
+  <div id="standaloneMount"></div>
+
+</div>
+
+<footer class="site">
+  <div class="footer-inner">
+    <div class="footer-legal-links"><a href="#">Impressum</a><a href="#">AGB</a><a href="#">Datenschutz</a></div>
+    <span>© 2026 BIKE ONE · Komponente: Filialauswahl Click &amp; Collect</span>
+  </div>
+</footer>
+
+<template id="ccComponentTemplate">
+  <div class="cc-frame">
+    <div class="cc-widget">
+      <div class="cc-map">
+        <span class="cc-map-label">Kartenansicht — Platzhalter</span>
+        <button type="button" class="cc-pin" data-store="oldenburg" style="left:35%; top:60%;">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z"/><circle cx="12" cy="10" r="3" fill="var(--surface)"/></svg>
+          <span class="pin-name">Oldenburg</span>
+        </button>
+        <button type="button" class="cc-pin" data-store="osnabrueck" style="left:66%; top:42%;">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z"/><circle cx="12" cy="10" r="3" fill="var(--surface)"/></svg>
+          <span class="pin-name">Osnabrück</span>
+        </button>
+      </div>
+
+      <div class="cc-stores-col">
+        <div class="cc-stores">
+          <label class="cc-store selected" data-store="oldenburg">
+            <input type="radio" name="ccStore" value="oldenburg" checked>
+            <div class="cc-store-body">
+              <div class="cc-store-head">
+                <span class="cc-store-name">Oldenburg</span>
+              </div>
+              <div class="cc-store-addr">Rheinstr. 16, 26135 Oldenburg</div>
+              <div class="cc-store-hours">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                Mo–Fr 10:00–18:00 · Sa 10:00–14:00
+              </div>
+              <div class="cc-stock ok"><span class="dot"></span>3× auf Lager in dieser Filiale</div>
+              <div class="cc-fit-row">
+                <button type="button" class="cc-fit-link" data-fit="Oldenburg">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                  Termin für Bike-Fitting vereinbaren
+                </button>
+                <span class="cc-fit-confirm">✓ Terminanfrage notiert — wir melden uns zur Bestätigung.</span>
+              </div>
+            </div>
+          </label>
+
+          <label class="cc-store" data-store="osnabrueck">
+            <input type="radio" name="ccStore" value="osnabrueck">
+            <div class="cc-store-body">
+              <div class="cc-store-head">
+                <span class="cc-store-name">Osnabrück</span>
+              </div>
+              <div class="cc-store-addr">Lengericher Landstraße 30, 49078 Osnabrück</div>
+              <div class="cc-store-hours">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                Di–Fr 10:00–18:00 · Sa 10:00–14:00
+              </div>
+              <div class="cc-stock wait"><span class="dot"></span>Auf Bestellung — in 2–3 Werktagen an die Filiale</div>
+              <div class="cc-fit-row">
+                <button type="button" class="cc-fit-link" data-fit="Osnabrück">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                  Termin für Bike-Fitting vereinbaren
+                </button>
+                <span class="cc-fit-confirm">✓ Terminanfrage notiert — wir melden uns zur Bestätigung.</span>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <details class="cc-devstate">
+          <summary>Für Entwickler: Auswahl-Status (an Parent-Flow übergeben)</summary>
+          <pre><span class="k">selectedStoreId</span>: "<span class="js-state-id">oldenburg</span>",
+<span class="k">selectedStoreName</span>: "<span class="js-state-name">Oldenburg</span>",
+<span class="k">stockStatus</span>: "<span class="js-state-stock">in_stock</span>"</pre>
+        </details>
+
+        <div class="cc-actions">
+          <button type="button" class="btn btn-secondary">← Zurück</button>
+          <button type="button" class="btn btn-primary">Auswahl übernehmen →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+(function(){
+  var tpl = document.getElementById('ccComponentTemplate');
+  var standaloneMount = document.getElementById('standaloneMount');
+  var embedMount = document.getElementById('embedMount');
+
+  function mountComponent(target, embedded){
+    var node = tpl.content.cloneNode(true);
+    var widget = node.querySelector('.cc-widget');
+    if (embedded) widget.classList.add('embedded');
+    target.innerHTML = '';
+    target.appendChild(node);
+    wireComponent(target);
+  }
+
+  function wireComponent(root){
+    var storeLabels = root.querySelectorAll('.cc-store');
+    var pins = root.querySelectorAll('.cc-pin');
+    var stateId = root.querySelector('.js-state-id');
+    var stateName = root.querySelector('.js-state-name');
+    var stateStock = root.querySelector('.js-state-stock');
+
+    function select(storeId){
+      storeLabels.forEach(function(l){ l.classList.toggle('selected', l.getAttribute('data-store') === storeId); });
+      pins.forEach(function(p){ p.classList.toggle('selected', p.getAttribute('data-store') === storeId); });
+      var activeLabel = root.querySelector('.cc-store[data-store="' + storeId + '"]');
+      if (activeLabel){
+        activeLabel.querySelector('input').checked = true;
+        var name = activeLabel.querySelector('.cc-store-name').textContent;
+        var isWait = activeLabel.querySelector('.cc-stock').classList.contains('wait');
+        if (stateId) stateId.textContent = storeId;
+        if (stateName) stateName.textContent = name;
+        if (stateStock) stateStock.textContent = isWait ? 'on_order' : 'in_stock';
+      }
+    }
+
+    storeLabels.forEach(function(l){
+      l.addEventListener('click', function(){ select(l.getAttribute('data-store')); });
+    });
+    pins.forEach(function(p){
+      p.addEventListener('click', function(){ select(p.getAttribute('data-store')); });
+    });
+    root.querySelectorAll('[data-fit]').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var confirm = btn.parentElement.querySelector('.cc-fit-confirm');
+        confirm.classList.add('show');
+      });
+    });
+
+    // sync the map pins to whichever store is selected by default in the markup
+    var initialSelected = root.querySelector('.cc-store.selected') || root.querySelector('.cc-store');
+    if (initialSelected) select(initialSelected.getAttribute('data-store'));
+  }
+
+  mountComponent(standaloneMount, false);
+
+  // ---- demo mode toggle ----
+  var frame = document.getElementById('fakeCartFrame');
+  var hint = document.getElementById('demoHint');
+  var embedMounted = false;
+  document.querySelectorAll('.mode-toggle button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.mode-toggle button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var mode = btn.getAttribute('data-mode');
+      if (mode === 'embedded'){
+        standaloneMount.hidden = true;
+        frame.classList.add('show');
+        if (!embedMounted){ mountComponent(embedMount, true); embedMounted = true; }
+        hint.textContent = 'Dieselbe Komponente, hier in eine ~380px-Warenkorb-Spalte eingebettet — die Container Query stapelt Karte und Filialliste automatisch.';
+      } else {
+        standaloneMount.hidden = false;
+        frame.classList.remove('show');
+        hint.textContent = 'So sieht die Komponente auf einer eigenen Seite aus.';
+      }
+    });
+  });
+})();
+</script>

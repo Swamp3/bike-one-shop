@@ -1,0 +1,977 @@
+<title>Bike One Warenkorb &amp; Checkout Wireframe</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+  :root{
+    --bg:#f8f9fa;
+    --surface:#ffffff;
+    --surface-2:#f1f3f5;
+    --line:#dee2e6;
+    --line-strong:#adb5bd;
+    --ink:#212529;
+    --ink-muted:#495057;
+    --ink-faint:#868e96;
+    --accent:#e63946;
+    --accent-ink:#ffffff;
+    --ok:#2b8a3e;
+    --ok-bg:#ebfbee;
+    --wait:#e67700;
+    --wait-bg:#fff3bf;
+    --focus:#e63946;
+    --header-bg:#121212;
+    --header-text:#ffffff;
+    --header-line:#333333;
+    --header-surface:#1e1e1e;
+    --header-surface-2:#222222;
+    --header-muted:#888888;
+    --hatch: repeating-linear-gradient(135deg, var(--line) 0px, var(--line) 1px, transparent 1px, transparent 9px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#121212;
+      --surface:#1e1e1e;
+      --surface-2:#2c2c2c;
+      --line:#3d3d3d;
+      --line-strong:#606060;
+      --ink:#f8f9fa;
+      --ink-muted:#ced4da;
+      --ink-faint:#868e96;
+      --accent:#e63946;
+      --accent-ink:#ffffff;
+      --ok:#51cf66;
+      --ok-bg:#193420;
+      --wait:#fcc419;
+      --wait-bg:#3b2d0d;
+      --hatch: repeating-linear-gradient(135deg, var(--line) 0px, var(--line) 1px, transparent 1px, transparent 9px);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#121212;
+    --surface:#1e1e1e;
+    --surface-2:#2c2c2c;
+    --line:#3d3d3d;
+    --line-strong:#606060;
+    --ink:#f8f9fa;
+    --ink-muted:#ced4da;
+    --ink-faint:#868e96;
+    --accent:#e63946;
+    --accent-ink:#ffffff;
+    --ok:#51cf66;
+    --ok-bg:#193420;
+    --wait:#fcc419;
+    --wait-bg:#3b2d0d;
+    --hatch: repeating-linear-gradient(135deg, var(--line) 0px, var(--line) 1px, transparent 1px, transparent 9px);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding-bottom:76px;
+    background:var(--bg); color:var(--ink);
+    font-family:'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;}
+  ::selection{background:var(--accent);color:var(--accent-ink);}
+  :focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+  [hidden]{display:none !important;}
+
+  .mono{font-family:'JetBrains Mono', ui-monospace, monospace;}
+  .placeholder-img{
+    background-image:var(--hatch); background-color:var(--surface-2); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; color:var(--ink-faint);
+    font-family:'JetBrains Mono', monospace; font-size:9.5px; letter-spacing:.03em;
+    text-transform:uppercase; text-align:center; padding:4px; line-height:1.3;
+  }
+  .wrap{max-width:1100px; margin:0 auto; padding-inline:16px;}
+
+  /* ---------- minimal checkout header (no nav — fewer distractions from completing purchase) ---------- */
+  header.site{
+    position:sticky; top:0; z-index:40;
+    background:var(--header-bg); color:var(--header-text);
+    border-bottom:1px solid var(--header-line);
+  }
+  .header-top{ display:flex; align-items:center; gap:12px; padding:12px 16px; max-width:1100px; margin:0 auto; }
+  .logo{
+    font-family:'Oswald','Inter',sans-serif; font-weight:700; font-size:20px; letter-spacing:.01em;
+    text-transform:uppercase; font-style:italic; line-height:1; flex-shrink:0;
+  }
+  .logo .logo-dot{ color:var(--accent); font-size:1.05em; padding:0 .04em; }
+  .secure-note{
+    display:none; align-items:center; gap:6px; margin-left:16px;
+    font-size:12px; color:var(--header-muted);
+  }
+  .secure-note svg{width:14px;height:14px;}
+  .icon-btn{
+    position:relative; width:38px; height:38px; margin-left:auto;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--header-line); background:var(--header-surface);
+    border-radius:8px; cursor:pointer; color:var(--header-text); flex-shrink:0;
+  }
+  .icon-btn svg{width:18px;height:18px;}
+  .cart-count{
+    position:absolute; top:-6px; right:-6px; background:var(--accent); color:var(--accent-ink);
+    font-family:'JetBrains Mono', monospace; font-size:10px; font-weight:700;
+    min-width:17px; height:17px; border-radius:999px; display:flex; align-items:center; justify-content:center;
+    padding:0 3px; transition:transform .15s ease;
+  }
+  .cart-count.bump{transform:scale(1.25);}
+
+  .btn{
+    font-family:'Inter', sans-serif; font-weight:600; font-size:14.5px;
+    border-radius:4px; padding:13px 20px; border:1.5px solid var(--ink);
+    cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-primary{background:var(--ink); color:var(--bg);}
+  .btn-primary:hover{background:var(--accent); border-color:var(--accent); color:var(--accent-ink);}
+  .btn-primary:disabled{background:var(--surface-2); border-color:var(--line); color:var(--ink-faint); cursor:not-allowed;}
+  .btn-secondary{background:transparent; color:var(--ink); border-color:var(--line-strong);}
+  .btn-secondary:hover{border-color:var(--ink);}
+  .btn-block{width:100%;}
+  .btn-sm{padding:9px 14px; font-size:13px; border-radius:6px;}
+
+  .page-title{
+    font-family:'Oswald','Inter',sans-serif; font-weight:600;
+    font-size:clamp(24px,6vw,30px); margin:20px 0 16px; letter-spacing:.01em;
+  }
+
+  /* ---------- generic card / section-title helpers ---------- */
+  .card{ border:1px solid var(--line); border-radius:12px; background:var(--surface); padding:16px; }
+  .card + .card{ margin-top:12px; }
+  .card-title{
+    font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:14px;
+    letter-spacing:.03em; text-transform:uppercase; color:var(--ink); margin:0 0 12px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+
+  /* ---------- cart line items ---------- */
+  .cart-item{ display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--line); }
+  .cart-item:last-child{border-bottom:none;}
+  .cart-item-img{ width:72px; height:72px; border-radius:8px; flex-shrink:0; font-size:8px; }
+  .cart-item-body{ flex:1; min-width:0; display:flex; flex-direction:column; gap:4px; }
+  .cart-item-brand{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-faint); }
+  .cart-item-name{ font-family:'Oswald','Inter',sans-serif; font-size:15px; font-weight:500; margin:0; }
+  .cart-item-variant{ font-size:12.5px; color:var(--ink-muted); }
+  .cart-item-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:6px; flex-wrap:wrap; }
+  .qty-stepper{ display:flex; align-items:center; border:1px solid var(--line); border-radius:7px; overflow:hidden; }
+  .qty-stepper button{
+    width:30px; height:30px; border:none; background:var(--surface-2); color:var(--ink);
+    font-size:16px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .qty-stepper button:hover{background:var(--line);}
+  .qty-stepper button:disabled{color:var(--ink-faint); cursor:not-allowed;}
+  .qty-stepper .qty-val{ width:32px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; }
+  .cart-item-prices{ display:flex; align-items:baseline; gap:8px; }
+  .cart-item-unit{ font-size:11.5px; color:var(--ink-faint); }
+  .cart-item-total{ font-size:15px; font-weight:800; font-variant-numeric:tabular-nums; }
+  .cart-item-remove{
+    background:none; border:none; color:var(--ink-faint); cursor:pointer; font-size:12.5px;
+    text-decoration:underline dashed; text-underline-offset:3px; padding:0; margin-top:6px; align-self:flex-start;
+  }
+  .cart-item-remove:hover{color:var(--accent);}
+
+  .empty-cart{ text-align:center; padding:56px 16px; color:var(--ink-muted); }
+  .empty-cart svg{width:40px;height:40px; color:var(--ink-faint); margin-bottom:12px;}
+  .empty-cart p{margin:0 0 16px;}
+
+  /* ---------- option cards (delivery method, guest/account, shipping speed, payment) ---------- */
+  .option-card{
+    display:flex; align-items:flex-start; gap:12px; border:1.5px solid var(--line); border-radius:10px;
+    padding:12px 14px; cursor:pointer; margin-bottom:8px; background:var(--surface);
+  }
+  .option-card:last-child{margin-bottom:0;}
+  .option-card.active{ border-color:var(--accent); background:color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+  .option-card input{ margin-top:2px; width:16px; height:16px; accent-color:var(--accent); flex-shrink:0; cursor:pointer; }
+  .option-card-body{ flex:1; min-width:0; }
+  .option-card-title{ display:flex; align-items:center; justify-content:space-between; gap:8px; font-weight:600; font-size:14px; }
+  .option-card-sub{ font-size:12.5px; color:var(--ink-muted); margin-top:2px; }
+  .option-card-price{ font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px; white-space:nowrap; }
+  .option-card-price.free{ color:var(--ok); }
+
+  /* card network marks (network logos only — the processor itself stays unbranded) */
+  .card-network-marks{ display:flex; gap:5px; }
+  .card-network-marks span{
+    font-size:8.5px; font-weight:700; letter-spacing:.02em; color:var(--ink-faint);
+    border:1px solid var(--line); border-radius:3px; padding:2px 5px; line-height:1.4;
+  }
+
+  /* embedded payment-processor widget: visually distinct from BIKE ONE's own form
+     fields, since this part of the page is actually rendered by the payment
+     processor (no processor branding shown — just the "this is a secure,
+     separately-handled field" cue real embedded card widgets give). */
+  .secure-card-widget{
+    background:var(--surface-2); border:1px solid var(--line); border-radius:9px; padding:12px;
+  }
+  .secure-card-note{
+    display:flex; gap:7px; margin-top:10px; font-size:11px; line-height:1.4; color:var(--ink-faint);
+  }
+  .secure-card-note svg{width:14px;height:14px; flex-shrink:0; margin-top:1px;}
+
+  .store-pick{ display:none; gap:8px; margin-top:10px; padding-left:28px; }
+  .store-pick.show{ display:flex; flex-wrap:wrap; }
+  .store-chip{
+    border:1px solid var(--line); border-radius:999px; padding:7px 14px; font-size:12.5px; font-weight:600;
+    cursor:pointer; background:var(--surface); color:var(--ink);
+  }
+  .store-chip.active{ border-color:var(--accent); color:var(--accent); background:color-mix(in srgb, var(--accent) 8%, var(--surface)); }
+
+  /* ---------- promo code ---------- */
+  .promo-row{ display:flex; gap:8px; }
+  .promo-row input{
+    flex:1; min-width:0; border:1px solid var(--line); border-radius:7px; padding:10px 12px;
+    font-size:13.5px; background:var(--surface); color:var(--ink); font-family:'JetBrains Mono',monospace; text-transform:uppercase;
+  }
+  .promo-row input:focus{border-color:var(--accent); outline:none;}
+  .promo-msg{ font-size:12.5px; margin-top:8px; display:none; font-weight:600; }
+  .promo-msg.show{display:block;}
+  .promo-msg.ok{color:var(--ok);}
+  .promo-msg.err{color:var(--accent);}
+
+  /* ---------- summary ---------- */
+  .summary-row{ display:flex; justify-content:space-between; align-items:baseline; font-size:13.5px; padding:6px 0; color:var(--ink-muted); }
+  .summary-row.discount{color:var(--ok);}
+  .summary-row .amount{ font-variant-numeric:tabular-nums; font-weight:600; color:var(--ink); }
+  .summary-row.discount .amount{color:var(--ok);}
+  .summary-total{
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-top:1px solid var(--line); margin-top:8px; padding-top:12px;
+    font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:19px;
+  }
+  .summary-total .amount{font-variant-numeric:tabular-nums;}
+  .summary-note{ font-size:11.5px; color:var(--ink-faint); margin-top:6px; }
+
+  /* ---------- checkout: step nav ---------- */
+  .step-nav{ display:flex; align-items:flex-start; margin:20px 0 24px; }
+  .step-nav-item{ flex:1; display:flex; flex-direction:column; align-items:center; position:relative; cursor:pointer; background:none; border:none; font-family:inherit; }
+  .step-nav-item:disabled{cursor:not-allowed;}
+  .step-circle{
+    width:28px; height:28px; border-radius:999px; border:1.5px solid var(--line-strong);
+    display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace;
+    font-size:12px; font-weight:700; color:var(--ink-muted); background:var(--surface); flex-shrink:0;
+  }
+  .step-nav-item::before{
+    content:''; position:absolute; top:14px; left:-50%; width:100%; height:2px; background:var(--line); z-index:0;
+  }
+  .step-nav-item:first-child::before{display:none;}
+  .step-nav-item .step-label{ font-size:10.5px; letter-spacing:.03em; text-transform:uppercase; color:var(--ink-faint); margin-top:6px; text-align:center; }
+  .step-nav-item.done .step-circle{ border-color:var(--ok); background:var(--ok); color:#fff; }
+  .step-nav-item.done::before{background:var(--ok);}
+  .step-nav-item.current .step-circle{ border-color:var(--accent); color:var(--accent); }
+  .step-nav-item.current .step-label{ color:var(--ink); font-weight:600; }
+
+  /* ---------- checkout layout ---------- */
+  .checkout-layout{ display:flex; flex-direction:column; gap:16px; }
+  .checkout-summary-toggle{
+    display:flex; align-items:center; justify-content:space-between; width:100%;
+    border:1px solid var(--line); border-radius:10px; padding:12px 14px; background:var(--surface);
+    cursor:pointer; font-size:13.5px; font-weight:600;
+  }
+  .checkout-summary-toggle .amount{font-family:'JetBrains Mono',monospace; color:var(--accent);}
+  .checkout-summary-toggle svg{width:16px;height:16px; transition:transform .15s ease;}
+  .checkout-summary-toggle.open svg{transform:rotate(180deg);}
+  .checkout-side{ display:none; }
+  .checkout-side.open{ display:block; }
+
+  .form-grid{ display:grid; grid-template-columns:1fr; gap:12px; }
+  .form-field{ display:flex; flex-direction:column; gap:5px; }
+  .form-field label{ font-size:12.5px; font-weight:600; color:var(--ink-muted); }
+  .form-field input, .form-field select{
+    border:1px solid var(--line); border-radius:7px; padding:11px 12px; font-size:14px;
+    background:var(--surface); color:var(--ink); font-family:'Inter',sans-serif;
+  }
+  .form-field input:focus, .form-field select:focus{border-color:var(--accent); outline:none;}
+  .form-row-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+  .step-actions{ display:flex; gap:10px; margin-top:20px; }
+  .step-actions .btn{flex:1;}
+
+  /* ---------- confirmation ---------- */
+  .confirm-hero{ text-align:center; padding:12px 0 20px; }
+  .confirm-hero .check{
+    width:56px; height:56px; border-radius:999px; background:var(--ok-bg); color:var(--ok);
+    display:flex; align-items:center; justify-content:center; margin:0 auto 14px;
+  }
+  .confirm-hero .check svg{width:28px;height:28px;}
+  .confirm-hero h2{ font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:24px; margin:0 0 6px; }
+  .confirm-hero .order-no{ font-family:'JetBrains Mono',monospace; color:var(--ink-muted); font-size:13.5px; }
+  .confirm-hero .order-no b{color:var(--ink);}
+  .confirm-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .confirm-list li{ display:flex; gap:10px; font-size:13.5px; color:var(--ink-muted); }
+  .confirm-list svg{width:17px;height:17px; color:var(--accent); flex-shrink:0; margin-top:1px;}
+
+  /* ---------- mobile sticky CTA bar ---------- */
+  .mobile-cta-bar{
+    position:fixed; left:0; right:0; bottom:0; z-index:35;
+    background:var(--surface); border-top:1px solid var(--line);
+    padding:10px 16px; padding-bottom:calc(10px + env(safe-area-inset-bottom));
+    box-shadow:0 -4px 16px rgba(0,0,0,.06);
+  }
+  .mobile-cta-bar .row{ display:flex; align-items:center; gap:12px; }
+  .mobile-cta-bar .total{ display:flex; flex-direction:column; line-height:1.25; }
+  .mobile-cta-bar .total .amount{ font-family:'Oswald','Inter',sans-serif; font-weight:600; font-size:17px; }
+  .mobile-cta-bar .total .label{ font-size:10.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.03em; }
+  .mobile-cta-bar .btn{ flex-shrink:0; padding:13px 18px; }
+
+  /* ---------- footer ---------- */
+  footer.site{ margin-top:32px; border-top:1px solid var(--line); background:var(--surface); }
+  .footer-inner{ max-width:1100px; margin:0 auto; padding:20px 16px; display:flex; flex-direction:column; gap:12px; }
+  .footer-legal-links{ display:flex; flex-wrap:wrap; gap:6px 16px; font-size:12.5px; }
+  .footer-legal-links a{ color:var(--ink-muted); text-decoration:none; }
+  .footer-legal-links a:hover{ color:var(--accent); text-decoration:underline; }
+  .footer-return-note{ display:flex; gap:8px; font-size:12px; color:var(--ink-faint); align-items:flex-start; }
+  .footer-return-note svg{width:14px;height:14px; flex-shrink:0; margin-top:1px;}
+
+  @media (min-width:720px){
+    body{padding-bottom:0;}
+    .mobile-cta-bar{display:none;}
+    .cart-layout{ display:grid; grid-template-columns:1fr 340px; gap:28px; align-items:start; }
+    .checkout-layout{ display:grid; grid-template-columns:1fr 320px; gap:28px; align-items:start; }
+    .checkout-summary-toggle{display:none;}
+    .checkout-side{ display:block !important; position:sticky; top:88px; order:2; }
+    .form-row-2{grid-template-columns:1fr 1fr;}
+    .secure-note{display:flex;}
+    .step-nav-item .step-label{font-size:11.5px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; animation:none !important;}
+  }
+</style>
+
+<header class="site">
+  <div class="header-top">
+    <span class="logo">BIKE<span class="logo-dot">•</span>ONE</span>
+    <span class="secure-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Sicher einkaufen — SSL-verschlüsselt
+    </span>
+    <button class="icon-btn" id="cartBtn" aria-label="Warenkorb">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-count" id="cartCount">4</span>
+    </button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ CART VIEW ============ -->
+  <div class="view" id="cartView">
+    <h1 class="page-title">Warenkorb</h1>
+
+    <div id="cartHasItems">
+      <div class="cart-layout">
+        <div class="card" style="padding:0 16px;">
+          <div id="cartItemsList"></div>
+        </div>
+
+        <aside>
+          <div class="card">
+            <div class="card-title">Lieferart</div>
+            <label class="option-card active" data-method="shipping">
+              <input type="radio" name="deliveryMethod" value="shipping" checked>
+              <div class="option-card-body">
+                <div class="option-card-title"><span>Versand</span><span class="option-card-price" id="shipPreview">6,90 €</span></div>
+                <div class="option-card-sub">Spedition, 3–5 Werktage, Bike vormontiert</div>
+              </div>
+            </label>
+            <label class="option-card" data-method="pickup">
+              <input type="radio" name="deliveryMethod" value="pickup">
+              <div class="option-card-body">
+                <div class="option-card-title"><span>Click &amp; Collect</span><span class="option-card-price free">kostenlos</span></div>
+                <div class="option-card-sub">Heute ab 16:00 Uhr abholbereit in der Filiale</div>
+                <div class="store-pick" id="storePick">
+                  <button type="button" class="store-chip active" data-store="Oldenburg">Oldenburg</button>
+                  <button type="button" class="store-chip" data-store="Osnabrück">Osnabrück</button>
+                </div>
+              </div>
+            </label>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Gutscheincode</div>
+            <div class="promo-row">
+              <input type="text" id="promoInput" placeholder="z. B. BIKEONE10">
+              <button class="btn btn-secondary btn-sm" id="promoApplyBtn" type="button">Anwenden</button>
+            </div>
+            <div class="promo-msg" id="promoMsg"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Zwischensumme</div>
+            <div id="cartSummaryBody"></div>
+            <button class="btn btn-primary btn-block" id="toCheckoutBtn" type="button" style="margin-top:14px;">Weiter zur Kasse →</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="empty-cart" id="emptyCartMsg" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <p>Dein Warenkorb ist leer.</p>
+      <button class="btn btn-secondary" id="continueShoppingBtn" type="button">Weiter einkaufen</button>
+    </div>
+  </div>
+
+  <!-- ============ CHECKOUT VIEW ============ -->
+  <div class="view" id="checkoutView" hidden>
+    <h1 class="page-title">Kasse</h1>
+
+    <div class="step-nav" id="stepNav">
+      <button class="step-nav-item current" data-step="1" disabled><span class="step-circle">1</span><span class="step-label">Adresse</span></button>
+      <button class="step-nav-item" data-step="2" disabled><span class="step-circle">2</span><span class="step-label" id="step2Label">Versand</span></button>
+      <button class="step-nav-item" data-step="3" disabled><span class="step-circle">3</span><span class="step-label">Zahlung</span></button>
+      <button class="step-nav-item" data-step="4" disabled><span class="step-circle">4</span><span class="step-label">Bestätigung</span></button>
+    </div>
+
+    <button class="checkout-summary-toggle" id="checkoutSummaryToggle" type="button">
+      <span>Bestellübersicht anzeigen · <span class="amount mono" id="toggleAmount">474,49 €</span></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+
+    <div class="checkout-layout">
+      <aside class="checkout-side" id="checkoutSide">
+        <div class="card">
+          <div class="card-title">Bestellübersicht</div>
+          <div id="checkoutItemsList" style="margin-bottom:10px;"></div>
+          <div id="checkoutSummaryBody"></div>
+        </div>
+      </aside>
+
+      <div class="checkout-main">
+
+        <!-- Step 1: Adresse -->
+        <section class="step-panel" id="stepAddress">
+          <div class="card">
+            <div class="card-title">Wie möchtest du bestellen?</div>
+            <label class="option-card active" data-account="guest">
+              <input type="radio" name="accountType" value="guest" checked>
+              <div class="option-card-body">
+                <div class="option-card-title">Als Gast bestellen</div>
+                <div class="option-card-sub">Schnell, ohne Konto — Bestellstatus per E-Mail</div>
+              </div>
+            </label>
+            <label class="option-card" data-account="new">
+              <input type="radio" name="accountType" value="new">
+              <div class="option-card-body">
+                <div class="option-card-title">Konto erstellen</div>
+                <div class="option-card-sub">Bestellhistorie &amp; schnellerer Checkout beim nächsten Mal</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="card" id="shippingAddressCard">
+            <div class="card-title">Kontakt &amp; Lieferadresse</div>
+            <div class="form-grid">
+              <div class="form-row-2">
+                <div class="form-field"><label>Vorname</label><input type="text" placeholder="Anna"></div>
+                <div class="form-field"><label>Nachname</label><input type="text" placeholder="Meyer"></div>
+              </div>
+              <div class="form-field"><label>E-Mail</label><input type="email" placeholder="anna.meyer@beispiel.de"></div>
+              <div class="form-field"><label>Telefon (optional)</label><input type="tel" placeholder="0441 1234567"></div>
+              <div class="form-field"><label>Straße &amp; Hausnummer</label><input type="text" placeholder="Musterstraße 12"></div>
+              <div class="form-row-2">
+                <div class="form-field"><label>PLZ</label><input type="text" placeholder="26122"></div>
+                <div class="form-field"><label>Ort</label><input type="text" placeholder="Oldenburg"></div>
+              </div>
+              <div class="form-field"><label>Land</label>
+                <select><option>Deutschland</option><option>Österreich</option><option>Schweiz</option></select>
+              </div>
+              <div class="form-field" id="passwordField" hidden><label>Passwort</label><input type="password" placeholder="Mind. 8 Zeichen"></div>
+            </div>
+          </div>
+
+          <div class="card" id="pickupContactCard" hidden>
+            <div class="card-title">Filiale &amp; Kontakt</div>
+            <div class="option-card active" style="cursor:default;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="margin-top:1px; color:var(--accent); flex-shrink:0;"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              <div class="option-card-body">
+                <div class="option-card-title" id="pickupStoreName">Oldenburg</div>
+                <div class="option-card-sub" id="pickupStoreAddr">Rheinstr. 16, 26135 Oldenburg</div>
+              </div>
+            </div>
+            <div class="form-grid" style="margin-top:12px;">
+              <div class="form-row-2">
+                <div class="form-field"><label>Vorname</label><input type="text" placeholder="Anna"></div>
+                <div class="form-field"><label>Nachname</label><input type="text" placeholder="Meyer"></div>
+              </div>
+              <div class="form-field"><label>E-Mail (für Abholbenachrichtigung)</label><input type="email" placeholder="anna.meyer@beispiel.de"></div>
+              <div class="form-field"><label>Telefon (optional)</label><input type="tel" placeholder="0441 1234567"></div>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn btn-primary btn-block" data-next="2" type="button">Weiter →</button>
+          </div>
+        </section>
+
+        <!-- Step 2: Versand / Abholung -->
+        <section class="step-panel" id="stepShipping" hidden>
+          <div class="card" id="shippingSpeedCard">
+            <div class="card-title">Versandgeschwindigkeit</div>
+            <label class="option-card active" data-speed="standard">
+              <input type="radio" name="shippingSpeed" value="standard" checked>
+              <div class="option-card-body">
+                <div class="option-card-title"><span>Standard</span><span class="option-card-price" id="standardPricePreview">6,90 €</span></div>
+                <div class="option-card-sub">3–5 Werktage per Spedition, Bike vormontiert &amp; fahrfertig eingestellt</div>
+              </div>
+            </label>
+            <label class="option-card" data-speed="express">
+              <input type="radio" name="shippingSpeed" value="express">
+              <div class="option-card-body">
+                <div class="option-card-title"><span>Express</span><span class="option-card-price">12,90 €</span></div>
+                <div class="option-card-sub">1–2 Werktage, bevorzugte Zustellung</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="card" id="pickupSlotCard" hidden>
+            <div class="card-title">Abholzeitpunkt in <span id="pickupSlotStore">Oldenburg</span></div>
+            <label class="option-card active" data-slot="today">
+              <input type="radio" name="pickupSlot" value="today" checked>
+              <div class="option-card-body"><div class="option-card-title">Heute ab 16:00 Uhr</div><div class="option-card-sub">Bike ist bereits fahrfertig vorbereitet</div></div>
+            </label>
+            <label class="option-card" data-slot="tomorrow">
+              <input type="radio" name="pickupSlot" value="tomorrow">
+              <div class="option-card-body"><div class="option-card-title">Morgen ab 10:00 Uhr</div><div class="option-card-sub">Mehr Zeit für individuelle Voreinstellung</div></div>
+            </label>
+            <label class="option-card" data-slot="own">
+              <input type="radio" name="pickupSlot" value="own">
+              <div class="option-card-body"><div class="option-card-title">Eigenen Termin wählen</div><div class="option-card-sub">Wir melden uns zur Terminabstimmung</div></div>
+            </label>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn btn-secondary" data-back="1" type="button">← Zurück</button>
+            <button class="btn btn-primary" data-next="3" type="button">Weiter →</button>
+          </div>
+        </section>
+
+        <!-- Step 3: Zahlung -->
+        <section class="step-panel" id="stepPayment" hidden>
+          <div class="card">
+            <div class="card-title">Zahlungsmethode</div>
+            <label class="option-card active" data-pay="card">
+              <input type="radio" name="paymentMethod" value="card" checked>
+              <div class="option-card-body">
+                <div class="option-card-title">
+                  <span>Kreditkarte</span>
+                  <span class="card-network-marks"><span class="mono">VISA</span><span class="mono">MASTERCARD</span><span class="mono">AMEX</span></span>
+                </div>
+                <div id="cardFields" style="margin-top:10px;">
+                  <div class="secure-card-widget">
+                    <div class="form-grid">
+                      <div class="form-field"><label>Kartennummer</label><input type="text" placeholder="4111 1111 1111 1111" inputmode="numeric"></div>
+                      <div class="form-row-2">
+                        <div class="form-field"><label>Gültig bis</label><input type="text" placeholder="MM / JJ"></div>
+                        <div class="form-field"><label>CVC</label><input type="text" placeholder="123" inputmode="numeric"></div>
+                      </div>
+                    </div>
+                    <div class="secure-card-note">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                      Verschlüsselte Eingabe über unseren Zahlungsdienstleister — deine Kartendaten werden nicht bei BIKE ONE gespeichert.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </label>
+            <label class="option-card" data-pay="paypal">
+              <input type="radio" name="paymentMethod" value="paypal">
+              <div class="option-card-body">
+                <div class="option-card-title">PayPal</div>
+                <div class="option-card-sub">Du wirst nach dem Absenden zu PayPal weitergeleitet und kehrst danach hierher zurück.</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn btn-secondary" data-back="2" type="button">← Zurück</button>
+            <button class="btn btn-primary" id="placeOrderBtn" type="button">Zahlungspflichtig bestellen</button>
+          </div>
+        </section>
+
+        <!-- Step 4: Bestätigung -->
+        <section class="step-panel" id="stepConfirm" hidden>
+          <div class="card">
+            <div class="confirm-hero">
+              <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <h2>Danke für deine Bestellung!</h2>
+              <div class="order-no">Bestellnummer <b id="orderNumber">BO-2026-000000</b></div>
+            </div>
+            <ul class="confirm-list" id="confirmNextSteps"></ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Rückgabe &amp; Umtausch</div>
+            <p style="font-size:13.5px; color:var(--ink-muted); margin:0; line-height:1.5;">
+              30 Tage Rückgaberecht — unkompliziert in jeder Filiale, in Oldenburg oder Osnabrück, ohne Versandetikett. Bei per Spedition geliefertem Sperrgut holen wir die Rücksendung nach Absprache direkt bei dir ab.
+            </p>
+          </div>
+
+          <div class="step-actions">
+            <button class="btn btn-secondary btn-block" id="backToShopBtn" type="button">Weiter einkaufen</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mobile-cta-bar" id="mobileCtaBar" hidden>
+  <div class="row">
+    <div class="total">
+      <span class="label">Gesamt</span>
+      <span class="amount mono" id="mobileCtaAmount">474,49 €</span>
+    </div>
+    <button class="btn btn-primary" id="mobileCtaBtn" type="button">Weiter →</button>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="footer-inner">
+    <div class="footer-legal-links">
+      <a href="#">Impressum</a><a href="#">AGB</a><a href="#">Datenschutz</a><a href="#">Widerrufsrecht</a>
+    </div>
+    <div class="footer-return-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+      <span>© 2026 BIKE ONE · Rückgabe &amp; Umtausch: 30 Tage, unkompliziert in Oldenburg oder Osnabrück.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ---- state ----
+  var items = [
+    {id:1, brand:"Trek", name:"Checkpoint SL 6 AXS", variant:"Größe 56 cm", price:3799, qty:1},
+    {id:2, brand:"Lazer", name:"Aero-Helm ProLine", variant:"Größe M (54–58 cm)", price:189, qty:1},
+    {id:3, brand:"Garmin", name:"GPS-Radcomputer Edge", variant:"—", price:349, qty:1},
+    {id:4, brand:"SKS", name:"Schutzblech-Set Gravel", variant:"28 Zoll", price:39, qty:2}
+  ];
+  var STORES = {
+    "Oldenburg": "Rheinstr. 16, 26135 Oldenburg",
+    "Osnabrück": "Lengericher Landstraße 30, 49078 Osnabrück"
+  };
+  var state = {
+    deliveryMethod: 'shipping',
+    pickupStore: 'Oldenburg',
+    shippingSpeed: 'standard',
+    pickupSlot: 'today',
+    accountType: 'guest',
+    paymentMethod: 'card',
+    promoApplied: false,
+    currentStep: 1,
+    maxStepReached: 1
+  };
+  var FREE_SHIPPING_THRESHOLD = 5000;
+  var STANDARD_SHIPPING = 6.90;
+  var EXPRESS_SHIPPING = 12.90;
+
+  function fmt(n){ return n.toLocaleString('de-DE', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €'; }
+
+  function subtotal(){ return items.reduce(function(s,i){ return s + i.price*i.qty; }, 0); }
+  function itemCount(){ return items.reduce(function(s,i){ return s + i.qty; }, 0); }
+  function discount(){ return state.promoApplied ? subtotal() * 0.10 : 0; }
+  function shippingCost(){
+    if (state.deliveryMethod === 'pickup') return 0;
+    if (state.shippingSpeed === 'express') return EXPRESS_SHIPPING;
+    return subtotal() >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING;
+  }
+  function total(){ return Math.max(0, subtotal() - discount() + shippingCost()); }
+
+  // ---- cart rendering ----
+  var cartItemsList = document.getElementById('cartItemsList');
+  var cartHasItems = document.getElementById('cartHasItems');
+  var emptyCartMsg = document.getElementById('emptyCartMsg');
+
+  function renderCartItems(){
+    if (items.length === 0){
+      cartHasItems.hidden = true;
+      emptyCartMsg.hidden = false;
+      return;
+    }
+    cartHasItems.hidden = false;
+    emptyCartMsg.hidden = true;
+    cartItemsList.innerHTML = '';
+    items.forEach(function(it){
+      var row = document.createElement('div');
+      row.className = 'cart-item';
+      row.innerHTML =
+        '<div class="cart-item-img placeholder-img">' + it.brand + '<br>' + it.name + '</div>' +
+        '<div class="cart-item-body">' +
+          '<div class="cart-item-brand mono">' + it.brand + '</div>' +
+          '<p class="cart-item-name">' + it.name + '</p>' +
+          '<div class="cart-item-variant">' + it.variant + '</div>' +
+          '<div class="cart-item-row">' +
+            '<div class="qty-stepper" data-id="' + it.id + '">' +
+              '<button type="button" class="qty-minus" ' + (it.qty<=1?'disabled':'') + '>−</button>' +
+              '<span class="qty-val">' + it.qty + '</span>' +
+              '<button type="button" class="qty-plus">+</button>' +
+            '</div>' +
+            '<div class="cart-item-prices">' +
+              (it.qty>1 ? '<span class="cart-item-unit mono">' + fmt(it.price) + ' / Stk.</span>' : '') +
+              '<span class="cart-item-total mono">' + fmt(it.price*it.qty) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<button type="button" class="cart-item-remove" data-remove="' + it.id + '">Entfernen</button>' +
+        '</div>';
+      cartItemsList.appendChild(row);
+    });
+
+    cartItemsList.querySelectorAll('.qty-minus').forEach(function(b){
+      b.addEventListener('click', function(){
+        var id = parseInt(b.closest('.qty-stepper').getAttribute('data-id'), 10);
+        var it = items.find(function(i){return i.id===id;});
+        if (it && it.qty>1){ it.qty--; renderAll(); }
+      });
+    });
+    cartItemsList.querySelectorAll('.qty-plus').forEach(function(b){
+      b.addEventListener('click', function(){
+        var id = parseInt(b.closest('.qty-stepper').getAttribute('data-id'), 10);
+        var it = items.find(function(i){return i.id===id;});
+        if (it){ it.qty++; renderAll(); }
+      });
+    });
+    cartItemsList.querySelectorAll('[data-remove]').forEach(function(b){
+      b.addEventListener('click', function(){
+        var id = parseInt(b.getAttribute('data-remove'), 10);
+        items = items.filter(function(i){ return i.id !== id; });
+        renderAll();
+      });
+    });
+  }
+
+  function summaryHtml(){
+    var html = '';
+    html += '<div class="summary-row"><span>Zwischensumme (' + itemCount() + ' Artikel)</span><span class="amount">' + fmt(subtotal()) + '</span></div>';
+    if (state.promoApplied){
+      html += '<div class="summary-row discount"><span>Rabatt (BIKEONE10)</span><span class="amount">−' + fmt(discount()) + '</span></div>';
+    }
+    html += '<div class="summary-row"><span>' + (state.deliveryMethod==='pickup' ? 'Abholung' : 'Versand') + '</span><span class="amount">' + (shippingCost()===0 ? 'kostenlos' : fmt(shippingCost())) + '</span></div>';
+    html += '<div class="summary-total"><span>Gesamt</span><span class="amount">' + fmt(total()) + '</span></div>';
+    html += '<div class="summary-note">inkl. MwSt.' + (state.deliveryMethod==='shipping' ? ', zzgl. eventueller Versandkosten je nach Geschwindigkeit' : '') + '</div>';
+    return html;
+  }
+
+  function renderSummaries(){
+    document.getElementById('cartSummaryBody').innerHTML = summaryHtml();
+    document.getElementById('checkoutSummaryBody').innerHTML = summaryHtml();
+    document.getElementById('toggleAmount').textContent = fmt(total());
+    document.getElementById('mobileCtaAmount').textContent = fmt(total());
+    document.getElementById('shipPreview').textContent = subtotal() >= FREE_SHIPPING_THRESHOLD ? 'kostenlos' : fmt(STANDARD_SHIPPING);
+    var standardPreview = document.getElementById('standardPricePreview');
+    if (standardPreview) standardPreview.textContent = subtotal() >= FREE_SHIPPING_THRESHOLD ? 'kostenlos' : fmt(STANDARD_SHIPPING);
+
+    var checkoutItemsList = document.getElementById('checkoutItemsList');
+    checkoutItemsList.innerHTML = items.map(function(it){
+      return '<div style="display:flex; justify-content:space-between; gap:8px; font-size:12.5px; color:var(--ink-muted); padding:4px 0;">' +
+        '<span>' + it.name + ' × ' + it.qty + '</span><span class="mono">' + fmt(it.price*it.qty) + '</span></div>';
+    }).join('');
+
+    document.getElementById('cartCount').textContent = itemCount();
+  }
+
+  function renderAll(){ renderCartItems(); renderSummaries(); updateMobileCta(); }
+
+  // ---- delivery method (cart) ----
+  document.querySelectorAll('.option-card[data-method]').forEach(function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.option-card[data-method]').forEach(function(c){ c.classList.remove('active'); });
+      card.classList.add('active');
+      card.querySelector('input').checked = true;
+      state.deliveryMethod = card.getAttribute('data-method');
+      document.getElementById('storePick').classList.toggle('show', state.deliveryMethod === 'pickup');
+      syncPickupUI();
+      renderSummaries();
+    });
+  });
+  document.querySelectorAll('.store-chip').forEach(function(chip){
+    chip.addEventListener('click', function(e){
+      e.stopPropagation();
+      document.querySelectorAll('.store-chip').forEach(function(c){ c.classList.remove('active'); });
+      chip.classList.add('active');
+      state.pickupStore = chip.getAttribute('data-store');
+      syncPickupUI();
+    });
+  });
+
+  function syncPickupUI(){
+    document.getElementById('pickupStoreName').textContent = state.pickupStore;
+    document.getElementById('pickupStoreAddr').textContent = STORES[state.pickupStore];
+    document.getElementById('pickupSlotStore').textContent = state.pickupStore;
+    document.getElementById('shippingAddressCard').hidden = state.deliveryMethod === 'pickup';
+    document.getElementById('pickupContactCard').hidden = state.deliveryMethod !== 'pickup';
+    document.getElementById('shippingSpeedCard').hidden = state.deliveryMethod === 'pickup';
+    document.getElementById('pickupSlotCard').hidden = state.deliveryMethod !== 'pickup';
+    document.getElementById('step2Label').textContent = state.deliveryMethod === 'pickup' ? 'Abholung' : 'Versand';
+  }
+
+  // ---- promo code ----
+  document.getElementById('promoApplyBtn').addEventListener('click', function(){
+    var val = document.getElementById('promoInput').value.trim().toUpperCase();
+    var msg = document.getElementById('promoMsg');
+    if (val === 'BIKEONE10'){
+      state.promoApplied = true;
+      msg.textContent = '✓ Gutschein eingelöst — 10% Rabatt auf den Warenwert.';
+      msg.className = 'promo-msg show ok';
+    } else {
+      state.promoApplied = false;
+      msg.textContent = 'Code ungültig oder abgelaufen.';
+      msg.className = 'promo-msg show err';
+    }
+    renderSummaries();
+  });
+
+  // ---- account type (checkout) ----
+  document.querySelectorAll('.option-card[data-account]').forEach(function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.option-card[data-account]').forEach(function(c){ c.classList.remove('active'); });
+      card.classList.add('active');
+      card.querySelector('input').checked = true;
+      state.accountType = card.getAttribute('data-account');
+      document.getElementById('passwordField').hidden = state.accountType !== 'new';
+    });
+  });
+
+  // ---- shipping speed ----
+  document.querySelectorAll('.option-card[data-speed]').forEach(function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.option-card[data-speed]').forEach(function(c){ c.classList.remove('active'); });
+      card.classList.add('active');
+      card.querySelector('input').checked = true;
+      state.shippingSpeed = card.getAttribute('data-speed');
+      renderSummaries();
+    });
+  });
+
+  // ---- pickup slot ----
+  document.querySelectorAll('.option-card[data-slot]').forEach(function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.option-card[data-slot]').forEach(function(c){ c.classList.remove('active'); });
+      card.classList.add('active');
+      card.querySelector('input').checked = true;
+      state.pickupSlot = card.getAttribute('data-slot');
+    });
+  });
+
+  // ---- payment method ----
+  document.querySelectorAll('.option-card[data-pay]').forEach(function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.option-card[data-pay]').forEach(function(c){ c.classList.remove('active'); });
+      card.classList.add('active');
+      card.querySelector('input').checked = true;
+      state.paymentMethod = card.getAttribute('data-pay');
+      document.getElementById('cardFields').style.display = state.paymentMethod === 'card' ? 'block' : 'none';
+    });
+  });
+
+  // ---- view + step navigation ----
+  var cartView = document.getElementById('cartView');
+  var checkoutView = document.getElementById('checkoutView');
+  var stepPanels = { 1: document.getElementById('stepAddress'), 2: document.getElementById('stepShipping'), 3: document.getElementById('stepPayment'), 4: document.getElementById('stepConfirm') };
+  var mobileCtaBar = document.getElementById('mobileCtaBar');
+  var mobileCtaBtn = document.getElementById('mobileCtaBtn');
+
+  function goToCheckout(){
+    cartView.hidden = true;
+    checkoutView.hidden = false;
+    window.scrollTo({top:0});
+    setStep(1);
+  }
+  document.getElementById('toCheckoutBtn').addEventListener('click', goToCheckout);
+
+  function backToShop(){
+    checkoutView.hidden = true;
+    cartView.hidden = false;
+    window.scrollTo({top:0});
+    updateMobileCta();
+  }
+  document.getElementById('backToShopBtn').addEventListener('click', backToShop);
+  document.getElementById('continueShoppingBtn').addEventListener('click', function(){
+    window.scrollTo({top:0});
+  });
+
+  function setStep(n){
+    state.currentStep = n;
+    if (n > state.maxStepReached) state.maxStepReached = n;
+    Object.keys(stepPanels).forEach(function(k){ stepPanels[k].hidden = (parseInt(k,10) !== n); });
+    document.querySelectorAll('.step-nav-item').forEach(function(item){
+      var s = parseInt(item.getAttribute('data-step'), 10);
+      item.classList.toggle('current', s === n);
+      item.classList.toggle('done', s < n || (s <= state.maxStepReached && s < n));
+      item.disabled = s > state.maxStepReached;
+    });
+    window.scrollTo({top:0, behavior:'smooth'});
+    updateMobileCta();
+  }
+
+  document.querySelectorAll('.step-nav-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      var s = parseInt(item.getAttribute('data-step'), 10);
+      if (s <= state.maxStepReached) setStep(s);
+    });
+  });
+  document.querySelectorAll('[data-next]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var n = parseInt(btn.getAttribute('data-next'), 10);
+      if (n === 4) placeOrder(); else setStep(n);
+    });
+  });
+  document.querySelectorAll('[data-back]').forEach(function(btn){
+    btn.addEventListener('click', function(){ setStep(parseInt(btn.getAttribute('data-back'), 10)); });
+  });
+  document.getElementById('placeOrderBtn').addEventListener('click', placeOrder);
+
+  function placeOrder(){
+    var orderNo = 'BO-2026-' + Math.floor(100000 + Math.random()*899999);
+    document.getElementById('orderNumber').textContent = orderNo;
+    var steps = document.getElementById('confirmNextSteps');
+    var lines = [];
+    if (state.deliveryMethod === 'pickup'){
+      lines.push('Wir benachrichtigen dich per E-Mail, sobald deine Bestellung in <b>' + state.pickupStore + '</b> abholbereit ist.');
+      lines.push('Abholzeitpunkt: ' + (state.pickupSlot==='today' ? 'heute ab 16:00 Uhr' : state.pickupSlot==='tomorrow' ? 'morgen ab 10:00 Uhr' : 'nach individueller Terminabstimmung') + '.');
+    } else {
+      lines.push('Du erhältst eine Versandbestätigung mit Sendungsverfolgung, sobald dein Paket unterwegs ist.');
+      lines.push('Voraussichtliche Lieferung: ' + (state.shippingSpeed==='express' ? '1–2 Werktage' : '3–5 Werktage') + '.');
+    }
+    lines.push('Eine Bestellbestätigung wurde an deine E-Mail-Adresse geschickt.');
+    steps.innerHTML = lines.map(function(l){
+      return '<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><span>' + l + '</span></li>';
+    }).join('');
+    setStep(4);
+  }
+
+  // ---- checkout summary collapse (mobile) ----
+  var checkoutSummaryToggle = document.getElementById('checkoutSummaryToggle');
+  var checkoutSide = document.getElementById('checkoutSide');
+  checkoutSummaryToggle.addEventListener('click', function(){
+    var isOpen = checkoutSide.classList.toggle('open');
+    checkoutSummaryToggle.classList.toggle('open', isOpen);
+  });
+
+  // ---- mobile sticky CTA ----
+  function updateMobileCta(){
+    if (checkoutView.hidden){
+      mobileCtaBar.hidden = items.length === 0;
+      mobileCtaBtn.textContent = 'Zur Kasse →';
+      mobileCtaBtn.onclick = goToCheckout;
+    } else if (state.currentStep === 4){
+      mobileCtaBar.hidden = true;
+    } else {
+      mobileCtaBar.hidden = false;
+      mobileCtaBtn.textContent = state.currentStep === 3 ? 'Bestellen' : 'Weiter →';
+      mobileCtaBtn.onclick = function(){
+        if (state.currentStep === 3) placeOrder(); else setStep(state.currentStep + 1);
+      };
+    }
+  }
+
+  // ---- cart icon just scrolls to cart (no separate mini-cart needed here) ----
+  document.getElementById('cartBtn').addEventListener('click', function(){
+    if (!checkoutView.hidden){ backToShop(); }
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  renderAll();
+})();
+</script>
