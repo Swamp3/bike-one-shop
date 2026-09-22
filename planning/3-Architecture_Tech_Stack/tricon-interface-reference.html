@@ -1,0 +1,471 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>TriCon Interface Reference</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#f7f5f1;
+    --surface:#ffffff;
+    --surface-2:#f0ede6;
+    --border:#ddd7ca;
+    --ink:#211d17;
+    --ink-soft:#5b5648;
+    --muted:#8c8674;
+    --accent:#c1531f;
+    --accent-ink:#ffffff;
+    --dl:#2f6b8f;
+    --dl-bg:#e8f0f4;
+    --ul:#a34a1c;
+    --ul-bg:#f7e9de;
+    --code-bg:#fbf9f5;
+    --code-ink:#3c3627;
+    --shadow: 0 1px 2px rgba(33,29,23,0.06), 0 8px 24px -12px rgba(33,29,23,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#191713;
+      --surface:#211e19;
+      --surface-2:#28241d;
+      --border:#3a352b;
+      --ink:#f1ece1;
+      --ink-soft:#c9c2b0;
+      --muted:#8f8873;
+      --accent:#e0793f;
+      --accent-ink:#191713;
+      --dl:#6fb3dd;
+      --dl-bg:#1f2c33;
+      --ul:#e29a6b;
+      --ul-bg:#2f2419;
+      --code-bg:#1c1a15;
+      --code-ink:#dcd5c3;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#191713;
+    --surface:#211e19;
+    --surface-2:#28241d;
+    --border:#3a352b;
+    --ink:#f1ece1;
+    --ink-soft:#c9c2b0;
+    --muted:#8f8873;
+    --accent:#e0793f;
+    --accent-ink:#191713;
+    --dl:#6fb3dd;
+    --dl-bg:#1f2c33;
+    --ul:#e29a6b;
+    --ul-bg:#2f2419;
+    --code-bg:#1c1a15;
+    --code-ink:#dcd5c3;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Public Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size:15px;
+    line-height:1.55;
+    padding-left:max(16px, env(safe-area-inset-left,0px));
+    padding-right:max(16px, env(safe-area-inset-right,0px));
+  }
+  h1,h2,h3,h4{ font-family:"Archivo", ui-sans-serif, system-ui, sans-serif; text-wrap:balance; margin:0; color:var(--ink);}
+  code, pre, .mono{ font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+  a{ color:var(--accent); }
+
+  .shell{ max-width:1180px; margin:0 auto; display:grid; grid-template-columns:248px 1fr; gap:32px; padding-block:28px 64px; }
+  @media (max-width: 880px){ .shell{ grid-template-columns:1fr; } }
+
+  /* ---- Sidebar ---- */
+  .sidebar{ position:sticky; top:calc(16px + env(safe-area-inset-top,0px)); align-self:start; max-height:calc(100vh - 32px); overflow-y:auto; padding-right:4px; }
+  @media (max-width: 880px){ .sidebar{ position:static; max-height:none; } }
+  .brand{ display:flex; align-items:baseline; gap:8px; margin-bottom:4px; }
+  .brand .mark{ width:10px; height:10px; border-radius:2px; background:var(--accent); flex:none; }
+  .brand h1{ font-size:17px; font-weight:800; letter-spacing:-0.01em; }
+  .brand-sub{ font-size:12px; color:var(--muted); margin:2px 0 18px; }
+
+  .search{ position:relative; margin-bottom:16px; }
+  .search input{
+    width:100%; padding:9px 12px 9px 32px; border-radius:8px; border:1px solid var(--border);
+    background:var(--surface); color:var(--ink); font:inherit; font-size:13.5px;
+  }
+  .search input:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+  .search svg{ position:absolute; left:10px; top:50%; transform:translateY(-50%); width:14px; height:14px; stroke:var(--muted); pointer-events:none; }
+
+  nav.toc{ display:flex; flex-direction:column; gap:2px; margin-bottom:20px; }
+  nav.toc .toc-label{ font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--muted); font-weight:600; margin:14px 0 6px; }
+  nav.toc .toc-label:first-child{ margin-top:0; }
+  nav.toc a{ text-decoration:none; color:var(--ink-soft); font-size:13.5px; padding:5px 8px; border-radius:6px; display:flex; justify-content:space-between; gap:8px; }
+  nav.toc a:hover{ background:var(--surface-2); color:var(--ink); }
+  nav.toc a .count{ color:var(--muted); font-variant-numeric:tabular-nums; font-size:12px; }
+
+  .legend{ display:flex; flex-direction:column; gap:6px; padding-top:14px; border-top:1px solid var(--border); font-size:12px; color:var(--muted); }
+  .legend .row{ display:flex; align-items:center; gap:7px; }
+  .swatch{ width:9px; height:9px; border-radius:2px; flex:none; }
+
+  /* ---- Main ---- */
+  main{ min-width:0; }
+  .hero{ margin-bottom:8px; }
+  .eyebrow{ font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent); font-weight:700; margin-bottom:8px; }
+  .hero h2{ font-size:30px; font-weight:800; letter-spacing:-0.01em; margin-bottom:10px; }
+  .hero p{ color:var(--ink-soft); max-width:64ch; font-size:15px; }
+  .contact{ font-size:13px; color:var(--muted); margin-top:10px; }
+  .contact a{ color:var(--ink-soft); }
+
+  section{ margin-top:46px; scroll-margin-top:20px; }
+  section > h3{ font-size:21px; font-weight:800; letter-spacing:-0.01em; padding-bottom:10px; border-bottom:1px solid var(--border); margin-bottom:16px; }
+  section > .section-intro{ color:var(--ink-soft); max-width:70ch; margin-bottom:16px; font-size:14.5px; }
+
+  .card{ background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px; box-shadow:var(--shadow); }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width: 700px){ .grid-2{ grid-template-columns:1fr; } }
+
+  table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  th{ text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); font-weight:600; padding:6px 10px; border-bottom:1px solid var(--border); }
+  td{ padding:8px 10px; border-bottom:1px solid var(--border); vertical-align:top; }
+  tr:last-child td{ border-bottom:none; }
+  td.fname{ font-family:"IBM Plex Mono", monospace; font-size:12.5px; color:var(--ink); white-space:nowrap; }
+  td.ftype{ font-family:"IBM Plex Mono", monospace; font-size:12px; color:var(--dl); white-space:nowrap; }
+  td.fnull{ font-size:12px; color:var(--muted); white-space:nowrap; }
+  .table-wrap{ overflow-x:auto; }
+
+  .steps{ display:flex; flex-direction:column; gap:0; counter-reset:step; }
+  .step{ display:grid; grid-template-columns:28px 1fr; gap:14px; padding:14px 0; border-bottom:1px solid var(--border); }
+  .step:last-child{ border-bottom:none; }
+  .step .num{ width:26px; height:26px; border-radius:50%; background:var(--surface-2); border:1px solid var(--border); color:var(--ink-soft); font-family:"IBM Plex Mono",monospace; font-size:12px; display:flex; align-items:center; justify-content:center; font-weight:600; }
+  .step h4{ font-size:14.5px; font-weight:700; margin-bottom:3px; }
+  .step p{ margin:0; color:var(--ink-soft); font-size:13.5px; }
+  .step code{ background:var(--code-bg); padding:1px 5px; border-radius:4px; font-size:12px; color:var(--code-ink); }
+
+  .callout{ border-radius:10px; padding:14px 16px; font-size:13.5px; border:1px solid var(--border); background:var(--surface-2); }
+  .callout.warn{ border-color: color-mix(in srgb, var(--accent) 35%, var(--border)); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+  .callout strong{ color:var(--ink); }
+
+  /* ---- Function cards ---- */
+  #fn-list{ display:flex; flex-direction:column; gap:12px; }
+  .fn-cat-heading{ font-size:12px; text-transform:uppercase; letter-spacing:0.07em; color:var(--muted); font-weight:700; margin:28px 0 10px; padding-top:2px; }
+  .fn-cat-heading:first-child{ margin-top:6px; }
+
+  .fn-card{ background:var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:var(--shadow); overflow:hidden; }
+  .fn-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; padding:15px 18px; cursor:pointer; list-style:none; }
+  .fn-head::-webkit-details-marker{ display:none; }
+  .fn-head-left{ display:flex; flex-direction:column; gap:5px; min-width:0; }
+  .fn-name{ font-family:"IBM Plex Mono", monospace; font-size:14.5px; font-weight:600; color:var(--ink); }
+  .fn-desc{ font-size:13px; color:var(--ink-soft); max-width:62ch; }
+  .fn-badge{ flex:none; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; padding:4px 9px; border-radius:999px; margin-top:1px; }
+  .fn-badge.Download{ background:var(--dl-bg); color:var(--dl); }
+  .fn-badge.Upload{ background:var(--ul-bg); color:var(--ul); }
+  .chev{ flex:none; width:16px; height:16px; stroke:var(--muted); transition:transform .15s ease; margin-top:3px; }
+  details[open] .chev{ transform:rotate(90deg); }
+
+  .fn-body{ padding:0 18px 18px; display:flex; flex-direction:column; gap:16px; border-top:1px solid var(--border); padding-top:16px; }
+  .fn-block-label{ font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); font-weight:700; margin-bottom:8px; }
+  pre.xml{ background:var(--code-bg); color:var(--code-ink); border:1px solid var(--border); border-radius:8px; padding:12px 14px; font-size:12px; line-height:1.6; overflow-x:auto; margin:0; }
+  ul.notes{ margin:0; padding-left:18px; display:flex; flex-direction:column; gap:5px; font-size:13px; color:var(--ink-soft); }
+  ul.notes li::marker{ color:var(--accent); }
+  ul.notes b{ color:var(--ink); font-weight:600; }
+
+  #fn-empty{ display:none; color:var(--muted); font-size:14px; padding:24px 0; }
+
+  .df-card{ margin-bottom:16px; }
+  .df-card h4{ font-family:"IBM Plex Mono",monospace; font-size:15px; margin-bottom:4px; }
+  .df-card p{ margin:0 0 12px; color:var(--ink-soft); font-size:13.5px; }
+
+  footer{ margin-top:56px; padding-top:20px; border-top:1px solid var(--border); font-size:12.5px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+
+  ::selection{ background: color-mix(in srgb, var(--accent) 30%, transparent); }
+</style>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><span class="mark"></span><h1>TriCon Interface</h1></div>
+    <div class="brand-sub">TriBike ERP ⇄ web shop reference</div>
+
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="fn-search" type="search" placeholder="Search functions…" autocomplete="off">
+    </div>
+
+    <nav class="toc">
+      <div class="toc-label">Guide</div>
+      <a href="#overview">Overview &amp; protocol</a>
+      <a href="#flow">Data flow</a>
+      <a href="#dependencies">Module dependencies</a>
+      <a href="#build">Building the shop sync</a>
+      <div class="toc-label">Functions</div>
+      <a href="#cat-Items-Variants">Items &amp; variants <span class="count">7</span></a>
+      <a href="#cat-Images">Images <span class="count">2</span></a>
+      <a href="#cat-Pricing-Customer-Groups">Pricing &amp; groups <span class="count">3</span></a>
+      <a href="#cat-Customers">Customers <span class="count">5</span></a>
+      <a href="#cat-Stock">Stock <span class="count">12</span></a>
+      <a href="#cat-Orders-Order-State">Orders &amp; order state <span class="count">9</span></a>
+      <a href="#cat-Invoices-Credits">Invoices &amp; credits <span class="count">6</span></a>
+      <div class="toc-label">Reference</div>
+      <a href="#formats">Upload data formats</a>
+      <a href="#ids">Key identifiers</a>
+    </nav>
+
+    <div class="legend">
+      <div class="row"><span class="swatch" style="background:var(--dl)"></span> Download — TriBike → shop</div>
+      <div class="row"><span class="swatch" style="background:var(--ul)"></span> Upload — shop → TriBike</div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="hero" id="overview">
+      <div class="eyebrow">SOAP / XML web service</div>
+      <h2>TriCon Web Interface Reference</h2>
+      <p>TriCon is TriData's SOAP web service that connects a TriBike ERP installation to an external web shop. It exchanges catalog, stock, customer, order and document data as XML over SOAP — 44 functions in total, analyzed here from the official documentation and organized for building a shop integration on top of it.</p>
+      <div class="contact">Vendor support: <a href="tel:+499112476750">+49 911 247675-0</a> · <a href="mailto:support@tridata.de">support@tridata.de</a> — for your IdentifyGuid and the WSDL URL for your instance.</div>
+    </div>
+
+    <section>
+      <h3>Protocol &amp; authentication</h3>
+      <div class="grid-2">
+        <div class="card">
+          <div class="fn-block-label">Transport</div>
+          <p style="margin:0 0 10px;font-size:13.5px;color:var(--ink-soft)">SOAP 1.1/1.2 over HTTP(S), payloads as XML. The exact request/response shapes for your TriCon instance are published as a WSDL — open the web service's own URL in a browser to get it (append <code>?wsdl</code> or use the URL TriData gives you).</p>
+          <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">Every call in this reference is described by its inner parameters and result fields; the outer SOAP envelope follows the standard WSDL-generated shape.</p>
+        </div>
+        <div class="card">
+          <div class="fn-block-label">IdentifyGuid</div>
+          <p style="margin:0 0 10px;font-size:13.5px;color:var(--ink-soft)">Your authentication token. It is sent as a parameter on <b>every single request</b> — there is no separate login call. TriData issues it during project setup.</p>
+          <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">Store it as a server-side secret in the shop backend; never expose it to the browser.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="flow">
+      <h3>Data flow</h3>
+      <p class="section-intro">Two independent directions of traffic, both authenticated with the same IdentifyGuid.</p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="fn-block-label" style="color:var(--dl)">TriBike → web interface → shop (Download)</div>
+          <ul class="notes">
+            <li><b>Items</b> — every item flagged for web use, with retail/purchase prices and category assignments.</li>
+            <li><b>Color/size variants</b> — only if the color/size module is active; otherwise each variant is its own separate item in TriBike.</li>
+            <li><b>Customers</b> — existing TriBike customers, mainly for B2B shops.</li>
+            <li><b>Stock</b> — pushed to the interface automatically whenever stock changes in TriBike.</li>
+            <li><b>Item images</b> — the interface serves back an image URL path.</li>
+            <li><b>Invoices</b> — exported as PDFs via an ftp path.</li>
+            <li><b>Order states</b> — updated automatically as TriBike processes an order.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="fn-block-label" style="color:var(--ul)">Shop → web interface (Upload)</div>
+          <ul class="notes">
+            <li><b>Orders</b> — customer, delivery address, delivery term, shipping cost, prices, payment and every order line, in one call.</li>
+            <li><b>Customers</b> — can be uploaded standalone, e.g. when someone registers without ordering.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="dependencies">
+      <h3>TriBike module dependencies</h3>
+      <p class="section-intro">Which functions apply — and how — depends on how the connected TriBike system is configured.</p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="fn-block-label">Color/size module (Größen Farben Modul)</div>
+          <p style="margin:0;font-size:13.5px;color:var(--ink-soft)">When active, variants are modeled as color/size combinations under a parent item — fetch them with <code>DownloadGrFaKombi</code>, related to their parent via <code>ArtikelGrFaKombi.Artikel</code>. Use the <code>*ColorSize*</code> stock functions instead of the plain stock functions. When inactive, each variant is simply its own separate item in TriBike — talk to TriData support if that makes variant management impractical for your shop.</p>
+        </div>
+        <div class="card">
+          <div class="fn-block-label">Branches (Filialen)</div>
+          <p style="margin:0 0 10px;font-size:13.5px;color:var(--ink-soft)"><b>One interface for all branches:</b> one "main" branch is directly connected; manual upload/download only happens there, but stock covers every branch (use the branch-aware stock functions). You can create orders for other branches by setting <code>Filialname</code> in the Order object — the main branch downloads them and routes them to the right branch.</p>
+          <p style="margin:0;font-size:13.5px;color:var(--ink-soft)"><b>One interface per branch (or single-branch selling):</b> don't use the branch stock functions, and leave <code>Filialname</code> unset on orders.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="build">
+      <h3>Building the shop sync</h3>
+      <p class="section-intro">A practical call order for wiring a new shop up to this interface, derived from the function set below.</p>
+      <div class="card steps">
+        <div class="step">
+          <div class="num">1</div>
+          <div><h4>Load reference/lookup tables once</h4><p><code>DownloadKundengruppen</code>, <code>DownloadFarbe</code>, <code>DownloadGroesse</code> — small, mostly-static tables your catalog and pricing will join against.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <div><h4>Full catalog import</h4><p><code>DownloadArtikelAll</code> for every item, then <code>DownloadGrFaKombi</code> for variants if the color/size module is active. Key off <code>ArtikelID</code>; use <code>I_VKnetto</code>/<code>I_VKbrutto</code> as the web-facing price, not <code>VKnetto</code>.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <div><h4>Images and pricing tiers</h4><p><code>DownloadArtikelbild</code> for product images; <code>DownloadArtikelKundengruppenPreis</code>/<code>DownloadArtikelKundenPreis</code> if you're running B2B tiered or negotiated pricing.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">4</div>
+          <div><h4>Stock import, then poll deltas</h4><p><code>DownloadStock</code> (or the <code>ColorSize</code>/<code>Branch</code> variants that match your setup) for the initial load, then the matching <code>*Delta</code> function on a schedule using <code>LastChange</code> — TriBike pushes stock changes to the interface the moment they happen, so short polling intervals are safe.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">5</div>
+          <div><h4>Incremental catalog sync</h4><p>Switch from <code>DownloadArtikelAll</code> to <code>DownloadArtikel</code> with <code>LastChange</code>; use <code>DownloadArtikelNrAll</code> / <code>DownloadGrFaKombiBarcodeAll</code> periodically to detect items deleted on the TriBike side.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">6</div>
+          <div><h4>Checkout: UploadOrder</h4><p>Send Customer + Order + OrderItemsList together on every order — even for a returning customer. Always set a unique <code>WebShopOrderID</code> outside TriBike's own number range; it's the only way to relate the order back later.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">7</div>
+          <div><h4>Post-checkout status</h4><p>Poll <code>DownloadOrderStateByOrder</code> (or <code>ByCustomer</code> for an account page) to reflect TriBike's fulfillment state in the shop; use <code>UploadOrderChangeBezahlt</code> once payment settles and <code>UploadOrderChangeStorno</code> for cancellations.</p></div>
+        </div>
+        <div class="step">
+          <div class="num">8</div>
+          <div><h4>Documents</h4><p><code>DownloadRechnungen</code> / <code>DownloadGutschriften</code> (and their <code>ByCustomer</code>/<code>ByOrder</code>/<code>ByInvoice</code> variants) to surface invoice and credit-note PDFs in an account area.</p></div>
+        </div>
+      </div>
+      <div class="callout warn" style="margin-top:16px;"><strong>Before building:</strong> confirm with TriData support whether the color/size module and branches are active on the target TriBike instance — both change which functions apply and how several fields (stock, <code>Filialname</code>) behave.</div>
+    </section>
+
+    <section id="functions-section">
+      <h3>Function reference <span style="font-weight:400;color:var(--muted);font-size:14px;">— 44 functions</span></h3>
+      <p class="section-intro">Click a function to expand its parameters, response shape and field notes. Use the search box in the sidebar to filter by name or description.</p>
+      <div id="fn-list"></div>
+      <p id="fn-empty">No functions match your search.</p>
+    </section>
+
+    <section id="formats">
+      <h3>Upload data formats</h3>
+      <p class="section-intro">The four objects TriCon expects on upload, field by field. <code>Order</code> and <code>OrderItems</code> are also embedded inside <code>UploadOrder</code>; <code>CustomerExt</code> is shared by <code>UploadCustomer</code> and the Customer block of <code>UploadOrder</code>.</p>
+      <div id="df-list"></div>
+    </section>
+
+    <section id="ids">
+      <h3>Key identifiers, at a glance</h3>
+      <div class="table-wrap card">
+        <table>
+          <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td class="fname">ArtikelID</td><td>Primary key for an item — use this for identification wherever available.</td></tr>
+            <tr><td class="fname">Artikelnummer</td><td>Secondary/display item number. On order upload, only the first 20 characters are used by TriBike.</td></tr>
+            <tr><td class="fname">ArtikelGrFaKombiID</td><td>Primary key for one color/size variant of an item.</td></tr>
+            <tr><td class="fname">GrFa</td><td>Boolean on the item — true means it has color/size variants to look up via DownloadGrFaKombi.</td></tr>
+            <tr><td class="fname">I_VKnetto / I_VKbrutto</td><td>Net/gross price configured specifically for web use — prefer these over VKnetto/VKbrutto for shop display.</td></tr>
+            <tr><td class="fname">WebShopOrderID</td><td>Your own order number, set on UploadOrder. Required for order-state polling and the UploadOrderChange* functions to work at all.</td></tr>
+            <tr><td class="fname">Kundennummer</td><td>TriBike's customer number — set it explicitly only with a number range outside TriBike's own.</td></tr>
+            <tr><td class="fname">UserID</td><td>Mandatory customer field, normally the email address — TriData's primary match key for de-duplicating customers.</td></tr>
+            <tr><td class="fname">Filialname</td><td>Branch name — only relevant on multi-branch TriBike setups; leave unset otherwise.</td></tr>
+            <tr><td class="fname">LastChange</td><td>The delta-sync parameter across nearly every Download function — pass the timestamp of your last successful sync.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      <span>Compiled from the TriCon online documentation (tricondoku.tri-data.de) for the BikeOne shop build.</span>
+      <span>Support: +49 911 247675-0 · support@tridata.de</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+window.__TRICON_DATA__ = {"functions": [{"name": "DownloadArtikel", "method": "Download", "cat": "Items & Variants", "desc": "Downloads all items that have been updated or created since the last download.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Last successful download date. Items changed or created since then are returned."]], "resp": "<DownloadArtikelResult>\n  <Artikel>\n    <ArtikelID>guid</ArtikelID>\n    <ArtikelNummer>string</ArtikelNummer>\n    <EAN>string</EAN>\n    <ArtikelName>string</ArtikelName>\n    <ArtikelBeschreibung>string</ArtikelBeschreibung>\n    <MehrwertSteuerSatz>string</MehrwertSteuerSatz>\n    <QuantityUnitCode>string</QuantityUnitCode>\n    <Gewicht>double</Gewicht>\n    <Hersteller>string</Hersteller>\n    <Warengruppe>string</Warengruppe>\n    <VKBrutto>decimal</VKBrutto>\n    <VKNetto>decimal</VKNetto>\n    <UVP>decimal</UVP>\n    <CreateDate>dateTime</CreateDate>\n    <LastChange>dateTime</LastChange>\n    <HerstellerEAN>string</HerstellerEAN>\n    <Kurzbeschreibung>string</Kurzbeschreibung>\n    <Position>int</Position>\n    <Preisgruppe>guid</Preisgruppe>\n    <MetaTitel>string</MetaTitel>\n    <MetaBeschreibung>string</MetaBeschreibung>\n    <MetaKeywords>string</MetaKeywords>\n    <Veroeffentlichungsdatum>dateTime</Veroeffentlichungsdatum>\n    <MindestBestellmenge>double</MindestBestellmenge>\n    <MaximalBestellmenge>double</MaximalBestellmenge>\n    <KostenloseLiefung>boolean</KostenloseLiefung>\n    <TopArtikel>boolean</TopArtikel>\n    <OnSale>boolean</OnSale>\n    <Kategorien>string</Kategorien>\n    <ArtikelKlassifizierung1>string</ArtikelKlassifizierung1>\n    <ArtikelKlassifizierung2>string</ArtikelKlassifizierung2>\n    <ArtikelKlassifizierung3>string</ArtikelKlassifizierung3>\n    <EKNettoAvg>decimal</EKNettoAvg>\n    <EKBruttoAvg>decimal</EKBruttoAvg>\n    <LetzterEKNetto>decimal</LetzterEKNetto>\n    <LetzterEKBrutto>decimal</LetzterEKBrutto>\n    <HinterlegterEKNettoAvg>decimal</HinterlegterEKNettoAvg>\n    <HinterlegterEKBruttoAvg>decimal</HinterlegterEKBruttoAvg>\n    <GrFa>boolean</GrFa>\n    <Matchcode>string</Matchcode>\n    <Bezeichnung2>string</Bezeichnung2>\n    <Bezeichnung3>string</Bezeichnung3>\n    <Rabattsperre>boolean</Rabattsperre>\n    <Modelljahr>string</Modelljahr>\n    <Rahmennummerpflichtig>boolean</Rahmennummerpflichtig>\n    <IStatus>boolean</IStatus>\n    <Seriennummer>boolean</Seriennummer>\n    <Fedas>int</Fedas>\n    <Herstellernummer>string</Herstellernummer>\n    <Bidex>int</Bidex>\n    <I_VKnetto>decimal</I_VKnetto>\n    <I_VKbrutto>decimal</I_VKbrutto>\n    <Versandkostenaufschlag>decimal</Versandkostenaufschlag>\n    <I_RotstiftpreisNetto>decimal</I_RotstiftpreisNetto>\n    <I_RotstiftpreisBrutto>decimal</I_RotstiftpreisBrutto>\n    <I_IstOnlineAktiv>boolean</I_IstOnlineAktiv>\n    <I_NeuerArtikel>boolean</I_NeuerArtikel>\n    <I_NurAbholung>boolean</I_NurAbholung>\n    <I_TextBezeichnung1>string</I_TextBezeichnung1>\n    <I_TextBezeichnung2>string</I_TextBezeichnung2>\n    <I_TextBezeichnung3>string</I_TextBezeichnung3>\n    <I_Beschreibung1>string</I_Beschreibung1>\n    <I_Beschreibung2>string</I_Beschreibung2>\n    <I_Beschreibung3>string</I_Beschreibung3>\n    <I_Beschreibung>string</I_Beschreibung>\n  </Artikel>\n  <!-- repeated per item -->\n</DownloadArtikelResult>", "notes": ["ArtikelID – primary key, use for item identification.", "Artikelnummer – secondary/display identifier for the item.", "VKNetto – net price used inside TriBike.", "I_VKnetto – net price configured specifically for web usage — this is normally the price to show in the shop.", "GrFa – true marks the item as a color/size parent; look up its variants via DownloadGrFaKombi."]}, {"name": "DownloadArtikelAll", "method": "Download", "cat": "Items & Variants", "desc": "Downloads all items available in the TriCon web interface (full catalog, not just deltas).", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadArtikelAllResult>\n  <Artikel>\n    <!-- identical schema to DownloadArtikel, see that entry -->\n  </Artikel>\n</DownloadArtikelAllResult>", "notes": ["Same item schema as DownloadArtikel — use this for the initial full catalog import, then switch to DownloadArtikel with LastChange for incremental syncs.", "Result quality depends entirely on how well the TriBike operator maintains item data."]}, {"name": "DownloadArtikelNrAll", "method": "Download", "cat": "Items & Variants", "desc": "Downloads just item numbers (Artikelnummer) and ids (ArtikelID) for every available item — a lightweight index.", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadArtikelNrAllResult>\n  <ArtikelNrObj>\n    <Artikelnummer>string</Artikelnummer>\n    <ArtikelID>guid</ArtikelID>\n  </ArtikelNrObj>\n</DownloadArtikelNrAllResult>", "notes": ["Built for cheap diffing — compare this list against your own shop database to find items that were deleted in TriBike (present locally, absent here)."]}, {"name": "DownloadFarbe", "method": "Download", "cat": "Items & Variants", "desc": "Returns all colors defined in TriBike.", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadFarbeResult>\n  <Farbe>\n    <FarbeID>guid</FarbeID>\n    <Bezeichnung>string</Bezeichnung>\n    <CreateDate>dateTime</CreateDate>\n    <LastChange>dateTime</LastChange>\n  </Farbe>\n</DownloadFarbeResult>", "notes": ["Bezeichnung – display name of the color.", "FarbeID – id referenced from DownloadGrFaKombi."]}, {"name": "DownloadGroesse", "method": "Download", "cat": "Items & Variants", "desc": "Returns all sizes defined in TriBike.", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadGroesseResult>\n  <Groesse>\n    <GroesseID>guid</GroesseID>\n    <Bezeichnung>string</Bezeichnung>\n    <Positionsnummer>int</Positionsnummer>\n    <CreateDate>dateTime</CreateDate>\n    <LastChange>dateTime</LastChange>\n  </Groesse>\n</DownloadGroesseResult>", "notes": ["Bezeichnung – display name of the size.", "Positionsnummer – sort order to display sizes in the correct sequence (e.g. S, M, L)."]}, {"name": "DownloadGrFaKombi", "method": "Download", "cat": "Items & Variants", "desc": "Loads all color/size combinations (variants) from the interface.", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadGrFaKombiResult>\n  <ArtikelGrFaKombi>\n    <ArtikelGrFaKombiID>guid</ArtikelGrFaKombiID>\n    <Artikel>guid</Artikel>\n    <Groesse>guid</Groesse>\n    <Farbe>guid</Farbe>\n    <Artikelnummer>string</Artikelnummer>\n    <EAN>string</EAN>\n    <CreateDate>dateTime</CreateDate>\n    <LastChange>dateTime</LastChange>\n    <Barcode>string</Barcode>\n    <FarbeBezeichnung>string</FarbeBezeichnung>\n    <GroesseBezeichnung>string</GroesseBezeichnung>\n  </ArtikelGrFaKombi>\n</DownloadGrFaKombiResult>", "notes": ["ArtikelGrFaKombiID – primary key of the variant, needed for variant-level stock and orders.", "Artikel – ArtikelID of the parent item.", "Only relevant if the TriBike color/size module is active — see Overview."]}, {"name": "DownloadGrFaKombiBarcodeAll", "method": "Download", "cat": "Items & Variants", "desc": "Downloads just barcodes and ids for every available color/size variant — a lightweight index for diffing.", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadGrFaKombiBarcodeAllResult>\n  <GrFaKombiBarcodeObj>\n    <ArtikelGrFaKombiID>guid</ArtikelGrFaKombiID>\n    <Barcode>string</Barcode>\n  </GrFaKombiBarcodeObj>\n</DownloadGrFaKombiBarcodeAllResult>", "notes": ["Use for performant comparisons between the variants in your shop and the interface (e.g. detecting deleted variants), mirroring DownloadArtikelNrAll for items."]}, {"name": "DownloadArtikelbild", "method": "Download", "cat": "Images", "desc": "Returns the URL path, item number and description for item images, optionally since a given date.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["sinceDate", "dateTime", "Only return images changed or created since this date."]], "resp": "<DownloadArtikelbildResult>\n  <ArticleImageObj>\n    <Artikelnummer>string</Artikelnummer>\n    <Image>string</Image>\n    <Description>string</Description>\n    <LastChange>dateTime</LastChange>\n  </ArticleImageObj>\n</DownloadArtikelbildResult>", "notes": ["Artikelnummer – item number the image belongs to.", "Image – URL path to fetch the actual image file from."]}, {"name": "DownloadArtikelbildByArtikel", "method": "Download", "cat": "Images", "desc": "Returns image information for one specific item.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["Artikelnummer", "string", "Item number to fetch images for."]], "resp": "<DownloadArtikelbildByArtikelResult>\n  <ArticleImageObj>\n    <Artikelnummer>string</Artikelnummer>\n    <Image>string</Image>\n    <Description>string</Description>\n    <LastChange>dateTime</LastChange>\n  </ArticleImageObj>\n</DownloadArtikelbildByArtikelResult>", "notes": ["Same object shape as DownloadArtikelbild, scoped to a single item — useful for on-demand/lazy image loading."]}, {"name": "DownloadKundengruppen", "method": "Download", "cat": "Pricing & Customer Groups", "desc": "Loads all customer groups (Kundengruppen) configured in TriBike.", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadKundengruppenResult>\n  <Kundengruppe>\n    <KundengruppeID>guid</KundengruppeID>\n    <Bezeichnung>string</Bezeichnung>\n  </Kundengruppe>\n</DownloadKundengruppenResult>", "notes": ["KundengruppeID – primary key referenced by customers and by DownloadArtikelKundengruppenPreis.", "Typically used for B2B pricing tiers."]}, {"name": "DownloadArtikelKundengruppenPreis", "method": "Download", "cat": "Pricing & Customer Groups", "desc": "Returns item prices scoped to a customer group, each valid from a minimum order quantity (scale pricing).", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Only return prices changed or created since this date."]], "resp": "<DownloadArtikelKundengruppenPreisResult>\n  <ArtikelKundengruppenPreis>\n    <ArtikelKundengruppenPreisID>guid</ArtikelKundengruppenPreisID>\n    <KundengruppeID>guid</KundengruppeID>\n    <Artikelnummer>string</Artikelnummer>\n    <ArtikelID>guid</ArtikelID>\n    <VKnetto>decimal</VKnetto>\n    <VKbrutto>decimal</VKbrutto>\n    <abMenge>double</abMenge>\n    <Kundengruppe>string</Kundengruppe>\n    <LastChange>dateTime</LastChange>\n  </ArtikelKundengruppenPreis>\n</DownloadArtikelKundengruppenPreisResult>", "notes": ["abMenge – minimum order quantity for this price tier to apply (scale pricing).", "B2B feature — pairs with DownloadKundengruppen."]}, {"name": "DownloadArtikelKundenPreis", "method": "Download", "cat": "Pricing & Customer Groups", "desc": "Returns item prices scoped to one specific customer, optionally a scale price.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Only return prices changed or created since this date — use an early date to load everything."]], "resp": "<DownloadArtikelKundenPreisResult>\n  <ArtikelKundenPreis>\n    <ArtikelKundenPreisID>guid</ArtikelKundenPreisID>\n    <CustomerID>guid</CustomerID>\n    <ArtikelID>guid</ArtikelID>\n    <VKnetto>decimal</VKnetto>\n    <VKbrutto>decimal</VKbrutto>\n    <abMenge>double</abMenge>\n    <Artikelnummer>string</Artikelnummer>\n    <Kundennummer>int</Kundennummer>\n    <LastChange>dateTime</LastChange>\n  </ArtikelKundenPreis>\n</DownloadArtikelKundenPreisResult>", "notes": ["CustomerID / Kundennummer – identify the customer this negotiated price applies to.", "abMenge – minimum quantity for scale pricing, as above.", "B2B feature."]}, {"name": "DownloadCustomer", "method": "Download", "cat": "Customers", "desc": "Downloads all customers that have been changed or created since a given date.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Date of the last successful use of this function."]], "resp": "<DownloadCustomerResult>\n  <Customer>\n    <customerID>guid</customerID>\n    <Kundennummer>int</Kundennummer>\n    <extern_ID>string</extern_ID>\n    <Anrede>string</Anrede>\n    <Kundenname>string</Kundenname>\n    <Name2>string</Name2>\n    <Firmenkunde>boolean</Firmenkunde>\n    <MehrwertsteuerCode>string</MehrwertsteuerCode>\n    <Telefon>string</Telefon>\n    <TelefonMobil>string</TelefonMobil>\n    <Fax>string</Fax>\n    <Email>string</Email>\n    <Geburtsdatum>dateTime</Geburtsdatum>\n    <UstID>string</UstID>\n    <Mailingsperre>boolean</Mailingsperre>\n    <UserID>string</UserID>\n    <UserPassword>string</UserPassword>\n    <Strasse>string</Strasse>\n    <Ort>string</Ort>\n    <Land>string</Land>\n    <Postleitzahl>string</Postleitzahl>\n    <CreateDate>dateTime</CreateDate>\n    <LastChange>dateTime</LastChange>\n    <Adresszusatz>string</Adresszusatz>\n    <Kundengruppe>guid</Kundengruppe>\n    <HasDeliveryAdress>boolean</HasDeliveryAdress>\n  </Customer>\n</DownloadCustomerResult>", "notes": ["Relevant mostly for B2B shops that need TriBike's existing customer base.", "UserPassword is legacy/unused — TriData no longer stores web passwords."]}, {"name": "DownloadCustomerAll", "method": "Download", "cat": "Customers", "desc": "Loads every customer that has been uploaded from TriBike (full export, not just deltas).", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadCustomerAllResult>\n  <Customer>\n    <!-- identical schema to DownloadCustomer, see that entry -->\n  </Customer>\n</DownloadCustomerAllResult>", "notes": ["Same object shape as DownloadCustomer."]}, {"name": "DownloadCustomerAdress", "method": "Download", "cat": "Customers", "desc": "Returns the delivery addresses for one customer.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["KundenNummer", "int", "The customer number to fetch addresses for."]], "resp": "<DownloadCustomerAdressResult>\n  <adressID>guid</adressID>\n  <Kundennummer>int</Kundennummer>\n  <Anrede>string</Anrede>\n  <Name>string</Name>\n  <Name2>string</Name2>\n  <Beschreibung>string</Beschreibung>\n  <Telefonnummer>string</Telefonnummer>\n  <Email>string</Email>\n  <Strasse>string</Strasse>\n  <Postleitzahl>string</Postleitzahl>\n  <Ort>string</Ort>\n  <Land>string</Land>\n  <CreateDate>dateTime</CreateDate>\n  <LastChange>dateTime</LastChange>\n  <Adresszusatz>string</Adresszusatz>\n</DownloadCustomerAdressResult>", "notes": ["Same field set as the standalone Adress data format — see Data Formats."]}, {"name": "DownloadCustomerAdressLastChange", "method": "Download", "cat": "Customers", "desc": "Returns delivery addresses for all customers changed since a specific date.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Limits addresses to those changed since this date."]], "resp": "<DownloadCustomerAdressLastChangeResult>\n  <Adress>\n    <adressID>guid</adressID>\n    <Kundennummer>int</Kundennummer>\n    <Anrede>string</Anrede>\n    <Name>string</Name>\n    <Name2>string</Name2>\n    <Beschreibung>string</Beschreibung>\n    <Telefonnummer>string</Telefonnummer>\n    <Email>string</Email>\n    <Strasse>string</Strasse>\n    <Postleitzahl>string</Postleitzahl>\n    <Ort>string</Ort>\n    <Land>string</Land>\n    <CreateDate>dateTime</CreateDate>\n    <LastChange>dateTime</LastChange>\n    <Adresszusatz>string</Adresszusatz>\n  </Adress>\n</DownloadCustomerAdressLastChangeResult>", "notes": ["Bulk/delta variant of DownloadCustomerAdress — use this for incremental address syncs across all customers."]}, {"name": "UploadCustomer", "method": "Upload", "cat": "Customers", "desc": "Uploads a single customer who is not placing an order. If the customer is created together with an order, use UploadOrder instead.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["customer", "CustomerExt object", "See Data Formats → CustomerExt for the full field list."]], "resp": "<UploadCustomer xmlns=\"http://localhost:2562/ShopAbgleichExtern.asmx\">\n  <customer>\n    <Kundennummer>int</Kundennummer>\n    <extern_ID>string</extern_ID>\n    <Anrede>string</Anrede>\n    <Kundenname>string</Kundenname>\n    <Name2>string</Name2>\n    <Firmenkunde>boolean</Firmenkunde>\n    <MehrwertsteuerCode>string</MehrwertsteuerCode>\n    <Telefon>string</Telefon>\n    <TelefonMobil>string</TelefonMobil>\n    <Fax>string</Fax>\n    <Email>string</Email>\n    <Geburtsdatum>dateTime</Geburtsdatum>\n    <UstID>string</UstID>\n    <Mailingsperre>boolean</Mailingsperre>\n    <UserID>string</UserID>\n    <UserPassword>string</UserPassword>\n    <Strasse>string</Strasse>\n    <Ort>string</Ort>\n    <Land>string</Land>\n    <Postleitzahl>string</Postleitzahl>\n    <IsOneTimeCustomer>boolean</IsOneTimeCustomer>\n    <LastChange>dateTime</LastChange>\n  </customer>\n  <IdentifyGuid>guid</IdentifyGuid>\n</UploadCustomer>", "notes": ["UserID is mandatory.", "Kundennummer – if set, TriBike uses this exact number; it must be unique and outside TriBike's own number range.", "MehrwertsteuerCode – one of „Inland“ (default), „Ausland“ (non-EU corporate, requires UstID), „Ausland EU“ (EU corporate, requires UstID).", "UserPassword is no longer used by TriData."]}, {"name": "DownloadStock", "method": "Download", "cat": "Stock", "desc": "Gets the stock of all items.", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadStockResult>\n  <Stock>\n    <StockID>guid</StockID>\n    <ArtikelID>guid</ArtikelID>\n    <Artikelbezeichnung>string</Artikelbezeichnung>\n    <Artikelnummer>string</Artikelnummer>\n    <BestelltGesamt>double</BestelltGesamt>\n    <BestelltLokaleFiliale>double</BestelltLokaleFiliale>\n    <ReserviertGesamt>double</ReserviertGesamt>\n    <ReserviertLokaleFiliale>double</ReserviertLokaleFiliale>\n    <LagerbestandGesamt>double</LagerbestandGesamt>\n    <LagerbestandLokaleFiliale>double</LagerbestandLokaleFiliale>\n    <MengeVerfuegbarGesamt>double</MengeVerfuegbarGesamt>\n    <MengeVerfuegbarLokaleFiliale>double</MengeVerfuegbarLokaleFiliale>\n    <LastChange>dateTime</LastChange>\n  </Stock>\n</DownloadStockResult>", "notes": ["Fires automatically in TriBike every time stock changes — poll it (or DownloadStockDelta) regularly.", "„Gesamt“ = total across all branches; „LokaleFiliale“ = the single branch wired to this interface. Identical when TriBike has no branches.", "MengeVerfuegbar (available) = TriBike's own formula, typically Lagerbestand minus Reserviert, plus/minus Bestellt depending on configuration — treat it as the authoritative sellable quantity."]}, {"name": "DownloadStockDelta", "method": "Download", "cat": "Stock", "desc": "Gets the stock of all items changed since the passed date — the incremental counterpart to DownloadStock.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Only items changed since this date are returned."]], "resp": "<DownloadStockDeltaResult>\n  <Stock>\n    <!-- identical schema to DownloadStock, see that entry -->\n  </Stock>\n</DownloadStockDeltaResult>", "notes": ["Use this for routine polling once the initial full DownloadStock import is done."]}, {"name": "DownloadStockByArtikel", "method": "Download", "cat": "Stock", "desc": "Gets the stock of one specific item.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["Artikelnummer", "string", "Item number to fetch stock for."]], "resp": "<DownloadStockByArtikelResult>\n  <StockID>guid</StockID>\n  <ArtikelID>guid</ArtikelID>\n  <Artikelbezeichnung>string</Artikelbezeichnung>\n  <Artikelnummer>string</Artikelnummer>\n  <BestelltGesamt>double</BestelltGesamt>\n  <BestelltLokaleFiliale>double</BestelltLokaleFiliale>\n  <ReserviertGesamt>double</ReserviertGesamt>\n  <ReserviertLokaleFiliale>double</ReserviertLokaleFiliale>\n  <LagerbestandGesamt>double</LagerbestandGesamt>\n  <LagerbestandLokaleFiliale>double</LagerbestandLokaleFiliale>\n  <MengeVerfuegbarGesamt>double</MengeVerfuegbarGesamt>\n  <MengeVerfuegbarLokaleFiliale>double</MengeVerfuegbarLokaleFiliale>\n</DownloadStockByArtikelResult>", "notes": ["Single-item counterpart to DownloadStock — useful for on-demand stock checks (e.g. product detail page)."]}, {"name": "DownloadStockBranch", "method": "Download", "cat": "Stock", "desc": "Provides per-branch stock for all items. Only relevant for TriBike setups that use branches (Filialen).", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadStockBranchResult>\n  <StockBranch>\n    <StockBranchID>guid</StockBranchID>\n    <ArtikelID>guid</ArtikelID>\n    <Artikelbezeichnung>string</Artikelbezeichnung>\n    <Artikelnummer>string</Artikelnummer>\n    <Bestellt>double</Bestellt>\n    <Reserviert>double</Reserviert>\n    <Lagerbestand>double</Lagerbestand>\n    <MengeVerfuegbar>double</MengeVerfuegbar>\n    <Filialname>string</Filialname>\n    <LastChange>dateTime</LastChange>\n  </StockBranch>\n</DownloadStockBranchResult>", "notes": ["Filialname identifies the branch — one row per item per branch.", "Use to show per-location availability (e.g. “available for pickup in Oldenburg”)."]}, {"name": "DownloadStockBranchByArtikel", "method": "Download", "cat": "Stock", "desc": "Provides per-branch stock for one item. Only relevant for TriBike setups that use branches.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["Artikelnummer", "string", "Item number to fetch branch stock for."]], "resp": "<StockBranch>\n  <StockBranchID>guid</StockBranchID>\n  <ArtikelID>guid</ArtikelID>\n  <Artikelbezeichnung>string</Artikelbezeichnung>\n  <Artikelnummer>string</Artikelnummer>\n  <Bestellt>double</Bestellt>\n  <Reserviert>double</Reserviert>\n  <Lagerbestand>double</Lagerbestand>\n  <MengeVerfuegbar>double</MengeVerfuegbar>\n  <Filialname>string</Filialname>\n</StockBranch>", "notes": ["Single-item counterpart to DownloadStockBranch."]}, {"name": "DownloadStockBranchDelta", "method": "Download", "cat": "Stock", "desc": "Provides per-branch stock for all items changed after the passed date — incremental branch stock sync.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Only branch stock changed since this date is returned."]], "resp": "<DownloadStockBranchDeltaResult>\n  <StockBranch>\n    <!-- identical schema to DownloadStockBranch, see that entry -->\n  </StockBranch>\n</DownloadStockBranchDeltaResult>", "notes": ["Use for routine polling once the initial DownloadStockBranch import is done."]}, {"name": "DownloadStockColorSize", "method": "Download", "cat": "Stock", "desc": "Provides stock for all color/size variants. Only relevant when the TriBike color/size module is active.", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadStockColorSizeResult>\n  <StockColorSize>\n    <StockColorSizeID>guid</StockColorSizeID>\n    <ArtikelID>guid</ArtikelID>\n    <Artikelbezeichnung>string</Artikelbezeichnung>\n    <Artikelnummer>string</Artikelnummer>\n    <BestelltGesamt>double</BestelltGesamt>\n    <BestelltLokaleFiliale>double</BestelltLokaleFiliale>\n    <ReserviertGesamt>double</ReserviertGesamt>\n    <ReserviertLokaleFiliale>double</ReserviertLokaleFiliale>\n    <LagerbestandGesamt>double</LagerbestandGesamt>\n    <LagerbestandLokaleFiliale>double</LagerbestandLokaleFiliale>\n    <MengeVerfuegbarGesamt>double</MengeVerfuegbarGesamt>\n    <MengeVerfuegbarLokaleFiliale>double</MengeVerfuegbarLokaleFiliale>\n    <Color>string</Color>\n    <Size>string</Size>\n    <ArtikelGrFaKombinationenID>guid</ArtikelGrFaKombinationenID>\n  </StockColorSize>\n</DownloadStockColorSizeResult>", "notes": ["One row per color/size combination (ArtikelGrFaKombinationenID), not per parent item — a single ArtikelID can have many variant stock rows."]}, {"name": "DownloadStockColorSizeDelta", "method": "Download", "cat": "Stock", "desc": "Provides stock for all color/size variants changed since the passed date — incremental variant stock sync.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Only variant stock changed since this date is returned."]], "resp": "<DownloadStockColorSizeDeltaResult>\n  <StockColorSize>\n    <!-- identical schema to DownloadStockColorSize, plus: -->\n    <LastChange>dateTime</LastChange>\n    <Barcode>string</Barcode>\n  </StockColorSize>\n</DownloadStockColorSizeDeltaResult>", "notes": ["Use for routine polling once the initial DownloadStockColorSize import is done."]}, {"name": "DownloadStockColorSizeByArtikelGrFaKombination", "method": "Download", "cat": "Stock", "desc": "Provides stock for one specific color/size combination.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["ArtikelGrFaKombinationID", "guid", "The variant id (ArtikelGrFaKombiID) to fetch stock for."]], "resp": "<DownloadStockColorSizeByArtikelGrFaKombinationResult>\n  <StockColorSizeID>guid</StockColorSizeID>\n  <ArtikelID>guid</ArtikelID>\n  <Artikelbezeichnung>string</Artikelbezeichnung>\n  <Artikelnummer>string</Artikelnummer>\n  <BestelltGesamt>double</BestelltGesamt>\n  <BestelltLokaleFiliale>double</BestelltLokaleFiliale>\n  <ReserviertGesamt>double</ReserviertGesamt>\n  <ReserviertLokaleFiliale>double</ReserviertLokaleFiliale>\n  <LagerbestandGesamt>double</LagerbestandGesamt>\n  <LagerbestandLokaleFiliale>double</LagerbestandLokaleFiliale>\n  <MengeVerfuegbarGesamt>double</MengeVerfuegbarGesamt>\n  <MengeVerfuegbarLokaleFiliale>double</MengeVerfuegbarLokaleFiliale>\n  <Color>string</Color>\n  <Size>string</Size>\n  <ArtikelGrFaKombinationenID>guid</ArtikelGrFaKombinationenID>\n</DownloadStockColorSizeByArtikelGrFaKombinationResult>", "notes": ["Single-variant counterpart to DownloadStockColorSize — good for a live stock check on a product/variant page."]}, {"name": "DownloadStockColorSizeBranch", "method": "Download", "cat": "Stock", "desc": "Gets stock of every color/size combination, per branch.", "params": [["IdentifyGuid", "guid", "Your identification Guid"]], "resp": "<DownloadStockColorSizeBranchResult>\n  <StockColorSizeBranch>\n    <StockColorSizeBranchID>guid</StockColorSizeBranchID>\n    <ArtikelID>guid</ArtikelID>\n    <Artikelbezeichnung>string</Artikelbezeichnung>\n    <Artikelnummer>string</Artikelnummer>\n    <Bestellt>double</Bestellt>\n    <Reserviert>double</Reserviert>\n    <Lagerbestand>double</Lagerbestand>\n    <MengeVerfuegbar>double</MengeVerfuegbar>\n    <Color>string</Color>\n    <Size>string</Size>\n    <Filialname>string</Filialname>\n    <ArtikelGrFaKombinationenID>guid</ArtikelGrFaKombinationenID>\n    <LastChange>dateTime</LastChange>\n    <Barcode>string</Barcode>\n  </StockColorSizeBranch>\n</DownloadStockColorSizeBranchResult>", "notes": ["Combines the branch dimension with the color/size dimension — the most granular stock function.", "Stock value meanings match DownloadStock (Lagerbestand, MengeVerfuegbar, Reserviert, Bestellt)."]}, {"name": "DownloadStockColorSizeBranchDelta", "method": "Download", "cat": "Stock", "desc": "Gets per-branch stock of every color/size combination changed since the passed date.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Only rows changed since this date are returned."]], "resp": "<DownloadStockColorSizeBranchDeltaResult>\n  <StockColorSizeBranch>\n    <!-- identical schema to DownloadStockColorSizeBranch, see that entry -->\n  </StockColorSizeBranch>\n</DownloadStockColorSizeBranchDeltaResult>", "notes": ["Incremental counterpart to DownloadStockColorSizeBranch."]}, {"name": "DownloadStockColorSizeBranchByArtikelGrFaKombination", "method": "Download", "cat": "Stock", "desc": "Provides per-branch stock for one color/size combination.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["ArtikelGrFaKombinationID", "guid", "The variant id to fetch per-branch stock for."]], "resp": "<DownloadStockColorSizeBranchByArtikelGrFaKombinationResult>\n  <StockColorSizeBranch>\n    <StockColorSizeBranchID>guid</StockColorSizeBranchID>\n    <ArtikelID>guid</ArtikelID>\n    <Artikelbezeichnung>string</Artikelbezeichnung>\n    <Artikelnummer>string</Artikelnummer>\n    <Bestellt>double</Bestellt>\n    <Reserviert>double</Reserviert>\n    <Lagerbestand>double</Lagerbestand>\n    <MengeVerfuegbar>double</MengeVerfuegbar>\n    <Color>string</Color>\n    <Size>string</Size>\n    <Filialname>string</Filialname>\n    <ArtikelGrFaKombinationenID>guid</ArtikelGrFaKombinationenID>\n  </StockColorSizeBranch>\n</DownloadStockColorSizeBranchByArtikelGrFaKombinationResult>", "notes": ["Single-variant counterpart to DownloadStockColorSizeBranch."]}, {"name": "DownloadOrderStateByCustomer", "method": "Download", "cat": "Orders & Order State", "desc": "Gives the order states for every order of one customer.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["UserID", "string", "UserID of the customer."]], "resp": "<DownloadOrderStateByCustomerResult>\n  <OrderStateObj>\n    <WebShopOrderID>int</WebShopOrderID>\n    <OrderState>string</OrderState>\n  </OrderStateObj>\n</DownloadOrderStateByCustomerResult>", "notes": ["OrderState values: „Neu“ uploaded to TriCon · „InBearbeitung“ imported into TriBike · „Geliefert“ invoiced & delivered · „Teilgeliefert“ partially invoiced/delivered · „Abgelehnt“ rejected by TriBike · „Storniert“ deleted manually in TriBike."]}, {"name": "DownloadOrderStateByOrder", "method": "Download", "cat": "Orders & Order State", "desc": "Gets the state of a single order. Only works reliably if WebshopOrderID was used on upload — otherwise TriBike orders can't be related back to interface orders.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["WebshopOrderID", "int", "The WebshopOrderID of the order."]], "resp": "<DownloadOrderStateByOrderResult>\n  <WebShopOrderID>int</WebShopOrderID>\n  <OrderState>string</OrderState>\n</DownloadOrderStateByOrderResult>", "notes": ["OrderState values: „Neu“ · „InBearbeitung“ · „Geliefert“ · „Teilgeliefert“ · „Abgelehnt“ · „StorniertTriData“ (deleted in TriBike) · „StorniertExtern“ (deleted via UploadOrderChangeStorno).", "This is the function to poll for a per-order status page/webhook in the shop."]}, {"name": "UploadOrder", "method": "Upload", "cat": "Orders & Order State", "desc": "Uploads an order, including the customer and (optionally) a separate delivery address. This is the core checkout-to-ERP call.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["TO", "transport object", "Container with DeliverAdress, Customer, Order and OrderItemsList — see below."]], "resp": "<UploadOrder>\n  <TO>\n    <DeliverAdress>\n      <!-- see Data Formats -> Adress. Only send if shipping to a different address than the customer's own. -->\n    </DeliverAdress>\n    <Customer>\n      <!-- see Data Formats -> CustomerExt. Must be sent with every order, even a repeat customer. -->\n    </Customer>\n    <Order>\n      <ausgeglichenAm>dateTime</ausgeglichenAm>\n      <VKOrderID>guid</VKOrderID>\n      <WebShopOrderID>int</WebShopOrderID>\n      <Payment>string</Payment>\n      <Bezahlt>boolean</Bezahlt>\n      <Referenztext>string</Referenztext>\n      <Comment>string</Comment>\n      <OrderCompletedDate>dateTime</OrderCompletedDate>\n      <OrderImportDate>dateTime</OrderImportDate>\n      <ShippingCost>decimal</ShippingCost>\n      <DeliveryTerm>string</DeliveryTerm>\n      <Filialname>string</Filialname>\n    </Order>\n    <OrderItemsList>\n      <OrderItemsObj>\n        <!-- see Data Formats -> OrderItems, repeated once per line item -->\n      </OrderItemsObj>\n    </OrderItemsList>\n  </TO>\n  <IdentifyGuid>guid</IdentifyGuid>\n</UploadOrder>", "notes": ["WebShopOrderID – set this on every order. TriBike adopts it as the order number when possible; use a number range clearly outside TriBike's own, and outside your shop's own order numbers too. Required for order-state polling and for the Bezahlt/Freitext/Storno/Verkaufsstatus update calls to work.", "Customer must be sent with every order, even for a customer who already exists — TriData matches on UserID/Email.", "DeliverAdress is only needed when shipping to an address different from the customer's own.", "Payment and DeliveryTerm map to TriBike's „Zahlungsbedingung“ / „Lieferbedingung“ and are auto-created if they don't already exist — keep these values from a small fixed set in your shop to avoid creating clutter.", "Filialname – only set this when the TriBike system uses branches and you want the order routed to a branch other than the one directly connected to the interface."]}, {"name": "UploadOrderChangeBezahlt", "method": "Upload", "cat": "Orders & Order State", "desc": "Updates the \"Bezahlt\" (paid) flag on an existing order. Requires WebShopOrderID to have been used on upload.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["Auftragsnummer", "int", "WebshopOrderID of the order to update."], ["Bezahlt", "boolean", "True = paid, false = not paid."], ["AusgeglichenAm", "dateTime", "Date/time of payment."]], "resp": "(no structured payload beyond the parameters above — a confirmation/fault response)", "notes": ["Only reliable when WebShopOrderID was set correctly during UploadOrder."]}, {"name": "UploadOrderChangeFreitext1", "method": "Upload", "cat": "Orders & Order State", "desc": "Updates the free-text field Freitext1 on an existing order.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["Auftragsnummer", "int", "WebshopOrderID of the order to update."], ["Freitext1", "string", "Text to write into Freitext1."]], "resp": "(no structured payload beyond the parameters above — a confirmation/fault response)", "notes": ["Requires WebShopOrderID to have been used on upload."]}, {"name": "UploadOrderChangeFreitext2", "method": "Upload", "cat": "Orders & Order State", "desc": "Updates the free-text field Freitext2 on an existing order.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["Auftragsnummer", "int", "WebshopOrderID of the order to update."], ["Freitext2", "string", "Text to write into Freitext2."]], "resp": "(no structured payload beyond the parameters above — a confirmation/fault response)", "notes": ["Requires WebShopOrderID to have been used on upload."]}, {"name": "UploadOrderChangeVerkaufsstatus", "method": "Upload", "cat": "Orders & Order State", "desc": "Updates the Verkaufsstatus field on an existing order.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["Auftragsnummer", "int", "WebshopOrderID of the order to update."], ["Verkaufsstatus", "string", "Text to write into Verkaufsstatus."]], "resp": "(no structured payload beyond the parameters above — a confirmation/fault response)", "notes": ["Requires WebShopOrderID to have been used on upload."]}, {"name": "UploadOrderChangeStorno", "method": "Upload", "cat": "Orders & Order State", "desc": "Attempts to delete an existing order from TriBike or the TriCon interface.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["WebShopOrderID", "int", "WebshopOrderID (Auftragsnummer in TriBike) of the order to delete."]], "resp": "(no structured payload — a confirmation/fault response)", "notes": ["Deletion in TriBike only succeeds under certain conditions — an order already shipped or invoiced cannot be auto-deleted.", "On success, the order state changes to „StorniertExtern“.", "If the order hasn't been imported into TriBike yet, it is deleted directly on the TriCon interface."]}, {"name": "UploadOrderItemChangeSeriennummern", "method": "Upload", "cat": "Orders & Order State", "desc": "Attaches serial numbers to an existing order item (e.g. for serialized bikes).", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["Auftragsnummer", "int", "WebshopOrderID of the order."], ["Positionsnummer", "int", "Position number of the order item, as used in the original order upload."], ["Seriennummern", "array of string", "Serial numbers to attach to the position."]], "resp": "<Seriennummern>\n  <string>string</string>\n</Seriennummern>", "notes": ["Requires Positionsnummer and WebShopOrderID to have been used correctly in the original order upload.", "Every serial number given must already exist and be in stock in TriBike/TriMobile.", "The count of serial numbers can't exceed the ordered quantity for that line item."]}, {"name": "DownloadRechnungen", "method": "Download", "cat": "Invoices & Credits", "desc": "Returns all invoice objects, including their ftp paths, for invoices created or changed since a given date.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Invoices created or changed since this date are included."]], "resp": "<DownloadRechnungenResult>\n  <RechnungObj>\n    <ftpPath>string</ftpPath>\n    <Rechnungsnummer>string</Rechnungsnummer>\n    <Auftragsnummer>int</Auftragsnummer>\n    <UserID>string</UserID>\n    <Kundennummer>int</Kundennummer>\n    <Quelle>string</Quelle>\n    <OnlineAuftrag>boolean</OnlineAuftrag>\n    <Filialname>string</Filialname>\n  </RechnungObj>\n</DownloadRechnungenResult>", "notes": ["ftpPath – where to fetch the invoice PDF from.", "Quelle – the source system the invoice originated in.", "OnlineAuftrag – true if the invoice originated from a webshop order."]}, {"name": "DownloadRechnungenByCustomer", "method": "Download", "cat": "Invoices & Credits", "desc": "Returns all invoice objects for one customer.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Invoices created or changed since this date are included."], ["Kundennummer", "int", "Customer number to fetch invoices for."]], "resp": "<DownloadRechnungenByCustomerResult>\n  <RechnungObj>\n    <!-- identical schema to DownloadRechnungen, see that entry -->\n  </RechnungObj>\n</DownloadRechnungenByCustomerResult>", "notes": ["Scoped counterpart to DownloadRechnungen — good fit for an “my invoices” account page."]}, {"name": "DownloadRechnungByOrder", "method": "Download", "cat": "Invoices & Credits", "desc": "Returns the invoice object for one order.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Invoices created or changed since this date are included."], ["Auftragsnummer", "int", "Order number to fetch the invoice for."]], "resp": "<DownloadRechnungenByCustomerResult>\n  <RechnungObj>\n    <!-- identical schema to DownloadRechnungen, see that entry -->\n  </RechnungObj>\n</DownloadRechnungenByCustomerResult>", "notes": ["Note the response wrapper name (“ByCustomer”) does not match the function name in the source docs — the object shape is the same RechnungObj either way."]}, {"name": "DownloadGutschriften", "method": "Download", "cat": "Invoices & Credits", "desc": "Returns all credit note (Gutschrift) objects, including their ftp paths.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Credits created or changed since this date are included."]], "resp": "<DownloadGutschriftenResult>\n  <GutschriftObj>\n    <Gutschriftsnummer>int</Gutschriftsnummer>\n    <ftpPath>string</ftpPath>\n    <CreateDate>dateTime</CreateDate>\n    <LastChange>dateTime</LastChange>\n    <ausRechnungsnummer>int</ausRechnungsnummer>\n    <UserID>string</UserID>\n    <Kundennummer>int</Kundennummer>\n    <Filialname>string</Filialname>\n  </GutschriftObj>\n</DownloadGutschriftenResult>", "notes": ["ausRechnungsnummer – the invoice number this credit note relates to.", "ftpPath – where to fetch the credit note PDF from."]}, {"name": "DownloadGutschriftenByCustomer", "method": "Download", "cat": "Invoices & Credits", "desc": "Returns all credit note objects for one customer.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["LastChange", "dateTime", "Credits created or changed since this date are included."], ["Kundennummer", "int", "Customer number to fetch credit notes for."]], "resp": "<DownloadGutschriftenByCustomerResult>\n  <GutschriftObj>\n    <!-- identical schema to DownloadGutschriften, see that entry -->\n  </GutschriftObj>\n</DownloadGutschriftenByCustomerResult>", "notes": ["Scoped counterpart to DownloadGutschriften."]}, {"name": "DownloadGutschriftByInvoice", "method": "Download", "cat": "Invoices & Credits", "desc": "Returns the credit note object for one invoice.", "params": [["IdentifyGuid", "guid", "Your identification Guid"], ["Rechnungsnummer", "int", "Invoice number the credit note relates to."]], "resp": "<DownloadGutschriftByInvoiceResult>\n  <Gutschriftsnummer>int</Gutschriftsnummer>\n  <ftpPath>string</ftpPath>\n  <CreateDate>dateTime</CreateDate>\n  <LastChange>dateTime</LastChange>\n  <ausRechnungsnummer>int</ausRechnungsnummer>\n  <UserID>string</UserID>\n  <Kundennummer>int</Kundennummer>\n  <Filialname>string</Filialname>\n</DownloadGutschriftByInvoiceResult>", "notes": ["Single-invoice counterpart to DownloadGutschriften."]}], "dataFormats": [{"name": "Adress", "desc": "Delivery address — used inside UploadOrder (DeliverAdress) and returned by the customer-address download functions.", "fields": [["Kundennummer", "int", "yes", "Customer number."], ["AdressID", "uniqueidentifier", "yes", "Internal use only — setting it has no effect."], ["Name", "varchar(50)", "no", "Name of the receiving person / company."], ["Name2", "varchar(50)", "yes", ""], ["Strasse", "varchar(50)", "yes", "Street including house number."], ["Ort", "varchar(50)", "yes", "City / town."], ["Land", "varchar(50)", "yes", "Country."], ["Postleitzahl", "varchar(10)", "yes", "Postal code."], ["Telefonnummer", "varchar(20)", "yes", "Phone number."], ["Beschreibung", "varchar(255)", "yes", "Description of the address."], ["Anrede", "varchar(50)", "yes", "Salutation — TriData uses its default if not set."]]}, {"name": "CustomerExt", "desc": "Full customer object — used inside UploadCustomer and UploadOrder (Customer).", "fields": [["Kundennummer", "int", "yes", "If set, TriData uses this exact value as the customer number."], ["Extern_ID", "varchar(50)", "yes", ""], ["Anrede", "varchar(50)", "yes", "Salutation — TriData uses its default if not set."], ["Kundenname", "varchar(50)", "no", "Customer name — mandatory."], ["Name2", "varchar(50)", "yes", "Customer name 2."], ["Firmenkunde", "bit", "yes", "Marks the customer as a corporate customer."], ["Mehrwertsteuercode", "varchar(50)", "no", "Allowed values: „Inland“, „Ausland“, „Ausland EU“."], ["Telefon", "varchar(20)", "yes", "Phone number."], ["TelefonMobil", "varchar(20)", "yes", "Cellphone number."], ["Fax", "varchar(20)", "yes", "Fax number."], ["Email", "varchar(50)", "yes", "One of the primary import-match fields in TriData — should always be set."], ["Geburtsdatum", "smalldatetime", "yes", "Date of birth."], ["UstID", "varchar(20)", "yes", "VAT ID — required for foreign EU corporate customers."], ["Mailingsperre", "bit", "no", "Ban on mailing."], ["UserID", "varchar(50)", "no", "Usually equal to the email address — mandatory, primary import-match criteria in TriData."], ["UserPassword", "varchar(50)", "yes", "No longer used — TriData will not save any user passwords."], ["Strasse", "varchar(50)", "yes", "Street including house number."], ["Ort", "varchar(50)", "yes", "City."], ["Land", "varchar(50)", "yes", "Country."], ["Postleitzahl", "varchar(10)", "yes", "Postal code."], ["Adresszusatz", "varchar(max)", "yes", "No longer used."], ["IsOneTimeCustomer", "bit", "yes", "For guest checkout — defaults to false/0."], ["LastChange", "smalldatetime", "yes", "Internal use — should not be set by the shop."]]}, {"name": "Order", "desc": "Order header object — used inside UploadOrder (Order).", "fields": [["WebShopOrderID", "int", "yes", "If set, TriData uses this value as the order number (Auftragsnummer)."], ["Kundennummer", "int", "yes", ""], ["Payment", "varchar(50)", "no", ""], ["Bezahlt", "bit", "no", "Already paid. Can be updated later via UploadOrderChangeBezahlt; if set, ausgeglichenAm is mandatory."], ["Referenztext", "varchar(50)", "yes", "Used as Kundenreferenz in TriData — use only in agreement with the TriBike operator."], ["Comment", "varchar(max)", "yes", ""], ["OrderCompletedDate", "smalldatetime", "no", ""], ["OrderImportData", "smalldatetime", "yes", "Set by the web service itself."], ["ShippingCost", "decimal", "yes", "If set, a shipping-cost line item is added to the order in TriData."], ["DeliveryTerm", "string", "yes", "Created automatically in TriData if it doesn't already exist."], ["Filialname", "string", "yes", "Only use if branches are used in TriData."]]}, {"name": "OrderItems", "desc": "One order line item — used inside UploadOrder (OrderItemsList), repeated once per line.", "fields": [["Provision", "decimal", "yes", "No longer used."], ["Discount", "decimal", "yes", "No longer used."], ["LinItemID", "varchar", "yes", "No longer used."], ["WebshopArtikelnummer", "varchar(50)", "yes", "Item number as used in the webshop."], ["Artikelnummer", "varchar(20)", "yes", "TriData item number — can be used for item identification."], ["Bezeichnung", "varchar(max)", "yes", "Item name."], ["VKBrutto", "decimal", "no", "Gross price."], ["MwStBetrag", "decimal", "yes", "No longer used."], ["MwStProzent", "decimal", "yes", "No longer used."], ["SummeVKBrutto", "decimal", "no", "Gross total (quantity × gross price)."], ["Quantity", "float", "no", "Quantity."], ["QuantityUnit", "varchar", "yes", "No longer used."], ["ArtikelGrFaKombiID", "uniqueidentifier", "yes", "Use for variant identification."], ["ArtikelID", "uniqueidentifier", "yes", "Use for item identification."], ["Positionsnummer", "int", "yes", "Used to order the order items — also referenced by UploadOrderItemChangeSeriennummern."], ["EAN", "varchar(20)", "yes", "EAN."], ["Barcode", "varchar(20)", "yes", "Can be used for color/size variant identification."]]}]};
+</script>
+<script>
+(function(){
+  var data = window.__TRICON_DATA__;
+  var fnList = document.getElementById('fn-list');
+  var dfList = document.getElementById('df-list');
+  var emptyMsg = document.getElementById('fn-empty');
+  var searchInput = document.getElementById('fn-search');
+
+  var catOrder = ["Items & Variants","Images","Pricing & Customer Groups","Customers","Stock","Orders & Order State","Invoices & Credits"];
+
+  function slug(s){ return s.replace(/[^a-zA-Z0-9]+/g,'-'); }
+  function esc(s){ return String(s).replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
+
+  function paramRows(params){
+    return params.map(function(p){
+      return '<tr><td class="fname">'+esc(p[0])+'</td><td class="ftype">'+esc(p[1])+'</td><td>'+esc(p[2])+'</td></tr>';
+    }).join('');
+  }
+
+  function noteItems(notes){
+    return notes.map(function(n){
+      var m = n.match(/^([A-Za-z0-9_]+(?:\s*\/\s*[A-Za-z0-9_]+)?)\s*[–-]\s*(.*)$/);
+      if(m){ return '<li><b>'+esc(m[1])+'</b> – '+esc(m[2])+'</li>'; }
+      return '<li>'+esc(n)+'</li>';
+    }).join('');
+  }
+
+  function renderFunctions(list){
+    fnList.innerHTML = '';
+    if(list.length === 0){ emptyMsg.style.display = 'block'; return; }
+    emptyMsg.style.display = 'none';
+
+    var byCat = {};
+    list.forEach(function(fn){ (byCat[fn.cat] = byCat[fn.cat] || []).push(fn); });
+
+    catOrder.forEach(function(cat){
+      var items = byCat[cat];
+      if(!items || !items.length) return;
+      var heading = document.createElement('div');
+      heading.className = 'fn-cat-heading';
+      heading.id = 'cat-' + slug(cat);
+      heading.textContent = cat;
+      fnList.appendChild(heading);
+
+      items.forEach(function(fn){
+        var card = document.createElement('div');
+        card.className = 'fn-card';
+        card.innerHTML =
+          '<details>'+
+            '<summary class="fn-head">'+
+              '<div class="fn-head-left">'+
+                '<span class="fn-name">'+esc(fn.name)+'</span>'+
+                '<span class="fn-desc">'+esc(fn.desc)+'</span>'+
+              '</div>'+
+              '<div style="display:flex;align-items:center;gap:10px;flex:none;">'+
+                '<span class="fn-badge '+fn.method+'">'+fn.method+'</span>'+
+                '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke-width="2.4"><path d="M9 6l6 6-6 6"/></svg>'+
+              '</div>'+
+            '</summary>'+
+            '<div class="fn-body">'+
+              '<div>'+
+                '<div class="fn-block-label">Parameters</div>'+
+                '<div class="table-wrap"><table><thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead><tbody>'+paramRows(fn.params)+'</tbody></table></div>'+
+              '</div>'+
+              '<div>'+
+                '<div class="fn-block-label">Response shape</div>'+
+                '<pre class="xml">'+esc(fn.resp)+'</pre>'+
+              '</div>'+
+              (fn.notes && fn.notes.length ? '<div><div class="fn-block-label">Field notes</div><ul class="notes">'+noteItems(fn.notes)+'</ul></div>' : '')+
+            '</div>'+
+          '</details>';
+        fnList.appendChild(card);
+      });
+    });
+  }
+
+  function renderFormats(){
+    dfList.innerHTML = data.dataFormats.map(function(df){
+      var rows = df.fields.map(function(f){
+        return '<tr><td class="fname">'+esc(f[0])+'</td><td class="ftype">'+esc(f[1])+'</td><td class="fnull">'+esc(f[2])+'</td><td>'+esc(f[3])+'</td></tr>';
+      }).join('');
+      return '<div class="card df-card"><h4>'+esc(df.name)+'</h4><p>'+esc(df.desc)+'</p>'+
+        '<div class="table-wrap"><table><thead><tr><th>Field</th><th>Type</th><th>Nullable</th><th>Notes</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+    }).join('');
+  }
+
+  function applyFilter(){
+    var q = searchInput.value.trim().toLowerCase();
+    if(!q){ renderFunctions(data.functions); return; }
+    var filtered = data.functions.filter(function(fn){
+      return fn.name.toLowerCase().indexOf(q) !== -1 ||
+             fn.desc.toLowerCase().indexOf(q) !== -1 ||
+             fn.cat.toLowerCase().indexOf(q) !== -1;
+    });
+    renderFunctions(filtered);
+  }
+
+  searchInput.addEventListener('input', applyFilter);
+  renderFunctions(data.functions);
+  renderFormats();
+})();
+</script>
+
+</body></html>

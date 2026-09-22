@@ -1,6 +1,6 @@
 # Schritt 2 — Produktanforderungen / Projektplan: Offene Fragen
 
-Deutsche Übersetzung von `questions.md` inkl. bereits eingetragener Antworten. Original (Englisch) bleibt als Referenz erhalten.
+Maßgebliche Fassung (die englische `questions.md` wurde entfernt, da inhaltlich vollständig hierher übernommen).
 
 Bereits bekannter Kontext aus Schritt 1 (`planning/1-Market_Competitor_Research/`):
 
@@ -19,7 +19,7 @@ Bereits bekannter Kontext aus Schritt 1 (`planning/1-Market_Competitor_Research/
 Fachlich geklärt sind Datenfluss (1), sonstige Systeme (2), Auth-Strategie (3) und Budget (5) — Details siehe jeweiliger Abschnitt. Verbleibend:
 
 1. **Anwaltliche Prüfung AGB/Widerrufsrecht** — Notwendigkeit bestätigt (gesetzlich vorgeschrieben), als offenes TODO vor Launch getrackt, aktuell noch nicht durchgeführt. _(Abschnitt 6)_
-2. **Katalogumfang beim Launch** — Prinzip + Begründung entschieden (kleine Startauswahl aus Tridata, mangels Logistikpersonal; Tridata bleibt Source of Truth), genaue Anzahl Produkte/Marken noch final festzulegen. _(Abschnitt 5)_
+2. **Katalogumfang beim Launch** — Scope entschieden (nur Artikel mit physischem Vor-Ort-Bestand in den Läden: einige Räder + etwas Zubehör; Tridata bleibt Source of Truth für den Gesamtbestand), genaue Anzahl Produkte/Marken innerhalb dieses Scopes noch final festzulegen. _(Abschnitt 5)_
 
 Entschieden seit letzter Fassung: Shopsystem **Shopware**, Zahlungsdienstleister **SumUp** (siehe [docs/DECISIONS.md](../../docs/DECISIONS.md)); Datenfluss Tridata↔Shop, Auth-Strategie, sonstige Bestandssysteme (WordPress-Seite vorhanden), kein festes Budget-Limit.
 
@@ -81,8 +81,8 @@ Hinweis zu Abschnitt 2, Frage "Ist Tridata Single Source of Truth?": formal mit 
 - Produkttypen für v1: nur Räder, oder Räder + Zubehör/Bekleidung/Komponenten zusammen?
   → Kann ein großer Teil des Filialbestands sein — also Zubehör, Komponenten, Räder/Rahmen.
 - Geschätzte Kataloggröße (# Produkte, # Marken) beim Launch?
-  → Zum Start wird nur eine ausgewählte Teilmenge der Produkte aus Tridata im Online-Shop angeboten (genaue Anzahl/Marken noch zu definieren). Tridata bleibt Source of Truth für den gesamten Bestand.
-  Begründung: Es gibt aktuell kein dediziertes Logistikpersonal für Versand — daher bewusst kleine Artikelzahl zum Start sinnvoll, später ausbaufähig sobald Fulfillment-Kapazität aufgebaut ist. Auswahlkriterien für die Startliste: Bestseller, margenstarke Artikel, sofort lagernd, ausgewählte Kernmarken.
+  → Zum Start beschränkt auf Artikel, die physisch in den Läden vorhanden sind (einige Räder und etwas Zubehör) — keine Auflistung von Tridata-Artikeln ohne Vor-Ort-Bestand. Genaue Anzahl/Marken innerhalb dieser Einschränkung noch nicht final beziffert. Tridata bleibt Source of Truth für den gesamten Bestand.
+  Begründung: Es gibt aktuell kein dediziertes Logistikpersonal für Versand — daher bewusst kleine Artikelzahl zum Start sinnvoll, später ausbaufähig sobald Fulfillment-Kapazität aufgebaut ist.
 - Bike-Konfigurator (Rahmen-/Komponenten-Customization, gemäß Option 3) — v1 oder spätere Phase?
   → Spätere Phase, zeitnah nach v1.
 - JobRad / BusinessBike / Lease a Bike Leasing-Checkout-Integration — v1 oder spätere Phase?
@@ -96,6 +96,15 @@ Hinweis zu Abschnitt 2, Frage "Ist Tridata Single Source of Truth?": formal mit 
   → Eventuell Texte von bike-one.org vorhanden — falls möglich, wiederverwenden.
 - Bestätigung: Anwalt prüft AGB/Widerrufsrecht vor Launch (gemäß Roadmap Schritt 12) — Zeitpunkt der Prüfung?
   → Ja, erforderlich (Fernabsatzrecht, Widerrufsbelehrung, Impressum, DSGVO gesetzlich vorgeschrieben für Online-Handel in DE). Als TODO vor Launch bestätigt — aktuell noch nicht erledigt, muss vor Go-Live abgeschlossen sein.
+- **Neu erkannt (September 2026):** Ab 27.09.2026 gelten neue EU-Informationspflichten für den Verkauf physischer Waren an Verbraucher — Garantiehinweise und das sogenannte "GARAN"-Label müssen auf Produktdetailseiten angezeigt werden. Shopware unterstützt dies nativ ab Version 6.7.14.0 ohne zusätzliche Erweiterung. Sollte im Rahmen der anwaltlichen AGB-Prüfung mit abgedeckt werden, da das Datum sehr kurzfristig ist (in dieser Woche in Kraft, direkt betroffen wäre aber erst der spätere Go-Live).
+- **Weitere EU-Regularien, die für die anwaltliche Prüfung relevant sein könnten** (recherchiert September 2026, keine Rechtsberatung — vom Anwalt final zu bewerten):
+  - **GPSR (Produktsicherheitsverordnung, (EU) 2023/988)** — bereits seit 13.12.2024 in Kraft, Durchsetzung 2026 spürbar verschärft (u. a. automatisierte Kontrollen von Produktseiten). Verlangt auf jeder Produktseite selbst (nicht nur im Impressum): Kontaktdaten von Hersteller und EU-verantwortlicher Person, Produktbild, Sicherheits-/Warnhinweise. Betrifft alle Kategorien (Räder, Zubehör, Bekleidung) — hohe Priorität, direkt Shop-Frontend-relevant.
+  - **EU-Batterieverordnung ((EU) 2023/1542)** — nur relevant, falls E-Bikes oder abnehmbare E-Bike-Akkus ins Sortiment kommen. Verlangt Kennzeichnung (Kapazität, Lebensdauer, Entsorgung) ab 2026, kostenlose Rücknahme mit "angemessener Rückgabemöglichkeit" auch online, ab 18.02.2027 einen elektronischen "Batteriepass" pro Akku. **Zu klären:** Ist Verkauf von E-Bikes/E-Bike-Akkus für v1 oder später geplant?
+  - **Verpackungsgesetz / LUCID-Registrierung** — jeder Versandhändler mit verpackter Ware an Endkunden muss (unabhängig von Unternehmensgröße) im Verpackungsregister LUCID registriert sein und an einem dualen System teilnehmen. Neu-Registrierungsfrist 12.09.2026 ist zum Zeitpunkt dieses Dokuments bereits verstrichen — **zu klären, ob bike-one.org für den bestehenden Versandhandel schon registriert ist**, sonst droht Bußgeld bis 100.000 € (fehlende Registrierung) bzw. 200.000 € (fehlende Systemteilnahme). Ab 12.08.2026 löst das neue VerpackDG das bisherige Gesetz ab (Angleichung an die EU-Verpackungsverordnung PPWR). Reine Registrierungs-/Organisationspflicht, kein Shop-Feature.
+  - **ElektroG / WEEE-Registrierung (Stiftung EAR)** — analog zu LUCID, aber für Elektro-/Elektronikgeräte. Nur relevant, falls Zubehör wie Bike-Computer, Lichter oder E-Bike-Motoren/-Akkus verkauft werden.
+  - **Recht-auf-Reparatur-Richtlinie ((EU) 2024/1799)** — EU-weit ab 31.07.2026 anwendbar, Geltungsbereich aktuell auf Produkte mit bestehenden Reparierbarkeitsvorgaben beschränkt (u. a. Akkus von E-Bikes als "leichte Verkehrsmittel"); reguläre Fahrräder sind aktuell **nicht** erfasst. Nur relevant zusammen mit der Batterieverordnung oben.
+  - **Textil-EPR (geplantes deutsches Textilgesetz)** — noch kein verabschiedetes Gesetz (Eckpunktepapier 27.03.2026 des BMU, Entwurf evtl. Ende September 2026 erwartet), Umsetzungsfrist 17.06.2027 gemäß EU-Richtlinie (EU) 2025/1892. Relevant für die Bekleidungs-Kategorie — aktuell nur beobachten, noch kein Handlungsbedarf.
+  - **Digital Services Act** — betrifft primär Online-Marktplätze mit Drittanbietern (z. B. Prüfpflichten für fremde Händler); bike-one.org betreibt einen Einzelhändler-Shop, keinen Marktplatz, daher greifen die schwersten DSA-Pflichten voraussichtlich nicht. Allgemeine Transparenz-/Dark-Pattern-Regeln gelten trotzdem für jede kommerzielle Website.
 
 ## 7. Umfang, Zeitplan, Budget
 
@@ -113,6 +122,15 @@ Hinweis zu Abschnitt 2, Frage "Ist Tridata Single Source of Truth?": formal mit 
   → Aktuell nur Inhaber, Admin und ggf. einige Ladenmitarbeiter benötigen Zugang.
 - Mehrsprachigkeit erforderlich (nur Deutsch, oder Deutsch + Englisch) für DACH/EU-weite Reichweite?
   → Primärsprache Deutsch. Englisch kann als Sekundärsprache ergänzt werden.
+
+## 9. SEO & Google Shopping (hohe Priorität)
+
+- **Anforderung:** SEO hat für v1 hohe Priorität. Produktlistings müssen für Google Shopping / Shopping Ads ("gesponsert"-Platzierungen in der Google-Suche) infrage kommen, nicht nur für organisches Ranking.
+- **Auswirkung — technisches SEO:** erfordert einen Google-Merchant-Center-Produktfeed (Produkt-ID, Titel, Beschreibung, Preis, Verfügbarkeit, GTIN/MPN, Bild, Kategorie), der laufend mit Live-Bestand/-Preis aus Tridata via TriCon synchron gehalten wird. Feed-Genauigkeit ist direkt relevant — Merchant Center sperrt Konten bei veralteten Preis-/Verfügbarkeitsangaben.
+- **Auswirkung — Google Ads:** die gesponserte Platzierung selbst erfordert eine laufende Google-Ads-Shopping-Kampagne, verknüpft mit dem Merchant-Center-Feed; das ist ein Budget-/Ops-Thema, kein reiner Dev-Task — zu klären, wer Ad-Budget und Kampagnenmanagement verantwortet.
+- **Auswirkung — Frontend-Architektur:** Angular rendert standardmäßig client-seitig, was für Crawlbarkeit und Core Web Vitals schwach ist (beides fließt ins organische Ranking und in die Merchant-Center-Prüfung ein). Angular Universal (SSR) oder Prerendering für Produkt-/Kategorieseiten nötig, plus schema.org-`Product`-Strukturdaten, kanonische URLs, sitemap.xml. Als Architekturentscheidung für Schritt 3 markiert, nicht nur als Content-Aufgabe.
+- Wer verantwortet Qualität der Produkttexte/Metadaten (Titel, Beschreibungen), die sowohl für SEO als auch für Feed-Freigabe nötig sind — Ladenpersonal, Agentur, oder KI-Entwurf mit interner Prüfung?
+  → Texte werden von Mitarbeitern erarbeitet und entweder direkt freigegeben oder durch die Geschäftsleitung geprüft. KI kann zur Analyse/Unterstützung eingesetzt werden.
 
 ---
 

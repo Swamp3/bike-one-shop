@@ -14,8 +14,6 @@ Für die Entwicklung und den Test dieser Anbindung benötigen wir eine **Test- b
 
 Sollte eine Sandbox kurzfristig nicht bereitstellbar sein, wäre alternativ die technische Dokumentation der TriCon-WebService-Schnittstelle (Protokoll, Endpunkte, Request-/Response-Formate, Authentifizierung) hilfreich, damit wir zumindest mit der Implementierung beginnen können.
 
-Wir haben bereits mehrfach über das Kontaktformular zur Demoversion Kontakt aufgenommen, bislang leider ohne Rückmeldung.
-
 Für Rückfragen stehen wir jederzeit zur Verfügung.
 
 Mit freundlichen Grüßen

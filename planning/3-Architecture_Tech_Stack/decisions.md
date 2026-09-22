@@ -26,7 +26,7 @@ At launch we support card (Visa/Mastercard) and PayPal, both handled natively th
 
 ## Frontend rendering (SEO)
 
-Angular runs with server-side rendering (`@angular/ssr`) rather than pure client-side rendering, so Google and the Merchant Center feed crawler receive fully-rendered HTML instead of an empty shell. Paired with schema.org `Product` structured data, canonical URLs, and a generated `sitemap.xml` for product/category pages, per the Google Shopping eligibility requirement in [planning/2-Product_Requirements/questions.md](../2-Product_Requirements/questions.md).
+Angular runs with server-side rendering (`@angular/ssr`) rather than pure client-side rendering, so Google and the Merchant Center feed crawler receive fully-rendered HTML instead of an empty shell. Paired with schema.org `Product` structured data, canonical URLs, and a generated `sitemap.xml` for product/category pages, per the Google Shopping eligibility requirement in [planning/2-Product_Requirements/questions.de.md:126-133](../2-Product_Requirements/questions.de.md).
 
 ## Frontend architecture / CSS conventions
 
@@ -38,7 +38,7 @@ Build every reusable piece of UI — buttons, cards, common layouts (sidebar+con
 
 3-stage setup decided: dev / staging / prod, dockerized. Provider not yet decided — leaning toward a managed cloud (AWS or Azure) for security, plus interest in a managed Shopware host (e.g. mittwald) instead of self-managing PHP/MySQL/Redis/OpenSearch. Still needs a final pick. Constraints that narrow the field:
 
-- Shopware self-hosted needs PHP 8.2+ (8.4 on Shopware 6.7), MySQL 8 / MariaDB 10.11, Redis (sessions + cache), and an Elasticsearch/OpenSearch-compatible search service for a catalog of real size — this rules out pure serverless/edge platforms (e.g. Vercel) for the Shopware side; Angular's SSR frontend alone would fit those fine.
+- Shopware self-hosted needs PHP 8.2+ (8.4 on Shopware 6.7), MySQL 8 / MariaDB 10.11, Redis (sessions + cache), and an Elasticsearch/OpenSearch-compatible search service for a catalog of real size — this rules out pure serverless/edge platforms (e.g. Vercel) for the Shopware side; Angular's SSR frontend alone would fit those fine. 6.7 is still the current major series as of September 2026 (latest patch 6.7.14.0), and the next major version, 6.8, has been pushed back to 2027 — no reason to target anything newer.
 - GDPR favors an EU data residency region for customer/order data.
 
 | Option | Fit | Trade-off |

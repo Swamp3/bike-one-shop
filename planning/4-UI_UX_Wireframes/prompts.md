@@ -12,7 +12,7 @@ Per [ROADMAP.md](../ROADMAP.md): Claude (Artifacts) for interactive wireframes, 
 - Primary language German (English secondary) — mock copy in German.
 - SEO is high priority — PDP needs visible structured info (price, availability, GTIN-equivalent specs) since it feeds Google Shopping.
 
-Full detail: [2-Product_Requirements/questions.md](../2-Product_Requirements/questions.md), [3-Architecture_Tech_Stack/decisions.md](../3-Architecture_Tech_Stack/decisions.md).
+Full detail: [2-Product_Requirements/questions.de.md](../2-Product_Requirements/questions.de.md), [3-Architecture_Tech_Stack/decisions.md](../3-Architecture_Tech_Stack/decisions.md).
 
 ---
 
