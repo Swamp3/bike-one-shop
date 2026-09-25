@@ -33,6 +33,31 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
+        // BikeOne design tokens — see wireframes/*.html. Backed by CSS custom
+        // properties (src/styles/globals.css) so light/dark mode and the
+        // dark-chrome header (which never follows the page theme) both work.
+        bo: {
+          bg: "var(--bo-bg)",
+          surface: "var(--bo-surface)",
+          "surface-2": "var(--bo-surface-2)",
+          line: "var(--bo-line)",
+          "line-strong": "var(--bo-line-strong)",
+          ink: "var(--bo-ink)",
+          "ink-muted": "var(--bo-ink-muted)",
+          "ink-faint": "var(--bo-ink-faint)",
+          accent: "var(--bo-accent)",
+          "accent-ink": "var(--bo-accent-ink)",
+          ok: "var(--bo-ok)",
+          "ok-bg": "var(--bo-ok-bg)",
+          wait: "var(--bo-wait)",
+          "wait-bg": "var(--bo-wait-bg)",
+          header: "var(--bo-header-bg)",
+          "header-text": "var(--bo-header-text)",
+          "header-line": "var(--bo-header-line)",
+          "header-surface": "var(--bo-header-surface)",
+          "header-surface-2": "var(--bo-header-surface-2)",
+          "header-muted": "var(--bo-header-muted)",
+        },
       },
       borderRadius: {
         none: "0px",
@@ -59,6 +84,7 @@ module.exports = {
       },
       fontFamily: {
         sans: [
+          "var(--font-inter)",
           "Inter",
           "-apple-system",
           "BlinkMacSystemFont",
@@ -67,6 +93,13 @@ module.exports = {
           "Helvetica Neue",
           "Ubuntu",
           "sans-serif",
+        ],
+        heading: ["var(--font-oswald)", "Oswald", "Inter", "sans-serif"],
+        mono: [
+          "var(--font-jetbrains-mono)",
+          "JetBrains Mono",
+          "ui-monospace",
+          "monospace",
         ],
       },
       keyframes: {

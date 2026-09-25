@@ -1,157 +1,139 @@
-import { listCategories } from "@lib/data/categories";
-import { listCollections } from "@lib/data/collections";
-import { Text, clx } from "@modules/common/components/ui";
+import { listCategories } from "@lib/data/categories"
+import { listCollections } from "@lib/data/collections"
 
-import LocalizedClientLink from "@modules/common/components/localized-client-link";
-import MedusaCTA from "@modules/layout/components/medusa-cta";
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import NewsletterForm from "@modules/layout/components/newsletter-form"
 
 export default async function Footer() {
-  const { collections } = await listCollections({
-    fields: "*products",
-  });
-  const productCategories = await listCategories();
+  const [{ collections }, categories] = await Promise.all([
+    listCollections({ fields: "id,handle,title" }),
+    listCategories().catch(() => null),
+  ])
+  const topLevelCategories = categories?.filter((c) => !c.parent_category)
 
   return (
-    <footer className="border-t border-ui-border-base w-full">
-      <div className="content-container flex flex-col w-full">
-        <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between py-40">
-          <div>
-            <LocalizedClientLink
-              href="/"
-              className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
-            >
-              Medusa Store
-            </LocalizedClientLink>
+    <footer className="mt-5 border-t border-bo-line bg-bo-surface">
+      <div className="border-b border-bo-line bg-bo-surface-2 px-4 py-6 md:px-6 md:py-8">
+        <h3 className="mb-1 font-heading text-lg font-semibold md:text-[19px]">
+          Neuigkeiten, bevor sie im Laden stehen
+        </h3>
+        <p className="mb-3.5 max-w-[48ch] text-[13px] text-bo-ink-muted">
+          Neue Modelle, Werkstatt-Termine und Filial-Events — max. zweimal im
+          Monat, jederzeit abbestellbar.
+        </p>
+        <NewsletterForm />
+      </div>
+
+      <div className="grid grid-cols-2 gap-x-4 gap-y-6 px-4 py-6 md:grid-cols-4 md:px-6 md:py-8">
+        <div>
+          <h4 className="mb-2.5 font-mono text-[11px] uppercase tracking-wide text-bo-ink-faint">
+            Standorte
+          </h4>
+          <div className="mb-2.5 text-[12.5px] leading-relaxed text-bo-ink-muted">
+            <b className="mb-0.5 block text-[13px] text-bo-ink">Oldenburg</b>
+            Rheinstr. 16, 26135 Oldenburg
+            <br />
+            Mo–Fr 10:00–18:00, Sa 10:00–14:00
+            <br />
+            0441 984 894 83 · OL@bike-one.de
           </div>
-          <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3">
-            {productCategories && productCategories?.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Categories
-                </span>
-                <ul
-                  className="grid grid-cols-1 gap-2"
-                  data-testid="footer-categories"
-                >
-                  {productCategories?.slice(0, 6).map((c) => {
-                    if (c.parent_category) {
-                      return;
-                    }
-
-                    const children =
-                      c.category_children?.map((child) => ({
-                        name: child.name,
-                        handle: child.handle,
-                        id: child.id,
-                      })) || null;
-
-                    return (
-                      <li
-                        className="flex flex-col gap-2 text-ui-fg-subtle txt-small"
-                        key={c.id}
-                      >
-                        <LocalizedClientLink
-                          className={clx(
-                            "hover:text-ui-fg-base",
-                            children && "txt-small-plus"
-                          )}
-                          href={`/categories/${c.handle}`}
-                          data-testid="category-link"
-                        >
-                          {c.name}
-                        </LocalizedClientLink>
-                        {children && (
-                          <ul className="grid grid-cols-1 ml-3 gap-2">
-                            {children &&
-                              children.map((child) => (
-                                <li key={child.id}>
-                                  <LocalizedClientLink
-                                    className="hover:text-ui-fg-base"
-                                    href={`/categories/${child.handle}`}
-                                    data-testid="category-link"
-                                  >
-                                    {child.name}
-                                  </LocalizedClientLink>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
-            {collections && collections.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Collections
-                </span>
-                <ul
-                  className={clx(
-                    "grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small",
-                    {
-                      "grid-cols-2": (collections?.length || 0) > 3,
-                    }
-                  )}
-                >
-                  {collections?.slice(0, 6).map((c) => (
-                    <li key={c.id}>
-                      <LocalizedClientLink
-                        className="hover:text-ui-fg-base"
-                        href={`/collections/${c.handle}`}
-                      >
-                        {c.title}
-                      </LocalizedClientLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <div className="flex flex-col gap-y-2">
-              <span className="txt-small-plus txt-ui-fg-base">Medusa</span>
-              <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
-                <li>
-                  <a
-                    href="https://github.com/medusajs"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    GitHub
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://docs.medusajs.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/medusajs/dtc-starter"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    Source code
-                  </a>
-                </li>
-              </ul>
-            </div>
+          <div className="text-[12.5px] leading-relaxed text-bo-ink-muted">
+            <b className="mb-0.5 block text-[13px] text-bo-ink">Osnabrück</b>
+            Lengericher Landstraße 30, 49078 Osnabrück
+            <br />
+            Di–Fr 10:00–18:00, Sa 10:00–14:00
+            <br />
+            0541 440 952 84 · OS@bike-one.de
           </div>
         </div>
-        <div className="flex w-full mb-16 justify-between text-ui-fg-muted">
-          <Text className="txt-compact-small">
-            © {new Date().getFullYear()} Medusa Store. All rights reserved.
-          </Text>
-          <MedusaCTA />
+
+        <div>
+          <h4 className="mb-2.5 font-mono text-[11px] uppercase tracking-wide text-bo-ink-faint">
+            {collections.length ? "Marken" : "Service"}
+          </h4>
+          <ul className="flex flex-col gap-2">
+            {collections.length ? (
+              collections.map((c) => (
+                <li key={c.id}>
+                  <LocalizedClientLink
+                    href={`/collections/${c.handle}`}
+                    className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
+                  >
+                    {c.title}
+                  </LocalizedClientLink>
+                </li>
+              ))
+            ) : (
+              <li className="text-[13px] text-bo-ink-muted">
+                Bikefitting-Termin
+              </li>
+            )}
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="mb-2.5 font-mono text-[11px] uppercase tracking-wide text-bo-ink-faint">
+            Kategorien
+          </h4>
+          <ul className="flex flex-col gap-2">
+            {topLevelCategories?.slice(0, 6).map((c) => (
+              <li key={c.id}>
+                <LocalizedClientLink
+                  href={`/categories/${c.handle}`}
+                  className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
+                >
+                  {c.name}
+                </LocalizedClientLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="mb-2.5 font-mono text-[11px] uppercase tracking-wide text-bo-ink-faint">
+            Rechtliches
+          </h4>
+          <ul className="flex flex-col gap-2">
+            <li>
+              <a
+                href="#"
+                className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
+              >
+                Impressum
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
+              >
+                AGB
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
+              >
+                Datenschutz
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
+              >
+                Widerrufsrecht
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
+
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-bo-line px-4 py-4 text-[11.5px] text-bo-ink-faint md:px-6">
+        <span className="font-mono">© {new Date().getFullYear()} BIKE ONE</span>
+        <span>Oldenburg · Osnabrück</span>
+      </div>
     </footer>
-  );
+  )
 }

@@ -2,6 +2,64 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* BikeOne design tokens, ported from wireframes/*.html's :root block.
+   --bo-header-* stay constant across light/dark — the header chrome is
+   always dark, matching the wireframe (site header != page theme). */
+:root {
+  --bo-bg: #f8f9fa;
+  --bo-surface: #ffffff;
+  --bo-surface-2: #f1f3f5;
+  --bo-line: #dee2e6;
+  --bo-line-strong: #adb5bd;
+  --bo-ink: #212529;
+  --bo-ink-muted: #495057;
+  --bo-ink-faint: #868e96;
+  --bo-accent: #e63946;
+  --bo-accent-ink: #ffffff;
+  --bo-ok: #2b8a3e;
+  --bo-ok-bg: #ebfbee;
+  --bo-wait: #e67700;
+  --bo-wait-bg: #fff3bf;
+  --bo-header-bg: #121212;
+  --bo-header-text: #ffffff;
+  --bo-header-line: #333333;
+  --bo-header-surface: #1e1e1e;
+  --bo-header-surface-2: #222222;
+  --bo-header-muted: #888888;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bo-bg: #121212;
+    --bo-surface: #1e1e1e;
+    --bo-surface-2: #2c2c2c;
+    --bo-line: #3d3d3d;
+    --bo-line-strong: #606060;
+    --bo-ink: #f8f9fa;
+    --bo-ink-muted: #ced4da;
+    --bo-ink-faint: #868e96;
+    --bo-ok: #51cf66;
+    --bo-ok-bg: #193420;
+    --bo-wait: #fcc419;
+    --bo-wait-bg: #3b2d0d;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bo-bg: #121212;
+  --bo-surface: #1e1e1e;
+  --bo-surface-2: #2c2c2c;
+  --bo-line: #3d3d3d;
+  --bo-line-strong: #606060;
+  --bo-ink: #f8f9fa;
+  --bo-ink-muted: #ced4da;
+  --bo-ink-faint: #868e96;
+  --bo-ok: #51cf66;
+  --bo-ok-bg: #193420;
+  --bo-wait: #fcc419;
+  --bo-wait-bg: #3b2d0d;
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
