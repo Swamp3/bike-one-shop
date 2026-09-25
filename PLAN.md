@@ -144,15 +144,85 @@ against the real wireframes in `wireframes/`.
     volume. Expanding it can happen alongside or after the real brand
     module.
 
+### Task 5 — SumUp payment provider: prepared, pending sandbox credentials
+Status: **prepared, not activated**
+
+- Installed the **official** `@sumup/medusa-plugin` (npm, maintained by
+  SumUp — confirmed by inspecting the published package, not just its
+  docs) into `backend/apps/backend`, rather than hand-rolling a custom
+  `AbstractPaymentProvider`. It supports Hosted Checkout, the Payment
+  Widget, refunds via SumUp Transactions, and Medusa's built-in payment
+  webhook route.
+- Registered in `medusa-config.ts`, but **only conditionally**: the
+  plugin/provider entries are only added when both `SUMUP_API_KEY` and
+  `SUMUP_MERCHANT_CODE` are set. The plugin's own `validateOptions()`
+  throws on boot if either is missing, so without this guard the server
+  wouldn't start at all until credentials exist. Verified both states
+  directly: with the vars empty, `make dev` boots clean (current
+  state); with fake placeholder values set, `GET
+  /admin/payments/payment-providers` returned `pp_sumup_sumup` as
+  registered and enabled, then removed the fake values again — so
+  dropping the real sandbox credentials into `.env` needs no further
+  code changes to activate it.
+- Env vars added to `.env.template` (all empty/placeholder for now):
+  `SUMUP_API_KEY`, `SUMUP_MERCHANT_CODE`, `SUMUP_CHECKOUT_MODE`
+  (defaults to `hosted`), `MEDUSA_BACKEND_URL`, `STOREFRONT_URL`.
+- **What's still needed once the sandbox account details arrive:**
+  1. Drop `SUMUP_API_KEY`/`SUMUP_MERCHANT_CODE` into `.env`.
+  2. Enable the `sumup` provider for the EUR region in Medusa Admin
+     (Settings → Regions → Payment Providers) — registering it in code
+     doesn't auto-enable it for a region.
+  3. Storefront checkout UI: the default Next.js starter's payment step
+     doesn't know about SumUp. Needs a `/checkout/sumup/return` page
+     (the plugin's `redirectUrl` target) and a hosted-checkout redirect
+     step in the payment flow. This depends on the custom storefront
+     work below, not just the backend.
+  4. Run the plugin's own documented sandbox checklist (hosted checkout,
+     widget, webhook-driven update, full + partial refund, the `amount:
+     11` deliberate-failure test, expired/canceled checkout handling).
+
+### Task 6 — TriCon/Tridata: shared debug-logging infra prepared
+Status: **prepared, not activated** (no WSDL/IdentifyGuid yet)
+
+- Added `src/lib/integration-logger.ts` — a small structured-logging
+  wrapper for any external-system call. Every call gets a correlation
+  ID and a consistent `[scope]` prefix (e.g. `[tridata]`), logged on
+  start, success (with duration), and failure (with duration + error) —
+  so once integration code exists, its traffic is filterable out of the
+  rest of the backend's logs with `grep '\[tridata\]'`.
+- Added `src/lib/tridata/client.ts` — a `TridataClient` stub covering a
+  representative slice of TriCon's 44 functions (catalog, images,
+  stock, orders, order state, invoices — one per category from
+  `tricon-integration-notes.md`'s function table), every method already
+  wired through the logger above. Each throws "not implemented" until
+  filled in with a real SOAP call — intentional, so a caller fails
+  loudly rather than silently no-opping.
+- Added `TRIDATA_WSDL_URL`/`TRIDATA_IDENTIFY_GUID` to `.env.template`
+  (empty placeholders).
+- **What's still needed:** the actual blocker hasn't moved — no WSDL
+  URL or `IdentifyGuid` yet (contact TriData support: +49 911 247675-0
+  / support@tridata.de, per `tricon-integration-notes.md`). Once that
+  exists: fill in `TridataClient`'s method bodies with real SOAP calls,
+  and build the actual `tridata-sync` custom module (`TridataProductMap`,
+  `TridataOrderMap`, `TridataSyncLog` — see the schema-design table
+  above) that calls it on a schedule/workflow. The logging infra here
+  is prep for that, not a replacement for it.
+
 ## Later milestones (not started)
 
 - Fix the Task 3 Next.js production-build issue (`/404` `/500`
   prerender crash) — needed before any real deploy, not needed for
   local dev.
-- SumUp payment provider integration
-- TriCon/Tridata sync (WireMock mock first, real sandbox when Tridata
-  grants access — see `planning/3-Architecture_Tech_Stack/local-dev-setup.md`
-  "Open blocker")
+- Custom storefront UI wired to the wireframes in `wireframes/`
+  (homepage, PLP, PDP, cart/checkout, account, Click & Collect store
+  picker) — the storefront currently runs Medusa's generic starter
+  design, not BikeOne's. Sizeable, multi-page body of work; needs a
+  priority order before starting (see chat).
+- Finish SumUp activation once sandbox credentials exist — see Task 5.
+- TriCon/Tridata SOAP integration itself (client stubbed + logged, see
+  Task 6; WireMock mock first if sandbox access is delayed further,
+  real sandbox when Tridata grants access — see
+  `planning/3-Architecture_Tech_Stack/local-dev-setup.md` "Open blocker")
 - Click & Collect checkout flow end-to-end
 - Auth / customer accounts
 - GDPR/legal compliance features (route through `legal-security-reviewer`

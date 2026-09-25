@@ -11,7 +11,7 @@ E-commerce storefront for BikeOne, a German multi-brand bike retailer with two p
 
 ## Status
 
-Planning phases 1-5 (research, requirements, architecture, wireframes, DB schema) are done. Build phase 6/7 (backend + frontend scaffold) is started: a working Medusa.js v2 backend and Next.js storefront exist and run together locally. See `PLAN.md` for the current milestone, what's done, and known issues. Full original roadmap and reasoning: `planning/ROADMAP.md`.
+Planning phases 1-5 (research, requirements, architecture, wireframes, DB schema) are done. Build phase 6/7 (backend + frontend scaffold) is started: a working Medusa.js v2 backend and Next.js storefront exist and run together locally, seeded with a small real bike catalog (Trek/Cervélo/Factor/Specialized). The storefront still runs Medusa's generic starter UI — the custom design from `wireframes/` isn't wired in yet. SumUp payments and TriCon/Tridata ERP sync are prepared (official SumUp plugin installed and conditionally wired; a logged TriCon client stub in place) but not active — both are waiting on real sandbox credentials. See `PLAN.md` for the current milestone, what's done, and known issues. Full original roadmap and reasoning: `planning/ROADMAP.md`.
 
 ## Repo layout
 
