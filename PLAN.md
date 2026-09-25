@@ -208,16 +208,43 @@ Status: **prepared, not activated** (no WSDL/IdentifyGuid yet)
   above) that calls it on a schedule/workflow. The logging infra here
   is prep for that, not a replacement for it.
 
+### Task 7 — Custom storefront: homepage + shared chrome
+Status: **done** (first slice of a multi-page milestone)
+
+- Replaced Medusa's generic starter design with BikeOne's own, matching
+  `wireframes/homepage.html`: design tokens (colors, Oswald/Inter/
+  JetBrains Mono fonts) ported into `tailwind.config.js` +
+  `globals.css`; dark sticky header with mobile drawer, search (submits
+  to `/store?q=`, no Algolia configured so no live suggestions), a
+  Click & Collect store picker, and a category nav row; footer with
+  real store/brand/category data; homepage hero (using the wireframe's
+  own reference photo), trust strip, and a real product grid.
+- All content is real backend data (`listCategories`/`listCollections`/
+  `listProducts`), not the wireframe's hardcoded arrays. Fixed
+  `money.ts`'s locale default (`en-US` → `de-DE`) so prices render as
+  `4.999,00 €` everywhere, not `€4,999.00`.
+- **Known placeholders, not bugs:** the store-picker's two BikeOne
+  addresses are static (no public Store API for stock locations exists
+  yet — needs the not-yet-built `store-profile` module); legal footer
+  links (Impressum/AGB/Datenschutz/Widerrufsrecht) point at `#` rather
+  than fabricated content, since that's GDPR/legal-compliance work, a
+  separate flagged milestone.
+- Verified in-browser with Playwright (mobile + desktop viewports):
+  all 4 bikes render with correct data, mobile drawer and both
+  store-picker variants open and work correctly. Caught and fixed two
+  real bugs this way — an invalid Tailwind color class made the "DE"
+  badge invisible (white-on-white), and the mobile store-picker panel
+  overflowed off-screen (was positioned relative to its 38px icon
+  button instead of the full header).
+- Remaining pages, in the order agreed: category/PLP → product detail →
+  cart/checkout → account → Click & Collect store-selection flow. Each
+  is its own sizeable slice; continuing across follow-up turns.
+
 ## Later milestones (not started)
 
 - Fix the Task 3 Next.js production-build issue (`/404` `/500`
   prerender crash) — needed before any real deploy, not needed for
   local dev.
-- Custom storefront UI wired to the wireframes in `wireframes/`
-  (homepage, PLP, PDP, cart/checkout, account, Click & Collect store
-  picker) — the storefront currently runs Medusa's generic starter
-  design, not BikeOne's. Sizeable, multi-page body of work; needs a
-  priority order before starting (see chat).
 - Finish SumUp activation once sandbox credentials exist — see Task 5.
 - TriCon/Tridata SOAP integration itself (client stubbed + logged, see
   Task 6; WireMock mock first if sandbox access is delayed further,
