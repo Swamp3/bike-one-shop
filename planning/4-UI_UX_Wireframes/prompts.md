@@ -8,7 +8,7 @@ Per [ROADMAP.md](../ROADMAP.md): Claude (Artifacts) for interactive wireframes, 
 - Positioning v1: **Omnichannel Premium Hub** — regional launch (~150km around Oldenburg/Osnabrück), in-store fitting/builds or shipping prebuilt frames. Leasing and bike configurator are later phases, not v1 UI.
 - Catalog: bikes/frames + accessories + components, price range budget-to-premium (multi-brand reseller).
 - v1 must-haves: Click & Collect, in-store returns, checkout with card + PayPal (via SumUp).
-- Frontend: Angular + Tailwind, SSR for SEO — product/category pages must read as content-rich and crawlable, not app-shell-sparse.
+- Frontend: Angular + Tailwind, SSR for SEO — product/category pages must read as content-rich and crawlable, not app-shell-sparse. *(Frontend framework later revised to Next.js during Phase 6 planning — see `decisions.md`. Doesn't affect these wireframes, which are plain framework-agnostic HTML/CSS; relevant only if reusing this prompt template for future wireframe work.)*
 - Primary language German (English secondary) — mock copy in German.
 - SEO is high priority — PDP needs visible structured info (price, availability, GTIN-equivalent specs) since it feeds Google Shopping.
 
@@ -160,4 +160,4 @@ Generate a consistent icon set (simple line-art or duotone style, one unified vi
 
 ## After this phase
 
-Once wireframes are reviewed and a visual direction is picked, feed both back into Claude to produce the actual Angular component structure (Step 6/7), and revisit [3-Architecture_Tech_Stack/decisions.md](../3-Architecture_Tech_Stack/decisions.md) if the UI surfaces new architecture needs (e.g. a specific search/filter library, image CDN choice).
+Once wireframes are reviewed and a visual direction is picked, feed both back into Claude to produce the actual Next.js component structure (Step 6/7 — frontend framework revised from Angular to Next.js during Phase 6 planning, see `decisions.md`), and revisit [3-Architecture_Tech_Stack/decisions.md](../3-Architecture_Tech_Stack/decisions.md) if the UI surfaces new architecture needs (e.g. a specific search/filter library, image CDN choice).
