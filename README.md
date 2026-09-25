@@ -25,14 +25,13 @@ Planning phases 1-5 (research, requirements, architecture, wireframes, DB schema
 ## Local development
 
 ```
-docker compose up -d postgres redis   # from repo root
-cd backend
-npm run dev                           # runs both backend (:9000) and storefront (:8000)
-# or individually:
-npm run backend:dev
-npm run storefront:dev
+make setup   # one-time: starts Postgres/Redis, installs deps, creates env files,
+             # runs DB migrations, creates a dev admin user, wires the storefront's API key
+make dev     # runs both backend (:9000) and storefront (:8000)
 ```
 
-Backend health check: `curl http://localhost:9000/health`. Storefront: open `http://localhost:8000` (redirects to the seeded `/dk` region). Admin dashboard: `http://localhost:9000/app` (a first-run invite link is printed to the console the first time the backend runs after scaffolding).
+`make help` lists every target (`backend`, `storefront`, `migrate`, `down`, `reset-db`, etc.) — see the `Makefile` at the repo root. `make setup` is idempotent, safe to re-run.
+
+Backend health check: `curl http://localhost:9000/health`. Storefront: open `http://localhost:8000` (redirects to the seeded `/dk` region). Admin dashboard: `http://localhost:9000/app` — `make setup` prints the dev admin login (default `admin@bikeone.local` / `supersecret`; override with `ADMIN_EMAIL`/`ADMIN_PASSWORD` env vars before running it).
 
 Production build: `npm run build` (from `backend/`) builds the Medusa backend + admin dashboard successfully. The storefront's `next build` currently fails on Next.js's own auto-generated `/404`/`/500` error-page prerendering (not on any real app route) — see `PLAN.md`'s Task 3 for details; `next dev` is unaffected.
