@@ -116,13 +116,33 @@ Status: **done** (with the Task 3 build caveat noted above)
   secrets (`JWT_SECRET=supersecret` etc.) — fine for local dev, must be
   rotated before any shared/deployed environment.
 
-## Next milestone (not started): Core commerce data model
+## Next milestone (in progress): Core commerce data model
 
 Implement the custom Medusa modules and module links from
 `planning/5-Database_Schema/schema-design.md` (brand, store-profile,
 order-fulfillment-extension/Click&Collect, saved-payment-instrument),
 seed sample BikeOne catalog data, and start wiring the storefront pages
 against the real wireframes in `wireframes/`.
+
+- **Seed data — started.** `initial-data-seed.ts` now seeds 4 real bikes
+  (Trek Domane SL 6, Cervélo Áspero-5, Factor Ostro VAM, Specialized
+  Stumpjumper) across 3 categories (Road/Gravel/Mountain Bikes, plus an
+  empty Accessories category) with Frame Size (S/M/L/XL) variants and
+  realistic EUR/USD pricing. Verified end-to-end: fresh `make reset-db`
+  migrates clean, `GET /store/products` returns all 4 with correct
+  collection/category/variant/price data, and the storefront renders
+  them at `/dk`.
+  - **Brand is a stand-in, not the real thing.** The schema design calls
+    for a dedicated `product-brand` custom module (see the table above).
+    That doesn't exist yet, so each bike's brand is a native Medusa
+    **Collection** (Trek/Cervélo/Factor/Specialized) instead — enough
+    for brand pages/filtering to work today, but it should be replaced
+    once the real `product-brand` module lands (migrate `collection_id`
+    → the new module's link).
+  - Still only 4 products (one per brand, no variety within a brand,
+    no accessories) — fine as a smoke-test catalog, not representative
+    volume. Expanding it can happen alongside or after the real brand
+    module.
 
 ## Later milestones (not started)
 

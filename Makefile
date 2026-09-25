@@ -44,6 +44,7 @@ status: ## Show container status
 
 reset-db: ## Wipe local Postgres/Redis data and re-run setup (DESTRUCTIVE)
 	$(COMPOSE) down -v
+	rm -f backend/apps/storefront/.env.local
 	@$(MAKE) setup
 
 clean: down ## Stop infra and remove node_modules
