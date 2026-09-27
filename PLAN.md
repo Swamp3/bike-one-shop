@@ -240,6 +240,29 @@ Status: **done** (first slice of a multi-page milestone)
   cart/checkout → account → Click & Collect store-selection flow. Each
   is its own sizeable slice; continuing across follow-up turns.
 
+### Task 8 — Custom storefront: category/collection/search listing pages
+Status: **done**
+
+- Matches `wireframes/gravelbikes.html`: breadcrumb, page head with a
+  real result count, sort dropdown, a Frame Size filter (real
+  product-option data, not the wireframe's mocked brand/price/usage
+  facets — those don't map onto our actual data model), active filter
+  chips, product grid, prev/next pagination. Mobile gets a slide-in
+  filter drawer, desktop a sticky sidebar.
+- **Bigger find:** `/store` (all-products page) was 100% Algolia
+  InstantSearch under the hood, and this project has no Algolia
+  credentials configured anywhere — it rendered nothing. That's also
+  where the homepage's search bar links (`/store?q=...`), so search was
+  silently broken end-to-end since Task 7. Replaced it with the same
+  server-rendered approach the category/collection pages already used
+  (no Algolia needed), and wired `q` through to Medusa's native
+  product-list text filter — search now genuinely works. Removed the
+  fully-dead Algolia component tree it left behind.
+- Verified in-browser: category pages (including an empty one),
+  collection/brand pages, search with results and with none, the Frame
+  Size filter. Caught and fixed a second real bug — the header's result
+  count didn't update when a filter was applied.
+
 ## Later milestones (not started)
 
 - Fix the Task 3 Next.js production-build issue (`/404` `/500`
