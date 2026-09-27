@@ -1,39 +1,62 @@
-"use client"
+import { Suspense } from "react"
 
-import type { SearchClient } from "instantsearch.js"
-import { Configure, InstantSearch } from "react-instantsearch"
+import { listProducts } from "@lib/data/products"
+import { OptionValueIds } from "@lib/util/product-option-filters"
+import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
+import PlpBreadcrumb from "@modules/store/components/plp-breadcrumb"
+import PlpPageHead from "@modules/store/components/plp-page-head"
+import RefinementList from "@modules/store/components/refinement-list"
+import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
+import PaginatedProducts from "@modules/store/templates/paginated-products"
 
-import { PRODUCT_INDEX_NAME, searchClient } from "@lib/search-client"
-import StoreHits from "@modules/store/components/store-hits"
-import StoreRefinements from "@modules/store/components/store-refinements"
-import StoreSearchBox from "@modules/store/components/store-search-box"
+const StoreTemplate = async ({
+  sortBy,
+  page,
+  countryCode,
+  optionValueIds,
+  q,
+}: {
+  sortBy?: SortOptions
+  page?: string
+  countryCode: string
+  optionValueIds?: OptionValueIds
+  q?: string
+}) => {
+  const pageNumber = page ? parseInt(page) : 1
+  const sort = sortBy || "created_at"
 
-const PRODUCT_LIMIT = 12
+  const { response } = await listProducts({
+    countryCode,
+    queryParams: {
+      limit: 1,
+      ...(q ? { q } : {}),
+      ...(optionValueIds?.length
+        ? { option_value_id: optionValueIds }
+        : {}),
+    },
+  }).catch(() => ({ response: { count: undefined } }))
 
-const StoreTemplate = ({ currencyCode }: { currencyCode: string }) => {
   return (
-    <div className="py-6 content-container" data-testid="category-container">
-      <div className="mb-8 text-2xl-semi">
-        <h1 data-testid="store-page-title">All products</h1>
-      </div>
+    <div className="pb-10">
+      <PlpBreadcrumb items={[{ label: "Start", href: "/" }, { label: "Alle Produkte" }]} />
+      <PlpPageHead
+        title={q ? `Suche: „${q}“` : "Alle Produkte"}
+        count={response.count}
+      />
 
-      <div className="flex flex-col small:flex-row small:items-start">
-        <InstantSearch
-          indexName={PRODUCT_INDEX_NAME}
-          searchClient={searchClient as unknown as SearchClient}
-          routing
-          future={{ preserveSharedStateOnUnmount: true }}
-        >
-          <Configure hitsPerPage={PRODUCT_LIMIT} />
-          <StoreRefinements currencyCode={currencyCode} />
-          <div className="w-full min-w-0">
-            <StoreSearchBox />
-            <StoreHits
-              hitsPerPage={PRODUCT_LIMIT}
-              currencyCode={currencyCode}
+      <div className="mt-3 flex flex-col gap-6 px-4 md:flex-row md:items-start md:gap-8 md:px-6">
+        <RefinementList sortBy={sort} />
+        <div className="min-w-0 flex-1">
+          <Suspense fallback={<SkeletonProductGrid numberOfProducts={8} />}>
+            <PaginatedProducts
+              sortBy={sort}
+              page={pageNumber}
+              countryCode={countryCode}
+              optionValueIds={optionValueIds}
+              q={q}
             />
-          </div>
-        </InstantSearch>
+          </Suspense>
+        </div>
       </div>
     </div>
   )
