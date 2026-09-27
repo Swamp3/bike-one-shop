@@ -1,5 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react"
-import { Button, clx } from "@modules/common/components/ui"
+import { clx } from "@modules/common/components/ui"
 import React, { Fragment, useMemo } from "react"
 
 import useToggleState from "@lib/hooks/use-toggle-state"
@@ -70,65 +70,57 @@ const MobileActions: React.FC<MobileActionsProps> = ({
           leaveTo="opacity-0"
         >
           <div
-            className="bg-white flex flex-col gap-y-3 justify-center items-center text-large-regular p-4 h-full w-full border-t border-gray-200"
+            className="flex h-full w-full flex-col items-center justify-center gap-y-3 border-t border-bo-line bg-bo-surface p-4 text-bo-ink"
             data-testid="mobile-actions"
           >
-            <div className="flex items-center gap-x-2">
-              <span data-testid="mobile-title">{product.title}</span>
+            <div className="flex items-center gap-x-2 text-[14px]">
+              <span data-testid="mobile-title" className="font-semibold">
+                {product.title}
+              </span>
               <span>—</span>
-              {selectedPrice ? (
-                <div className="flex items-end gap-x-2 text-ui-fg-base">
-                  {selectedPrice.price_type === "sale" && (
-                    <p>
-                      <span className="line-through text-small-regular">
-                        {selectedPrice.original_price}
-                      </span>
-                    </p>
-                  )}
-                  <span
-                    className={clx({
-                      "text-ui-fg-interactive":
-                        selectedPrice.price_type === "sale",
-                    })}
-                  >
-                    {selectedPrice.calculated_price}
-                  </span>
-                </div>
-              ) : (
-                <div></div>
+              {selectedPrice && (
+                <span className="font-bold tabular-nums">
+                  {selectedPrice.calculated_price}
+                </span>
               )}
             </div>
-            <div className={clx("grid grid-cols-2 w-full gap-x-4", {
-              "!grid-cols-1": isSimple
-            })}>
-              {!isSimple && <Button
-                onClick={open}
-                variant="secondary"
-                className="w-full"
-                data-testid="mobile-actions-button"
-              >
-                <div className="flex items-center justify-between w-full">
-                  <span>
-                    {variant
-                      ? Object.values(options).join(" / ")
-                      : "Select Options"}
-                  </span>
-                  <ChevronDown />
-                </div>
-              </Button>}
-              <Button
+            <div
+              className={clx("grid w-full grid-cols-2 gap-2.5", {
+                "!grid-cols-1": isSimple,
+              })}
+            >
+              {!isSimple && (
+                <button
+                  type="button"
+                  onClick={open}
+                  data-testid="mobile-actions-button"
+                  className="w-full rounded border-[1.5px] border-bo-line-strong bg-transparent px-3 py-2.5 text-[13.5px] font-semibold text-bo-ink"
+                >
+                  <div className="flex w-full items-center justify-between">
+                    <span>
+                      {variant
+                        ? Object.values(options).join(" / ")
+                        : "Größe wählen"}
+                    </span>
+                    <ChevronDown />
+                  </div>
+                </button>
+              )}
+              <button
+                type="button"
                 onClick={handleAddToCart}
-                disabled={!inStock || !variant}
-                className="w-full"
-                isLoading={isAdding}
+                disabled={!inStock || !variant || isAdding}
                 data-testid="mobile-cart-button"
+                className="w-full rounded border-[1.5px] border-bo-ink bg-bo-ink px-3 py-2.5 text-[13.5px] font-semibold text-bo-bg disabled:cursor-not-allowed disabled:border-bo-line disabled:bg-bo-surface-2 disabled:text-bo-ink-faint"
               >
                 {!variant
-                  ? "Select variant"
+                  ? "Größe wählen"
                   : !inStock
-                  ? "Out of stock"
-                  : "Add to cart"}
-              </Button>
+                  ? "Ausverkauft"
+                  : isAdding
+                  ? "Wird hinzugefügt …"
+                  : "In den Warenkorb"}
+              </button>
             </div>
           </div>
         </Transition>
@@ -144,7 +136,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-gray-700 bg-opacity-75 backdrop-blur-sm" />
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
           </Transition.Child>
 
           <div className="fixed bottom-0 inset-x-0">
@@ -165,13 +157,13 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                   <div className="w-full flex justify-end pr-6">
                     <button
                       onClick={close}
-                      className="bg-white w-12 h-12 rounded-full text-ui-fg-base flex justify-center items-center"
+                      className="flex h-12 w-12 items-center justify-center rounded-full bg-bo-surface text-bo-ink"
                       data-testid="close-modal-button"
                     >
                       <X />
                     </button>
                   </div>
-                  <div className="bg-white px-6 py-12">
+                  <div className="bg-bo-surface px-6 py-12">
                     {(product.variants?.length ?? 0) > 1 && (
                       <div className="flex flex-col gap-y-6">
                         {(product.options || []).map((option) => {

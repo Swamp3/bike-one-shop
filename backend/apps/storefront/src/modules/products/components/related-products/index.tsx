@@ -1,7 +1,7 @@
 import { listProducts } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
 import { HttpTypes } from "@medusajs/types"
-import Product from "../product-preview"
+import BikeOneProductCard from "@modules/products/components/bikeone-product-card"
 
 type RelatedProductsProps = {
   product: HttpTypes.StoreProduct
@@ -18,52 +18,40 @@ export default async function RelatedProducts({
     return null
   }
 
-  // edit this function to define your related products logic
-  const queryParams: HttpTypes.StoreProductListParams = {}
-  if (region?.id) {
-    queryParams.region_id = region.id
-  }
-  if (product.collection_id) {
-    queryParams.collection_id = [product.collection_id]
-  }
-  if (product.tags) {
-    queryParams.tag_id = product.tags
-      .map((t) => t.id)
-      .filter(Boolean) as string[]
-  }
-  queryParams.is_giftcard = false
+  const categoryId = product.categories?.[0]?.id
+  const fields = "*variants.calculated_price,*collection"
 
-  const products = await listProducts({
-    queryParams,
-    countryCode,
-  }).then(({ response }) => {
-    return response.products.filter(
-      (responseProduct) => responseProduct.id !== product.id
-    )
-  })
+  // Prefer same-category products (our catalog is small enough that
+  // same-collection/brand matches are usually empty — each brand has one
+  // product today). Falls back to "other products" so the section never
+  // shows an empty state for lack of siblings.
+  let products: HttpTypes.StoreProduct[] = []
+
+  if (categoryId) {
+    const { response } = await listProducts({
+      countryCode,
+      queryParams: { category_id: [categoryId], limit: 5, fields },
+    })
+    products = response.products.filter((p) => p.id !== product.id)
+  }
+
+  if (!products.length) {
+    const { response } = await listProducts({
+      countryCode,
+      queryParams: { limit: 5, fields },
+    })
+    products = response.products.filter((p) => p.id !== product.id)
+  }
 
   if (!products.length) {
     return null
   }
 
   return (
-    <div className="product-page-constraint">
-      <div className="flex flex-col items-center text-center mb-16">
-        <span className="text-base-regular text-gray-600 mb-6">
-          Related products
-        </span>
-        <p className="text-2xl-regular text-ui-fg-base max-w-lg">
-          You might also want to check out these products.
-        </p>
-      </div>
-
-      <ul className="grid grid-cols-2 small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8">
-        {products.map((product) => (
-          <li key={product.id}>
-            <Product region={region} product={product} />
-          </li>
-        ))}
-      </ul>
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+      {products.slice(0, 4).map((p) => (
+        <BikeOneProductCard key={p.id} product={p} />
+      ))}
     </div>
   )
 }

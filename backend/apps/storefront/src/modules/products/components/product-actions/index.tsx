@@ -2,14 +2,12 @@
 
 import { addToCart } from "@lib/data/cart"
 import { useIntersection } from "@lib/hooks/use-in-view"
+import { getProductPrice } from "@lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
-import { Button } from "@modules/common/components/ui"
-import Divider from "@modules/common/components/divider"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
 import { isEqual } from "lodash"
 import { useParams, usePathname, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
-import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
 import { useRouter } from "next/navigation"
 
@@ -135,53 +133,57 @@ export default function ProductActions({
     setIsAdding(false)
   }
 
+  const { variantPrice, cheapestPrice } = getProductPrice({
+    product,
+    variantId: selectedVariant?.id,
+  })
+  const price = (selectedVariant ? variantPrice : cheapestPrice)
+    ?.calculated_price
+
+  const ctaDisabled =
+    !inStock || !selectedVariant || !!disabled || isAdding || !isValidVariant
+
+  const ctaLabel = !selectedVariant
+    ? "Größe wählen"
+    : !inStock || !isValidVariant
+    ? "Ausverkauft"
+    : isAdding
+    ? "Wird hinzugefügt …"
+    : price
+    ? `In den Warenkorb — ${price}`
+    : "In den Warenkorb"
+
   return (
     <>
-      <div className="flex flex-col gap-y-2" ref={actionsRef}>
-        <div>
-          {(product.variants?.length ?? 0) > 1 && (
-            <div className="flex flex-col gap-y-4">
-              {(product.options || []).map((option) => {
-                return (
-                  <div key={option.id}>
-                    <OptionSelect
-                      option={option}
-                      current={options[option.id]}
-                      updateOption={setOptionValue}
-                      title={option.title ?? ""}
-                      data-testid="product-options"
-                      disabled={!!disabled || isAdding}
-                    />
-                  </div>
-                )
-              })}
-              <Divider />
-            </div>
-          )}
-        </div>
+      <div className="flex flex-col gap-y-4" ref={actionsRef}>
+        {(product.variants?.length ?? 0) > 1 && (
+          <div className="flex flex-col gap-y-4">
+            {(product.options || []).map((option) => {
+              return (
+                <div key={option.id}>
+                  <OptionSelect
+                    option={option}
+                    current={options[option.id]}
+                    updateOption={setOptionValue}
+                    title={option.title ?? ""}
+                    data-testid="product-options"
+                    disabled={!!disabled || isAdding}
+                  />
+                </div>
+              )
+            })}
+          </div>
+        )}
 
-        <ProductPrice product={product} variant={selectedVariant} />
-
-        <Button
+        <button
+          type="button"
           onClick={handleAddToCart}
-          disabled={
-            !inStock ||
-            !selectedVariant ||
-            !!disabled ||
-            isAdding ||
-            !isValidVariant
-          }
-          variant="primary"
-          className="w-full h-10"
-          isLoading={isAdding}
+          disabled={ctaDisabled}
           data-testid="add-product-button"
+          className="w-full rounded border-[1.5px] border-bo-ink bg-bo-ink py-[13px] text-[14.5px] font-semibold text-bo-bg hover:border-bo-accent hover:bg-bo-accent hover:text-bo-accent-ink disabled:cursor-not-allowed disabled:border-bo-line disabled:bg-bo-surface-2 disabled:text-bo-ink-faint disabled:hover:border-bo-line disabled:hover:bg-bo-surface-2 disabled:hover:text-bo-ink-faint"
         >
-          {!selectedVariant
-            ? "Select variant"
-            : !inStock || !isValidVariant
-            ? "Out of stock"
-            : "Add to cart"}
-        </Button>
+          {ctaLabel}
+        </button>
         <MobileActions
           product={product}
           variant={selectedVariant}
