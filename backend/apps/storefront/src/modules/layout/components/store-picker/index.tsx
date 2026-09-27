@@ -2,23 +2,10 @@
 
 import { useEffect, useState } from "react"
 
-/**
- * Static placeholder for BikeOne's two physical stores. There's no public
- * Store API for stock locations yet (Medusa's stock-location module is
- * admin-only) — the real `store-profile` custom module from
- * planning/5-Database_Schema/schema-design.md hasn't been built, so this
- * can't be sourced from the backend today. Swap for a real fetch once that
- * module + a public read route exist.
- */
-const STORES = [
-  { name: "Oldenburg", address: "Rheinstr. 16, 26135 Oldenburg" },
-  {
-    name: "Osnabrück",
-    address: "Lengericher Landstraße 30, 49078 Osnabrück",
-  },
-]
+import { PREFERRED_STORE_STORAGE_KEY, STORES } from "@lib/data/stores"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
-const STORAGE_KEY = "bikeone_preferred_store"
+const STORAGE_KEY = PREFERRED_STORE_STORAGE_KEY
 
 const PinIcon = ({ className }: { className?: string }) => (
   <svg
@@ -74,6 +61,13 @@ const StorePicker = ({ variant }: { variant: "mobile" | "strip" }) => {
             </span>
           </button>
         ))}
+        <LocalizedClientLink
+          href="/click-collect"
+          onClick={() => setOpen(false)}
+          className="mt-1 block rounded-[7px] border-t border-bo-header-line px-2.5 pt-2.5 text-[12px] font-semibold text-bo-accent"
+        >
+          Alle Filialen &amp; Öffnungszeiten →
+        </LocalizedClientLink>
       </div>
     </>
   )

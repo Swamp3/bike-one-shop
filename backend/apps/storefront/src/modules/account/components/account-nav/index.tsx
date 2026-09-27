@@ -1,198 +1,84 @@
 "use client"
 
-import { ArrowRightOnRectangle } from "@medusajs/icons"
 import { clx } from "@modules/common/components/ui"
 import { useParams, usePathname } from "next/navigation"
 
-import { signout } from "@lib/data/customer"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import ChevronDown from "@modules/common/icons/chevron-down"
-import MapPin from "@modules/common/icons/map-pin"
-import Package from "@modules/common/icons/package"
-import User from "@modules/common/icons/user"
+
+const PackageIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[15px] w-[15px]">
+    <rect x="3" y="7" width="18" height="14" rx="2" />
+    <path d="M8 7V5a4 4 0 0 1 8 0v2" />
+  </svg>
+)
+const UserIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[15px] w-[15px]">
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
+  </svg>
+)
+const CardIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[15px] w-[15px]">
+    <rect x="2" y="5" width="20" height="14" rx="2" />
+    <path d="M2 10h20" />
+  </svg>
+)
+const LogoutIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-[15px] w-[15px]">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <path d="M16 17l5-5-5-5" />
+    <path d="M21 12H9" />
+  </svg>
+)
+
+const TABS = [
+  { href: "/account/orders", label: "Bestellungen", icon: PackageIcon },
+  { href: "/account/profile", label: "Meine Daten", icon: UserIcon },
+  { href: "/account/payment", label: "Zahlungsmethoden", icon: CardIcon },
+]
 
 const AccountNav = ({
-  customer,
+  customer: _customer,
 }: {
   customer: HttpTypes.StoreCustomer | null
 }) => {
-  const route = usePathname()
+  const pathname = usePathname()
   const { countryCode } = useParams() as { countryCode: string }
-
-  const handleLogout = async () => {
-    await signout(countryCode)
-  }
+  const route = pathname?.split(countryCode)[1] || ""
 
   return (
-    <div>
-      <div className="small:hidden" data-testid="mobile-account-nav">
-        {route !== `/${countryCode}/account` ? (
-          <LocalizedClientLink
-            href="/account"
-            className="flex items-center gap-x-2 text-small-regular py-2"
-            data-testid="account-main-link"
-          >
-            <>
-              <ChevronDown className="transform rotate-90" />
-              <span>Account</span>
-            </>
-          </LocalizedClientLink>
-        ) : (
-          <>
-            <div className="text-xl-semi mb-4 px-8">
-              Hello {customer?.first_name}
-            </div>
-            <div className="text-base-regular">
-              <ul>
-                <li>
-                  <LocalizedClientLink
-                    href="/account/profile"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
-                    data-testid="profile-link"
-                  >
-                    <>
-                      <div className="flex items-center gap-x-2">
-                        <User size={20} />
-                        <span>Profile</span>
-                      </div>
-                      <ChevronDown className="transform -rotate-90" />
-                    </>
-                  </LocalizedClientLink>
-                </li>
-                <li>
-                  <LocalizedClientLink
-                    href="/account/addresses"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
-                    data-testid="addresses-link"
-                  >
-                    <>
-                      <div className="flex items-center gap-x-2">
-                        <MapPin size={20} />
-                        <span>Addresses</span>
-                      </div>
-                      <ChevronDown className="transform -rotate-90" />
-                    </>
-                  </LocalizedClientLink>
-                </li>
-                <li>
-                  <LocalizedClientLink
-                    href="/account/orders"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8"
-                    data-testid="orders-link"
-                  >
-                    <div className="flex items-center gap-x-2">
-                      <Package size={20} />
-                      <span>Orders</span>
-                    </div>
-                    <ChevronDown className="transform -rotate-90" />
-                  </LocalizedClientLink>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    className="flex items-center justify-between py-4 border-b border-gray-200 px-8 w-full"
-                    onClick={handleLogout}
-                    data-testid="logout-button"
-                  >
-                    <div className="flex items-center gap-x-2">
-                      <ArrowRightOnRectangle />
-                      <span>Log out</span>
-                    </div>
-                    <ChevronDown className="transform -rotate-90" />
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </>
-        )}
-      </div>
-      <div className="hidden small:block" data-testid="account-nav">
-        <div>
-          <div className="pb-4">
-            <h3 className="text-base-semi">Account</h3>
-          </div>
-          <div className="text-base-regular">
-            <ul className="flex mb-0 justify-start items-start flex-col gap-y-4">
-              <li>
-                <AccountNavLink
-                  href="/account"
-                  route={route!}
-                  data-testid="overview-link"
-                >
-                  Overview
-                </AccountNavLink>
-              </li>
-              <li>
-                <AccountNavLink
-                  href="/account/profile"
-                  route={route!}
-                  data-testid="profile-link"
-                >
-                  Profile
-                </AccountNavLink>
-              </li>
-              <li>
-                <AccountNavLink
-                  href="/account/addresses"
-                  route={route!}
-                  data-testid="addresses-link"
-                >
-                  Addresses
-                </AccountNavLink>
-              </li>
-              <li>
-                <AccountNavLink
-                  href="/account/orders"
-                  route={route!}
-                  data-testid="orders-link"
-                >
-                  Orders
-                </AccountNavLink>
-              </li>
-              <li className="text-grey-700">
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  data-testid="logout-button"
-                >
-                  Log out
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-type AccountNavLinkProps = {
-  href: string
-  route: string
-  children: React.ReactNode
-  "data-testid"?: string
-}
-
-const AccountNavLink = ({
-  href,
-  route,
-  children,
-  "data-testid": dataTestId,
-}: AccountNavLinkProps) => {
-  const { countryCode }: { countryCode: string } = useParams()
-
-  const active = route.split(countryCode)[1] === href
-  return (
-    <LocalizedClientLink
-      href={href}
-      className={clx("text-ui-fg-subtle hover:text-ui-fg-base", {
-        "text-ui-fg-base font-semibold": active,
-      })}
-      data-testid={dataTestId}
+    <div
+      className="-mx-4 flex gap-1 overflow-x-auto border-b border-bo-line px-4 pb-3.5 [scrollbar-width:none] md:sticky md:top-6 md:mx-0 md:flex-col md:overflow-visible md:border-b-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden"
+      role="tablist"
     >
-      {children}
-    </LocalizedClientLink>
+      {TABS.map((tab) => {
+        const active = route.startsWith(tab.href)
+        return (
+          <LocalizedClientLink
+            key={tab.href}
+            href={tab.href}
+            className={clx(
+              "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-bo-line px-3.5 py-2.5 text-[13px] font-semibold text-bo-ink-muted md:rounded-lg md:border-transparent md:px-3 md:py-2.5",
+              active && "border-bo-ink bg-bo-ink text-bo-bg md:border-bo-line md:bg-bo-surface-2 md:text-bo-ink"
+            )}
+          >
+            <tab.icon />
+            {tab.label}
+          </LocalizedClientLink>
+        )
+      })}
+      <LocalizedClientLink
+        href="/account/logout"
+        className={clx(
+          "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-bo-accent bg-[color-mix(in_srgb,var(--bo-accent)_6%,var(--bo-surface))] px-3.5 py-2.5 text-[13px] font-semibold text-bo-accent md:mt-3 md:rounded-none md:border-0 md:border-t md:border-bo-line md:bg-transparent md:px-3 md:pb-0 md:pt-4",
+          route.startsWith("/account/logout") && "bg-bo-accent text-bo-accent-ink md:bg-transparent md:text-bo-accent"
+        )}
+      >
+        <LogoutIcon />
+        Abmelden
+      </LocalizedClientLink>
+    </div>
   )
 }
 

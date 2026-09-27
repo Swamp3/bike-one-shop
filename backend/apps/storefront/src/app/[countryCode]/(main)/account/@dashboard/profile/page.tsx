@@ -1,51 +1,34 @@
 import { Metadata } from "next"
 
-import ProfilePhone from "@modules/account//components/profile-phone"
-import ProfileBillingAddress from "@modules/account/components/profile-billing-address"
-import ProfileEmail from "@modules/account/components/profile-email"
-import ProfileName from "@modules/account/components/profile-name"
 import { notFound } from "next/navigation"
-import { listRegions } from "@lib/data/regions"
+import { getRegion } from "@lib/data/regions"
 import { retrieveCustomer } from "@lib/data/customer"
+import AddressBook from "@modules/account/components/address-book"
+import PersonalDataCard from "@modules/account/components/personal-data-card"
 
 export const metadata: Metadata = {
-  title: "Profile",
-  description: "View and edit your Medusa Store profile.",
+  title: "Meine Daten",
+  description: "Persönliche Daten und Adressbuch.",
 }
 
-export default async function Profile() {
+export default async function Profile(props: {
+  params: Promise<{ countryCode: string }>
+}) {
+  const { countryCode } = await props.params
   const customer = await retrieveCustomer()
-  const regions = await listRegions()
+  const region = await getRegion(countryCode)
 
-  if (!customer || !regions) {
+  if (!customer || !region) {
     notFound()
   }
 
   return (
     <div className="w-full" data-testid="profile-page-wrapper">
-      <div className="mb-8 flex flex-col gap-y-4">
-        <h1 className="text-2xl-semi">Profile</h1>
-        <p className="text-base-regular">
-          View and update your profile information, including your name, email,
-          and phone number. You can also update your billing address, or change
-          your password.
-        </p>
-      </div>
-      <div className="flex flex-col gap-y-8 w-full">
-        <ProfileName customer={customer} />
-        <Divider />
-        <ProfileEmail customer={customer} />
-        <Divider />
-        <ProfilePhone customer={customer} />
-        <Divider />
-        {/* <ProfilePassword customer={customer} />
-        <Divider /> */}
-        <ProfileBillingAddress customer={customer} regions={regions} />
-      </div>
+      <h2 className="m-0 mb-3.5 font-heading text-[19px] font-semibold">
+        Meine Daten
+      </h2>
+      <PersonalDataCard customer={customer} />
+      <AddressBook customer={customer} region={region} />
     </div>
   )
-}
-
-const Divider = () => {
-  return <div className="w-full h-px bg-gray-200" />
 }

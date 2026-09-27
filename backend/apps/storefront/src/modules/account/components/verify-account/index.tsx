@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useSearchParams } from "next/navigation"
-import { Button } from "@modules/common/components/ui"
 import { confirmEmailVerification } from "@lib/data/customer"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
@@ -34,36 +33,44 @@ const VerifyAccount = () => {
 
   return (
     <div
-      className="max-w-sm w-full flex flex-col items-center text-center gap-y-4"
+      className="mx-auto flex w-full max-w-sm flex-col items-center gap-y-4 rounded-xl border border-bo-line bg-bo-surface p-8 text-center"
       data-testid="verify-account-page"
     >
-      <h1 className="text-large-semi uppercase">Email verification</h1>
+      <h1 className="m-0 font-heading text-[20px] font-semibold uppercase">
+        E-Mail-Bestätigung
+      </h1>
 
       {state === "verifying" && (
-        <p className="text-base-regular text-ui-fg-base">
-          Verifying your email...
+        <p className="m-0 text-[13.5px] text-bo-ink-muted">
+          Deine E-Mail-Adresse wird bestätigt …
         </p>
       )}
 
       {state === "success" && (
         <>
-          <p className="text-base-regular text-ui-fg-base">
-            Your email is verified. You can now sign in to your account.
+          <p className="m-0 text-[13.5px] text-bo-ink-muted">
+            Deine E-Mail-Adresse ist bestätigt. Du kannst dich jetzt anmelden.
           </p>
-          <LocalizedClientLink href="/account">
-            <Button variant="primary">Go to sign in</Button>
+          <LocalizedClientLink
+            href="/account"
+            className="inline-flex items-center justify-center rounded border-[1.5px] border-bo-ink bg-bo-ink px-[18px] py-3 text-[14px] font-semibold text-bo-bg hover:border-bo-accent hover:bg-bo-accent hover:text-bo-accent-ink"
+          >
+            Zur Anmeldung
           </LocalizedClientLink>
         </>
       )}
 
       {state === "error" && (
         <>
-          <p className="text-base-regular text-ui-fg-base">
-            This verification link is invalid or has expired. Sign in to receive
-            a new verification email.
+          <p className="m-0 text-[13.5px] text-bo-ink-muted">
+            Dieser Bestätigungslink ist ungültig oder abgelaufen. Melde dich
+            an, um einen neuen zu erhalten.
           </p>
-          <LocalizedClientLink href="/account">
-            <Button variant="secondary">Go to sign in</Button>
+          <LocalizedClientLink
+            href="/account"
+            className="inline-flex items-center justify-center rounded border-[1.5px] border-bo-line-strong px-[18px] py-3 text-[14px] font-semibold text-bo-ink hover:border-bo-ink"
+          >
+            Zur Anmeldung
           </LocalizedClientLink>
         </>
       )}

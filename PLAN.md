@@ -124,6 +124,14 @@ order-fulfillment-extension/Click&Collect, saved-payment-instrument),
 seed sample BikeOne catalog data, and start wiring the storefront pages
 against the real wireframes in `wireframes/`.
 
+**Storefront page-by-page redesign: done (Tasks 7-11).** Every page in
+the "custom storefront" sub-thread kicked off in Task 7 now matches its
+wireframe: homepage/chrome, category/collection/search listing, product
+detail, cart/checkout, account, and Click & Collect store selection. The
+custom-modules half of this milestone (brand, store-profile,
+order-fulfillment-extension, saved-payment-instrument, tridata-sync) is
+still not started — see Task 5/6 and "Later milestones" below.
+
 - **Seed data — started.** `initial-data-seed.ts` now seeds 4 real bikes
   (Trek Domane SL 6, Cervélo Áspero-5, Factor Ostro VAM, Specialized
   Stumpjumper) across 3 categories (Road/Gravel/Mountain Bikes, plus an
@@ -397,6 +405,159 @@ Status: **done**
   (unchanged Medusa demo fulfillment data, not something this task's
   scope covers).
 
+### Task 11 — Custom storefront: account & Click & Collect
+Status: **done** — last page of the custom-storefront milestone
+
+- Matches `wireframes/mein-konto.html`. Kept the official Next.js
+  starter's real account logic entirely as-is — login/register
+  (`sdk.auth.*`), logout, `updateCustomer`, `createAddress`/
+  `updateAddress`/`deleteAddress`, `listOrders`/`retrieveOrder`, and the
+  order-transfer-request flow are all untouched real Medusa calls — and
+  restyled the markup and information architecture around them:
+  - A single `AccountNav` (`account-nav`) now renders one responsive tab
+    list (horizontal scroll pills on mobile, sticky sidebar on desktop)
+    that links to real routes — `/account/orders` (default, "Bestellungen"),
+    `/account/profile` ("Meine Daten"), `/account/payment`
+    ("Zahlungsmethoden"), `/account/logout` ("Abmelden") — replacing the
+    starter's two separately-coded mobile/desktop nav blocks and its
+    generic profile-completion "Overview" dashboard (deleted; nothing in
+    the wireframe corresponds to it, and `/account` now server-redirects
+    straight to `/account/orders`). `/account/addresses` (the old
+    starter's own route) now redirects to `/account/profile` rather than
+    404ing for anyone with an old link, since the wireframe folds the
+    address book into "Meine Daten".
+  - **Bestellungen**: a new `order-list` renders the wireframe's
+    expandable `.order-card`s from real order data — real status pill
+    (mapped from Medusa's actual `fulfillment_status` enum, not
+    fabricated), real item rows, real totals. "Rücksendung im Store
+    starten" is honestly scoped: it's a client-only reveal of static
+    instructions ("bring the item with this order number to a store"),
+    never a real return/refund API call (Medusa's return workflows exist
+    but nothing in this storefront initiates one) — gated on
+    `fulfillment_status === "delivered"` with an approximate 30-day
+    window measured from the order date (there's no separate
+    "delivered at" timestamp surfaced here, so this is a known
+    approximation, not exact). The real order-transfer-request feature
+    (`TransferRequestForm`, not in the wireframe but genuinely working)
+    was kept and restyled rather than dropped.
+  - **Meine Daten**: a new `personal-data-card` combines the starter's
+    separate `ProfileName`/`ProfilePhone` editors into the wireframe's
+    one card with one real "Speichern" (`updateCustomer`). Email is
+    shown but disabled with an explanatory note, and the starter's
+    `ProfilePassword`/standalone `ProfileEmail` editors were deleted
+    outright rather than restyled — both were already non-functional
+    stubs in the starter (`ProfileEmail` had a `// TODO: It seems we
+    don't support updating emails now?` and never called an API;
+    `ProfilePassword` only logged to the console), so wiring either into
+    a real-looking "Speichern" button would have been exactly the fake
+    functionality this project's discipline (see Task 5/10) rules out —
+    and neither field exists in the wireframe's "Meine Daten" panel
+    anyway. `address-book` was rebuilt with the wireframe's inline
+    expand/collapse forms (add + per-address edit) in place of the
+    starter's modal dialogs, still calling the same real
+    `addCustomerAddress`/`updateCustomerAddress`/`deleteCustomerAddress`
+    actions. The starter's separate `ProfileBillingAddress` (a second,
+    parallel `is_default_billing` address form) was dropped — the
+    wireframe has one address book, not a separate billing-address
+    concept, and nothing else in the app reads `is_default_billing`.
+  - **Zahlungsmethoden**: the wireframe shows a saved test VISA card and
+    an "add card" form that collects a card number/expiry/CVC and
+    pretends to save it. There is no `saved-payment-instrument` module
+    (see "Later milestones") and no active payment provider besides
+    Medusa's manual test provider (SumUp prepared, not activated — Task
+    5/10) — nothing would actually store or charge a card. Collecting
+    real-looking card details for a form that does nothing would be
+    fake functionality, so this tab is instead an honest "Bald
+    verfügbar" state, matching cart/checkout's existing treatment of
+    Click & Collect.
+  - **Abmelden**: a new `/account/logout` route (`logout-panel`) shows
+    the wireframe's confirm card and calls the real `signout` server
+    action on confirm — no fake "you are logged out" screen; after
+    sign-out the real redirect to `/account` naturally shows the login
+    form again, which *is* the "logged out" state.
+  - Deleted now-fully-dead code after confirming no other references:
+    the generic `checkout/components/submit-button` (superseded by a new
+    local `account-button`, matching how checkout already has its own
+    local `StepSubmitButton` for the same reason), `common/components/
+    {input,modal,native-select}`, `lib/context/modal-context.tsx`, and
+    the `eye`/`eye-off`/`map-pin`/`package`/`user` icon components —
+    all were only ever reachable from the account files this task
+    rewrote. Also fixed two real bugs found while restyling: `register`
+    linked to `/content/privacy-policy` and `/content/terms-of-use`,
+    neither of which exists (404) — pointed at `#` instead, matching the
+    footer's own established placeholder pattern for not-yet-built legal
+    pages; and `account-layout` linked to a `/customer-service` page
+    that also doesn't exist — removed (not in the wireframe either).
+- **Click & Collect is a real preferred-store picker, not a pickup/
+  reservation flow.** Read `wireframes/click-collect-filiale.html` in
+  full before building anything: it's not a checkout step, it's a
+  demo-wrapped *component* (a store-select widget with a placeholder
+  map, two store cards, and a toggle to preview it either standalone or
+  embedded in a fake cart sidebar) meant to illustrate a Click & Collect
+  UX that assumes a working pickup-fulfillment backend — one this store
+  doesn't have (no `order-fulfillment-extension` module, no pickup
+  fulfillment set — see Task 10's cart/checkout notes, still true).
+  Rather than build something that *looks* like it reserves a pickup
+  slot, this task separated what's real from what isn't:
+  - **Real and built:** a new `/click-collect` page
+    (`click-collect/components/store-select`) lets a customer pick
+    Oldenburg or Osnabrück and save it as their preferred store — using
+    the exact same `bikeone_preferred_store` localStorage key as the
+    existing header `store-picker` (extended, not duplicated: both now
+    read store data from a new shared `lib/data/stores.ts` instead of
+    the store-picker's previous private copy, and the store-picker
+    panel gained an "Alle Filialen & Öffnungszeiten →" link into the new
+    page). Verified in-browser: selecting Osnabrück and saving updates
+    `localStorage`, and the header strip on the homepage immediately
+    reflects it on the next page load — a real, working, shared
+    preference, not a second parallel mechanism.
+  - **Deliberately left out, not fake-implemented:** the wireframe's
+    per-store, per-product stock line ("3× auf Lager in dieser Filiale"
+    / "Auf Bestellung — 2-3 Werktage") — there's no store-level stock
+    API; the "reserve it, we'll hold it for you" copy — no pickup
+    fulfillment exists to honor that; the "Termin für Bike-Fitting
+    vereinbaren" appointment request ("✓ wir melden uns zur
+    Bestätigung") — no appointment/CRM backend and no real contact
+    channel to fabricate one from; and the wireframe's own
+    developer-facing "Auswahl-Status" debug panel and embedded-in-cart
+    demo toggle — both are wireframe-authoring aids, not something a
+    real page should ship. The page instead carries a plain-language
+    "Bald verfügbar" note that Click & Collect *ordering* isn't bookable
+    yet, same tone as cart/checkout's existing disabled Click & Collect
+    card.
+- `npx tsc --noEmit` clean. `next lint` shows the same pre-existing
+  errors/warnings as Task 10 noted, all in files this task didn't touch
+  (`global-error.tsx`, `lib/data/cart.ts`, `shipping-address`,
+  `language-select`, `product-actions`) — confirmed via `git diff
+  --stat` against each; zero lint issues in any file this task added or
+  changed.
+- Verified in-browser with Playwright at both 420px and 1400px: full
+  account lifecycle — registered a real test customer (no email
+  verification required by this store's config), saw the real "Hallo,
+  {first_name}" greeting and empty "Noch keine Bestellungen vorhanden."
+  state, edited the personal-data card (phone number, saved and
+  persisted), added a real address, edited it in place, deleted it
+  (native confirm dialog, real `deleteCustomerAddress` call verified by
+  the card disappearing), viewed the honest Zahlungsmethoden "Bald
+  verfügbar" panel, logged out via the confirm flow, and logged back in
+  — all against the real backend, no mocked data. Separately ran a full
+  add-to-cart → checkout → place-order flow as this same test customer
+  and confirmed the resulting real order (`#5`, `In Bearbeitung`,
+  correct total) appears in "Bestellungen", expands to show the real
+  line item, and correctly shows "Rücksendung erst nach Zustellung
+  möglich." (not yet delivered). Tested Click & Collect: selected
+  Osnabrück, saved it, confirmed `localStorage` held the real value and
+  the header on a fresh page load showed it. No console/page errors in
+  any of these flows.
+- **Found, not fixed (out of scope):** the homepage hero trust strip
+  (`wireframes/homepage.html` copy, Task 7, untouched by this task)
+  reads "Click & Collect: online reservieren, innerhalb von 2 Stunden
+  abholbereit im Wunschstore" — a claim that a real reservation/pickup
+  flow exists, which is inconsistent with the honest "Bald verfügbar"
+  treatment this task and Task 10 both gave Click & Collect everywhere
+  else. Left untouched since editing the homepage is explicitly out of
+  this task's scope; flagged here as a follow-up.
+
 ## Later milestones (not started)
 
 - Fix the Task 3 Next.js production-build issue (`/404` `/500`
@@ -407,8 +568,20 @@ Status: **done**
   Task 6; WireMock mock first if sandbox access is delayed further,
   real sandbox when Tridata grants access — see
   `planning/3-Architecture_Tech_Stack/local-dev-setup.md` "Open blocker")
-- Click & Collect checkout flow end-to-end
-- Auth / customer accounts
+- **Real Click & Collect order fulfillment.** Task 11 built the honest
+  part (preferred-store selection, real and working). What's still
+  missing before Click & Collect can be a real *order* fulfillment
+  option: the `order-fulfillment-extension` custom module from
+  `planning/5-Database_Schema/schema-design.md`, a pickup fulfillment
+  set/shipping option registered in Medusa so `Shipping`'s existing
+  `_pickupMethods` code path (cart/checkout, Task 10) has something real
+  to render, a public per-store stock read (so the store-select
+  component could show genuine availability instead of nothing), and a
+  decision on the bike-fitting-appointment feature the wireframe
+  sketches (needs a real booking/contact channel, not built anywhere
+  yet). Also: fix the homepage hero copy flagged at the end of Task 11
+  once this lands (or sooner, since it's currently an honesty
+  regression against Task 10/11's Click & Collect messaging elsewhere).
 - GDPR/legal compliance features (route through `legal-security-reviewer`
   before merge)
 - Testing & QA (roadmap phase 9)

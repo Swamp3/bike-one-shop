@@ -1,8 +1,8 @@
 import { login } from "@lib/data/customer"
+import { AccountSubmitButton } from "@modules/account/components/account-button"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
-import { SubmitButton } from "@modules/checkout/components/submit-button"
-import Input from "@modules/common/components/input"
+import { TextField } from "@modules/checkout/components/form-field"
 import { useActionState } from "react"
 
 type Props = {
@@ -13,62 +13,60 @@ const Login = ({ setCurrentView }: Props) => {
   const [message, formAction] = useActionState(login, null)
 
   return (
-    <div
-      className="max-w-sm w-full flex flex-col items-center"
-      data-testid="login-page"
-    >
-      <h1 className="text-large-semi uppercase mb-6">Welcome back</h1>
-      <p className="text-center text-base-regular text-ui-fg-base mb-8">
-        Sign in to access an enhanced shopping experience.
+    <div className="w-full max-w-sm" data-testid="login-page">
+      <h1 className="m-0 mb-1.5 font-heading text-[22px] font-semibold">
+        Willkommen zurück
+      </h1>
+      <p className="mb-6 text-[13.5px] text-bo-ink-muted">
+        Melde dich an, um deine Bestellungen und Adressen zu sehen.
       </p>
       {message?.state === "verification_required" && (
         <div
-          className="w-full mb-6 text-center text-base-regular text-ui-fg-base bg-ui-bg-subtle border border-ui-border-base rounded-rounded p-4"
+          className="mb-5 rounded-[9px] border border-bo-line bg-bo-surface-2 p-3.5 text-[13px] text-bo-ink-muted"
           data-testid="login-verification-message"
         >
-          We sent a verification link to <strong>{message.email}</strong>.
-          Please verify your email, then sign in.
+          Wir haben einen Bestätigungslink an{" "}
+          <strong className="text-bo-ink">{message.email}</strong> gesendet.
+          Bitte bestätige deine E-Mail-Adresse und melde dich dann an.
         </div>
       )}
-      <form className="w-full" action={formAction}>
-        <div className="flex flex-col w-full gap-y-2">
-          <Input
-            label="Email"
-            name="email"
-            type="email"
-            title="Enter a valid email address."
-            autoComplete="email"
-            required
-            data-testid="email-input"
-          />
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            data-testid="password-input"
-          />
-        </div>
+      <form className="flex flex-col gap-3" action={formAction}>
+        <TextField
+          label="E-Mail"
+          name="email"
+          type="email"
+          title="Bitte gib eine gültige E-Mail-Adresse ein."
+          autoComplete="email"
+          required
+          data-testid="email-input"
+        />
+        <TextField
+          label="Passwort"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+          data-testid="password-input"
+        />
         <ErrorMessage
           error={message?.state === "error" ? message.error : null}
           data-testid="login-error-message"
         />
-        <SubmitButton data-testid="sign-in-button" className="w-full mt-6">
-          Sign in
-        </SubmitButton>
+        <AccountSubmitButton className="mt-2 w-full" data-testid="sign-in-button">
+          Anmelden
+        </AccountSubmitButton>
       </form>
-      <span className="text-center text-ui-fg-base text-small-regular mt-6">
-        Not a member?{" "}
+      <p className="mt-6 text-center text-[13px] text-bo-ink-muted">
+        Noch kein Konto?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.REGISTER)}
-          className="underline"
+          className="font-semibold text-bo-accent underline decoration-dashed underline-offset-[3px]"
           data-testid="register-button"
         >
-          Join us
+          Jetzt registrieren
         </button>
         .
-      </span>
+      </p>
     </div>
   )
 }

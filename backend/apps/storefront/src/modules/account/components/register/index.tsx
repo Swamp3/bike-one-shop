@@ -1,11 +1,10 @@
 "use client"
 
 import { useActionState } from "react"
-import Input from "@modules/common/components/input"
+import { AccountSubmitButton } from "@modules/account/components/account-button"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
-import { SubmitButton } from "@modules/checkout/components/submit-button"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { TextField } from "@modules/checkout/components/form-field"
 import { signup } from "@lib/data/customer"
 
 type Props = {
@@ -16,101 +15,93 @@ const Register = ({ setCurrentView }: Props) => {
   const [message, formAction] = useActionState(signup, null)
 
   return (
-    <div
-      className="max-w-sm flex flex-col items-center"
-      data-testid="register-page"
-    >
-      <h1 className="text-large-semi uppercase mb-6">
-        Become a Medusa Store Member
+    <div className="w-full max-w-sm" data-testid="register-page">
+      <h1 className="m-0 mb-1.5 font-heading text-[22px] font-semibold">
+        Konto erstellen
       </h1>
-      <p className="text-center text-base-regular text-ui-fg-base mb-4">
-        Create your Medusa Store Member profile, and get access to an enhanced
-        shopping experience.
+      <p className="mb-6 text-[13.5px] text-bo-ink-muted">
+        Erstelle ein BIKE-ONE-Konto für schnellere Bestellungen, eine
+        Bestellübersicht und ein gespeichertes Adressbuch.
       </p>
       {message?.state === "verification_required" && (
         <div
-          className="w-full mb-4 text-center text-base-regular text-ui-fg-base bg-ui-bg-subtle border border-ui-border-base rounded-rounded p-4"
+          className="mb-5 rounded-[9px] border border-bo-line bg-bo-surface-2 p-3.5 text-[13px] text-bo-ink-muted"
           data-testid="register-verification-message"
         >
-          We sent a verification link to <strong>{message.email}</strong>.
-          Please check your inbox to verify your email, then sign in.
+          Wir haben einen Bestätigungslink an{" "}
+          <strong className="text-bo-ink">{message.email}</strong> gesendet.
+          Bitte bestätige deine E-Mail-Adresse und melde dich anschließend an.
         </div>
       )}
-      <form className="w-full flex flex-col" action={formAction}>
-        <div className="flex flex-col w-full gap-y-2">
-          <Input
-            label="First name"
+      <form className="flex flex-col gap-3" action={formAction}>
+        <div className="grid grid-cols-2 gap-3">
+          <TextField
+            label="Vorname"
             name="first_name"
             required
             autoComplete="given-name"
             data-testid="first-name-input"
           />
-          <Input
-            label="Last name"
+          <TextField
+            label="Nachname"
             name="last_name"
             required
             autoComplete="family-name"
             data-testid="last-name-input"
           />
-          <Input
-            label="Email"
-            name="email"
-            required
-            type="email"
-            autoComplete="email"
-            data-testid="email-input"
-          />
-          <Input
-            label="Phone"
-            name="phone"
-            type="tel"
-            autoComplete="tel"
-            data-testid="phone-input"
-          />
-          <Input
-            label="Password"
-            name="password"
-            required
-            type="password"
-            autoComplete="new-password"
-            data-testid="password-input"
-          />
         </div>
+        <TextField
+          label="E-Mail"
+          name="email"
+          required
+          type="email"
+          autoComplete="email"
+          data-testid="email-input"
+        />
+        <TextField
+          label="Telefon"
+          name="phone"
+          type="tel"
+          autoComplete="tel"
+          data-testid="phone-input"
+        />
+        <TextField
+          label="Passwort"
+          name="password"
+          required
+          type="password"
+          autoComplete="new-password"
+          data-testid="password-input"
+        />
         <ErrorMessage
           error={message?.state === "error" ? message.error : null}
           data-testid="register-error"
         />
-        <span className="text-center text-ui-fg-base text-small-regular mt-6">
-          By creating an account, you agree to Medusa Store&apos;s{" "}
-          <LocalizedClientLink
-            href="/content/privacy-policy"
-            className="underline"
-          >
-            Privacy Policy
-          </LocalizedClientLink>{" "}
-          and{" "}
-          <LocalizedClientLink
-            href="/content/terms-of-use"
-            className="underline"
-          >
-            Terms of Use
-          </LocalizedClientLink>
+        <p className="text-[11.5px] leading-snug text-bo-ink-faint">
+          Mit der Kontoerstellung akzeptierst du unsere{" "}
+          <a href="#" className="underline decoration-dashed underline-offset-[2px]">
+            Datenschutzerklärung
+          </a>{" "}
+          und{" "}
+          <a href="#" className="underline decoration-dashed underline-offset-[2px]">
+            AGB
+          </a>
           .
-        </span>
-        <SubmitButton className="w-full mt-6" data-testid="register-button">
-          Join
-        </SubmitButton>
+        </p>
+        <AccountSubmitButton className="mt-1 w-full" data-testid="register-button">
+          Registrieren
+        </AccountSubmitButton>
       </form>
-      <span className="text-center text-ui-fg-base text-small-regular mt-6">
-        Already a member?{" "}
+      <p className="mt-6 text-center text-[13px] text-bo-ink-muted">
+        Schon ein Konto?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.SIGN_IN)}
-          className="underline"
+          className="font-semibold text-bo-accent underline decoration-dashed underline-offset-[3px]"
         >
-          Sign in
+          Jetzt anmelden
         </button>
         .
-      </span>
+      </p>
     </div>
   )
 }

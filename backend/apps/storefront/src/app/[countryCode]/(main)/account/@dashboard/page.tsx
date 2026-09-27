@@ -1,22 +1,14 @@
-import { Metadata } from "next"
+import { redirect } from "next/navigation"
 
-import Overview from "@modules/account/components/overview"
-import { notFound } from "next/navigation"
-import { retrieveCustomer } from "@lib/data/customer"
-import { listOrders } from "@lib/data/orders"
-
-export const metadata: Metadata = {
-  title: "Account",
-  description: "Overview of your account activity.",
-}
-
-export default async function OverviewTemplate() {
-  const customer = await retrieveCustomer().catch(() => null)
-  const orders = (await listOrders().catch(() => null)) || null
-
-  if (!customer) {
-    notFound()
-  }
-
-  return <Overview customer={customer} orders={orders} />
+/**
+ * `/account` has no dedicated overview panel in `wireframes/mein-konto.html`
+ * — "Bestellungen" is the landing tab, so redirect there rather than
+ * keeping the old starter's generic profile-completion/addresses-count
+ * dashboard (removed, see PLAN.md Task 11).
+ */
+export default async function AccountIndexPage(props: {
+  params: Promise<{ countryCode: string }>
+}) {
+  const { countryCode } = await props.params
+  redirect(`/${countryCode}/account/orders`)
 }
