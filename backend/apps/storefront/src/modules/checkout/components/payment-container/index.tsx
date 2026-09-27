@@ -1,11 +1,7 @@
-import { Radio as RadioGroupOption } from "@headlessui/react"
-import { Text, clx } from "@modules/common/components/ui"
-import React, { useContext, type JSX } from "react"
-
-import Radio from "@modules/common/components/radio"
+import React, { useContext } from "react"
 
 import { isManual } from "@lib/constants"
-import SkeletonCardDetails from "@modules/skeletons/components/skeleton-card-details"
+import { clx } from "@modules/common/components/ui"
 import { PaymentElement } from "@stripe/react-stripe-js"
 import PaymentTest from "../payment-test"
 import { StripeContext } from "../payment-wrapper/stripe-wrapper"
@@ -13,52 +9,69 @@ import { StripeContext } from "../payment-wrapper/stripe-wrapper"
 type PaymentContainerProps = {
   paymentProviderId: string
   selectedPaymentOptionId: string | null
+  setSelected: (id: string) => void
   disabled?: boolean
-  paymentInfoMap: Record<string, { title: string; icon: JSX.Element }>
   children?: React.ReactNode
 }
 
+const TITLES: Record<string, string> = {
+  pp_system_default: "Testzahlung",
+  pp_paypal_paypal: "PayPal",
+}
+
+/**
+ * A single payment-method option-card, styled after wireframes/
+ * warenkorb-checkout.html's `.option-card`. Only `pp_system_default`
+ * (Medusa's built-in manual/test payment provider) is actually registered
+ * for this region right now — see PLAN.md Task 5/10 — so this deliberately
+ * does not pretend to be a real card-entry form; it says plainly that
+ * placing the order completes the cart without a real charge.
+ */
 const PaymentContainer: React.FC<PaymentContainerProps> = ({
   paymentProviderId,
   selectedPaymentOptionId,
-  paymentInfoMap,
+  setSelected,
   disabled = false,
   children,
 }) => {
   const isDevelopment = process.env.NODE_ENV === "development"
+  const active = selectedPaymentOptionId === paymentProviderId
 
   return (
-    <RadioGroupOption
-      key={paymentProviderId}
-      value={paymentProviderId}
-      disabled={disabled}
+    <label
       className={clx(
-        "flex flex-col gap-y-2 text-small-regular cursor-pointer py-4 border rounded-rounded px-8 mb-2 hover:shadow-borders-interactive-with-active",
-        {
-          "border-ui-border-interactive":
-            selectedPaymentOptionId === paymentProviderId,
-        }
+        "flex items-start gap-3 rounded-[10px] border-[1.5px] p-3.5",
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
+        active
+          ? "border-bo-accent bg-[color-mix(in_srgb,var(--bo-accent)_6%,var(--bo-surface))]"
+          : "border-bo-line bg-bo-surface"
       )}
     >
-      <div className="flex items-center justify-between ">
-        <div className="flex items-center gap-x-4">
-          <Radio checked={selectedPaymentOptionId === paymentProviderId} />
-          <Text className="text-base-regular">
-            {paymentInfoMap[paymentProviderId]?.title || paymentProviderId}
-          </Text>
-          {isManual(paymentProviderId) && isDevelopment && (
-            <PaymentTest className="hidden small:block" />
-          )}
+      <input
+        type="radio"
+        name="paymentMethod"
+        className="mt-0.5 h-4 w-4 accent-bo-accent"
+        checked={active}
+        disabled={disabled}
+        onChange={() => setSelected(paymentProviderId)}
+        data-testid="payment-container-radio"
+      />
+      <div className="flex-1">
+        <div className="text-[14px] font-semibold">
+          {TITLES[paymentProviderId] || paymentProviderId}
         </div>
-        <span className="justify-self-end text-ui-fg-base">
-          {paymentInfoMap[paymentProviderId]?.icon}
-        </span>
+        {isManual(paymentProviderId) && (
+          <>
+            <p className="m-0 mt-1 text-[12.5px] text-bo-ink-muted">
+              Schließt die Bestellung ohne echte Zahlungsabwicklung ab —
+              aktuell ist noch kein produktiver Zahlungsanbieter angebunden.
+            </p>
+            {isDevelopment && <PaymentTest className="mt-2" />}
+          </>
+        )}
+        {children}
       </div>
-      {isManual(paymentProviderId) && isDevelopment && (
-        <PaymentTest className="small:hidden text-[10px]" />
-      )}
-      {children}
-    </RadioGroupOption>
+    </label>
   )
 }
 
@@ -67,50 +80,40 @@ export default PaymentContainer
 export const StripePaymentContainer = ({
   paymentProviderId,
   selectedPaymentOptionId,
-  paymentInfoMap,
-  disabled = false,
+  setSelected,
   setError,
   setPaymentComplete,
-}: Omit<PaymentContainerProps, "children"> & {
+}: Omit<PaymentContainerProps, "disabled"> & {
   setError: (error: string | null) => void
   setPaymentComplete: (complete: boolean) => void
 }) => {
   const stripeReady = useContext(StripeContext)
+  const active = selectedPaymentOptionId === paymentProviderId
 
   return (
     <PaymentContainer
       paymentProviderId={paymentProviderId}
       selectedPaymentOptionId={selectedPaymentOptionId}
-      paymentInfoMap={paymentInfoMap}
-      disabled={disabled}
+      setSelected={setSelected}
     >
-      {selectedPaymentOptionId === paymentProviderId &&
+      {active &&
         (stripeReady ? (
-          <div className="my-4 transition-all duration-150 ease-in-out">
-            <Text className="txt-medium-plus text-ui-fg-base mb-1">
-              Enter your payment details:
-            </Text>
+          <div className="mt-3">
             <PaymentElement
               options={{ layout: "accordion" }}
               onChange={(e) => {
                 setError(null)
                 setPaymentComplete(e.complete)
               }}
-              // Without a handler Stripe.js reports a failed mount as an
-              // unhandled "payment Element loaderror" and the option renders
-              // blank with no explanation. Surface it in the checkout's own
-              // error slot instead.
               onLoadError={(e) => {
                 setPaymentComplete(false)
                 setError(
-                  e.error?.message ?? "Could not load the payment methods."
+                  e.error?.message ?? "Die Zahlungsmethoden konnten nicht geladen werden."
                 )
               }}
             />
           </div>
-        ) : (
-          <SkeletonCardDetails />
-        ))}
+        ) : null)}
     </PaymentContainer>
   )
 }

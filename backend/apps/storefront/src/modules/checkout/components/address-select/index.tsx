@@ -34,9 +34,9 @@ const AddressSelect = ({
 
   return (
     <Listbox onChange={handleSelect} value={selectedAddress?.id}>
-      <div className="relative">
+      <div className="relative mb-1">
         <Listbox.Button
-          className="relative w-full flex justify-between items-center px-4 py-[10px] text-left bg-white cursor-default focus:outline-none border rounded-rounded focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-gray-300 focus-visible:ring-offset-2 focus-visible:border-gray-300 text-base-regular"
+          className="relative flex w-full items-center justify-between rounded-[7px] border border-bo-line bg-bo-surface px-3.5 py-2.5 text-left text-[13.5px] focus:border-bo-accent focus:outline-none"
           data-testid="shipping-address-select"
         >
           {({ open }) => (
@@ -44,7 +44,7 @@ const AddressSelect = ({
               <span className="block truncate">
                 {selectedAddress
                   ? selectedAddress.address_1
-                  : "Choose an address"}
+                  : "Adresse wählen"}
               </span>
               <ChevronUpDown
                 className={clx("transition-rotate duration-200", {
@@ -61,7 +61,7 @@ const AddressSelect = ({
           leaveTo="opacity-0"
         >
           <Listbox.Options
-            className="absolute z-20 w-full overflow-auto text-small-regular bg-white border border-top-0 max-h-60 focus:outline-none sm:text-sm"
+            className="absolute z-20 max-h-60 w-full overflow-auto rounded-[7px] border border-bo-line bg-bo-surface text-[13px] shadow-lg focus:outline-none"
             data-testid="shipping-address-options"
           >
             {addresses.map((address) => {
@@ -69,24 +69,24 @@ const AddressSelect = ({
                 <Listbox.Option
                   key={address.id}
                   value={address.id}
-                  className="cursor-default select-none relative pl-6 pr-10 hover:bg-gray-50 py-4"
+                  className="relative cursor-default select-none py-3 pl-4 pr-8 hover:bg-bo-surface-2"
                   data-testid="shipping-address-option"
                 >
-                  <div className="flex gap-x-4 items-start">
+                  <div className="flex items-start gap-3">
                     <Radio
                       checked={selectedAddress?.id === address.id}
                       data-testid="shipping-address-radio"
                     />
-                    <div className="flex flex-col">
-                      <span className="text-left text-base-semi">
+                    <div className="flex flex-col text-[13.5px]">
+                      <span className="text-left font-semibold">
                         {address.first_name} {address.last_name}
                       </span>
                       {address.company && (
-                        <span className="text-small-regular text-ui-fg-base">
+                        <span className="text-bo-ink-muted">
                           {address.company}
                         </span>
                       )}
-                      <div className="flex flex-col text-left text-base-regular mt-2">
+                      <div className="mt-1 flex flex-col text-left text-bo-ink-muted">
                         <span>
                           {address.address_1}
                           {address.address_2 && (

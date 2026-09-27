@@ -3,7 +3,7 @@
 import { isManual, isStripeLike } from "@lib/constants"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
-import { Button } from "@modules/common/components/ui"
+import { clx } from "@modules/common/components/ui"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
 import { useParams } from "next/navigation"
 import React, { useState } from "react"
@@ -13,6 +13,9 @@ type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
   "data-testid": string
 }
+
+const primaryBtn =
+  "w-full rounded border-[1.5px] border-bo-ink bg-bo-ink py-3.5 text-[15px] font-semibold text-bo-bg hover:border-bo-accent hover:bg-bo-accent hover:text-bo-accent-ink disabled:cursor-not-allowed disabled:border-bo-line disabled:bg-bo-surface-2 disabled:text-bo-ink-faint"
 
 const PaymentButton: React.FC<PaymentButtonProps> = ({
   cart,
@@ -41,7 +44,11 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
       )
     default:
-      return <Button disabled>Select a payment method</Button>
+      return (
+        <button type="button" disabled className={primaryBtn}>
+          Zahlungsmethode wählen
+        </button>
+      )
   }
 }
 
@@ -139,15 +146,15 @@ const StripePaymentButton = ({
 
   return (
     <>
-      <Button
-        disabled={disabled || notReady}
+      <button
+        type="button"
+        disabled={disabled || notReady || submitting}
         onClick={handlePayment}
-        size="large"
-        isLoading={submitting}
         data-testid={dataTestId}
+        className={clx(primaryBtn)}
       >
-        Place order
-      </Button>
+        {submitting ? "Wird bestellt …" : "Zahlungspflichtig bestellen"}
+      </button>
       <ErrorMessage
         error={errorMessage}
         data-testid="stripe-payment-error-message"
@@ -156,6 +163,13 @@ const StripePaymentButton = ({
   )
 }
 
+/**
+ * The button that actually fires in this store today: `pp_system_default`
+ * completes the cart without any real charge (see PLAN.md Task 5/10 — SumUp
+ * is prepared but not activated). `placeOrder` is the same real
+ * `sdk.store.cart.complete` call as before; it produces a genuine Medusa
+ * order and redirects to the real order-confirmation page.
+ */
 const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -172,21 +186,20 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
 
   const handlePayment = () => {
     setSubmitting(true)
-
     onPaymentCompleted()
   }
 
   return (
     <>
-      <Button
-        disabled={notReady}
-        isLoading={submitting}
+      <button
+        type="button"
+        disabled={notReady || submitting}
         onClick={handlePayment}
-        size="large"
         data-testid="submit-order-button"
+        className={clx(primaryBtn)}
       >
-        Place order
-      </Button>
+        {submitting ? "Wird bestellt …" : "Zahlungspflichtig bestellen"}
+      </button>
       <ErrorMessage
         error={errorMessage}
         data-testid="manual-payment-error-message"

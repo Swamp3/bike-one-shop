@@ -1,7 +1,6 @@
 "use client"
 
-import { Heading, Text, clx } from "@modules/common/components/ui"
-
+import StepCard from "@modules/checkout/components/step-card"
 import PaymentButton from "../payment-button"
 import { useSearchParams } from "next/navigation"
 import { HttpTypes } from "@medusajs/types"
@@ -12,7 +11,10 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
   const isOpen = searchParams.get("step") === "review"
 
   const paidByGiftcard = !!(
-    (cart as unknown as Record<string, unknown>)?.gift_cards && ((cart as unknown as Record<string, unknown>)?.gift_cards as unknown[])?.length > 0 && cart?.total === 0
+    (cart as unknown as Record<string, unknown>)?.gift_cards &&
+    ((cart as unknown as Record<string, unknown>)?.gift_cards as unknown[])
+      ?.length > 0 &&
+    cart?.total === 0
   )
 
   const previousStepsCompleted =
@@ -21,36 +23,17 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
     (cart.payment_collection || paidByGiftcard)
 
   return (
-    <div className="bg-white">
-      <div className="flex flex-row items-center justify-between mb-6">
-        <Heading
-          level="h2"
-          className={clx(
-            "flex flex-row text-3xl-regular gap-x-2 items-baseline",
-            {
-              "opacity-50 pointer-events-none select-none": !isOpen,
-            }
-          )}
-        >
-          Review
-        </Heading>
-      </div>
+    <StepCard title="Bestellung prüfen" isOpen={isOpen} done={false}>
       {isOpen && previousStepsCompleted && (
         <>
-          <div className="flex items-start gap-x-1 w-full mb-6">
-            <div className="w-full">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                By clicking the Place Order button, you confirm that you have
-                read, understand and accept our Terms of Use, Terms of Sale and
-                Returns Policy and acknowledge that you have read Medusa
-                Store&apos;s Privacy Policy.
-              </Text>
-            </div>
-          </div>
+          <p className="m-0 mb-4 text-[13px] text-bo-ink-muted">
+            Mit Klick auf „Zahlungspflichtig bestellen“ akzeptierst du unsere
+            AGB und Widerrufsbelehrung.
+          </p>
           <PaymentButton cart={cart} data-testid="submit-order-button" />
         </>
       )}
-    </div>
+    </StepCard>
   )
 }
 

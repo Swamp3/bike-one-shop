@@ -1,49 +1,41 @@
-import { forwardRef, useImperativeHandle, useMemo, useRef } from "react"
+import { forwardRef, useMemo } from "react"
 
-import NativeSelect, {
-  NativeSelectProps,
-} from "@modules/common/components/native-select"
 import { HttpTypes } from "@medusajs/types"
+import { SelectField } from "../form-field"
 
-const CountrySelect = forwardRef<
-  HTMLSelectElement,
-  NativeSelectProps & {
-    region?: HttpTypes.StoreRegion
-  }
->(({ placeholder = "Country", region, defaultValue, ...props }, ref) => {
-  const innerRef = useRef<HTMLSelectElement>(null)
+type CountrySelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
+  region?: HttpTypes.StoreRegion
+  label?: string
+  name: string
+}
 
-  useImperativeHandle<HTMLSelectElement | null, HTMLSelectElement | null>(
-    ref,
-    () => innerRef.current
-  )
+const CountrySelect = forwardRef<HTMLSelectElement, CountrySelectProps>(
+  ({ region, label = "Land", ...props }, ref) => {
+    const countryOptions = useMemo(() => {
+      if (!region) {
+        return []
+      }
 
-  const countryOptions = useMemo(() => {
-    if (!region) {
-      return []
-    }
+      return region.countries?.map((country) => ({
+        value: country.iso_2,
+        label: country.display_name,
+      }))
+    }, [region])
 
-    return region.countries?.map((country) => ({
-      value: country.iso_2,
-      label: country.display_name,
-    }))
-  }, [region])
-
-  return (
-    <NativeSelect
-      ref={innerRef}
-      placeholder={placeholder}
-      defaultValue={defaultValue}
-      {...props}
-    >
-      {countryOptions?.map(({ value, label }, index) => (
-        <option key={index} value={value}>
-          {label}
+    return (
+      <SelectField ref={ref} label={label} {...props}>
+        <option value="" disabled>
+          Land wählen
         </option>
-      ))}
-    </NativeSelect>
-  )
-})
+        {countryOptions?.map(({ value, label: countryLabel }, index) => (
+          <option key={index} value={value}>
+            {countryLabel}
+          </option>
+        ))}
+      </SelectField>
+    )
+  }
+)
 
 CountrySelect.displayName = "CountrySelect"
 

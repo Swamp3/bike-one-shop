@@ -1,24 +1,23 @@
-import { Button, Heading, Text } from "@modules/common/components/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 const SignInPrompt = () => {
   return (
-    <div className="bg-white flex items-center justify-between">
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-bo-line bg-bo-surface p-4">
       <div>
-        <Heading level="h2" className="txt-xlarge">
-          Already have an account?
-        </Heading>
-        <Text className="txt-medium text-ui-fg-subtle mt-2">
-          Sign in for a better experience.
-        </Text>
+        <p className="m-0 font-heading text-[15px] font-semibold">
+          Bereits Kunde bei BIKE ONE?
+        </p>
+        <p className="m-0 text-[13px] text-bo-ink-muted">
+          Melde dich an für gespeicherte Adressen und deine Bestellhistorie.
+        </p>
       </div>
-      <div>
-        <LocalizedClientLink href="/account">
-          <Button variant="secondary" className="h-10" data-testid="sign-in-button">
-            Sign in
-          </Button>
-        </LocalizedClientLink>
-      </div>
+      <LocalizedClientLink
+        href="/account"
+        data-testid="sign-in-button"
+        className="whitespace-nowrap rounded border-[1.5px] border-bo-line-strong px-4 py-2 text-[13.5px] font-semibold hover:border-bo-ink"
+      >
+        Anmelden
+      </LocalizedClientLink>
     </div>
   )
 }

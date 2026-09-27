@@ -1,23 +1,29 @@
-import { Heading, Text } from "@modules/common/components/ui"
-
-import InteractiveLink from "@modules/common/components/interactive-link"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 const EmptyCartMessage = () => {
   return (
-    <div className="py-48 px-2 flex flex-col justify-center items-start" data-testid="empty-cart-message">
-      <Heading
-        level="h1"
-        className="flex flex-row text-3xl-regular gap-x-2 items-baseline"
+    <div
+      className="flex flex-col items-center px-4 py-14 text-center text-bo-ink-muted"
+      data-testid="empty-cart-message"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className="mb-3 h-10 w-10 text-bo-ink-faint"
       >
-        Cart
-      </Heading>
-      <Text className="text-base-regular mt-4 mb-6 max-w-[32rem]">
-        You don&apos;t have anything in your cart. Let&apos;s change that, use
-        the link below to start browsing our products.
-      </Text>
-      <div>
-        <InteractiveLink href="/store">Explore products</InteractiveLink>
-      </div>
+        <circle cx="9" cy="21" r="1" />
+        <circle cx="20" cy="21" r="1" />
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+      </svg>
+      <p className="m-0 mb-4">Dein Warenkorb ist leer.</p>
+      <LocalizedClientLink
+        href="/store"
+        className="rounded border-[1.5px] border-bo-line-strong px-5 py-3 text-[14.5px] font-semibold hover:border-bo-ink"
+      >
+        Weiter einkaufen
+      </LocalizedClientLink>
     </div>
   )
 }
