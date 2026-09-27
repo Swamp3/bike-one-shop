@@ -287,6 +287,116 @@ Status: **done**
   cart mutation → header badge count updates), all 4 product pages
   render, mobile sticky bar now visually consistent.
 
+### Task 10 — Custom storefront: cart & checkout
+Status: **done**
+
+- Matches `wireframes/warenkorb-checkout.html`. Cart page (`/[countryCode]/
+  cart`): `.cart-item` cards with thumbnail/brand/name/size, a +/− qty
+  stepper (replacing the old unstyled `<select>` dropdown), a remove link,
+  and real German totals (Zwischensumme/Versand/Rabatt/MwSt./Gesamt). All
+  mutations are the same real Medusa cart calls as before
+  (`updateLineItem`, `deleteLineItem`, `applyPromotions`) — only the
+  markup changed. Deleted the now-dead `cart-item-select` component the
+  old dropdown used.
+- Checkout (`/[countryCode]/checkout`): kept Medusa's real `?step=`
+  accordion (`Addresses` → `Shipping` → `Payment` → `Review`, each backed
+  by its real server action — `setAddresses`, `setShippingMethod`,
+  `initiatePaymentSession`, `placeOrder`) and laid the wireframe's visual
+  language over it rather than forcing it into the wireframe's separate
+  step-nav-with-circles markup: a new `StepNav` component reflects real
+  cart state (address filled, shipping method set, payment session
+  active) as done/current/upcoming circles and lets you click back to any
+  completed step; a shared `StepCard` gives every step the wireframe's
+  card-with-title-and-edit-link shell; a new `checkout/components/
+  form-field` gives the address forms the wireframe's labeled bordered
+  inputs. A new minimal dark checkout header (logo, "Sicher einkaufen —
+  SSL-verschlüsselt", back-to-cart) replaces the old generic "Medusa
+  Store" header — deleted the now-dead `MedusaCTA` component and its
+  Medusa/Next.js icon files along with it, since nothing referenced them
+  once removed from checkout's layout.
+- **Payment step is deliberately honest, not decorative.** Verified via
+  `GET /store/payment-providers` that only `pp_system_default` (Medusa's
+  built-in manual/test provider) is registered for this region —
+  SumUp is prepared but not activated (Task 5), and no Stripe key is
+  configured. The payment option-card is labeled "Testzahlung" with a
+  plain-language note ("Schließt die Bestellung ohne echte
+  Zahlungsabwicklung ab — aktuell ist noch kein produktiver
+  Zahlungsanbieter angebunden") and an orange "nur zum Testen" badge,
+  instead of the wireframe's fake credit-card entry form — showing that
+  form would have implied a real charge that cannot happen here. Clicking
+  it and placing the order runs the same real `sdk.store.cart.complete`
+  call as before and produces a genuine Medusa order.
+- **Click & Collect is shown, not faked.** There is no pickup
+  fulfillment set in this store (confirmed via `GET /store/
+  shipping-options` — only "Standard Shipping"/"Express Shipping" exist,
+  both real `manual_manual` options), matching PLAN.md's existing note
+  that the `order-fulfillment-extension` module isn't built. Rather than
+  omit it entirely, both the cart sidebar and the checkout delivery step
+  show it as a clearly disabled, greyed-out card labelled "Bald
+  verfügbar — Abholung in Oldenburg oder Osnabrück ist noch nicht
+  buchbar" — visible so it isn't a surprise, but not selectable and not
+  wired to any fake behavior. `Shipping`'s real pickup-fulfillment-set
+  code path (`_pickupMethods`) is left intact and would render real
+  pickup options automatically once that module exists.
+- **Checkout account choice deliberately simplified.** The wireframe's
+  step 1 has a "Gast bestellen vs. Konto erstellen" radio with an inline
+  password field. Real customer auth (login/register) already exists as
+  its own flow at `/account`, entirely separate from the checkout form,
+  and PLAN.md still lists full auth/account integration as a later,
+  not-started milestone. Building a second, inline "create account"
+  control here that doesn't actually create an account would be exactly
+  the kind of fake functionality this task warned against, so checkout
+  instead shows a one-line honest note for guests ("Du bestellst als
+  Gast. Bereits Kunde? Jetzt anmelden.") linking to the real `/account`
+  login/register page.
+- Order confirmation (`/[countryCode]/order/[id]/confirmed`) restyled to
+  match the wireframe's `.confirm-hero` (checkmark, "Danke für deine
+  Bestellung!", real order number/email), a real items+totals summary, a
+  real delivery/payment recap and the same return-policy copy used on
+  the product page. Built as new `order/components/confirmation-*`
+  components rather than restyling the existing shared `order/
+  components/{items,shipping-details,help,order-details}` — those are
+  also used by the account module's order-history detail page
+  (`/account/orders/details/[id]`), which is out of scope for this task
+  and stays untouched, matching the same discipline applied to the
+  shared `Input`/`Checkbox`/`NativeSelect`/`Button` primitives used by
+  account forms (checkout builds its own local `TextField`/`SelectField`/
+  `StepSubmitButton` instead of restyling those shared components).
+  `order/components/payment-details` was restyled directly since it's
+  only ever used from the confirmation page.
+- `npx tsc --noEmit` clean. `next lint` has a handful of pre-existing
+  errors/warnings, all in files this task didn't touch (`global-error.tsx`,
+  unrelated `lib/data/cart.ts` functions, `language-select`,
+  `product-actions`) — confirmed via `git diff --stat` against each.
+- Verified in-browser end-to-end with Playwright at both a 420px and a
+  1400px viewport: browsed a category → product → added a Cervélo
+  Áspero-5 to the cart → on the cart page, used the qty stepper (1→2,
+  price recalculated live) and applied a real seeded 10%-off promotion
+  code (`BIKEONE10`, created via the Admin API for this test, active in
+  the store) → "Weiter zur Kasse" → filled a real shipping address
+  (redirect correctly carried the submitted country code) → selected
+  "Standard Shipping" (a real fulfillment option, €10) → selected the
+  "Testzahlung" payment option → placed the order → landed on a real
+  `/order/order_.../confirmed` page with a real Medusa order number,
+  correct totals (subtotal, discount, shipping, total) and the address/
+  payment recap. Repeated the full flow at mobile width, including
+  opening/closing the collapsible "Bestellübersicht anzeigen" summary
+  toggle. Confirmed the empty-cart state separately.
+- **Bug found and ruled out, not fixed:** full-page Playwright
+  screenshots of the checkout pages initially looked like the sticky
+  dark header was rendering a second time mid-page. Isolated with a
+  viewport-only (non-fullPage) screenshot and confirmed the header
+  renders exactly once in the right place — it's a known Playwright
+  `fullPage` artifact with `position: sticky` elements (they get
+  re-painted at each stitched scroll segment), not a real bug.
+- **Known pre-existing/out-of-scope, not touched:** MwSt. shows `0,00 €`
+  throughout cart/checkout/confirmation because the `dk` region has no
+  tax rates configured in the seed data — real cart/order data, a region
+  setup issue rather than anything in the cart/checkout UI. Both
+  Standard and Express shipping cost the same seeded €10 flat rate
+  (unchanged Medusa demo fulfillment data, not something this task's
+  scope covers).
+
 ## Later milestones (not started)
 
 - Fix the Task 3 Next.js production-build issue (`/404` `/500`
