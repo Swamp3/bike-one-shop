@@ -263,6 +263,30 @@ Status: **done**
   Size filter. Caught and fixed a second real bug — the header's result
   count didn't update when a filter was applied.
 
+### Task 9 — Custom storefront: product detail page
+Status: **done**
+
+- Matches `wireframes/produkt-trek-checkpoint-sl6-axs.html`. Kept the
+  existing variant-selection/`addToCart` logic entirely as-is (it
+  already worked correctly — real Medusa cart mutations) and restyled
+  around it: brand, title, stock row, a Frame Size grid, a CTA button
+  showing the live price, a spec table, description, delivery/returns
+  info, related products. Also restyled the mobile sticky action bar,
+  which still had unstyled English copy clashing with the rest of the
+  German UI once scrolled past the main CTA.
+- **Deliberately doesn't match the wireframe on two points:** the spec
+  table only shows fields we actually have (brand, frame sizes,
+  weight) — the wireframe's frame/fork/groupset/wheel/tire rows are
+  fabricated marketing copy for a different product, and real specs
+  are TriCon/Tridata catalog data (see Task 6), not something to
+  invent here. The gallery is a single "photo folgt" placeholder, not
+  a multi-thumbnail set — there are no real product photos, and faking
+  swappable thumbnails for nonexistent images would be worse than one
+  honest placeholder.
+- Verified in-browser: real add-to-cart end-to-end (select a size →
+  cart mutation → header badge count updates), all 4 product pages
+  render, mobile sticky bar now visually consistent.
+
 ## Later milestones (not started)
 
 - Fix the Task 3 Next.js production-build issue (`/404` `/500`
