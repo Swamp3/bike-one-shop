@@ -8,6 +8,7 @@ import OptionSelect from "@modules/products/components/product-actions/option-se
 import { isEqual } from "lodash"
 import { useParams, usePathname, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
+import { toast } from "sonner"
 import MobileActions from "./mobile-actions"
 import { useRouter } from "next/navigation"
 
@@ -129,6 +130,8 @@ export default function ProductActions({
       quantity: 1,
       countryCode,
     })
+
+    toast.success("Zum Warenkorb hinzugefügt")
 
     setIsAdding(false)
   }

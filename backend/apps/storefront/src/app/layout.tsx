@@ -1,6 +1,7 @@
 import { getBaseURL } from "@lib/util/env"
 import { Metadata } from "next"
 import { Inter, JetBrains_Mono, Oswald } from "next/font/google"
+import { Toaster } from "sonner"
 import "styles/globals.css"
 
 const inter = Inter({
@@ -34,6 +35,16 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     >
       <body className="bg-bo-bg text-bo-ink font-sans antialiased">
         <main className="relative">{props.children}</main>
+        <Toaster
+          position="bottom-center"
+          toastOptions={{
+            classNames: {
+              toast:
+                "!rounded-lg !border !border-bo-line !bg-bo-ink !text-bo-bg !shadow-lg",
+              title: "!font-sans !text-[13.5px] !font-semibold",
+            },
+          }}
+        />
       </body>
     </html>
   )
