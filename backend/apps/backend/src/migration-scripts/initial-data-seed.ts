@@ -23,6 +23,55 @@ import {
   linkSalesChannelsToStockLocationWorkflow,
 } from "@medusajs/medusa/core-flows";
 
+// A generic (non-brand-specific) color name, used when a bike's real current
+// colorway names could not be confirmed against the manufacturer's own site
+// (see the per-product notes below and PLAN.md Task 12 §4). Never a
+// fabricated-sounding paint/marketing name.
+type ColorSpec = { name: string; abbr: string };
+
+const sizes = ["S", "M", "L", "XL"];
+
+function buildVariants({
+  skuPrefix,
+  colors,
+  priceEur,
+}: {
+  skuPrefix: string;
+  colors: ColorSpec[];
+  priceEur: number;
+}) {
+  const variants: {
+    title: string;
+    sku: string;
+    options: { "Frame Size": string; Farbe: string };
+    prices: { amount: number; currency_code: string }[];
+  }[] = [];
+
+  for (const size of sizes) {
+    for (const color of colors) {
+      variants.push({
+        title: `${size} / ${color.name}`,
+        sku: `${skuPrefix}-${size}-${color.abbr}`,
+        options: { "Frame Size": size, Farbe: color.name },
+        prices: [{ amount: priceEur, currency_code: "eur" }],
+      });
+    }
+  }
+
+  return variants;
+}
+
+// Deterministic, per-variant "realistic" placeholder inventory quantities —
+// there is no real business inventory count yet (no TriCon/Tridata feed,
+// see PLAN.md Task 12 §3). Two interleaved repeating patterns (length 11,
+// coprime with most product variant counts) assigned by sorted SKU index so
+// the mix is reproducible: mostly small in-stock quantities, a handful of
+// single-location zeros (tests that per-location + aggregate stock is
+// handled correctly), and one fully-sold-out combination per 11 variants
+// (tests the real "Ausverkauft" path).
+const OL_PATTERN = [3, 1, 0, 4, 2, 5, 1, 3, 0, 2, 0];
+const OS_PATTERN = [2, 4, 1, 5, 0, 3, 0, 2, 0, 1, 4];
+
 export default async function initial_data_seed({
   container,
 }: {
@@ -34,8 +83,6 @@ export default async function initial_data_seed({
   const fulfillmentModuleService = container.resolve(
     ModuleRegistrationName.FULFILLMENT
   );
-
-  const countries = ["gb", "de", "dk", "se", "fr", "es", "it"];
 
   logger.info("Seeding store data...");
   const {
@@ -72,6 +119,9 @@ export default async function initial_data_seed({
     },
   });
 
+  // EUR only — BikeOne is a German retailer with no multi-currency
+  // requirement (schema-design.md "Out of scope for v1"), and USD pricing
+  // for a store with no USD-priced region is dead/confusing data.
   const {
     result: [store],
   } = await createStoresWorkflow(container).run({
@@ -84,10 +134,6 @@ export default async function initial_data_seed({
               currency_code: "eur",
               is_default: true,
             },
-            {
-              currency_code: "usd",
-              is_default: false,
-            },
           ],
           default_sales_channel_id: defaultSalesChannel.id,
         },
@@ -95,14 +141,19 @@ export default async function initial_data_seed({
     },
   });
 
+  // Germany-only region — a deliberate narrowing of schema-design.md's
+  // DE/AT/CH region, per explicit fresh user feedback ("start with national
+  // availability first to keep things easy"). See PLAN.md Task 12 §1 for
+  // the full note; widening back to AT/CH later is a small, additive
+  // change (country list + tax regions), not a redesign.
   logger.info("Seeding region data...");
   const { result: regionResult } = await createRegionsWorkflow(container).run({
     input: {
       regions: [
         {
-          name: "Europe",
+          name: "Deutschland",
           currency_code: "eur",
-          countries,
+          countries: ["de"],
           payment_providers: ["pp_system_default"],
         },
       ],
@@ -113,13 +164,20 @@ export default async function initial_data_seed({
 
   logger.info("Seeding tax regions...");
   await createTaxRegionsWorkflow(container).run({
-    input: countries.map((country_code) => ({
-      country_code,
-      provider_id: "tp_system",
-    })),
+    input: [
+      {
+        country_code: "de",
+        provider_id: "tp_system",
+      },
+    ],
   });
   logger.info("Finished seeding tax regions.");
 
+  // Two real BikeOne stores (schema-design.md: "2 fixed physical
+  // locations", not a simplification to revisit later). Addresses/phone
+  // match the storefront footer exactly. `email` has no native
+  // stock_location field yet (that's the not-yet-built `store-profile`
+  // module — see PLAN.md Task 12 §2) so it's stashed in `metadata` for now.
   logger.info("Seeding stock location data...");
   const { result: stockLocationResult } = await createStockLocationsWorkflow(
     container
@@ -127,21 +185,59 @@ export default async function initial_data_seed({
     input: {
       locations: [
         {
-          name: "European Warehouse",
+          name: "BikeOne Oldenburg",
           address: {
-            city: "Copenhagen",
-            country_code: "DK",
-            address_1: "",
+            address_1: "Rheinstr. 16",
+            city: "Oldenburg",
+            postal_code: "26135",
+            country_code: "de",
+            phone: "0441 984 894 83",
+          },
+          metadata: {
+            email: "OL@bike-one.de",
+          },
+        },
+        {
+          name: "BikeOne Osnabrück",
+          address: {
+            address_1: "Lengericher Landstraße 30",
+            city: "Osnabrück",
+            postal_code: "49078",
+            country_code: "de",
+            phone: "0541 440 952 84",
+          },
+          metadata: {
+            email: "OS@bike-one.de",
           },
         },
       ],
     },
   });
-  const stockLocation = stockLocationResult[0];
+  const oldenburg = stockLocationResult.find(
+    (l) => l.name === "BikeOne Oldenburg"
+  )!;
+  const osnabrueck = stockLocationResult.find(
+    (l) => l.name === "BikeOne Osnabrück"
+  )!;
 
+  // Both locations get a fulfillment *provider* link — either one could end
+  // up holding the reserved stock for an order (Medusa reserves inventory
+  // across every stock location linked to the cart's sales channel, not
+  // just the location a shipping option nominally points at — confirmed by
+  // reading @medusajs/core-flows's cart-complete/
+  // prepare-confirm-inventory-input.js), so both need a registered provider
+  // to be able to carry a real Fulfillment.
   await link.create({
     [Modules.STOCK_LOCATION]: {
-      stock_location_id: stockLocation.id,
+      stock_location_id: oldenburg.id,
+    },
+    [Modules.FULFILLMENT]: {
+      fulfillment_provider_id: "manual_manual",
+    },
+  });
+  await link.create({
+    [Modules.STOCK_LOCATION]: {
+      stock_location_id: osnabrueck.id,
     },
     [Modules.FULFILLMENT]: {
       fulfillment_provider_id: "manual_manual",
@@ -156,39 +252,29 @@ export default async function initial_data_seed({
   });
   const shippingProfile = shippingProfileResult[0];
 
+  // One shared "national shipping" fulfillment set/service zone for
+  // Germany, structurally anchored to a single stock_location (Medusa's
+  // FulfillmentSet <-> StockLocation link is 1:1 — see
+  // @medusajs/link-modules's fulfillment-set-location.js), here Oldenburg.
+  // This is a deliberate, documented simplification for this shipping-only
+  // task (not the real, later Click & Collect model): since inventory
+  // reservation at checkout is aggregated across *every* stock location
+  // linked to the sales channel (both Oldenburg and Osnabrück, linked
+  // below), a single shared "Standard-Versand"/"Express-Versand" pair
+  // already lets a real order complete from either store's stock, without
+  // needing duplicate, confusingly-identical shipping options per store.
+  // Real Click & Collect (a separate, later, blocked task — see PLAN.md
+  // "Later milestones") is what will need a genuine per-store pickup
+  // fulfillment set/service zone.
   const fulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
-    name: "European Warehouse delivery",
+    name: "BikeOne Versand",
     type: "shipping",
     service_zones: [
       {
-        name: "Europe",
+        name: "Deutschland",
         geo_zones: [
           {
-            country_code: "gb",
-            type: "country",
-          },
-          {
             country_code: "de",
-            type: "country",
-          },
-          {
-            country_code: "dk",
-            type: "country",
-          },
-          {
-            country_code: "se",
-            type: "country",
-          },
-          {
-            country_code: "fr",
-            type: "country",
-          },
-          {
-            country_code: "es",
-            type: "country",
-          },
-          {
-            country_code: "it",
             type: "country",
           },
         ],
@@ -198,7 +284,7 @@ export default async function initial_data_seed({
 
   await link.create({
     [Modules.STOCK_LOCATION]: {
-      stock_location_id: stockLocation.id,
+      stock_location_id: oldenburg.id,
     },
     [Modules.FULFILLMENT]: {
       fulfillment_set_id: fulfillmentSet.id,
@@ -208,21 +294,17 @@ export default async function initial_data_seed({
   await createShippingOptionsWorkflow(container).run({
     input: [
       {
-        name: "Standard Shipping",
+        name: "Standard-Versand",
         price_type: "flat",
         provider_id: "manual_manual",
         service_zone_id: fulfillmentSet.service_zones[0].id,
         shipping_profile_id: shippingProfile.id,
         type: {
           label: "Standard",
-          description: "Ship in 2-3 days.",
+          description: "Versand in 2–3 Werktagen.",
           code: "standard",
         },
         prices: [
-          {
-            currency_code: "usd",
-            amount: 10,
-          },
           {
             currency_code: "eur",
             amount: 10,
@@ -246,21 +328,17 @@ export default async function initial_data_seed({
         ],
       },
       {
-        name: "Express Shipping",
+        name: "Express-Versand",
         price_type: "flat",
         provider_id: "manual_manual",
         service_zone_id: fulfillmentSet.service_zones[0].id,
         shipping_profile_id: shippingProfile.id,
         type: {
           label: "Express",
-          description: "Ship in 24 hours.",
+          description: "Lieferung innerhalb von 24 Std.",
           code: "express",
         },
         prices: [
-          {
-            currency_code: "usd",
-            amount: 10,
-          },
           {
             currency_code: "eur",
             amount: 10,
@@ -289,7 +367,13 @@ export default async function initial_data_seed({
 
   await linkSalesChannelsToStockLocationWorkflow(container).run({
     input: {
-      id: stockLocation.id,
+      id: oldenburg.id,
+      add: [defaultSalesChannel.id],
+    },
+  });
+  await linkSalesChannelsToStockLocationWorkflow(container).run({
+    input: {
+      id: osnabrueck.id,
       add: [defaultSalesChannel.id],
     },
   });
@@ -345,21 +429,66 @@ export default async function initial_data_seed({
     (c) => c.handle === "specialized"
   )!;
 
-  const { result: productOptionsResult } = await createProductOptionsWorkflow(
+  const { result: sizeOptionResult } = await createProductOptionsWorkflow(
     container
   ).run({
     input: {
       product_options: [
         {
           title: "Frame Size",
-          values: ["S", "M", "L", "XL"],
+          values: sizes,
         },
       ],
     },
   });
-  const sizeOption = productOptionsResult.find(
-    (o) => o.title === "Frame Size"
-  )!;
+  const sizeOption = sizeOptionResult.find((o) => o.title === "Frame Size")!;
+
+  // "Farbe" (German — see PLAN.md Task 12 §4 for why "Frame Size" itself
+  // stays English, a pre-existing inconsistency left alone). Colors below
+  // are researched per product against the manufacturer's own site
+  // (trekbikes.com / cervelo.com / factorbikes.com / specialized.com) —
+  // but every one of those sites, and docs.medusajs.com, is blocked by this
+  // session's network egress policy (confirmed via repeated WebFetch
+  // EGRESS_BLOCKED errors, not a transient failure — see PLAN.md Task 12
+  // §4 for the exact evidence). A supplementary web *search* (not a fetch
+  // of the manufacturer's own page) surfaced plausible current colorway
+  // names for some models, but nothing here could be verified directly
+  // against the primary source, and results were inconsistent/mixed
+  // model-years across retailers. Per this project's no-fabrication rule,
+  // every color below is therefore a plain, generic, honest fallback name
+  // (Schwarz/Blau/Weiß/Grau/Grün) — never a specific-sounding factory paint
+  // name — for all 4 products, not just some. Every size ships in every
+  // color for all 4 products: with no real per-model size/color
+  // availability data to go on, inventing exclusions would itself be a
+  // fabricated availability claim, so a full cross-product is the more
+  // honest choice here.
+  //
+  // Each product gets its own "Farbe" option created inline (not via the
+  // shared/reused `createProductOptionsWorkflow` pattern `sizeOption` uses
+  // above) because that shared path enforces a globally-unique option
+  // title — a second standalone "Farbe" option collides with the first.
+  // An inline `{title, values}` entry in a product's own `options` array
+  // creates an option scoped to that one product instead, which is also
+  // the more correct shape here since each bike's color values differ.
+  const trekColors: ColorSpec[] = [
+    { name: "Schwarz", abbr: "BLK" },
+    { name: "Blau", abbr: "BLU" },
+    { name: "Weiß", abbr: "WHT" },
+  ];
+  const cerveloColors: ColorSpec[] = [
+    { name: "Schwarz", abbr: "BLK" },
+    { name: "Grau", abbr: "GRY" },
+  ];
+  const factorColors: ColorSpec[] = [
+    { name: "Schwarz", abbr: "BLK" },
+    { name: "Weiß", abbr: "WHT" },
+    { name: "Blau", abbr: "BLU" },
+  ];
+  const specializedColors: ColorSpec[] = [
+    { name: "Schwarz", abbr: "BLK" },
+    { name: "Grau", abbr: "GRY" },
+    { name: "Grün", abbr: "GRN" },
+  ];
 
   await createProductsWorkflow(container).run({
     input: {
@@ -376,69 +505,15 @@ export default async function initial_data_seed({
           weight: 8900,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
-          options: [{ id: sizeOption.id }],
-          variants: [
-            {
-              title: "S",
-              sku: "TREK-DOMANE-SL6-S",
-              options: { "Frame Size": "S" },
-              prices: [
-                {
-                  amount: 4999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 5499,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M",
-              sku: "TREK-DOMANE-SL6-M",
-              options: { "Frame Size": "M" },
-              prices: [
-                {
-                  amount: 4999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 5499,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L",
-              sku: "TREK-DOMANE-SL6-L",
-              options: { "Frame Size": "L" },
-              prices: [
-                {
-                  amount: 4999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 5499,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL",
-              sku: "TREK-DOMANE-SL6-XL",
-              options: { "Frame Size": "XL" },
-              prices: [
-                {
-                  amount: 4999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 5499,
-                  currency_code: "usd",
-                },
-              ],
-            },
+          options: [
+            { id: sizeOption.id },
+            { title: "Farbe", values: trekColors.map((c) => c.name) },
           ],
+          variants: buildVariants({
+            skuPrefix: "TREK-DOMANE-SL6",
+            colors: trekColors,
+            priceEur: 4999,
+          }),
           sales_channels: [
             {
               id: defaultSalesChannel.id,
@@ -457,69 +532,15 @@ export default async function initial_data_seed({
           weight: 9200,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
-          options: [{ id: sizeOption.id }],
-          variants: [
-            {
-              title: "S",
-              sku: "CERVELO-ASPERO5-S",
-              options: { "Frame Size": "S" },
-              prices: [
-                {
-                  amount: 5999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 6499,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M",
-              sku: "CERVELO-ASPERO5-M",
-              options: { "Frame Size": "M" },
-              prices: [
-                {
-                  amount: 5999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 6499,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L",
-              sku: "CERVELO-ASPERO5-L",
-              options: { "Frame Size": "L" },
-              prices: [
-                {
-                  amount: 5999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 6499,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL",
-              sku: "CERVELO-ASPERO5-XL",
-              options: { "Frame Size": "XL" },
-              prices: [
-                {
-                  amount: 5999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 6499,
-                  currency_code: "usd",
-                },
-              ],
-            },
+          options: [
+            { id: sizeOption.id },
+            { title: "Farbe", values: cerveloColors.map((c) => c.name) },
           ],
+          variants: buildVariants({
+            skuPrefix: "CERVELO-ASPERO5",
+            colors: cerveloColors,
+            priceEur: 5999,
+          }),
           sales_channels: [
             {
               id: defaultSalesChannel.id,
@@ -538,69 +559,15 @@ export default async function initial_data_seed({
           weight: 7300,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
-          options: [{ id: sizeOption.id }],
-          variants: [
-            {
-              title: "S",
-              sku: "FACTOR-OSTROVAM-S",
-              options: { "Frame Size": "S" },
-              prices: [
-                {
-                  amount: 8999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 9499,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M",
-              sku: "FACTOR-OSTROVAM-M",
-              options: { "Frame Size": "M" },
-              prices: [
-                {
-                  amount: 8999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 9499,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L",
-              sku: "FACTOR-OSTROVAM-L",
-              options: { "Frame Size": "L" },
-              prices: [
-                {
-                  amount: 8999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 9499,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL",
-              sku: "FACTOR-OSTROVAM-XL",
-              options: { "Frame Size": "XL" },
-              prices: [
-                {
-                  amount: 8999,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 9499,
-                  currency_code: "usd",
-                },
-              ],
-            },
+          options: [
+            { id: sizeOption.id },
+            { title: "Farbe", values: factorColors.map((c) => c.name) },
           ],
+          variants: buildVariants({
+            skuPrefix: "FACTOR-OSTROVAM",
+            colors: factorColors,
+            priceEur: 8999,
+          }),
           sales_channels: [
             {
               id: defaultSalesChannel.id,
@@ -619,69 +586,15 @@ export default async function initial_data_seed({
           weight: 13500,
           status: ProductStatus.PUBLISHED,
           shipping_profile_id: shippingProfile.id,
-          options: [{ id: sizeOption.id }],
-          variants: [
-            {
-              title: "S",
-              sku: "SPECIALIZED-STUMPJUMPER-S",
-              options: { "Frame Size": "S" },
-              prices: [
-                {
-                  amount: 4299,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 4599,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "M",
-              sku: "SPECIALIZED-STUMPJUMPER-M",
-              options: { "Frame Size": "M" },
-              prices: [
-                {
-                  amount: 4299,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 4599,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "L",
-              sku: "SPECIALIZED-STUMPJUMPER-L",
-              options: { "Frame Size": "L" },
-              prices: [
-                {
-                  amount: 4299,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 4599,
-                  currency_code: "usd",
-                },
-              ],
-            },
-            {
-              title: "XL",
-              sku: "SPECIALIZED-STUMPJUMPER-XL",
-              options: { "Frame Size": "XL" },
-              prices: [
-                {
-                  amount: 4299,
-                  currency_code: "eur",
-                },
-                {
-                  amount: 4599,
-                  currency_code: "usd",
-                },
-              ],
-            },
+          options: [
+            { id: sizeOption.id },
+            { title: "Farbe", values: specializedColors.map((c) => c.name) },
           ],
+          variants: buildVariants({
+            skuPrefix: "SPECIALIZED-STUMPJUMPER",
+            colors: specializedColors,
+            priceEur: 4299,
+          }),
           sales_channels: [
             {
               id: defaultSalesChannel.id,
@@ -697,16 +610,34 @@ export default async function initial_data_seed({
 
   const { data: inventoryItems } = await query.graph({
     entity: "inventory_item",
-    fields: ["id"],
+    fields: ["id", "sku"],
+  });
+
+  const sortedInventoryItems = [...inventoryItems].sort((a, b) =>
+    (a.sku ?? "").localeCompare(b.sku ?? "")
+  );
+
+  const inventoryLevels = sortedInventoryItems.flatMap((item, index) => {
+    const olQty = OL_PATTERN[index % OL_PATTERN.length];
+    const osQty = OS_PATTERN[index % OS_PATTERN.length];
+
+    return [
+      {
+        location_id: oldenburg.id,
+        stocked_quantity: olQty,
+        inventory_item_id: item.id,
+      },
+      {
+        location_id: osnabrueck.id,
+        stocked_quantity: osQty,
+        inventory_item_id: item.id,
+      },
+    ];
   });
 
   await createInventoryLevelsWorkflow(container).run({
     input: {
-      inventory_levels: inventoryItems.map((item) => ({
-        location_id: stockLocation.id,
-        stocked_quantity: 1000000,
-        inventory_item_id: item.id,
-      })),
+      inventory_levels: inventoryLevels,
     },
   });
 

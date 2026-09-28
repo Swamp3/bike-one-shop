@@ -32,6 +32,6 @@ make dev     # runs both backend (:9000) and storefront (:8000)
 
 `make help` lists every target (`backend`, `storefront`, `migrate`, `down`, `reset-db`, etc.) — see the `Makefile` at the repo root. `make setup` is idempotent, safe to re-run.
 
-Backend health check: `curl http://localhost:9000/health`. Storefront: open `http://localhost:8000` (redirects to the seeded `/dk` region). Admin dashboard: `http://localhost:9000/app` — `make setup` prints the dev admin login (default `admin@bikeone.local` / `supersecret`; override with `ADMIN_EMAIL`/`ADMIN_PASSWORD` env vars before running it).
+Backend health check: `curl http://localhost:9000/health`. Storefront: open `http://localhost:8000` (redirects to the seeded `/de` region — Germany-only, see `PLAN.md`'s Task 12). Admin dashboard: `http://localhost:9000/app` — `make setup` prints the dev admin login (default `admin@bikeone.local` / `supersecret`; override with `ADMIN_EMAIL`/`ADMIN_PASSWORD` env vars before running it).
 
 Production build: `npm run build` (from `backend/`) builds the Medusa backend + admin dashboard successfully. The storefront's `next build` currently fails on Next.js's own auto-generated `/404`/`/500` error-page prerendering (not on any real app route) — see `PLAN.md`'s Task 3 for details; `next dev` is unaffected.
