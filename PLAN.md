@@ -773,12 +773,68 @@ task's scope required a fixed order, but a size-then-color swatch layout
 should not rely on `product.options` array order — sort/find by
 `option.title` in the render layer instead of mapping the array
 positionally.
-Per-color product photos remain out of scope, unchanged from the earlier
-planning note: `bikeone-gallery/index.tsx` still renders the honest
-"Produktfoto folgt" placeholder for every color, since no real per-color
-photos exist to switch between — building the color-aware image-switching
-mechanism itself is exactly the follow-up task this seed-data work sets up
-for (the option/value data it needs now exists and is real).
+
+**Frontend follow-up done (same task, storefront side):** built a real
+color-swatch selector for "Farbe" and wired it to the gallery placeholder,
+on top of the option/value data above.
+`product-actions/color-swatch-select.tsx` is a new sibling to the existing
+`option-select.tsx` (the Frame Size button grid) — small circular swatches
+instead of text buttons, selected state via an accent ring, each color
+name mapped to a real CSS color through a small local lookup
+(`Schwarz`→`#111111`, `Blau`→`#2554c7`, `Weiß`→`#ffffff` with a visible
+border since it'd otherwise vanish on the light card background,
+`Grau`→`#8a8a8a`, `Grün`→`#2f7a3f`) — kept to exactly the 5 generic
+fallback color names the seed actually uses, nothing invented. Which
+selector renders for a given `option` is decided by `option.title ===
+"Farbe"` (`product-actions/option-title.ts`), never by array position —
+directly addressing the array-order inconsistency flagged above; confirmed
+live that both option groups still render correctly and in their
+product-specific order on both Trek (Farbe first) and Factor (Frame Size
+first).
+`ColorSwatchSelect` reuses the exact same `updateOption`/`setOptionValue`
+plumbing `OptionSelect` already used — no parallel selection state was
+built. That plumbing itself moved: the `options` state and its setter used
+to live only inside `ProductActions`'s own `useState`; they're now owned by
+a new `ProductOptionsProvider` (React Context,
+`product-options-context/index.tsx`) so `BikeOneGallery` — a sibling of
+`ProductActions` in `templates/index.tsx`, not a descendant — can read the
+same selection. `ProductTemplate` (still a Server Component) wraps the grid
+containing both `<BikeOneGallery>` and the `Suspense`-wrapped,
+async-fetched `<ProductActionsWrapper>` in `<ProductOptionsProvider
+product={product}>`; both children are passed through as ordinary JSX
+composition (the standard Server-Component-renders-Client-Component /
+Server-subtree-passed-as-children pattern), and the Context still reaches
+`ProductActions` even though it's instantiated two Server Component layers
+down inside `ProductActionsWrapper`'s async fetch, because Context
+propagates through the rendered element tree regardless of the
+Server/Client boundaries within it. `BikeOneGallery` itself became a
+Client Component (`"use client"`) so it can call
+`useProductOptionsContext()`.
+Per-color product photos remain explicitly out of scope — there is still
+no real photo to switch to, and inventing one was never on the table — but
+the gallery is no longer a total no-op with respect to color: `Produktfoto
+folgt` becomes `Produktfoto folgt — Farbe: Schwarz` (etc.) once a color is
+selected, confirmed live to update immediately on swatch click, from both
+the desktop selector and the mobile sticky-bar's expanded sheet.
+`mobile-actions.tsx`'s expanded modal got the identical
+`ColorSwatchSelect`/`OptionSelect` branch-by-title treatment as the desktop
+`ProductActions` render, so Farbe and Frame Size both appear there too, in
+whatever order that product's `product.options` gives them.
+Verified live via Playwright (`/opt/pw-browsers/chromium`), desktop
+(1280×900) and mobile (390×844) viewports, on Trek Domane SL 6 (Farbe
+before Frame Size) and Factor Ostro VAM (Frame Size before Farbe): color
+swatch counts match each product's Farbe value count (3 for both), both
+option groups render in the product's own order on desktop and inside the
+mobile sheet, selecting a color updates the gallery caption text exactly as
+above, selecting the known 0-stock combination (Factor "L / Schwarz")
+still correctly disables the CTA with "Ausverkauft" once color is part of
+the selection, and a real add-to-cart on an in-stock combination (Factor
+"S / Schwarz", €8.999,00) succeeded — the cart line item correctly reads
+"Factor Ostro VAM — Größe S / Schwarz" at the right price. No console
+errors during any of the above. `npx tsc --noEmit` and `npx eslint`
+(via `next lint`) are clean on every changed/added file (the handful of
+lint errors `next lint` reports elsewhere in the storefront predate this
+change and are untouched).
 
 **Cross-cutting fixes needed to make the above actually run:**
 `scripts/setup.sh` hardcoded `NEXT_PUBLIC_DEFAULT_REGION=dk` (a leftover

@@ -4,7 +4,10 @@ import { addToCart } from "@lib/data/cart"
 import { useIntersection } from "@lib/hooks/use-in-view"
 import { getProductPrice } from "@lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
+import { useProductOptionsContext } from "@modules/products/components/product-options-context"
+import ColorSwatchSelect from "@modules/products/components/product-actions/color-swatch-select"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
+import { isColorOption } from "@modules/products/components/product-actions/option-title"
 import { isEqual } from "lodash"
 import { useParams, usePathname, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
@@ -35,17 +38,12 @@ export default function ProductActions({
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const [options, setOptions] = useState<Record<string, string | undefined>>({})
+  // Shared with `BikeOneGallery` via `ProductOptionsProvider` (see
+  // `templates/index.tsx`) so selecting a color also updates the gallery
+  // caption, instead of each component holding its own selection state.
+  const { options, setOptionValue } = useProductOptionsContext()
   const [isAdding, setIsAdding] = useState(false)
   const countryCode = useParams().countryCode as string
-
-  // If there is only 1 variant, preselect the options
-  useEffect(() => {
-    if (product.variants?.length === 1) {
-      const variantOptions = optionsAsKeymap(product.variants[0].options)
-      setOptions(variantOptions ?? {})
-    }
-  }, [product.variants])
 
   const selectedVariant = useMemo(() => {
     if (!product.variants || product.variants.length === 0) {
@@ -57,14 +55,6 @@ export default function ProductActions({
       return isEqual(variantOptions, options)
     })
   }, [product.variants, options])
-
-  // update the options when a variant is selected
-  const setOptionValue = (optionId: string, value: string) => {
-    setOptions((prev) => ({
-      ...prev,
-      [optionId]: value,
-    }))
-  }
 
   //check if the selected options produce a valid variant
   const isValidVariant = useMemo(() => {
@@ -162,14 +152,18 @@ export default function ProductActions({
         {(product.variants?.length ?? 0) > 1 && (
           <div className="flex flex-col gap-y-4">
             {(product.options || []).map((option) => {
+              const isColor = isColorOption(option.title)
+              const Selector = isColor ? ColorSwatchSelect : OptionSelect
               return (
                 <div key={option.id}>
-                  <OptionSelect
+                  <Selector
                     option={option}
                     current={options[option.id]}
                     updateOption={setOptionValue}
                     title={option.title ?? ""}
-                    data-testid="product-options"
+                    data-testid={
+                      isColor ? "product-options-color" : "product-options"
+                    }
                     disabled={!!disabled || isAdding}
                   />
                 </div>
