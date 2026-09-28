@@ -175,17 +175,49 @@ Status: **prepared, not activated**
 - Env vars added to `.env.template` (all empty/placeholder for now):
   `SUMUP_API_KEY`, `SUMUP_MERCHANT_CODE`, `SUMUP_CHECKOUT_MODE`
   (defaults to `hosted`), `MEDUSA_BACKEND_URL`, `STOREFRONT_URL`.
+- **Security review finding (2026-09-28), not yet fixed:** read the
+  installed plugin's own compiled source
+  (`node_modules/@sumup/medusa-plugin/.medusa/server/src/providers/sumup/service.js`,
+  `getWebhookActionAndData`) — it decides the webhook action purely from
+  `payload.data.event_type`/`.id`, with **no signature/checksum
+  verification of the incoming request at all**. Confirmed no
+  `signature`/`hmac`/`verify` logic anywhere in the package (`grep` over
+  every file in it). This is a gap in the third-party plugin itself
+  (v0.1.0, not SumUp's own official backend SDK), not something this
+  project's code introduced — but as configured today, anyone who can
+  reach `/hooks/payment/sumup_sumup` could POST a forged
+  `CHECKOUT_STATUS_CHANGED` payload and have it treated as authentic
+  (e.g. mark an unpaid order paid). No real transactions have gone through
+  it yet (still unconfigured), so nothing has been exploited — but **this
+  must be fixed or compensated for before real credentials/transactions
+  go live**, not discovered after. Options to evaluate before activation:
+  patch/fork the provider to verify SumUp's webhook signature (check
+  SumUp's own API docs for the exact header/scheme), add an independent
+  server-side confirmation step that re-fetches checkout status from
+  SumUp's API rather than trusting the webhook payload alone, or raise it
+  upstream with the plugin's maintainer. Route through
+  `legal-security-reviewer` regardless, per this repo's own convention for
+  anything touching payments, before enabling with real credentials.
+- No secrets are currently at risk: `SUMUP_API_KEY`/`SUMUP_MERCHANT_CODE`
+  are empty in `.env.template` (never a real value), `.env` itself is
+  gitignored at both `backend/.gitignore` and
+  `backend/apps/backend/.gitignore`, `git log --all` over every `.env`
+  path in this repo's history shows nothing was ever committed, and no
+  application code outside `medusa-config.ts` references the raw
+  credential values (checked directly, not assumed).
 - **What's still needed once the sandbox account details arrive:**
   1. Drop `SUMUP_API_KEY`/`SUMUP_MERCHANT_CODE` into `.env`.
-  2. Enable the `sumup` provider for the EUR region in Medusa Admin
+  2. Fix or compensate for the webhook-verification gap above — before,
+     not after, real credentials are dropped in.
+  3. Enable the `sumup` provider for the EUR region in Medusa Admin
      (Settings → Regions → Payment Providers) — registering it in code
      doesn't auto-enable it for a region.
-  3. Storefront checkout UI: the default Next.js starter's payment step
+  4. Storefront checkout UI: the default Next.js starter's payment step
      doesn't know about SumUp. Needs a `/checkout/sumup/return` page
      (the plugin's `redirectUrl` target) and a hosted-checkout redirect
      step in the payment flow. This depends on the custom storefront
      work below, not just the backend.
-  4. Run the plugin's own documented sandbox checklist (hosted checkout,
+  5. Run the plugin's own documented sandbox checklist (hosted checkout,
      widget, webhook-driven update, full + partial refund, the `amount:
      11` deliberate-failure test, expired/canceled checkout handling).
 
@@ -564,6 +596,15 @@ Everything below is grounded in what's actually in
 `backend/apps/backend/src/migration-scripts/initial-data-seed.ts` today, not
 assumptions — read that file first if picking this task up.
 
+**Correction (2026-09-28):** the first pass of this planning was written
+without re-reading `planning/5-Database_Schema/schema-design.md` and
+`planning/3-Architecture_Tech_Stack/tricon-integration-notes.md` — both
+already contain real decisions that should have grounded this section
+instead of re-deriving them from scratch (flagged directly by the user).
+Corrected below; **`schema-design.md` is the authority for the shop's data
+model, not this section — read it first**, this is only a working summary
+against it.
+
 **1. National availability first (regions/shipping/tax)**
 Current state: the seed script still carries Medusa's default demo-seed
 region/shipping shape almost untouched — one `"Europe"` region spanning 7
@@ -581,13 +622,17 @@ re-adding EU countries as an explicit, separate later milestone (a region
 covering 7 countries with no real fulfillment/tax review behind it is worse
 than one country done properly) rather than leaving it half-configured as
 today.
-Open question for the user: one shared stock location (simpler, matches
-"keep it easy") or one per physical store (Oldenburg + Osnabrück — sets up
-real Click & Collect stock visibility sooner, see the Task 11 Click &
-Collect follow-up in "Later milestones", but adds real complexity: per-
-location inventory levels, a location-aware storefront query). Recommend
-starting with one shared location and revisiting when real Click & Collect
-fulfillment (already tracked below) is built.
+**Not actually an open question — already decided.** The first pass of
+this plan asked whether to use one shared stock location or one per store;
+`schema-design.md`'s entity table already settles this: `stock_location`
+is native Medusa, "**2 fixed physical locations** — replaces the
+Shopware-era custom `bikeone_store` entity outright." Two `stock_location`
+rows (Oldenburg, Osnabrück) is the design, not a simplification to revisit
+later — align the seed data with that from the start rather than the
+"one shared location for now" default this section previously suggested.
+A linked `store-profile` custom module (`opening_hours` JSON, `email`)
+covers the fields `stock_location` itself doesn't have natively — see
+`schema-design.md`'s "New custom modules" section, not yet built.
 
 **2. Realistic inventory levels**
 Current state: every seeded inventory item gets
@@ -596,16 +641,27 @@ effectively infinite stock, another untouched demo-seed default. A real
 bike shop's actual inventory is mostly single-unit (each physical bike is
 one unit) or small multi-unit (accessories, tubes, etc.).
 Plan: reseed with realistic quantities (roughly 1–5 per variant, with a few
-intentionally at 0 to exercise the sold-out path for real), then audit
-whether the storefront's stock-aware UI (PDP add-to-cart/option-select,
-PLP availability badges if any) already degrades correctly at low/zero
-stock or was only ever exercised against effectively-infinite stock and
-silently assumes abundance somewhere. Decide `allow_backorder` per product
-type (bikes: no backorder — a bike is a real physical unit; accessories:
-maybe allow it). Note this is a stand-in for what should eventually be
-real-time stock from TriCon/Tridata (Task 6, still blocked on WSDL/
-credentials) — seed data will keep needing manual realism until that sync
-exists.
+intentionally at 0 to exercise the sold-out path for real), **now per the
+2-location model above** (an `InventoryLevel` row per variant × stock
+location, not one pooled number), then audit whether the storefront's
+stock-aware UI (PDP add-to-cart/option-select, PLP availability badges if
+any) already degrades correctly at low/zero stock or was only ever
+exercised against effectively-infinite stock and silently assumes
+abundance somewhere. Decide `allow_backorder` per product type (bikes: no
+backorder — a bike is a real physical unit; accessories: maybe allow it).
+This isn't just a seed-data placeholder to be replaced later — it's the
+exact mechanism `schema-design.md` already designed for real stock:
+native `InventoryLevel.stocked_quantity`/`reserved_quantity` per
+(variant × location), fed by a `tridata-stock-snapshot` custom module
+holding TriCon's raw `Lagerbestand`/`Reserviert`/`Bestellt`/
+`MengeVerfuegbar` fields per store — see `schema-design.md`'s "New custom
+modules" section and `tricon-integration-notes.md`'s stock-field mapping.
+That sync is still blocked on WSDL/credentials (Task 6) and on TriData's
+answer to the open "one interface for all branches vs. per-branch" question
+in `tricon-integration-notes.md` (decides whether `Filialname`-based
+per-store stock is even available from this TriBike install) — seed data
+stands in with realistic manual numbers per location until then, in the
+shape the real sync will eventually fill.
 
 **3. Color variants + color-aware preview images**
 Current state: every seeded product has exactly one option, "Frame Size"
@@ -628,11 +684,17 @@ against the same single placeholder image for every color until real
 photos are supplied, then swap in real per-color images the moment they
 exist — never fabricate product photos to make the feature look finished
 before it is.
-Open technical question: Medusa v2 has no first-class "this image belongs
-to this variant/color" field on the core product model — needs a short
-spike to settle on an approach (e.g. image `metadata` tagged with the
-option value, or a naming/ordering convention) before implementation
-starts.
+`schema-design.md` already anticipated this exact addition — its
+`product_option`/`product_option_value` entry says explicitly: "Color, if
+it becomes a real requirement later, is the same kind of option as size,"
+i.e. a second native Medusa `product_option`, no custom module needed for
+the option itself. The color-to-image mapping is genuinely not resolved
+by the schema doc, though — that document doesn't cover product media at
+field level at all. Open technical question stands: Medusa v2 has no
+first-class "this image belongs to this variant/color" field on the core
+product model — needs a short spike to settle on an approach (e.g. image
+`metadata` tagged with the option value, or a naming/ordering convention)
+before implementation starts.
 
 ## Later milestones (not started)
 
@@ -644,19 +706,30 @@ starts.
   Task 6; WireMock mock first if sandbox access is delayed further,
   real sandbox when Tridata grants access — see
   `planning/3-Architecture_Tech_Stack/local-dev-setup.md` "Open blocker")
-- **Real Click & Collect order fulfillment.** Task 11 built the honest
-  part (preferred-store selection, real and working). What's still
-  missing before Click & Collect can be a real *order* fulfillment
-  option: the `order-fulfillment-extension` custom module from
-  `planning/5-Database_Schema/schema-design.md`, a pickup fulfillment
-  set/shipping option registered in Medusa so `Shipping`'s existing
+- **Real Click & Collect order fulfillment — directly tied to TriCon
+  order sync, not a separate blocker.** Task 11 built the honest part
+  (preferred-store selection, real and working). Per
+  `planning/3-Architecture_Tech_Stack/tricon-integration-notes.md`
+  ("`Filialname` confirms the design"), the `order-fulfillment-extension`
+  module's `pickup_store_id` field maps directly onto TriCon's
+  `Filialname` field on the same `UploadOrder` call that order sync
+  already needs to make — i.e. building TriCon order sync (Task 6) and
+  enabling real pickup routing are largely the *same* piece of work, not
+  two independent blockers to schedule separately. That mapping is
+  itself gated on the still-open "one interface for all branches vs.
+  one per branch" question to TriData support in the same doc — **ask
+  this alongside the WSDL/`IdentifyGuid` access request**, since it
+  decides whether `Filialname`-based per-store routing is even available
+  on this TriBike install before any of this can be built.
+  Beyond that shared piece, still needed: a pickup fulfillment set/
+  shipping option registered in Medusa so `Shipping`'s existing
   `_pickupMethods` code path (cart/checkout, Task 10) has something real
-  to render, a public per-store stock read (so the store-select
-  component could show genuine availability instead of nothing), and a
-  decision on the bike-fitting-appointment feature the wireframe
-  sketches (needs a real booking/contact channel, not built anywhere
-  yet). Also: fix the homepage hero copy flagged at the end of Task 11
-  once this lands (or sooner, since it's currently an honesty
+  to render, the `tridata-stock-snapshot` module (Task 12 §2 above) for
+  genuine per-store availability in the store-select component instead
+  of nothing, and a decision on the bike-fitting-appointment feature the
+  wireframe sketches (needs a real booking/contact channel, not built
+  anywhere yet). Also: fix the homepage hero copy flagged at the end of
+  Task 11 once this lands (or sooner, since it's currently an honesty
   regression against Task 10/11's Click & Collect messaging elsewhere).
 - GDPR/legal compliance features (route through `legal-security-reviewer`
   before merge)
