@@ -584,6 +584,15 @@ Status: **done** — last page of the custom-storefront milestone
   regression against Task 10/11's Click & Collect messaging elsewhere).
 - GDPR/legal compliance features (route through `legal-security-reviewer`
   before merge)
+- **Real newsletter signup.** The footer's `NewsletterForm` (Task 7,
+  `newsletter-form/index.tsx`) is currently a UI-only placeholder — on
+  submit it just flips local state to show a static "confirmation email
+  sent" message, with no email/newsletter provider wired up and nothing
+  actually sent. This matches the wireframe's own static-confirmation
+  behavior, so it's not a bug. A real implementation needs an actual
+  email/newsletter provider integration (e.g. Klaviyo, Mailchimp, or a
+  custom Medusa module) plus double opt-in, required for GDPR
+  compliance on a German site.
 - Testing & QA (roadmap phase 9)
 - CI/CD (roadmap phase 10) — no GitHub Actions workflow exists yet for
   build/test; `gh` CLI is unavailable in this environment so CI status
@@ -593,6 +602,12 @@ Status: **done** — last page of the custom-storefront milestone
 - Containerize the Medusa backend/worker (per the original
   local-dev-setup.md compose shape) once there's a reason to (e.g.
   staging environment parity)
+- Mobile header layout: the mobile-only icon cluster in `Nav`
+  (search/language/store/cart, `nav/index.tsx`) currently lays out as a
+  horizontal row; it should default to one item per row instead. Flagged
+  by the user alongside the desktop header height fix (Task: desktop
+  header too tall) but explicitly deferred — needs its own mobile-layout
+  pass rather than being folded into that fix.
 
 ## Notes / decisions log for this plan
 
