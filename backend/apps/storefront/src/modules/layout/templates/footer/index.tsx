@@ -133,7 +133,7 @@ export default async function Footer() {
       </div>
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-bo-line px-4 py-4 text-[11.5px] text-bo-ink-faint md:px-6">
-        <span className="font-mono">© {new Date().getFullYear()} BikeOne</span>
+        <span className="font-mono">© {new Date().getFullYear()} BikeOne GmbH</span>
         <span>Oldenburg · Osnabrück</span>
       </div>
     </footer>
