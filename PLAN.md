@@ -558,6 +558,82 @@ Status: **done** — last page of the custom-storefront milestone
   else. Left untouched since editing the homepage is explicitly out of
   this task's scope; flagged here as a follow-up.
 
+### Task 12 — Shop setup review: national availability, real inventory, color variants
+Status: **planning only** — user feedback received 2026-09-28, no implementation yet.
+Everything below is grounded in what's actually in
+`backend/apps/backend/src/migration-scripts/initial-data-seed.ts` today, not
+assumptions — read that file first if picking this task up.
+
+**1. National availability first (regions/shipping/tax)**
+Current state: the seed script still carries Medusa's default demo-seed
+region/shipping shape almost untouched — one `"Europe"` region spanning 7
+countries (`gb, de, dk, se, fr, es, it`), a single stock location named
+"European Warehouse" addressed in Copenhagen, `usd` + `eur` as supported
+store currencies, and English shipping-option copy ("Ship in 2-3 days" /
+"Ship in 24 hours"). None of this reflects BikeOne (a German retailer with
+physical stores in Oldenburg and Osnabrück) — it was never localized past
+the product catalog.
+Plan: replace with a single Germany-only region (`eur` only, country `de`),
+drop the tax regions for the other 6 countries for now, rename/re-address
+the stock location to a real BikeOne location, German shipping-option
+copy ("Versand in 2–3 Tagen" / "Express-Versand in 24 Std."). Track
+re-adding EU countries as an explicit, separate later milestone (a region
+covering 7 countries with no real fulfillment/tax review behind it is worse
+than one country done properly) rather than leaving it half-configured as
+today.
+Open question for the user: one shared stock location (simpler, matches
+"keep it easy") or one per physical store (Oldenburg + Osnabrück — sets up
+real Click & Collect stock visibility sooner, see the Task 11 Click &
+Collect follow-up in "Later milestones", but adds real complexity: per-
+location inventory levels, a location-aware storefront query). Recommend
+starting with one shared location and revisiting when real Click & Collect
+fulfillment (already tracked below) is built.
+
+**2. Realistic inventory levels**
+Current state: every seeded inventory item gets
+`stocked_quantity: 1_000_000` (`initial-data-seed.ts` ~line 707) —
+effectively infinite stock, another untouched demo-seed default. A real
+bike shop's actual inventory is mostly single-unit (each physical bike is
+one unit) or small multi-unit (accessories, tubes, etc.).
+Plan: reseed with realistic quantities (roughly 1–5 per variant, with a few
+intentionally at 0 to exercise the sold-out path for real), then audit
+whether the storefront's stock-aware UI (PDP add-to-cart/option-select,
+PLP availability badges if any) already degrades correctly at low/zero
+stock or was only ever exercised against effectively-infinite stock and
+silently assumes abundance somewhere. Decide `allow_backorder` per product
+type (bikes: no backorder — a bike is a real physical unit; accessories:
+maybe allow it). Note this is a stand-in for what should eventually be
+real-time stock from TriCon/Tridata (Task 6, still blocked on WSDL/
+credentials) — seed data will keep needing manual realism until that sync
+exists.
+
+**3. Color variants + color-aware preview images**
+Current state: every seeded product has exactly one option, "Frame Size"
+(S/M/L/XL) — there is no Color option anywhere. There are also no product
+photos at all yet: `bikeone-gallery/index.tsx` intentionally renders an
+honest "Produktfoto folgt" placeholder because there's no real photo source
+to pull images from without fabricating URLs (see that component's own
+comment).
+Plan: add "Color" as a second product option alongside Frame Size — needs a
+decision on whether every size×color combination becomes its own variant
+or colors are modeled more loosely for cases where not every size ships in
+every color (check each brand's actual color/size matrix once that's
+known). Build a color-swatch selector next to the existing size selector
+(`option-select.tsx` pattern), with `bikeone-gallery` reacting to the
+selected color's option value.
+Real blocker, not a technical one: color-based image switching needs real
+per-color photos to be honest, and none exist yet. Plan is to build the
+real selection mechanism now (swatches, selection state, gallery wiring)
+against the same single placeholder image for every color until real
+photos are supplied, then swap in real per-color images the moment they
+exist — never fabricate product photos to make the feature look finished
+before it is.
+Open technical question: Medusa v2 has no first-class "this image belongs
+to this variant/color" field on the core product model — needs a short
+spike to settle on an approach (e.g. image `metadata` tagged with the
+option value, or a naming/ordering convention) before implementation
+starts.
+
 ## Later milestones (not started)
 
 - Fix the Task 3 Next.js production-build issue (`/404` `/500`
