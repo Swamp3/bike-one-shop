@@ -29,11 +29,14 @@ inventory, color variants) landed.
   branch" (`planning/3-Architecture_Tech_Stack/tricon-integration-notes.md`)
   — the answer decides whether per-store stock/pickup routing is even
   possible with the current setup.
-- **Real product photos, per color.** There are no product photos at all
-  yet (`bikeone-gallery` shows an honest "Produktfoto folgt" placeholder) —
-  no source to pull them from without fabricating URLs. Once colors were
-  added (Task 12 §4), the gap sharpened: color selection is real and
-  working, but there's nothing to visually switch to yet.
+- **Real product photos, per color.** Color selection is now fully real
+  and working — a color-swatch selector on the PDP, wired to the gallery
+  (the caption updates live, e.g. "Produktfoto folgt — Farbe: Schwarz").
+  What's still missing is the photos themselves: there are none at all yet
+  (`bikeone-gallery` shows an honest placeholder, no source to pull real
+  images from without fabricating URLs). The mechanism is done; dropping
+  in real per-color photos the moment they exist is the only remaining
+  step.
 - **Real manufacturer colorway names.** The "Farbe" option's values
   (Schwarz/Blau/Weiß/Grau/Grün) are honest generic fallbacks, not
   manufacturer-verified — every attempt to fetch trekbikes.com,
@@ -93,7 +96,8 @@ inventory, color variants) landed.
 - Homepage, PLP, PDP, cart/checkout, account, Click & Collect
   store-selection — all built and verified against the wireframes.
 - National region, 2 real stock locations, realistic per-location
-  inventory, color variants — all live (Task 12).
+  inventory, color variants (data + a real swatch selector wired to the
+  gallery) — all live (Task 12).
 - Header layout, add-to-cart toast, legal company name in the footer,
   newsletter documented as a placeholder — all shipped from your last
   round of feedback.
