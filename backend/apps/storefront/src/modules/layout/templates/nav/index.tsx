@@ -14,7 +14,8 @@ export default async function Nav() {
   return (
     <div className="sticky top-0 inset-x-0 z-50">
       <header className="border-b border-bo-header-line bg-bo-header text-bo-header-text">
-        <div className="relative flex items-center gap-2.5 px-4 py-2.5 md:px-6 md:py-3.5">
+        <div className="relative flex items-center gap-2.5 px-4 py-2.5 md:gap-4 md:px-6 md:py-3">
+          {/* Mobile only: mobile menu drawer trigger. Left untouched per scope. */}
           <MobileMenu categories={topLevelCategories ?? null} />
           <LocalizedClientLink
             href="/"
@@ -23,13 +24,20 @@ export default async function Nav() {
           >
             BIKE<span className="text-bo-accent">•</span>ONE
           </LocalizedClientLink>
+          {/* Desktop only: search bar shares the top row with the logo instead of a stacked full-width row below. */}
+          <div className="hidden min-w-0 max-w-[480px] flex-1 md:block">
+            <NavSearch variant="bar" />
+          </div>
           <div className="ml-auto flex items-center gap-2">
+            {/* TODO(mobile-layout): icon cluster (search/language/store/cart) should default to
+                one item per row instead of a horizontal row on mobile — deferred to a later pass. */}
             <NavSearch variant="icon" />
             <div className="hidden items-center gap-1 rounded-lg border border-bo-header-line font-mono text-[11px] font-semibold md:flex">
               <span className="px-2.5 py-2 text-bo-header bg-bo-header-text">
                 DE
               </span>
             </div>
+            <StorePicker variant="compact" />
             <StorePicker variant="mobile" />
             <Suspense
               fallback={
@@ -44,14 +52,6 @@ export default async function Nav() {
               <CartButton />
             </Suspense>
           </div>
-        </div>
-
-        <div className="hidden max-w-[480px] px-6 pb-3.5 md:block">
-          <NavSearch variant="bar" />
-        </div>
-
-        <div className="relative hidden items-center gap-2 border-t border-bo-header-line bg-bo-header-surface px-6 py-1.5 text-[12.5px] md:flex">
-          <StorePicker variant="strip" />
         </div>
       </header>
 

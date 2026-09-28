@@ -20,7 +20,23 @@ const PinIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 
-const StorePicker = ({ variant }: { variant: "mobile" | "strip" }) => {
+const ChevronDownIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    className={className}
+  >
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+)
+
+const StorePicker = ({
+  variant,
+}: {
+  variant: "mobile" | "strip" | "compact"
+}) => {
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState(STORES[0].name)
 
@@ -82,6 +98,24 @@ const StorePicker = ({ variant }: { variant: "mobile" | "strip" }) => {
           className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-lg border border-bo-header-line bg-bo-header-surface text-bo-header-text"
         >
           <PinIcon className="h-[18px] w-[18px]" />
+        </button>
+        {panel}
+      </div>
+    )
+  }
+
+  if (variant === "compact") {
+    return (
+      <div className="relative hidden shrink-0 md:block">
+        <button
+          type="button"
+          aria-label={`Filiale wählen: ${current.name}, ${current.address}`}
+          onClick={() => setOpen((v) => !v)}
+          className="flex h-[38px] items-center gap-1.5 rounded-lg border border-bo-header-line bg-bo-header-surface px-2.5 text-[12.5px] font-semibold text-bo-header-text"
+        >
+          <PinIcon className="h-3.5 w-3.5 shrink-0 text-bo-accent" />
+          <span className="max-w-[120px] truncate">{current.name}</span>
+          <ChevronDownIcon className="h-3.5 w-3.5 shrink-0 text-bo-header-muted" />
         </button>
         {panel}
       </div>
