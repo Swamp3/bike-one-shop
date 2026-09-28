@@ -42,6 +42,7 @@ form and were untouched):
 | `account/@dashboard/logout/page.tsx` (description) | `BIKE ONE` | **Fixed** |
 | `account/@login/page.tsx` (title/description) | English, "Medusa Store" | **Fixed** — rebranded to German/BikeOne, matching the rest of the storefront's copy |
 | `modules/layout/components/side-menu/index.tsx` | `Medusa Store` | **Fixed** — dead code (component isn't imported anywhere, superseded by the BikeOne nav), fixed anyway so it can't be revived with stale branding |
+| `backend/apps/backend/src/migration-scripts/initial-data-seed.ts` (the Medusa `Store` entity's `name` field) | `"Default Store"` | **Fixed** — renamed to `"BikeOne Store"`. **Note:** this only changes what a *fresh* seed run creates. If a database has already been seeded, the existing `store` row still says `"Default Store"` and needs updating separately — via Medusa Admin → Settings → Store, or a one-off admin API call — this script doesn't run again against an existing DB. |
 
 Left unchanged, deliberately: the discount-code placeholder text
 `"z. B. BIKEONE10"` in `checkout/components/discount-code/index.tsx` — a
