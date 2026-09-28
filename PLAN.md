@@ -591,110 +591,220 @@ Status: **done** — last page of the custom-storefront milestone
   this task's scope; flagged here as a follow-up.
 
 ### Task 12 — Shop setup review: national availability, real inventory, color variants
-Status: **planning only** — user feedback received 2026-09-28, no implementation yet.
-Everything below is grounded in what's actually in
-`backend/apps/backend/src/migration-scripts/initial-data-seed.ts` today, not
-assumptions — read that file first if picking this task up.
+Status: **done**
 
-**Correction (2026-09-28):** the first pass of this planning was written
-without re-reading `planning/5-Database_Schema/schema-design.md` and
-`planning/3-Architecture_Tech_Stack/tricon-integration-notes.md` — both
-already contain real decisions that should have grounded this section
-instead of re-deriving them from scratch (flagged directly by the user).
-Corrected below; **`schema-design.md` is the authority for the shop's data
-model, not this section — read it first**, this is only a working summary
-against it.
+Rewrote `backend/apps/backend/src/migration-scripts/initial-data-seed.ts`
+end to end. Verified with a fresh `make reset-db` (Docker/Postgres/Redis
+brought up manually — `dockerd` wasn't running), `npx tsc --noEmit` clean
+in both `apps/backend` and `apps/storefront`, `npx eslint` clean on the
+rewritten file, and a real Playwright run against the running dev servers
+(`/opt/pw-browsers/chromium`) covering the Store API, product pages, and
+two full cart→checkout→order flows (see each part below and the closing
+"Verification" note).
 
-**1. National availability first (regions/shipping/tax)**
-Current state: the seed script still carries Medusa's default demo-seed
-region/shipping shape almost untouched — one `"Europe"` region spanning 7
-countries (`gb, de, dk, se, fr, es, it`), a single stock location named
-"European Warehouse" addressed in Copenhagen, `usd` + `eur` as supported
-store currencies, and English shipping-option copy ("Ship in 2-3 days" /
-"Ship in 24 hours"). None of this reflects BikeOne (a German retailer with
-physical stores in Oldenburg and Osnabrück) — it was never localized past
-the product catalog.
-Plan: replace with a single Germany-only region (`eur` only, country `de`),
-drop the tax regions for the other 6 countries for now, rename/re-address
-the stock location to a real BikeOne location, German shipping-option
-copy ("Versand in 2–3 Tagen" / "Express-Versand in 24 Std."). Track
-re-adding EU countries as an explicit, separate later milestone (a region
-covering 7 countries with no real fulfillment/tax review behind it is worse
-than one country done properly) rather than leaving it half-configured as
-today.
-**Not actually an open question — already decided.** The first pass of
-this plan asked whether to use one shared stock location or one per store;
-`schema-design.md`'s entity table already settles this: `stock_location`
-is native Medusa, "**2 fixed physical locations** — replaces the
-Shopware-era custom `bikeone_store` entity outright." Two `stock_location`
-rows (Oldenburg, Osnabrück) is the design, not a simplification to revisit
-later — align the seed data with that from the start rather than the
-"one shared location for now" default this section previously suggested.
-A linked `store-profile` custom module (`opening_hours` JSON, `email`)
-covers the fields `stock_location` itself doesn't have natively — see
-`schema-design.md`'s "New custom modules" section, not yet built.
+**1. National availability (region/shipping/tax) — deliberately DE-only,
+not DE/AT/CH**
+Replaced the old demo-seed region (`"Europe"`, 7 countries) with a single
+`"Deutschland"` region: `eur` only, country `de` only, one `tp_system` tax
+region for `de` (the other 6 countries' tax regions dropped entirely, not
+left half-configured). Store `supported_currencies` is `eur` only (`usd`
+removed, and dropped from every variant/shipping price too — a currency
+the store doesn't support is dead data, not a hedge). Shipping-option copy
+is the exact German text specced: "Standard-Versand" (`type.label`
+"Standard", `type.description` "Versand in 2–3 Werktagen.") and
+"Express-Versand" ("Express" / "Lieferung innerhalb von 24 Std."), same
+€10 flat amount as before on both (no new pricing invented).
+**This is a deliberate, documented narrowing of `schema-design.md`'s
+DE/AT/CH region**, not an oversight — the user's own fresh feedback this
+session asked to "start with national availability first to keep things
+easy," which is narrower than the design doc and takes precedence per
+that instruction. Widening back to AT/CH later is a small, additive change
+(add `at`/`ch` to the region's `countries` array + two more
+`createTaxRegionsWorkflow` entries), not a redesign.
 
-**2. Realistic inventory levels**
-Current state: every seeded inventory item gets
-`stocked_quantity: 1_000_000` (`initial-data-seed.ts` ~line 707) —
-effectively infinite stock, another untouched demo-seed default. A real
-bike shop's actual inventory is mostly single-unit (each physical bike is
-one unit) or small multi-unit (accessories, tubes, etc.).
-Plan: reseed with realistic quantities (roughly 1–5 per variant, with a few
-intentionally at 0 to exercise the sold-out path for real), **now per the
-2-location model above** (an `InventoryLevel` row per variant × stock
-location, not one pooled number), then audit whether the storefront's
-stock-aware UI (PDP add-to-cart/option-select, PLP availability badges if
-any) already degrades correctly at low/zero stock or was only ever
-exercised against effectively-infinite stock and silently assumes
-abundance somewhere. Decide `allow_backorder` per product type (bikes: no
-backorder — a bike is a real physical unit; accessories: maybe allow it).
-This isn't just a seed-data placeholder to be replaced later — it's the
-exact mechanism `schema-design.md` already designed for real stock:
-native `InventoryLevel.stocked_quantity`/`reserved_quantity` per
-(variant × location), fed by a `tridata-stock-snapshot` custom module
-holding TriCon's raw `Lagerbestand`/`Reserviert`/`Bestellt`/
-`MengeVerfuegbar` fields per store — see `schema-design.md`'s "New custom
-modules" section and `tricon-integration-notes.md`'s stock-field mapping.
-That sync is still blocked on WSDL/credentials (Task 6) and on TriData's
-answer to the open "one interface for all branches vs. per-branch" question
-in `tricon-integration-notes.md` (decides whether `Filialname`-based
-per-store stock is even available from this TriBike install) — seed data
-stands in with realistic manual numbers per location until then, in the
-shape the real sync will eventually fill.
+**2. Two real stock locations, real fulfillment across both**
+Replaced the single Copenhagen "European Warehouse" with two real
+`stock_location` rows, addressed and phoned exactly as the storefront
+footer already shows them (nothing invented): **BikeOne Oldenburg**
+(Rheinstr. 16, 26135 Oldenburg, DE, 0441 984 894 83) and **BikeOne
+Osnabrück** (Lengericher Landstraße 30, 49078 Osnabrück, DE, 0541 440 952
+84). Both are linked to the default sales channel via
+`linkSalesChannelsToStockLocationWorkflow`, called once per location, per
+`schema-design.md`'s "2 fixed physical locations" decision (not a
+simplification to revisit later).
+`stock_location` has no native `email` field — that's exactly the gap
+`schema-design.md`'s not-yet-built `store-profile` module (`opening_hours`
++ `email`, linked to `stock_location`) is designed to fill. Building that
+real custom Medusa module (service, model, migration) was out of scope for
+this seed-data task, so each location's email
+(`OL@bike-one.de`/`OS@bike-one.de`) is stashed in the stock location's own
+`metadata` field for now, exactly as the task scoped it — `store-profile`
+itself is still a real, not-yet-started follow-up.
+**Fulfillment/shipping shape, researched against Medusa's own source**
+(`node_modules/@medusajs/*`, `docs.medusajs.com` was blocked — see §4):
+read `@medusajs/link-modules`'s `fulfillment-set-location.js` and
+`@medusajs/core-flows`'s `create-location-fulfillment-set.js`, which
+confirm a `FulfillmentSet` links to exactly one `stock_location`
+(`createLocationFulfillmentSetWorkflow`, the real admin-dashboard
+"add fulfillment set to a location" flow, adds one `FulfillmentSet` per
+location it's called on). The seed creates **one** shared `FulfillmentSet`
+("BikeOne Versand") with **one** service zone ("Deutschland", country
+`de`) and the two shipping options, structurally anchored to Oldenburg
+(Medusa requires *some* single location). This is safe, not a shortcut
+that silently drops Osnabrück's stock, because reading
+`@medusajs/core-flows`'s `cart/utils/prepare-confirm-inventory-input.js`
+(used by `completeCartWorkflow`) shows inventory reservation at checkout
+is aggregated across **every** stock location linked to the cart's sales
+channel — not tied to whichever location a shipping option nominally
+points at. Confirmed this behaviorally, not just by reading source:
+seeded `TREK-DOMANE-SL6-M-BLK` with `0` at Oldenburg and `1` at Osnabrück,
+added it to a cart, completed a real order through "Standard-Versand" (the
+Oldenburg-anchored option), and checked the inventory levels afterward —
+`reserved_quantity` incremented at **Osnabrück**, the location that
+actually had the stock, proving the order genuinely fulfilled from the
+non-anchor location. Both locations also get a `fulfillment_provider_id:
+"manual_manual"` link (not just the fulfillment-set-anchor location),
+since either could end up holding the reservation and needs a registered
+provider to carry a real `Fulfillment`.
+A per-location `FulfillmentSet` (4 shipping options: 2 types × 2 stores)
+was deliberately **not** built — it's the architecturally "purer" option
+but would show the customer two identically-named, functionally
+interchangeable "Standard-Versand" rows (the storefront's checkout
+component doesn't even use `insufficient_inventory` to disable a
+`shipping`-type option, only a `pickup`-type one — read
+`checkout/components/shipping/index.tsx` to confirm), which is confusing
+UX for zero behavioral benefit here. That real per-store structure is
+what Click & Collect (a separate, later, explicitly blocked task — see
+"Later milestones" below) will actually need, once it exists this
+shipping-only task's shape doesn't have to be re-architected, just
+extended with real `type: "pickup"` fulfillment sets.
+Verified via the Store API: `GET /store/shipping-options?cart_id=...`
+returns exactly 2 options (no duplication), each with the correct German
+`type.label`/`type.description` and `€10` price.
 
-**3. Color variants + color-aware preview images**
-Current state: every seeded product has exactly one option, "Frame Size"
-(S/M/L/XL) — there is no Color option anywhere. There are also no product
-photos at all yet: `bikeone-gallery/index.tsx` intentionally renders an
-honest "Produktfoto folgt" placeholder because there's no real photo source
-to pull images from without fabricating URLs (see that component's own
-comment).
-Plan: add "Color" as a second product option alongside Frame Size — needs a
-decision on whether every size×color combination becomes its own variant
-or colors are modeled more loosely for cases where not every size ships in
-every color (check each brand's actual color/size matrix once that's
-known). Build a color-swatch selector next to the existing size selector
-(`option-select.tsx` pattern), with `bikeone-gallery` reacting to the
-selected color's option value.
-Real blocker, not a technical one: color-based image switching needs real
-per-color photos to be honest, and none exist yet. Plan is to build the
-real selection mechanism now (swatches, selection state, gallery wiring)
-against the same single placeholder image for every color until real
-photos are supplied, then swap in real per-color images the moment they
-exist — never fabricate product photos to make the feature look finished
-before it is.
-`schema-design.md` already anticipated this exact addition — its
-`product_option`/`product_option_value` entry says explicitly: "Color, if
-it becomes a real requirement later, is the same kind of option as size,"
-i.e. a second native Medusa `product_option`, no custom module needed for
-the option itself. The color-to-image mapping is genuinely not resolved
-by the schema doc, though — that document doesn't cover product media at
-field level at all. Open technical question stands: Medusa v2 has no
-first-class "this image belongs to this variant/color" field on the core
-product model — needs a short spike to settle on an approach (e.g. image
-`metadata` tagged with the option value, or a naming/ordering convention)
-before implementation starts.
+**3. Realistic per-location inventory**
+Replaced `stocked_quantity: 1_000_000` with a real `InventoryLevel` row
+per (variant × location) via `createInventoryLevelsWorkflow`, called once
+with entries for both locations. Quantities are **placeholder realism, not
+real business numbers** — there is no TriCon/Tridata feed yet (still
+blocked on WSDL/credentials, Task 6) — generated deterministically from
+two interleaved repeating patterns (`OL_PATTERN`/`OS_PATTERN`, length 11)
+indexed by each inventory item's sorted SKU, so the seed is reproducible
+rather than using `Math.random()`: mostly small 1–5-unit quantities, a
+handful of variants that are `0` at exactly one location (exercises
+combined-across-locations availability, and the cross-location checkout
+case verified in §2), and one variant per 11 that's `0` at **both**
+locations (a genuinely sold-out combination). Confirmed via the Store API
+after seeding: e.g. Factor Ostro VAM "L / Schwarz" and "XL / Weiß", Trek
+Domane SL 6 "XL / Schwarz", and Specialized Stumpjumper "XL / Grün" all
+came out fully sold out (`inventory_quantity: 0`) this run — the exact
+list will differ if the seed data (product/variant count or order) changes
+later, since it's a function of sort position, not hardcoded per-SKU.
+`allow_backorder` was left at Medusa's default (`false`) — not
+independently revisited this task, since the deterministic zero-stock
+cases above already needed the sold-out path to be real, and "should
+accessories allow backorder" has no accessories seeded yet to apply it to.
+Audited the storefront's stock-aware UI as instructed
+(`product-actions/index.tsx`, `option-select.tsx`, `mobile-actions.tsx`):
+it already degrades correctly and needed **no fix**. `inventory_quantity`
+is fetched on both the PLP-adjacent and PDP product queries
+(`+variants.inventory_quantity` in `lib/data/products.ts`), and
+`ProductActions`' `inStock` memo already correctly checks
+`manage_inventory`/`allow_backorder`/`inventory_quantity > 0` per
+fully-selected variant. Confirmed live via Playwright, desktop and mobile
+viewports: a 0-stock combination (Factor Ostro VAM "L / Schwarz") renders
+the desktop CTA disabled with the text "Ausverkauft" and the mobile sticky
+bar's cart button disabled the same way, while switching to an in-stock
+combination ("S / Schwarz", qty 9) immediately re-enables both with the
+real price/"In den Warenkorb" label. This had simply never been exercised
+against real stock numbers before (everything was `1_000_000`), not
+actually broken.
+
+**4. Color variants ("Farbe") — researched, not invented**
+Added a second product option, **"Farbe"** (German — "Frame Size" stays
+English on purpose, a pre-existing inconsistency this task didn't touch),
+to all 4 seeded bikes, created inline per product
+(`options: [{ id: sizeOption.id }, { title: "Farbe", values: [...] }]`)
+rather than through the shared/reused `createProductOptionsWorkflow` path
+`sizeOption` uses — that shared path enforces a **globally unique option
+title**, confirmed the hard way (`Product option with title: Farbe,
+already exists` on the first seed attempt) once a second product tried to
+reuse it with different values.
+**Manufacturer verification: blocked, not skipped.** Attempted `WebFetch`
+against `trekbikes.com`, `cervelo.com`, `factorbikes.com`,
+`specialized.com` (and `docs.medusajs.com`, for the fulfillment research
+in §2) — every one came back `EGRESS_BLOCKED` from this session's network
+egress policy (`curl "$HTTPS_PROXY/__agentproxy/status"` confirms this is
+an organization-level policy denial, not a transient failure — per
+`/root/.ccr/README.md`, the correct response is to report the block, not
+route around it). A follow-up `WebSearch` (not a fetch of the
+manufacturer's own page) surfaced plausible-looking current colorway names
+for some models via third-party retailers, but results were inconsistent
+across retailers/model-years and none of it could be verified against the
+primary source. Per this project's standing no-fabrication rule, **every
+color for all 4 products is therefore a plain, generic, honest fallback
+name** — not manufacturer-verified for any of the four, and not presented
+as if it were:
+| Product | Farbe values (all generic fallback, none manufacturer-verified) |
+| --- | --- |
+| Trek Domane SL 6 | Schwarz, Blau, Weiß |
+| Cervélo Áspero-5 | Schwarz, Grau |
+| Factor Ostro VAM | Schwarz, Weiß, Blau |
+| Specialized Stumpjumper | Schwarz, Grau, Grün |
+
+Every size (S/M/L/XL) ships in every color, for all 4 products — a full
+cross-product, not a mechanically-trimmed one, but for an honest reason:
+with no real per-model size/color availability data to go on (the whole
+point of the block above), inventing *exclusions* would itself be a
+fabricated availability claim, so the full cross-product is the more
+honest choice here, not a shortcut. That's 12 variants each for Trek/
+Factor/Specialized and 8 for Cervélo (44 variants total, 88
+`InventoryLevel` rows).
+SKUs follow the existing `<PREFIX>-<SIZE>` convention, extended with a
+3-letter color suffix (`BLK`/`BLU`/`WHT`/`GRY`/`GRN`), e.g.
+`TREK-DOMANE-SL6-M-BLK`. Variant `title` is `"<size> / <color>"`, e.g.
+`"M / Schwarz"`.
+**Found, not fixed (flagged for whoever builds the swatch UI next):** the
+order Medusa returns `product.options` in is **not consistent** between
+products — Factor Ostro VAM renders "Frame Size" before "Farbe", but Trek
+Domane SL 6 renders "Farbe" before "Frame Size" (confirmed live via
+Playwright, `span.font-heading` text order on each PDP). Nothing in this
+task's scope required a fixed order, but a size-then-color swatch layout
+should not rely on `product.options` array order — sort/find by
+`option.title` in the render layer instead of mapping the array
+positionally.
+Per-color product photos remain out of scope, unchanged from the earlier
+planning note: `bikeone-gallery/index.tsx` still renders the honest
+"Produktfoto folgt" placeholder for every color, since no real per-color
+photos exist to switch between — building the color-aware image-switching
+mechanism itself is exactly the follow-up task this seed-data work sets up
+for (the option/value data it needs now exists and is real).
+
+**Cross-cutting fixes needed to make the above actually run:**
+`scripts/setup.sh` hardcoded `NEXT_PUBLIC_DEFAULT_REGION=dk` (a leftover
+from the old demo-seed region, which happened to include Denmark) — with
+the region now `de`-only, the storefront's country-code middleware
+couldn't resolve a default region without this. Fixed to `de`, plus the
+matching stale `/dk` mentions in `README.md` and `backend/README.md`.
+
+**Verification performed (per this task's own checklist):**
+Docker (`dockerd` started manually, `docker info` confirmed healthy) +
+`make up` + `make reset-db` (required — region/stock-location/inventory
+shape changed) ran clean end to end. `npx tsc --noEmit` clean in both
+`apps/backend` and `apps/storefront`; `npx eslint` clean on the rewritten
+seed file. Verified via the Store/Admin API and Playwright against the
+real running dev servers: `GET /store/regions` returns exactly one
+Germany/EUR region; `GET /admin/stock-locations` shows both real
+addresses; a product page shows both "Frame Size" and "Farbe" selectors
+with real per-combination price/stock; a 0-stock combination is genuinely
+blocked from add-to-cart (desktop and mobile); two full real orders were
+placed end-to-end (cart → address → "Standard-Versand" → "Testzahlung" →
+place order → real confirmation page with a real order number) — one an
+ordinary in-stock purchase, one specifically exercising the
+Oldenburg-anchored shipping option against Osnabrück-only stock to prove
+§2's cross-location claim. Dev-server processes (including the detached
+`@medusajs/cli/cli.js start --types` and `next-server` children, not just
+the top-level `medusa develop`/`next dev`) were killed after verification.
 
 ## Later milestones (not started)
 
