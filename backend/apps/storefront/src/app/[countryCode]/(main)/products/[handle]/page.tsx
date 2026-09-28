@@ -70,7 +70,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${product.title} | Bike One`,
+    title: `${product.title} | BikeOne`,
     description: product.description ?? product.title,
   }
 }

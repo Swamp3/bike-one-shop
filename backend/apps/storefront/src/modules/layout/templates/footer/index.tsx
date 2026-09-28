@@ -112,7 +112,9 @@ export default async function Footer() {
             </li>
             <li>
               <a
-                href="#"
+                href="https://bike-one.org/datenschutz/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
               >
                 Datenschutz
@@ -131,7 +133,7 @@ export default async function Footer() {
       </div>
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-bo-line px-4 py-4 text-[11.5px] text-bo-ink-faint md:px-6">
-        <span className="font-mono">© {new Date().getFullYear()} BIKE ONE</span>
+        <span className="font-mono">© {new Date().getFullYear()} BikeOne</span>
         <span>Oldenburg · Osnabrück</span>
       </div>
     </footer>

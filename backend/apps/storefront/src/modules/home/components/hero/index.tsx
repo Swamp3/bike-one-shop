@@ -1,13 +1,18 @@
+import Image from "next/image"
+
 const Hero = () => {
   return (
     <section className="relative">
-      <div
-        className="relative flex min-h-[400px] items-end overflow-hidden bg-[#121212] bg-cover bg-[center_65%] md:min-h-[520px]"
-        style={{
-          backgroundImage:
-            "linear-gradient(0deg, #121210 0%, rgba(18,16,14,.45) 45%, rgba(18,16,14,.1) 100%), url('/images/hero-autumn-ride.jpg')",
-        }}
-      >
+      <div className="relative flex min-h-[400px] items-end overflow-hidden bg-[#121212] md:min-h-[520px]">
+        <Image
+          src="/images/hero-autumn-ride.jpg"
+          alt="Radfahrerin auf einer Herbsttour mit einem Bike von BikeOne"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[center_65%]"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,#121210_0%,rgba(18,16,14,.45)_45%,rgba(18,16,14,.1)_100%)]" />
         <div className="relative z-[1] max-w-[640px] px-[18px] pb-[30px] pt-8 md:px-12 md:pb-14">
           <div className="font-mono text-[11px] font-semibold uppercase tracking-[.1em] text-bo-accent">
             Herbst-Saison 2026

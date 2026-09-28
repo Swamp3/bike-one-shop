@@ -8,6 +8,7 @@ import TransferRequestForm from "@modules/account/components/transfer-request-fo
 export const metadata: Metadata = {
   title: "Bestellungen",
   description: "Übersicht deiner Bestellungen.",
+  robots: { index: false, follow: false },
 }
 
 export default async function Orders() {

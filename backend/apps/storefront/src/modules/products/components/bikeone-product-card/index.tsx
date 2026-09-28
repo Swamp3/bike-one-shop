@@ -15,8 +15,10 @@ import Thumbnail from "@modules/products/components/thumbnail"
  */
 export default function BikeOneProductCard({
   product,
+  priority,
 }: {
   product: HttpTypes.StoreProduct
+  priority?: boolean
 }) {
   const { cheapestPrice } = getProductPrice({ product })
 
@@ -30,6 +32,8 @@ export default function BikeOneProductCard({
           thumbnail={product.thumbnail}
           images={product.images}
           size="full"
+          alt={product.title}
+          priority={priority}
           className="h-full rounded-none border-none p-0"
         />
       </div>

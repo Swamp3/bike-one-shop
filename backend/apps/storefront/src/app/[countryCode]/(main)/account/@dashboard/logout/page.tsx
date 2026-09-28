@@ -4,7 +4,8 @@ import LogoutPanel from "@modules/account/components/logout-panel"
 
 export const metadata: Metadata = {
   title: "Abmelden",
-  description: "Vom BIKE ONE Konto abmelden.",
+  description: "Vom BikeOne Konto abmelden.",
+  robots: { index: false, follow: false },
 }
 
 export default function LogoutPage() {

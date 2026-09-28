@@ -5,7 +5,7 @@ const SignInPrompt = () => {
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-bo-line bg-bo-surface p-4">
       <div>
         <p className="m-0 font-heading text-[15px] font-semibold">
-          Bereits Kunde bei BIKE ONE?
+          Bereits Kunde bei BikeOne?
         </p>
         <p className="m-0 text-[13px] text-bo-ink-muted">
           Melde dich an für gespeicherte Adressen und deine Bestellhistorie.

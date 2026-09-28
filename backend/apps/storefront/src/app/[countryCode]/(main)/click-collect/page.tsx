@@ -5,7 +5,7 @@ import StoreSelect from "@modules/click-collect/components/store-select"
 
 export const metadata: Metadata = {
   title: "Filiale wählen",
-  description: "Wähle deine bevorzugte BIKE ONE Filiale in Oldenburg oder Osnabrück.",
+  description: "Wähle deine bevorzugte BikeOne Filiale in Oldenburg oder Osnabrück.",
 }
 
 export default function ClickCollectPage() {
@@ -18,7 +18,7 @@ export default function ClickCollectPage() {
           Filiale wählen
         </h1>
         <p className="mt-1.5 max-w-[60ch] text-[13.5px] leading-relaxed text-bo-ink-muted">
-          Wähle deine bevorzugte BIKE-ONE-Filiale — für Beratung vor Ort, den
+          Wähle deine bevorzugte BikeOne-Filiale — für Beratung vor Ort, den
           Werkstatt-Kontakt und um sie im Header vorausgewählt zu haben.
         </p>
 

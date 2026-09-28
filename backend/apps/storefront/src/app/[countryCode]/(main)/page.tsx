@@ -6,7 +6,7 @@ import TrustStrip from "@modules/home/components/trust-strip"
 import { getRegion } from "@lib/data/regions"
 
 export const metadata: Metadata = {
-  title: "Bike One — Fahrräder & Beratung in Oldenburg und Osnabrück",
+  title: "BikeOne — Fahrräder & Beratung in Oldenburg und Osnabrück",
   description:
     "40+ Marken, persönliche Beratung und Click & Collect an zwei Standorten in Niedersachsen.",
 }

@@ -20,7 +20,7 @@ const Register = ({ setCurrentView }: Props) => {
         Konto erstellen
       </h1>
       <p className="mb-6 text-[13.5px] text-bo-ink-muted">
-        Erstelle ein BIKE-ONE-Konto für schnellere Bestellungen, eine
+        Erstelle ein BikeOne-Konto für schnellere Bestellungen, eine
         Bestellübersicht und ein gespeichertes Adressbuch.
       </p>
       {message?.state === "verification_required" && (
@@ -79,7 +79,12 @@ const Register = ({ setCurrentView }: Props) => {
         />
         <p className="text-[11.5px] leading-snug text-bo-ink-faint">
           Mit der Kontoerstellung akzeptierst du unsere{" "}
-          <a href="#" className="underline decoration-dashed underline-offset-[2px]">
+          <a
+            href="https://bike-one.org/datenschutz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-dashed underline-offset-[2px]"
+          >
             Datenschutzerklärung
           </a>{" "}
           und{" "}

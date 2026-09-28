@@ -8,7 +8,7 @@ import StoreTemplate from "@modules/store/templates"
 
 export const metadata: Metadata = {
   title: "Alle Produkte",
-  description: "Alle Bikes und Zubehör bei Bike One.",
+  description: "Alle Bikes und Zubehör bei BikeOne.",
 }
 
 type Props = {

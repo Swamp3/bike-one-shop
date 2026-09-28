@@ -93,8 +93,8 @@ export default async function PaginatedProducts({
         className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4"
         data-testid="products-list"
       >
-        {products.map((p) => (
-          <BikeOneProductCard key={p.id} product={p} />
+        {products.map((p, index) => (
+          <BikeOneProductCard key={p.id} product={p} priority={index === 0} />
         ))}
       </div>
       {totalPages > 1 && (

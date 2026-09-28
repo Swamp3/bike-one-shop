@@ -9,6 +9,7 @@ import { notFound } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "Kasse",
+  robots: { index: false, follow: false },
 }
 
 export default async function Checkout() {

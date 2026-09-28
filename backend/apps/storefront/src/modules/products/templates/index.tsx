@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import { notFound } from "next/navigation"
 
 import { HttpTypes } from "@medusajs/types"
+import { getBaseURL } from "@lib/util/env"
 import BikeOneGallery from "@modules/products/components/bikeone-gallery"
 import BikeOneSpecTable from "@modules/products/components/bikeone-spec-table"
 import ProductActions from "@modules/products/components/product-actions"
@@ -9,6 +10,7 @@ import RelatedProducts from "@modules/products/components/related-products"
 import PlpBreadcrumb from "@modules/store/components/plp-breadcrumb"
 
 import ProductActionsWrapper from "./product-actions-wrapper"
+import { buildProductJsonLd } from "./product-json-ld"
 
 type ProductTemplateProps = {
   product: HttpTypes.StoreProduct
@@ -25,8 +27,18 @@ const ProductTemplate = ({
     return notFound()
   }
 
+  const productUrl = `${getBaseURL()}/${countryCode}/products/${product.handle}`
+  const productJsonLd = buildProductJsonLd(product, productUrl)
+
   return (
     <div className="pb-10">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <PlpBreadcrumb
         items={[
           { label: "Start", href: "/" },

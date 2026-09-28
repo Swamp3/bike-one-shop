@@ -5,6 +5,7 @@ import PaymentMethodsPanel from "@modules/account/components/payment-methods-pan
 export const metadata: Metadata = {
   title: "Zahlungsmethoden",
   description: "Gespeicherte Zahlungsmethoden.",
+  robots: { index: false, follow: false },
 }
 
 export default function PaymentPage() {

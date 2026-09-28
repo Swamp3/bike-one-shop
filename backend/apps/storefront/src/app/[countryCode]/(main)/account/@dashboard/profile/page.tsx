@@ -9,6 +9,7 @@ import PersonalDataCard from "@modules/account/components/personal-data-card"
 export const metadata: Metadata = {
   title: "Meine Daten",
   description: "Persönliche Daten und Adressbuch.",
+  robots: { index: false, follow: false },
 }
 
 export default async function Profile(props: {
