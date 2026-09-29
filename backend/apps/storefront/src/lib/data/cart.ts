@@ -118,10 +118,18 @@ export async function addToCart({
   variantId,
   quantity,
   countryCode,
+  metadata,
 }: {
   variantId: string
   quantity: number
   countryCode: string
+  /**
+   * Per-line-item metadata, e.g. the shared `build_id`/`build_slot` a
+   * configured Wilier-Adlar-style add-to-cart stamps on its line items so
+   * the cart/checkout/order-history UI can group them (PLAN.md Task 13
+   * §2-3). Omitted for an ordinary, unconfigured add-to-cart.
+   */
+  metadata?: Record<string, unknown>
 }) {
   if (!variantId) {
     throw new Error("Missing variant ID when adding to cart")
@@ -143,6 +151,7 @@ export async function addToCart({
       {
         variant_id: variantId,
         quantity,
+        ...(metadata ? { metadata } : {}),
       },
       {},
       headers

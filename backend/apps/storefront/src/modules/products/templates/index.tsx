@@ -58,7 +58,7 @@ const ProductTemplate = ({
 
       <ProductOptionsProvider product={product}>
         <div className="mt-4 grid grid-cols-1 gap-6 px-4 md:grid-cols-2 md:gap-12 md:px-6">
-          <BikeOneGallery title={product.title} />
+          <BikeOneGallery product={product} />
 
           <div className="flex flex-col gap-3.5">
             {product.collection?.title && (

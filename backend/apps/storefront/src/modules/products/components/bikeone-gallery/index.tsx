@@ -1,21 +1,79 @@
 "use client"
 
+import { HttpTypes } from "@medusajs/types"
+import Image from "next/image"
 import { useProductOptionsContext } from "@modules/products/components/product-options-context"
 
+type BikeOneGalleryProps = {
+  product: HttpTypes.StoreProduct
+}
+
 /**
- * Single placeholder image — products have no real photos yet (no source to
- * pull them from without fabricating URLs). Matches wireframe's gallery-main
- * treatment, minus the thumbnail row, since there's nothing to switch
- * between with one placeholder.
+ * Real per-option-value gallery photos, when the seed data has one tagged
+ * for the shopper's *current* selection — plus the honest "Produktfoto
+ * folgt" placeholder for every product/option-value that has none (which,
+ * as of this task, is every product except Wilier Adlar's Farbe values).
  *
- * It does read the shopper's selected color (via `ProductOptionsProvider`,
- * shared with `ProductActions`) and reflects it in the caption — there is
- * still no real photo to swap, but the color selection's effect on the
- * gallery is real rather than a no-op.
+ * The match is generic: any image whose `image.metadata.option_title` /
+ * `option_value` equals the currently selected value for that option
+ * (read via `getOptionValueByTitle`, shared with `ProductActions` through
+ * `ProductOptionsProvider`) is shown. Nothing here is hardcoded to
+ * "Farbe" or to this product — a future real Schaltung (or any other
+ * option) photo tagged the same way works with no code change, per
+ * PLAN.md Task 13's "gap surfaced by the real assets" note.
  */
-const BikeOneGallery = ({ title }: { title: string }) => {
+const BikeOneGallery = ({ product }: BikeOneGalleryProps) => {
   const { getOptionValueByTitle } = useProductOptionsContext()
+
+  const matchedImages = (product.images ?? []).filter((image) => {
+    const optionTitle = image.metadata?.option_title
+    const optionValue = image.metadata?.option_value
+    if (typeof optionTitle !== "string" || typeof optionValue !== "string") {
+      return false
+    }
+    return getOptionValueByTitle(optionTitle) === optionValue
+  })
+
   const selectedColor = getOptionValueByTitle("Farbe")
+
+  if (matchedImages.length > 0) {
+    const mainImage = matchedImages[0]
+
+    return (
+      <div className="md:sticky md:top-[140px]">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-bo-line bg-bo-surface-2">
+          <Image
+            src={mainImage.url}
+            alt={
+              selectedColor ? `${product.title} — ${selectedColor}` : product.title
+            }
+            fill
+            className="object-contain"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            priority
+          />
+        </div>
+        {matchedImages.length > 1 && (
+          <div className="mt-2.5 flex gap-2">
+            {matchedImages.map((image) => (
+              <div
+                key={image.id}
+                className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-bo-line"
+              >
+                <Image
+                  src={image.url}
+                  alt={product.title}
+                  fill
+                  className="object-cover"
+                  sizes="64px"
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <div className="md:sticky md:top-[140px]">
@@ -36,7 +94,7 @@ const BikeOneGallery = ({ title }: { title: string }) => {
             ? `Produktfoto folgt — Farbe: ${selectedColor}`
             : "Produktfoto folgt"}
           <br />
-          {title}
+          {product.title}
         </div>
       </div>
     </div>

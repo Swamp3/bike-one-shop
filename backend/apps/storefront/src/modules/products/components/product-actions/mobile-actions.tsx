@@ -23,6 +23,12 @@ type MobileActionsProps = {
   isAdding?: boolean
   show: boolean
   optionsDisabled: boolean
+  /**
+   * The variant price plus any live-computed configurable-slot delta
+   * (PLAN.md Task 13 §2), formatted. Falls back to the plain variant price
+   * when not provided, e.g. for a product with no slots.
+   */
+  priceOverride?: string
 }
 
 const MobileActions: React.FC<MobileActionsProps> = ({
@@ -35,6 +41,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
   isAdding,
   show,
   optionsDisabled,
+  priceOverride,
 }) => {
   const { state, open, close } = useToggleState()
 
@@ -80,9 +87,9 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                 {product.title}
               </span>
               <span>—</span>
-              {selectedPrice && (
+              {(priceOverride || selectedPrice) && (
                 <span className="font-bold tabular-nums">
-                  {selectedPrice.calculated_price}
+                  {priceOverride || selectedPrice?.calculated_price}
                 </span>
               )}
             </div>
