@@ -13,16 +13,20 @@ landed.
 - **Bike configurator (swap groupset/wheelset/tires).** Full design in
   `PLAN.md` Task 13. Not a new idea — already scoped in
   `planning/2-Product_Requirements/questions.de.md` as "the phase right
-  after v1," which this now is. Proposed approach: base bike stays as-is
-  (Task 12's Frame Size + Farbe), each upgradeable part (Schaltung,
-  Laufradsatz, Reifen/tubeless) becomes a real, separately-priced/stocked
-  product offered as a swap-in option on specific bikes — deliberately
-  *not* more `product_option`s, which would explode into hundreds of
-  variants per bike. Needs real business input before any code starts:
-  which components to actually offer, on which bikes, whether Tridata
-  already tracks them as sellable articles, and the pricing model
-  (component price alone, or + an assembly fee). See PLAN.md Task 13's
-  "Open questions" for the full list — none of these are guessable.
+  after v1," which this now is. MVP decided: a new **Wilier Adlar**,
+  Schaltung (Shimano GRX/SRAM Rival) and Farbe (Bottle Green/Black-Gray)
+  as ordinary manufacturer-variant options, Laufradsatz (Miche → Zipp 303
+  XPLR) as the one real dealer-added component swap, via a new
+  `bike-configuration` module — deliberately *not* more `product_option`s
+  for the wheelset, which would explode combinatorially. No assembly fee
+  yet (modeled at €0, ready to turn on later); downgrades reduce the
+  total (computed price difference, not a stored delta).
+  **Blocked on the user's own compositing prototype** for the visual
+  preview (component images composited onto the base bike photo per
+  color) — decided approach, but not yet shared, so that specific piece
+  can't start. The rest (data model, selection UI, pricing, cart
+  grouping) isn't blocked by it. Also still needs: real component prices
+  from BikeOne, and the base bike photos themselves (2, one per color).
 
 ## Blocked on someone outside this project
 

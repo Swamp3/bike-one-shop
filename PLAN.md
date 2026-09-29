@@ -1075,37 +1075,32 @@ verified by this plan — real mechanic/staff sign-off before this goes live
 is still assumed, same as any other real-world product fact this project
 won't fabricate on its own.
 
-**New requirement, not yet resolved — visual preview must update with the
-selected configuration ("den Look vom neuen Bike zeigen"):** this is a
-real, unresolved design question, not just an implementation detail,
-because there are still **no real product photos at all** (Task 12 §4,
-unchanged) — a per-color photo pair (Bottle Green / Black-Gray) does not
-yet exist, and a photorealistic image of, specifically, "this Adlar in
-Black/Gray with Rival and Zipp 303 XPLR wheels" is a fourth thing that
-would need to exist as its own asset (or be rendered) for every
-combination, not just derived from the parts. Three honest ways to build
-this, with real cost/asset trade-offs, not yet chosen — **flagging this
-back to the user rather than picking one unilaterally**, since it changes
-both scope and what photography/assets are needed before this can ship:
-1. **Per-color full-bike photos + a real photo of whichever component was
-   swapped, shown alongside** (e.g. the Zipp 303 XPLR's own product shot)
-   rather than one composited "bike as built" image. Buildable with
-   ordinary product photography (2 bike photos + 1-2 component photos),
-   no rendering/compositing pipeline needed — the gallery shows "your
-   bike" (by color) and "your selected upgrade" (by component) as
-   separate, both real, honest images.
-2. **A real or rendered photo per actual combination** (2 colors × 2
-   groupsets × 2 wheelsets = 8 combinations for this MVP alone) — the
-   most literal reading of "show the look of the new bike," but needs
-   either shooting every combination that may not physically exist yet as
-   a built bike, or investing in 3D product rendering/configurator
-   tooling — a much larger, separate technical project, and one this plan
-   hasn't scoped.
-3. **Ship the configurator's selection/pricing logic first, keep today's
-   caption-only placeholder** ("Produktfoto folgt — Farbe: …", Task 12
-   §4) until real photography exists, same honesty treatment as every
-   other missing-photo case in this project — visual preview lands in a
-   later pass once assets exist.
+**Visual preview — decided (2026-09-29):** the preview updates with the
+selected configuration by **compositing real, precisely-aligned component
+images onto the matching base-color bike photo** — not two photos shown
+side by side (the plan's original framing of option 1), and not a
+separate rendered/shot image per full combination (option 2). The user
+confirmed this directly and said they **already have a prototype for
+this compositing approach**, which they'll bring in later for this to be
+built against — so the exact compositing mechanism (asset format,
+alignment/anchor points, how a swapped component's image is positioned
+over the base photo) is **not designed here**; it follows the user's
+prototype once shared, rather than this plan inventing its own approach
+that would likely conflict with it. What this section can still say:
+- Needs, at minimum, one base photo per color (2 for this MVP: Bottle
+  Green, Black/Gray) plus one precisely-prepared overlay image per
+  swappable component (the Zipp 303 XPLR wheelset, this MVP's only real
+  `ComponentOption`) — all still real photography/assets, still nothing
+  fabricated, just composited rather than shown separately or shot as
+  one finished scene per combination.
+- The default component (Miche) needs no overlay — it's already in the
+  base photo, matching how `is_default` already works in §2's pricing
+  model.
+- This is realistically **blocked on the user's prototype** before
+  implementation of the compositing piece specifically can start — the
+  rest of the configurator (data model, selection UI, pricing,
+  cart/checkout grouping) does not depend on it and can proceed once
+  the other inputs below (component prices, real photos) are available.
 
 ## Later milestones (not started)
 
