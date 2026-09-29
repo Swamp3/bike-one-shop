@@ -4,8 +4,25 @@ Short, prioritized list of what's still open. This is the readable
 punch-list; `PLAN.md` has the full technical record (what was built, how,
 and why) behind every line here — this file just points at it.
 
-Status as of 2026-09-28, after Task 12 (national availability, real
-inventory, color variants) landed.
+Status as of 2026-09-29, after Task 12 (national availability, real
+inventory, color variants) and Task 13's planning (bike configurator)
+landed.
+
+## Next big feature — planned, not started
+
+- **Bike configurator (swap groupset/wheelset/tires).** Full design in
+  `PLAN.md` Task 13. Not a new idea — already scoped in
+  `planning/2-Product_Requirements/questions.de.md` as "the phase right
+  after v1," which this now is. Proposed approach: base bike stays as-is
+  (Task 12's Frame Size + Farbe), each upgradeable part (Schaltung,
+  Laufradsatz, Reifen/tubeless) becomes a real, separately-priced/stocked
+  product offered as a swap-in option on specific bikes — deliberately
+  *not* more `product_option`s, which would explode into hundreds of
+  variants per bike. Needs real business input before any code starts:
+  which components to actually offer, on which bikes, whether Tridata
+  already tracks them as sellable articles, and the pricing model
+  (component price alone, or + an assembly fee). See PLAN.md Task 13's
+  "Open questions" for the full list — none of these are guessable.
 
 ## Blocked on someone outside this project
 

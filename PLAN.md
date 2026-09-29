@@ -862,6 +862,162 @@ Oldenburg-anchored shipping option against Osnabrück-only stock to prove
 `@medusajs/cli/cli.js start --types` and `next-server` children, not just
 the top-level `medusa develop`/`next dev`) were killed after verification.
 
+### Task 13 — Bike configurator: swap groupset/wheelset/tires (component upgrades)
+Status: **planning only** — user request 2026-09-29, no implementation yet.
+This is not a new idea: `planning/2-Product_Requirements/questions.de.md`
+line 88-89 already asked "Bike-Konfigurator (Rahmen-/Komponenten-
+Customization) — v1 oder spätere Phase?" and answered "**Spätere Phase,
+zeitnah nach v1**" (later phase, soon after v1) — v1 (the custom storefront
+rebuild, Tasks 7-12) is now done, so this is that phase. It's also the
+concrete expression of **positioning Option 3** from
+`planning/1-Market_Competitor_Research/market_analysis-deep.md`
+("Boutique für Performance-Upgrades & Customization" — modeled on
+edelrad.de's real "Custom Builds" business, where individualized
+frameset+component builds escape direct price-comparison and protect
+margin, deliberately not the Canyon/Rose D2C-volume model or the
+Bike-Discount/Fahrrad-XXL budget model). The wireframe's own PDP spec
+table (`wireframes/produkt-trek-checkpoint-sl6-axs.html`) already lists
+exactly the parts requested — Schaltung, Bremsen, Laufräder, Reifen — as
+static facts today; this feature turns the configurable ones into real
+choices.
+**Not covered by `planning/5-Database_Schema/schema-design.md`** — that
+doc explicitly lists "Bike-fitting appointment booking" etc. under "Out of
+scope for v1" but never designed a configurator at all (it wasn't in
+scope yet when written). This section extends that doc's own conventions
+(native/extended/custom entity tagging, module-links not raw FKs,
+Tridata-vs-shop-owned field tagging) rather than inventing a new
+methodology — but it's new design, not a correction of something already
+decided, unlike Task 12.
+
+**Scope clarification: color is not part of this task.** "Farbe" (Task 12)
+is already a real, working Medusa product option — it generates real
+variants with their own price/stock, exactly like Frame Size. It stays
+that way. This task is specifically about the *other* parts the user
+named — Schaltung (shifting/groupset), Laufradsatz/Laufräder (wheelset),
+Reifen/Schläuche/tubeless (tires/tubes) — because they need a genuinely
+different mechanism, explained next.
+
+**Why this can't just be more `product_option`s (the variant-explosion
+trap).** Frame Size × Farbe already gave the 4 seeded bikes 8-12 variants
+each (Task 12 §4). Adding Schaltung (e.g. 3 choices) × Laufradsatz (e.g. 3
+choices) × Reifen (e.g. 2 choices) as more `product_option`s would
+multiply that by 3×3×2=18 per existing combination — Trek alone would hit
+~200 variants, each needing its own price and stock row, for combinations
+that mostly won't be real inventory (a custom build is assembled to order
+from component stock, not pre-built and shelved in every combination).
+This also doesn't match how the actual business/competitor model works
+(see edelrad.de note above): a customer picks a base bike, then upgrades
+individual components with individual price deltas — not "a different
+finished bike SKU per combination."
+
+**Proposed architecture — base bike + real component upgrades, not a new
+bundling engine:**
+
+1. **Base bike stays exactly as Task 12 built it** — a real `Product`/
+   `ProductVariant` via Frame Size + Farbe, real price/stock/SKU,
+   unchanged.
+2. **New custom module `bike-configuration`**, module-linked (not raw
+   FKs, per `schema-design.md`'s own pattern):
+   - `ConfigurableSlot` (linked to `product`) — declares which component
+     *categories* a specific base bike can be configured on (e.g. Trek
+     Domane SL 6 → slots "Schaltung", "Laufradsatz", "Reifen"). Not every
+     bike gets every slot, and most bikes may get none at first (see MVP
+     scope below) — this is deliberately opt-in per product, not a
+     blanket feature.
+   - `ComponentOption` (linked to a `ConfigurableSlot` **and** to a real
+     `product`/`product_variant`) — each selectable upgrade points at an
+     already-real, already-sellable product (e.g. a "SRAM Force AXS
+     Upgrade-Kit" is itself a normal catalog product with its own real
+     price, and — once Task 6's TriCon sync exists — its own real stock).
+     The `ComponentOption` row itself carries no price/stock of its own;
+     it's a join row (this component is offered as an upgrade, on this
+     bike, in this slot), so price/stock is never duplicated or allowed
+     to drift from the one real source. One `ComponentOption` per slot is
+     `is_default: true` — the "included as standard" choice, €0 delta,
+     replacing today's static spec-table fact with the pre-selected
+     default of a real choice.
+   - Routing every component through a real product (rather than a
+     lighter "attribute + price delta" row with no product behind it)
+     means Task 6's existing TriCon sync machinery
+     (`tridata-stock-snapshot`, `TridataProductMap`) applies to components
+     for free later — no second, parallel sync surface to build.
+3. **Cart representation: ordinary line items with a shared build id, not
+   a new composite-line-item/bundling engine.** Medusa has no native
+   "line item with sub-line-items" concept, and building one is a large,
+   risky lift for this task. Instead: a configured bike becomes N ordinary
+   real cart line items — the base variant, plus one line item per
+   selected *non-default* `ComponentOption`'s variant — all carrying a
+   shared `metadata.build_id` (client-generated UUID) and
+   `metadata.build_slot`. This is a well-established low-risk pattern (the
+   same way "kit"/"bundle" products are commonly done without a dedicated
+   bundle engine elsewhere) — cart/checkout/order-history UI groups
+   line items sharing a `build_id` under one visual card ("Dein
+   Custom-Build: Trek Domane SL 6"); the price total is just the ordinary
+   line-item sum, no new pricing engine needed.
+4. **Real tie-in to a feature that's already planned, not invented here:**
+   `questions.de.md` line 74-75 separately answered that in-store
+   "Ready to Ride" pre-assembly before shipping/pickup "**sollte das erste
+   nachgelagerte Feature sein**" (should be the *first* post-launch
+   feature) — i.e. the business already prioritized build-to-order
+   pre-assembly as the top post-v1 feature, independent of this request.
+   An order containing `build_id`-tagged line items is exactly the signal
+   that workflow needs. This task does not build the staff-facing
+   assembly/pick-list workflow itself (a separate future task) — it just
+   makes sure the configurator's own data shape (the shared `build_id`)
+   is what that workflow keys off, instead of needing its own separate
+   marker invented later.
+5. **Compatibility rules — deliberately manual for v1, not an automated
+   engine.** Real compatibility (axle standard, brake mount, derailleur
+   hanger spec, tire/frame clearance) is a genuinely hard rules problem.
+   For v1: staff hand-picks a small, fixed set of `ComponentOption`s per
+   slot per bike (e.g. "these 3 wheelsets are the ones we offer as
+   upgrades on the Domane SL 6," decided by a human who knows it fits —
+   not a generic parts catalog cross-checked automatically against
+   frame specs). This sidesteps building a real compatibility engine now,
+   at the cost of needing manual curation each time a new bike or
+   component is added. An automated rules engine is explicitly a later
+   stretch goal, not v1 scope, and shouldn't be started until manual
+   curation actually fails to scale.
+
+**Proposed phased rollout:**
+- **Phase A (MVP)** — 1-2 flagship bikes, 2-3 configurable slots each
+  (suggest Schaltung, Laufradsatz, Reifen/tubeless — matches what the user
+  asked for and what the wireframe's spec table already shows), 2-3 real
+  component options per slot including one included default, manually
+  curated, cart grouping via `build_id`, a PDP configuration section with
+  a live running price total, honest "not every bike is configurable yet"
+  treatment elsewhere (same honesty discipline as every other feature in
+  this project — no fake "customize" button on a bike that isn't wired
+  up).
+- **Phase B** — extend to more bikes/slots once the pattern is proven,
+  and once Task 6's TriCon sync is real so component stock stops being
+  manually maintained placeholder data (same caveat Task 12 §3 already
+  carries for bike stock).
+  - **Phase C** — wire into the real in-store pre-assembly fulfillment
+  workflow (§4 above) and Click & Collect (a staff-facing build/pick
+  list) — both already-tracked, separate future tasks this task's data
+  shape is designed not to block.
+- **Phase D (stretch, not scoped here)** — an automated compatibility
+  rules engine, only if manual curation (§5) stops scaling.
+
+**Open questions — need real business input, not guessable:**
+1. Which specific components should actually be offered as upgrades, and
+   on which bikes, for the MVP? This needs a real decision from BikeOne
+   (or Sport Import's catalog), not an invented list — same
+   no-fabrication discipline as Task 12's colors.
+2. Does Tridata already carry these components as distinct sellable
+   articles today, or would some need to be newly set up in Tridata
+   itself before they can be synced? Determines whether component stock
+   can ever be fully TriCon-real or has to stay manually maintained
+   indefinitely.
+3. Pricing model: is an upgrade's price simply the component's own retail
+   price, or does BikeOne want a separate assembly/labor fee on top for a
+   custom build? Not designable without a real answer.
+4. Is there ever a scenario where a *downgrade* (choosing a cheaper
+   component than the default) should credit the difference, or do
+   upgrades only ever add cost? Affects whether `ComponentOption` needs a
+   negative-delta case designed in from the start.
+
 ## Later milestones (not started)
 
 - Fix the Task 3 Next.js production-build issue (`/404` `/500`
