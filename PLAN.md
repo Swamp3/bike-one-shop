@@ -913,34 +913,62 @@ finished bike SKU per combination."
 **Proposed architecture — base bike + real component upgrades, not a new
 bundling engine:**
 
+0. **Key refinement, from the concrete MVP example below: not everything
+   named is the same kind of "part."** A manufacturer-defined variation —
+   the bike ships from the factory in either configuration, it's a real
+   finished-bike SKU either way (e.g. this MVP's Schaltung and Farbe
+   choices, see below) — is not architecturally different from Frame
+   Size/Farbe today: it's an ordinary Medusa `product_option`, a bounded
+   real variant matrix, no explosion risk. The new `bike-configuration`
+   module below is for the *other* kind: a **dealer-added swap** to a
+   part that isn't itself a manufacturer-offered finished-bike SKU (this
+   MVP's wheelset swap). Telling these apart per part, per bike, is a
+   real judgment call each time this feature extends to a new bike — not
+   automatic from the part's name alone.
 1. **Base bike stays exactly as Task 12 built it** — a real `Product`/
-   `ProductVariant` via Frame Size + Farbe, real price/stock/SKU,
-   unchanged.
+   `ProductVariant`, real price/stock/SKU, now carrying whichever option
+   axes are genuinely manufacturer-defined for that bike (Frame Size +
+   Farbe today; this MVP adds Schaltung as a third manufacturer-defined
+   axis on the Wilier Adlar specifically — see below).
 2. **New custom module `bike-configuration`**, module-linked (not raw
-   FKs, per `schema-design.md`'s own pattern):
+   FKs, per `schema-design.md`'s own pattern), used only for genuine
+   dealer-added component swaps:
    - `ConfigurableSlot` (linked to `product`) — declares which component
-     *categories* a specific base bike can be configured on (e.g. Trek
-     Domane SL 6 → slots "Schaltung", "Laufradsatz", "Reifen"). Not every
-     bike gets every slot, and most bikes may get none at first (see MVP
-     scope below) — this is deliberately opt-in per product, not a
-     blanket feature.
+     *categories* a specific base bike can be configured on (e.g. Wilier
+     Adlar → slot "Laufradsatz" only, in this MVP — see below). Not every
+     bike gets every slot, and most bikes may get none at first — this is
+     deliberately opt-in per product, not a blanket feature.
    - `ComponentOption` (linked to a `ConfigurableSlot` **and** to a real
      `product`/`product_variant`) — each selectable upgrade points at an
-     already-real, already-sellable product (e.g. a "SRAM Force AXS
-     Upgrade-Kit" is itself a normal catalog product with its own real
-     price, and — once Task 6's TriCon sync exists — its own real stock).
-     The `ComponentOption` row itself carries no price/stock of its own;
-     it's a join row (this component is offered as an upgrade, on this
-     bike, in this slot), so price/stock is never duplicated or allowed
-     to drift from the one real source. One `ComponentOption` per slot is
-     `is_default: true` — the "included as standard" choice, €0 delta,
-     replacing today's static spec-table fact with the pre-selected
-     default of a real choice.
+     already-real, already-sellable product (e.g. the Zipp 303 XPLR
+     wheelset, this MVP, is itself a normal catalog product with its own
+     real price, and — once Task 6's TriCon sync exists — its own real
+     stock). The `ComponentOption` row itself carries **no stored price
+     delta** — the price difference is *computed* at cart/checkout time as
+     `(selected component's real price) − (that slot's default
+     component's real price)`, never a separately maintained number. This
+     is what makes a downgrade "just work": if the selected component is
+     cheaper than the slot's default, the computed difference is
+     negative and the total goes down — exactly the behavior decided
+     below — with no special-cased "credit" logic and no risk of a stored
+     delta drifting out of sync with either component's real price after
+     a TriCon price update. One `ComponentOption` per slot is
+     `is_default: true` (Miche, this MVP) — the included choice, €0
+     difference against itself by definition.
    - Routing every component through a real product (rather than a
      lighter "attribute + price delta" row with no product behind it)
      means Task 6's existing TriCon sync machinery
      (`tridata-stock-snapshot`, `TridataProductMap`) applies to components
-     for free later — no second, parallel sync surface to build.
+     for free later — no second, parallel sync surface to build. The user
+     confirmed these specific components should already exist as known
+     articles in Tridata (see MVP decisions below), so this isn't even a
+     hypothetical future benefit for this MVP — it's the intended real
+     path once WSDL/credentials land (Task 6).
+   - **`assembly_fee`**: a field on the build itself (store-level config
+     to start, not per-component), defaulting to **€0** per the decision
+     below — present in the model from day one so a real fee can be
+     turned on later without a schema change, not bolted on after the
+     fact.
 3. **Cart representation: ordinary line items with a shared build id, not
    a new composite-line-item/bundling engine.** Medusa has no native
    "line item with sub-line-items" concept, and building one is a large,
@@ -967,56 +995,117 @@ bundling engine:**
    is what that workflow keys off, instead of needing its own separate
    marker invented later.
 5. **Compatibility rules — deliberately manual for v1, not an automated
-   engine.** Real compatibility (axle standard, brake mount, derailleur
-   hanger spec, tire/frame clearance) is a genuinely hard rules problem.
-   For v1: staff hand-picks a small, fixed set of `ComponentOption`s per
-   slot per bike (e.g. "these 3 wheelsets are the ones we offer as
-   upgrades on the Domane SL 6," decided by a human who knows it fits —
-   not a generic parts catalog cross-checked automatically against
-   frame specs). This sidesteps building a real compatibility engine now,
-   at the cost of needing manual curation each time a new bike or
-   component is added. An automated rules engine is explicitly a later
-   stretch goal, not v1 scope, and shouldn't be started until manual
-   curation actually fails to scale.
+   engine.** The user's own framing confirms this is the right call, not
+   just a shortcut: "Ein kompletter custom build hat viele
+   Abhängigkeiten, z.B. muss das Tretlager passend zum Rahmen sein, eine
+   Schaltgruppe kompatibel oder der Lenker kompatibel sein" (bottom
+   bracket ↔ frame, groupset compatibility, handlebar compatibility —
+   real, hard constraints, not hypothetical). For v1: staff hand-picks a
+   small, fixed set of `ComponentOption`s per slot per bike (e.g. this
+   MVP's Zipp 303 XPLR as the one wheelset upgrade offered on the Adlar,
+   decided by someone who knows it actually fits this frame) — not a
+   generic parts catalog cross-checked automatically against frame specs.
+   **Compatibility itself is asserted by the person curating each
+   `ComponentOption`, never verified or claimed by this plan** — this
+   document has no way to confirm a Zipp 303 XPLR is mechanically
+   compatible with a Wilier Adlar (axle standard, brake mount, tire
+   clearance), that's real domain knowledge belonging to BikeOne/its
+   mechanics, and needs real sign-off before this goes live, same as any
+   other real-world product fact this project won't fabricate. An
+   automated rules engine is explicitly a later stretch goal, not v1
+   scope, and shouldn't be started until manual curation actually fails
+   to scale.
 
-**Proposed phased rollout:**
-- **Phase A (MVP)** — 1-2 flagship bikes, 2-3 configurable slots each
-  (suggest Schaltung, Laufradsatz, Reifen/tubeless — matches what the user
-  asked for and what the wireframe's spec table already shows), 2-3 real
-  component options per slot including one included default, manually
-  curated, cart grouping via `build_id`, a PDP configuration section with
-  a live running price total, honest "not every bike is configurable yet"
-  treatment elsewhere (same honesty discipline as every other feature in
-  this project — no fake "customize" button on a bike that isn't wired
-  up).
-- **Phase B** — extend to more bikes/slots once the pattern is proven,
-  and once Task 6's TriCon sync is real so component stock stops being
-  manually maintained placeholder data (same caveat Task 12 §3 already
-  carries for bike stock).
-  - **Phase C** — wire into the real in-store pre-assembly fulfillment
-  workflow (§4 above) and Click & Collect (a staff-facing build/pick
-  list) — both already-tracked, separate future tasks this task's data
-  shape is designed not to block.
-- **Phase D (stretch, not scoped here)** — an automated compatibility
-  rules engine, only if manual curation (§5) stops scaling.
+**MVP decided (2026-09-29), replacing the earlier open questions — real
+answers from the user, not guessed:**
 
-**Open questions — need real business input, not guessable:**
-1. Which specific components should actually be offered as upgrades, and
-   on which bikes, for the MVP? This needs a real decision from BikeOne
-   (or Sport Import's catalog), not an invented list — same
-   no-fabrication discipline as Task 12's colors.
-2. Does Tridata already carry these components as distinct sellable
-   articles today, or would some need to be newly set up in Tridata
-   itself before they can be synced? Determines whether component stock
-   can ever be fully TriCon-real or has to stay manually maintained
-   indefinitely.
-3. Pricing model: is an upgrade's price simply the component's own retail
-   price, or does BikeOne want a separate assembly/labor fee on top for a
-   custom build? Not designable without a real answer.
-4. Is there ever a scenario where a *downgrade* (choosing a cheaper
-   component than the default) should credit the difference, or do
-   upgrades only ever add cost? Affects whether `ComponentOption` needs a
-   negative-delta case designed in from the start.
+**Bike: Wilier Adlar.** A new addition to the catalog (not one of Task
+12's 4 seeded bikes) — a real gravel bike from Wilier Triestina, per the
+user directly (this project's standing product-fact source when a
+manufacturer site can't be reached from this sandbox — see Task 12 §4's
+`EGRESS_BLOCKED` finding, still true here).
+
+**Configuration, and which mechanism each part uses:**
+- **Schaltung (manufacturer-offered → ordinary `product_option`, like
+  Farbe):** Shimano GRX (base/default) ↔ SRAM Rival (upgrade). The user
+  confirmed Wilier itself sells the Adlar in either groupset — a real,
+  bounded, finished-bike SKU choice, not a dealer add-on. Becomes a third
+  `product_option` axis on this product alongside Frame Size and Farbe
+  (§0 above).
+- **Farbe (manufacturer-offered → ordinary `product_option`):** "Bottle
+  Green" and a more understated "Black/Gray" — real Wilier-offered
+  colorways for this specific model, confirmed directly by the user. This
+  resolves Task 12 §4's generic-fallback caveat *for this bike only* — the
+  other 4 products' colors are still unverified generic fallbacks, that
+  finding stands for them.
+- **Laufradsatz (dealer-added swap → the new `bike-configuration`
+  module):** standard Miche wheelset (default) ↔ Zipp 303 XPLR (upgrade).
+  The user was explicit this one is *not* a Wilier-offered configuration
+  — "Bis auf die Felgen sind dies auch Konfigurationen, die in diesem
+  Fall vom Hersteller angeboten werden" (except the wheels, these are
+  configurations the manufacturer itself offers) — confirming §0's
+  distinction is the right one: this is the MVP's only genuine
+  `ConfigurableSlot`/`ComponentOption` case, everything else on this bike
+  is a manufacturer variant axis.
+- **Reifen/tubeless:** not part of this MVP's decided scope (the user's
+  answer covered Schaltung, Laufradsatz, and Farbe only) — stays a
+  possible Phase B slot, not designed further here.
+
+**Tridata:** user confirmed these components ("die Teile") should already
+be known articles in Tridata — no new dealer-side Tridata setup expected,
+they should map via `TridataProductMap` like any other catalog item once
+Task 6's sync exists. Until then, same placeholder-SKU discipline as
+Task 12 (a real SKU string, no real stock/price synced yet).
+
+**Assembly fee:** none for now — **€0**, but modeled as a real field
+(§2 above) from the start specifically so BikeOne can turn on a real fee
+for custom builds later without a schema change.
+
+**Downgrades:** confirmed to reduce the total price. Handled by the
+computed-difference pricing in §2 above (no stored delta, no special-cased
+credit logic) — a cheaper wheelset than the Miche default simply produces
+a negative difference.
+
+**Compatibility:** real and acknowledged (§5 above) — bottom
+bracket/frame, groupset, and handlebar compatibility were the user's own
+examples of what a full custom build has to get right. This MVP's
+specific pairings (GRX↔Rival, Miche↔Zipp 303 XPLR, on this frame) are
+given by the user as the domain expert running the shop, not independently
+verified by this plan — real mechanic/staff sign-off before this goes live
+is still assumed, same as any other real-world product fact this project
+won't fabricate on its own.
+
+**New requirement, not yet resolved — visual preview must update with the
+selected configuration ("den Look vom neuen Bike zeigen"):** this is a
+real, unresolved design question, not just an implementation detail,
+because there are still **no real product photos at all** (Task 12 §4,
+unchanged) — a per-color photo pair (Bottle Green / Black-Gray) does not
+yet exist, and a photorealistic image of, specifically, "this Adlar in
+Black/Gray with Rival and Zipp 303 XPLR wheels" is a fourth thing that
+would need to exist as its own asset (or be rendered) for every
+combination, not just derived from the parts. Three honest ways to build
+this, with real cost/asset trade-offs, not yet chosen — **flagging this
+back to the user rather than picking one unilaterally**, since it changes
+both scope and what photography/assets are needed before this can ship:
+1. **Per-color full-bike photos + a real photo of whichever component was
+   swapped, shown alongside** (e.g. the Zipp 303 XPLR's own product shot)
+   rather than one composited "bike as built" image. Buildable with
+   ordinary product photography (2 bike photos + 1-2 component photos),
+   no rendering/compositing pipeline needed — the gallery shows "your
+   bike" (by color) and "your selected upgrade" (by component) as
+   separate, both real, honest images.
+2. **A real or rendered photo per actual combination** (2 colors × 2
+   groupsets × 2 wheelsets = 8 combinations for this MVP alone) — the
+   most literal reading of "show the look of the new bike," but needs
+   either shooting every combination that may not physically exist yet as
+   a built bike, or investing in 3D product rendering/configurator
+   tooling — a much larger, separate technical project, and one this plan
+   hasn't scoped.
+3. **Ship the configurator's selection/pricing logic first, keep today's
+   caption-only placeholder** ("Produktfoto folgt — Farbe: …", Task 12
+   §4) until real photography exists, same honesty treatment as every
+   other missing-photo case in this project — visual preview lands in a
+   later pass once assets exist.
 
 ## Later milestones (not started)
 
