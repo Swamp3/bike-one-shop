@@ -3,7 +3,9 @@
 import { useState } from "react"
 
 import { convertToLocale } from "@lib/util/money"
+import { getBuildBaseItem, groupLineItemsByBuild } from "@lib/util/group-line-items"
 import { HttpTypes } from "@medusajs/types"
+import BuildGroupCard from "@modules/common/components/build-group-card"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { clx } from "@modules/common/components/ui"
 
@@ -81,16 +83,33 @@ const OrderRow = ({ order }: { order: HttpTypes.StoreOrder }) => {
 
       {open && (
         <div className="border-t border-bo-line p-4 pt-3.5">
-          {order.items?.map((item) => (
-            <div key={item.id} className="flex justify-between gap-2.5 py-1 text-[13px] text-bo-ink-muted">
-              <span>
-                {item.product_title || item.title} × {item.quantity}
-              </span>
-              <b className="font-semibold text-bo-ink">
-                {convertToLocale({ amount: item.total ?? 0, currency_code: order.currency_code })}
-              </b>
-            </div>
-          ))}
+          {groupLineItemsByBuild(order.items ?? []).map((group) => {
+            const renderItem = (item: HttpTypes.StoreOrderLineItem) => (
+              <div key={item.id} className="flex justify-between gap-2.5 py-1 text-[13px] text-bo-ink-muted">
+                <span>
+                  {item.product_title || item.title} × {item.quantity}
+                </span>
+                <b className="font-semibold text-bo-ink">
+                  {convertToLocale({ amount: item.total ?? 0, currency_code: order.currency_code })}
+                </b>
+              </div>
+            )
+
+            if (!group.buildId) {
+              return renderItem(group.items[0])
+            }
+
+            const baseItem = getBuildBaseItem(group.items)
+
+            return (
+              <BuildGroupCard
+                key={group.buildId}
+                title={`Custom-Build: ${baseItem.product_title || baseItem.title}`}
+              >
+                {group.items.map(renderItem)}
+              </BuildGroupCard>
+            )
+          })}
 
           <div className="mt-3 flex flex-col gap-1 border-t border-dashed border-bo-line pt-3">
             {!canReturn && (
