@@ -5,31 +5,27 @@ punch-list; `PLAN.md` has the full technical record (what was built, how,
 and why) behind every line here — this file just points at it.
 
 Status as of 2026-09-29, after Task 12 (national availability, real
-inventory, color variants) and Task 13's planning (bike configurator)
-landed.
-
-## Next big feature — planned, not started
-
-- **Bike configurator (swap groupset/wheelset/tires).** Full design in
-  `PLAN.md` Task 13. Not a new idea — already scoped in
-  `planning/2-Product_Requirements/questions.de.md` as "the phase right
-  after v1," which this now is. MVP decided: a new **Wilier Adlar**,
-  Schaltung (Shimano GRX/SRAM Rival) and Farbe (Bottle Green/Black-Gray)
-  as ordinary manufacturer-variant options, Laufradsatz (Miche → Zipp 303
-  XPLR) as the one real dealer-added component swap, via a new
-  `bike-configuration` module — deliberately *not* more `product_option`s
-  for the wheelset, which would explode combinatorially. No assembly fee
-  yet (modeled at €0, ready to turn on later); downgrades reduce the
-  total (computed price difference, not a stored delta).
-  **Blocked on the user's own compositing prototype** for the visual
-  preview (component images composited onto the base bike photo per
-  color) — decided approach, but not yet shared, so that specific piece
-  can't start. The rest (data model, selection UI, pricing, cart
-  grouping) isn't blocked by it. Also still needs: real component prices
-  from BikeOne, and the base bike photos themselves (2, one per color).
+inventory, color variants) and Task 13 (Wilier Adlar bike configurator
+MVP) landed.
 
 ## Blocked on someone outside this project
 
+- **Compositing prototype for the configurator preview.** The Wilier
+  Adlar configurator (Task 13) is fully working end to end — real
+  photos, real Laufradsatz price math, real cart/checkout/order grouping
+  — but selecting the Zipp 303 XPLR S wheelset still shows the same base
+  photo with a plain text note, not a composited image of the bike with
+  those wheels. This is the one piece intentionally left out, waiting on
+  the compositing approach/prototype you said you'd bring in. Same
+  applies to any future Schaltung (GRX/Rival) photo — the gallery's
+  image-matching mechanism already supports it generically, it just
+  needs the tagged photo.
+- **Real component prices for the configurator.** Miche Wheelset (€400)
+  and Zipp 303 XPLR S (€1.200) are clearly-flagged placeholders, not real
+  BikeOne purchase prices — the Zipp upgrade currently shows +€800 on
+  that placeholder basis. Also: Shimano GRX and SRAM Rival are priced
+  identically (€3.500) since no real price difference between the two
+  was given. Needs real numbers before this goes live.
 - **SumUp sandbox credentials.** Payments are code-complete and gated
   (`PLAN.md` Task 5) but inactive without real `SUMUP_API_KEY`/
   `SUMUP_MERCHANT_CODE`. Waiting on you.
@@ -111,6 +107,16 @@ landed.
   exist yet.
 - **Backend containerization** for a staging environment — not needed for
   local dev, worth doing once there's a staging target.
+- **Configurator order-details page not grouped.** Cart, checkout,
+  order confirmation, and account order-history all group a custom
+  build's line items under one card — the separate, still-unstyled
+  `/account/orders/details/[id]` page (plain Medusa-starter table) does
+  not yet. Small, noted rather than silently skipped.
+- **`bike-configuration` real module still deferred.** Task 13 uses a v0
+  `product.metadata`-based mechanism for the Laufradsatz slot, same
+  deferral treatment Task 12 gave `store-profile` — the real linked
+  module (proper entities, migration, eventual TriCon sync) is follow-up
+  work, not started.
 
 ## Recently closed (for context, not action items)
 
@@ -122,3 +128,8 @@ landed.
 - Header layout, add-to-cart toast, legal company name in the footer,
   newsletter documented as a placeholder — all shipped from your last
   round of feedback.
+- **Wilier Adlar bike configurator MVP (Task 13).** Real photos per
+  color, real Laufradsatz (Miche/Zipp) slot with live computed price
+  delta, real cart/checkout/order-history grouping via a shared build
+  id. Working end to end, including a real placed order. Only the
+  compositing preview and real prices remain (see above).
