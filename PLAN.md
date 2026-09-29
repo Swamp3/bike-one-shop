@@ -1033,11 +1033,14 @@ manufacturer site can't be reached from this sandbox — see Task 12 §4's
   `product_option` axis on this product alongside Frame Size and Farbe
   (§0 above).
 - **Farbe (manufacturer-offered → ordinary `product_option`):** "Bottle
-  Green" and a more understated "Black/Gray" — real Wilier-offered
-  colorways for this specific model, confirmed directly by the user. This
-  resolves Task 12 §4's generic-fallback caveat *for this bike only* — the
-  other 4 products' colors are still unverified generic fallbacks, that
-  finding stands for them.
+  Green" and **"Stone Dark"** (corrected 2026-09-29 — the user's first
+  message called this "Black/Gray" descriptively; the real Wilier
+  colorway name, confirmed once actual product photos landed, is "Stone
+  Dark") — real Wilier-offered colorways for this specific model,
+  confirmed directly by the user. This resolves Task 12 §4's
+  generic-fallback caveat *for this bike only* — the other 4 products'
+  colors are still unverified generic fallbacks, that finding stands for
+  them.
 - **Laufradsatz (dealer-added swap → the new `bike-configuration`
   module):** standard Miche wheelset (default) ↔ Zipp 303 XPLR (upgrade).
   The user was explicit this one is *not* a Wilier-offered configuration
@@ -1080,27 +1083,50 @@ selected configuration by **compositing real, precisely-aligned component
 images onto the matching base-color bike photo** — not two photos shown
 side by side (the plan's original framing of option 1), and not a
 separate rendered/shot image per full combination (option 2). The user
-confirmed this directly and said they **already have a prototype for
-this compositing approach**, which they'll bring in later for this to be
-built against — so the exact compositing mechanism (asset format,
-alignment/anchor points, how a swapped component's image is positioned
-over the base photo) is **not designed here**; it follows the user's
-prototype once shared, rather than this plan inventing its own approach
-that would likely conflict with it. What this section can still say:
-- Needs, at minimum, one base photo per color (2 for this MVP: Bottle
-  Green, Black/Gray) plus one precisely-prepared overlay image per
-  swappable component (the Zipp 303 XPLR wheelset, this MVP's only real
-  `ComponentOption`) — all still real photography/assets, still nothing
-  fabricated, just composited rather than shown separately or shot as
-  one finished scene per combination.
-- The default component (Miche) needs no overlay — it's already in the
-  base photo, matching how `is_default` already works in §2's pricing
-  model.
-- This is realistically **blocked on the user's prototype** before
-  implementation of the compositing piece specifically can start — the
-  rest of the configurator (data model, selection UI, pricing,
-  cart/checkout grouping) does not depend on it and can proceed once
-  the other inputs below (component prices, real photos) are available.
+confirmed this directly and said they have a prototype for this
+compositing approach, to be brought in later — the exact compositing
+mechanism (alignment/anchor points, how a swapped component's image is
+positioned over the base photo) is **not designed here**, it follows the
+user's prototype once shared.
+
+**Real assets received (2026-09-29), pushed directly to this branch in
+`example-product-images/`:**
+- `YZ0TZD_Adlar_C9_Bottle_Green_lat_white-1920x1920_9STYYJ-1.jpg` — full
+  bike, lateral/side profile, white background, Bottle Green, shown with
+  the default config (GRX groupset, Miche wheelset visible).
+- `H6UYXD_Adlar_C10_Stone_Dark_lat_white-1920x1920_L5B1UA-1.jpg` — same
+  shot, Stone Dark colorway.
+- `wh-303-xp-s-dbcl-700f-12x100-std-a1-c-side-s.png` — Zipp 303 XPLR S
+  **front** wheel, isolated product shot, transparent background, real
+  12×100 front-axle SKU naming.
+- `wh-303-xp-s-dbcl-700r-xdr-12x142-std-a1-c-side-s.png` — same wheel,
+  **rear**, transparent background, real XDR 12×142 rear-axle SKU naming.
+  **Front and rear are separate assets** — compositing needs to place and
+  scale each independently at its own wheel position on the base photo,
+  not treat "the wheelset" as one combined graphic.
+- Base price confirmed: **€3.500** (this project's standing
+  no-invented-numbers rule applied — this is the real figure the user
+  gave, not a placeholder).
+
+**Gap surfaced by the real assets, not yet resolved — flagging rather
+than assuming:** both base photos show the **GRX** groupset (the
+default). No separate asset exists showing the bike with SRAM Rival
+installed, and the compositing approach agreed above was scoped to the
+Laufradsatz slot (the only genuine `ComponentOption`) — Schaltung stays a
+plain `product_option` per §0. Net effect: selecting SRAM Rival changes
+price and the order/cart contents correctly, but **the preview photo
+will keep showing GRX** unless a Rival-equipped photo is supplied later.
+Assumed acceptable for the MVP (matches how Farbe already only visually
+updates because a real photo exists per color, not because every option
+axis gets one) — flagged for the user to confirm or correct, not decided
+unilaterally.
+
+The default component (Miche) needs no overlay — it's already in both
+base photos, matching how `is_default` already works in §2's pricing
+model. The rest of the configurator (data model, selection UI, pricing,
+cart/checkout grouping) does not depend on the compositing prototype and
+can proceed against these real assets now; only the compositing
+implementation itself waits on the prototype.
 
 ## Later milestones (not started)
 
