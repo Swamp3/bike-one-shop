@@ -1108,18 +1108,25 @@ user's prototype once shared.
   no-invented-numbers rule applied — this is the real figure the user
   gave, not a placeholder).
 
-**Gap surfaced by the real assets, not yet resolved — flagging rather
-than assuming:** both base photos show the **GRX** groupset (the
-default). No separate asset exists showing the bike with SRAM Rival
-installed, and the compositing approach agreed above was scoped to the
-Laufradsatz slot (the only genuine `ComponentOption`) — Schaltung stays a
-plain `product_option` per §0. Net effect: selecting SRAM Rival changes
-price and the order/cart contents correctly, but **the preview photo
-will keep showing GRX** unless a Rival-equipped photo is supplied later.
-Assumed acceptable for the MVP (matches how Farbe already only visually
-updates because a real photo exists per color, not because every option
-axis gets one) — flagged for the user to confirm or correct, not decided
-unilaterally.
+**Gap surfaced by the real assets — confirmed temporary, not a design
+limit (2026-09-29):** both base photos show the **GRX** groupset (the
+default); no Rival-equipped photo exists yet. The user confirmed Rival
+photos are coming later, and stated the actual long-term goal plainly:
+**every component should eventually be dynamically visualized on the
+bike**, not just the wheelset. This changes how §2's visual layer should
+be built: the compositing mechanism must **not** be hard-wired to the
+Laufradsatz `ComponentOption` specifically. Whatever asset a given
+option value has — a full base-photo replacement (how Farbe already
+works) or an overlay (how Laufradsatz will work) — should be attached
+generically to *any* selectable value (a plain `product_option` value
+like a future Schaltung photo, or a `ComponentOption`), so adding the
+Rival photo later is "attach the new asset," never "extend the
+mechanism." This doesn't reopen §0's Schaltung-is-a-`product_option`
+decision (still correct — it's a real manufacturer SKU choice) — it just
+means the image layer is designed decoupled from, and orthogonal to,
+that manufacturer-vs-dealer-component distinction. Until the Rival photo
+exists, selecting it updates price/cart correctly but the preview keeps
+showing GRX — a real, temporary asset gap, not a decided limitation.
 
 The default component (Miche) needs no overlay — it's already in both
 base photos, matching how `is_default` already works in §2's pricing
