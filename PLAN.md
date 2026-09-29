@@ -1135,6 +1135,74 @@ cart/checkout grouping) does not depend on the compositing prototype and
 can proceed against these real assets now; only the compositing
 implementation itself waits on the prototype.
 
+**Backend built (2026-09-29), status: done.** A background subagent built
+this against the plan above; it was killed mid-task by an unrelated
+Bash-tooling outage (a transient server-side classifier failure, nothing
+to do with this code) after getting most of the way through — I
+(the orchestrating session) verified what it left, found and fixed one
+real bug in it, then completed verification directly rather than
+re-dispatching. What's actually in `initial-data-seed.ts` now:
+- **Wilier Adlar**: real collection ("Wilier"), Frame Size (S/M/L/XL —
+  the same unverified-but-plausible sizing convention the other 4 bikes
+  already use, not real Wilier geometry, flagged as such), Schaltung
+  (Shimano GRX default / SRAM Rival), Farbe (Bottle Green / Stone Dark),
+  16 real variants (4×2×2), every variant priced at the real **€3.500**
+  — Schaltung has no real price differential from the user, so GRX and
+  Rival are priced identically for now, flagged clearly as needing a
+  real number, not invented. Both real photos attached as `product.images`,
+  each tagged `metadata: { option_title: "Farbe", option_value: "…" }` —
+  generic by design (§ above), not Farbe-specific, so a future Schaltung
+  photo tags the same way with no new mechanism.
+- **Miche Wheelset** and **Zipp 303 XPLR S**: real, separately-sellable
+  products (category "Laufräder", newly added), one "Default Title"
+  variant each. Zipp gets both real photos (front/rear) in its gallery;
+  Miche has none (none were supplied — honest placeholder gallery, same
+  as every other unphotographed product). Prices are **clearly-flagged
+  placeholders**, not real numbers (no real Miche or Zipp retail price
+  was given): Miche €400, Zipp €1.200 — deliberately Zipp-higher (the
+  upgrade direction), real SKU-shaped identifiers taken from the supplied
+  image filenames (`ZIPP-303-XPS-DBCL`), not invented. **Needs real
+  BikeOne purchase prices before this goes live.**
+- **Laufradsatz slot data**: the v0/lighter `metadata`-based approach
+  PLAN.md §3 authorized (not the full `bike-configuration` module —
+  deferred, same treatment as `store-profile` in Task 12), shape:
+  `product.metadata.configurable_slots = [{ slot: "Laufradsatz", options: [{ product_id, is_default }] }]`,
+  referencing Miche's and Zipp's real product ids. **This is the exact
+  shape the frontend task must read** — confirmed stable and correct
+  (see bug/fix below).
+
+**Bug found and fixed:** the subagent's original code set this
+`metadata` directly on `createProductsWorkflow`'s product-create input.
+After reseeding, both the Store and Admin APIs returned `metadata: null`
+for the product — while `images[].metadata` on the exact same create
+call persisted correctly. Root cause not chased further (not worth a
+deep Medusa internals dig for a v0 seed script) — fixed by capturing the
+created product's id and setting `metadata` in a follow-up
+`updateProductsWorkflow` call instead, which is confirmed reliable.
+Re-verified after the fix, against the storefront's own real,
+already-used field-selection string (`lib/data/products.ts`'s
+`"...,+metadata,+tags,"` — nothing new needed there, it already requests
+`metadata`, confirmed by testing that exact string end to end with a
+real `region_id`) — both `product.metadata.configurable_slots` and
+`images[].metadata` come back correctly.
+
+**Verification:** `npx tsc --noEmit` clean. `make reset-db` (Docker
+brought up manually) ran clean twice (once with the bug present, once
+after the fix). Verified live against a running backend, using the
+storefront's exact product-query field string plus a real `region_id`:
+Wilier Adlar returns 16 variants, both real images with correct Farbe
+tagging, `metadata.configurable_slots` pointing at Miche's/Zipp's real
+ids, and `calculated_price.calculated_amount: 3500` for a sampled
+variant. Miche and Zipp confirmed as real, separate, correctly-priced
+products via the same API. Did not yet start the storefront/Next.js dev
+server or run Playwright against the PDP itself — that's the next
+(frontend) task's job, which needs the UI to exist first. All backend
+dev-server processes killed after verification, including detached
+children found running under `@medusajs/cli/cli.js start --types` from
+an earlier, unrelated boot — same recurring pattern this project has
+flagged before, killed by exact PID after a plain `pkill -f` pattern
+match missed them.
+
 ## Later milestones (not started)
 
 - Fix the Task 3 Next.js production-build issue (`/404` `/500`
