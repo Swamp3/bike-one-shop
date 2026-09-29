@@ -863,7 +863,11 @@ Oldenburg-anchored shipping option against Osnabrück-only stock to prove
 the top-level `medusa develop`/`next dev`) were killed after verification.
 
 ### Task 13 — Bike configurator: swap groupset/wheelset/tires (component upgrades)
-Status: **planning only** — user request 2026-09-29, no implementation yet.
+Status: **backend and frontend done** (2026-09-29) — see the "Backend
+built"/"Frontend built" subsections below for what was implemented and
+verified; only the wheelset-image-compositing prototype (explicitly out
+of scope, see below) and the two items under "Later milestones" this task
+surfaced remain open.
 This is not a new idea: `planning/2-Product_Requirements/questions.de.md`
 line 88-89 already asked "Bike-Konfigurator (Rahmen-/Komponenten-
 Customization) — v1 oder spätere Phase?" and answered "**Spätere Phase,
@@ -1203,8 +1207,165 @@ an earlier, unrelated boot — same recurring pattern this project has
 flagged before, killed by exact PID after a plain `pkill -f` pattern
 match missed them.
 
+**Frontend built (2026-09-29), status: done.** Built against the backend
+above and the real Wilier Adlar/Miche/Zipp seed data, all five pieces from
+this task's scope:
+
+1. **Real per-color gallery photos.** `bikeone-gallery/index.tsx` now
+   takes the full `product` (not just its title) and matches generically:
+   any `product.images[]` entry whose `metadata.option_title`/
+   `option_value` equals the shopper's *currently selected* value for
+   that option (read via the existing `getOptionValueByTitle` from
+   `ProductOptionsProvider`, built for Task 12) is shown as the real
+   photo; everything else — every product/option-value with no tagged
+   image, which today is every product except Wilier Adlar's Farbe — falls
+   through to the untouched placeholder. Nothing is hardcoded to "Farbe"
+   or "Wilier Adlar": the match is `image.metadata.option_title` looked up
+   generically against whichever option is currently selected, so a future
+   real Schaltung photo tagged the same way (`option_title: "Schaltung"`)
+   works with no code change — confirmed by the mechanism itself, not by
+   guessing, since it's the exact same generic lookup already used for
+   Farbe. Verified live: selecting Bottle Green vs. Stone Dark swaps the
+   real photo instantly; Trek Domane SL 6 (and every other product) still
+   shows the honest "Produktfoto folgt" placeholder, unaffected. The
+   product-detail page's own `fields` string (`products/[handle]/page.tsx`)
+   needed no change — confirmed live via curl that `product.images[]`
+   (with `metadata`) comes back by default even without an explicit
+   `+images`/`*images` entry, matching what the backend task already found
+   for its own field-selection string.
+2. **Laufradsatz slot selector.** `product-actions-wrapper/index.tsx`
+   resolves `product.metadata.configurable_slots` (when present — `[]` for
+   every other product) against the real Miche/Zipp products by id,
+   fetching each one's own region-priced `variants[0].calculated_price`
+   (a second, targeted `listProducts({ queryParams: { id: [...] } })`
+   call, not an extension of the single-product query, since it's fetching
+   *different* products). A new `ConfigurableSlotSelect`
+   (`product-actions/configurable-slot-select.tsx`) renders each slot as
+   stacked radio-style cards — deliberately distinct from
+   `OptionSelect`/`ColorSwatchSelect`'s small buttons/swatches, dashed
+   card border, to read as "swapping a real separate product" rather than
+   "picking a manufacturer SKU variant" — showing each non-default
+   option's price difference as `(that option's live calculated price) −
+   (the slot's default option's live calculated price)`, computed in
+   `ConfigurableSlotSelect`'s `formatDelta` and again independently in
+   `ProductActions`' `slotPriceDelta`/`nonDefaultSlotSelections`, both from
+   the same fetched real prices — never a stored number. Confirmed live:
+   Zipp shows **+ 800 €** (Zipp's real €1.200 − Miche's real €400,
+   both fetched from the live Store API), and the page's running total
+   (CTA button and the mobile sticky bar, via a new `priceOverride` prop
+   on `MobileActions`) updates from €3.500,00 to €4.300,00 the instant Zipp
+   is selected, and back when Miche is reselected. Renders only on Wilier
+   Adlar — every other product's `configurableSlots` resolves to `[]`.
+   The out-of-scope compositing is honored: switching the wheelset never
+   touches the gallery photo; a plain text line under the slot selector
+   ("Das Produktfoto zeigt weiterhin die Standard-Ausstattung (Miche
+   Wheelset) — eine Vorschau mit Zipp 303 XPLR S folgt.") says so plainly
+   instead of faking a composite.
+3. **Cart line-item grouping via a shared build id.** `addToCart`
+   (`lib/data/cart.ts`) now accepts an optional per-line-item `metadata`
+   and passes it straight through to `sdk.store.cart.createLineItem`
+   (confirmed via `@medusajs/types`' `StoreAddCartLineItem` that
+   `metadata` is a real, supported field — no new mechanism invented).
+   `ProductActions.handleAddToCart` generates one `crypto.randomUUID()`
+   **only when a non-default slot option is selected** (the Miche/default
+   case adds a single, unmarked line item, exactly per PLAN.md §3) and
+   awaits the calls **slot item(s) first, base item last** — the reverse
+   of the obvious order. This was a deliberate fix after live testing
+   surfaced a real failure mode: Zipp's seed stock is genuinely low (a
+   real, low placeholder quantity, not "1,000,000 flat" as an unrelated
+   cart-item.tsx comment claims for a different product), so a second live
+   test run hit Medusa's real out-of-stock rejection on the Zipp
+   `createLineItem` call — and with the base-item-first ordering, that left
+   an orphaned, build-id-tagged Wilier Adlar line item in the cart with no
+   matching Zipp line item and no visible error (an unhandled rejection —
+   `isAdding` never reset, no toast). Fixed two ways: (a) slot item(s) are
+   added and awaited *before* the base item, so if the upgrade is out of
+   stock the whole add-to-cart throws before the base item — and its
+   build id — ever gets created, leaving the cart untouched rather than
+   half-built; (b) `handleAddToCart` now wraps the whole sequence in
+   try/catch/finally, so any failure (stock or otherwise) shows a German
+   toast ("Konnte nicht zum Warenkorb hinzugefügt werden — vermutlich ist
+   eine der gewählten Komponenten nicht auf Lager.") and always resets the
+   button instead of hanging. Re-verified live after the fix, including
+   deliberately zeroing Zipp's stock via the Admin API to force the
+   failure path again: cart stays empty, error toast shows, CTA resets —
+   then restocked and re-verified the success path end to end. This one
+   caveat — a slot option out of stock aborts the *whole* add rather than
+   partially completing — is a real, intentional trade-off for this
+   single-slot MVP, not a rollback/transaction mechanism; it would need
+   revisiting if a future bike ever has more than one configurable slot at
+   once.
+4. **Cart/checkout/order-history grouping UI.** A shared
+   `groupLineItemsByBuild`/`getBuildBaseItem` (`lib/util/group-line-items.ts`)
+   groups any line-item array (cart or order line items — both carry
+   `metadata`) by `metadata.build_id`; every item without one stays its
+   own single-item "group" so callers treat both cases uniformly. A shared
+   `BuildGroupCard` (`modules/common/components/build-group-card`) renders
+   the grouped card ("Custom-Build" pill + the base item's
+   `product_title`, from the item whose `metadata.build_slot` is unset —
+   per PLAN.md §3, that's always the base line item). Wired into **all**
+   of: the cart page (`cart/templates/items.tsx`), the cart-preview list
+   reused by the checkout sidebar (`cart/templates/preview.tsx` —
+   `CheckoutSummary` renders it on every checkout step, so this covers
+   checkout review too, not just the cart page), the order-confirmation
+   page (`order/components/confirmation-items/index.tsx`), and the
+   account order-history list's inline expandable item view
+   (`account/components/order-list/index.tsx`, the actual styled
+   order-history surface a shopper sees at `/account/orders` — Task
+   10/11's work). **Not reached**: the separate, still-unstyled
+   `order/components/items/index.tsx` (Table-based Medusa boilerplate)
+   behind `/account/orders/details/[id]` — grouping was intentionally not
+   added there, since restyling that generic table is out of scope for
+   this task and the styled order-list already gives shoppers a grouped
+   view of every order without needing that page. So: cart, checkout
+   sidebar, order confirmation, and the real order-history list are all
+   done; the separate order-details sub-page is the one surface left
+   ungrouped, called out plainly rather than silently skipped.
+5. **Compositing correctly not attempted** — confirmed no ad-hoc
+   overlay/compositing code was written; selecting Zipp keeps showing the
+   base-color bike photo (still GRX/Miche, per the "gap surfaced by the
+   real assets" note) with only the plain text note described in §2 above.
+
+**Verification:** `npx tsc --noEmit` clean (both before and after the
+add-to-cart-ordering fix). `next lint` shows only pre-existing issues in
+files this task didn't touch (`cart.ts`'s already-stubbed gift-card
+functions, `global-error.tsx`, `language-select`) — nothing new. Verified
+live with Playwright (`/opt/pw-browsers/chromium`) at desktop (1280×1000)
+and mobile (390×844): Wilier Adlar's real photos and per-color swap;
+Trek Domane SL 6 and Miche Wheelset still show the honest placeholder with
+no Laufradsatz selector; the Laufradsatz selector's **+ 800 €** arithmetic
+confirmed live against the real fetched prices (Zipp €1.200 − Miche €400);
+Miche-selected add-to-cart → one €3.500,00 line item, no group card;
+Zipp-selected add-to-cart → two line items grouped under one
+"Custom-Build: Wilier Adlar" card, cart total €4.700,00. Ran a real,
+complete checkout (cart → address → shipping → test payment → place
+order) with Zipp selected end to end: order confirmation shows the same
+grouped card with both real line items and the correct total (€4.710,00
+incl. €10 shipping); separately registered a real account, repeated the
+flow, and confirmed the same grouping renders correctly on
+`/account/orders`. Also deliberately reproduced and then fixed the
+out-of-stock/orphaned-line-item failure mode described in §3 above, and
+re-verified both the failure path (clean error, empty cart) and the
+success path afterward. Killed all dev-server processes by exact PID
+after verification, including the detached `@medusajs/cli/cli.js start
+--types` and `next-server` children a plain `pkill -f` pattern has missed
+before on this project.
+
 ## Later milestones (not started)
 
+- **Task 13 follow-ups, surfaced by the frontend work:** (1) the separate,
+  still-unstyled `/account/orders/details/[id]` page
+  (`order/components/items/index.tsx`, Table-based Medusa boilerplate)
+  never got the `build_id` grouping the styled cart/checkout/order-history
+  surfaces did — restyling that whole page was out of scope here, and the
+  styled order-history list already gives shoppers a grouped view without
+  it. (2) The add-to-cart ordering fix (slot item(s) added and awaited
+  before the base item, so an out-of-stock upgrade aborts the whole add
+  rather than leaving an orphaned line item) is a clean fix for *one*
+  slot, not a real rollback/transaction mechanism — if a future bike ever
+  gets more than one configurable slot at once, a partial failure (slot A
+  added, slot B out of stock) would need real handling, not just
+  reordering.
 - Fix the Task 3 Next.js production-build issue (`/404` `/500`
   prerender crash) — needed before any real deploy, not needed for
   local dev.
