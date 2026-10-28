@@ -83,6 +83,13 @@ MVP) landed.
   and `email` are stashed in Medusa's generic `metadata` field for now,
   not a real linked module as `schema-design.md` specifies. Small, not
   urgent.
+- **Per-instance values that don't carry over to a new Medusa instance.**
+  `SUMUP_WEBHOOK_SECRET` (env var, generated per environment — see
+  `SUMUP_SETUP.md`) and the `payment_label_pp_sumup_sumup` Store metadata
+  key (Admin → Settings → Store, used to display a friendlier SumUp label
+  on the storefront's payment step) both live outside migrations/code and
+  must be set again by hand on any new dev/staging/prod instance — flagging
+  now so it isn't forgotten when going live.
 - **Homepage hero copy overstates Click & Collect** ("abholbereit
   innerhalb von 2 Stunden") — inconsistent with the honest "Bald
   verfügbar" treatment everywhere else. Quick copy fix, currently
@@ -96,6 +103,24 @@ MVP) landed.
   Widening to Austria/Switzerland later is a small additive change
   (2 more countries + 2 tax regions), not a redesign. Flagging so it's a
   conscious decision to revisit, not a forgotten scope cut.
+- **Multi-language support — scaffolded but disconnected, not real yet.**
+  The storefront already carries locale plumbing from the starter template
+  (a `_medusa_locale` cookie, `getLocaleHeader()` auto-attaching
+  `x-medusa-locale` to every backend request via `lib/config.ts`, a
+  language-select component, `listLocales()`) but none of it does anything:
+  `GET /store/locales` 404s (no such route exists in
+  `backend/apps/backend/src/api`), and nothing in the backend source reads
+  `x-medusa-locale` anywhere. Every string across the storefront (checkout
+  included) is hardcoded German today. Needs, in order: a real `/store/locales`
+  route backed by actual configured locales, backend content (product/category
+  text) keyed by locale and filtered via the already-arriving
+  `x-medusa-locale` header, and translating every hardcoded UI string
+  (checkout, header, footer, legal pages, etc.) — not a small task, closer
+  to its own milestone than a quick add. Once real: the
+  `payment_label_<provider_id>` Store-metadata mechanism (see the
+  per-instance-values entry above) extends cheaply — suffix keys by locale
+  (`payment_label_pp_sumup_sumup_en`), have the backend route prefer the
+  suffixed key and fall back to the base one.
 - **Next.js production build fails** on its own `/404`/`/500` prerender.
   Doesn't affect local dev; needs fixing before any real deploy.
 - **Mobile header layout.** The icon cluster (search/language/store/cart)

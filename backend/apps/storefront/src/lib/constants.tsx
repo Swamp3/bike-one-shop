@@ -30,7 +30,11 @@ export const paymentInfoMap: Record<
     icon: <PayPal />,
   },
   pp_system_default: {
-    title: "Manual Payment",
+    title: "Testzahlung",
+    icon: <CreditCard />,
+  },
+  pp_sumup_sumup: {
+    title: "Kreditkarte / PayPal (SumUp)",
     icon: <CreditCard />,
   },
   // Add more payment providers here
@@ -48,6 +52,25 @@ export const isPaypal = (providerId?: string) => {
 }
 export const isManual = (providerId?: string) => {
   return providerId?.startsWith("pp_system_default")
+}
+
+export const isSumUp = (providerId?: string) => {
+  return providerId?.startsWith("pp_sumup_")
+}
+
+// Admin can override a provider's display title via Store metadata
+// (`payment_label_<provider_id>`, see src/api/store/custom/payment-method-labels
+// on the backend) without a deploy; falls back to the static map, then the
+// raw id.
+export const getPaymentMethodLabel = (
+  providerId: string | undefined,
+  overrides: Record<string, string> = {}
+) => {
+  if (!providerId) {
+    return providerId
+  }
+
+  return overrides[providerId] ?? paymentInfoMap[providerId]?.title ?? providerId
 }
 
 // Add currencies that don't need to be divided by 100

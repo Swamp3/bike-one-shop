@@ -1,6 +1,6 @@
 "use client"
 
-import { isManual, isStripeLike } from "@lib/constants"
+import { isManual, isStripeLike, isSumUp } from "@lib/constants"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 import { clx } from "@modules/common/components/ui"
@@ -42,6 +42,14 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     case isManual(paymentSession?.provider_id):
       return (
         <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
+      )
+    case isSumUp(paymentSession?.provider_id):
+      return (
+        <SumUpPaymentButton
+          notReady={notReady}
+          paymentSession={paymentSession}
+          data-testid={dataTestId}
+        />
       )
     default:
       return (
@@ -203,6 +211,56 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
       <ErrorMessage
         error={errorMessage}
         data-testid="manual-payment-error-message"
+      />
+    </>
+  )
+}
+
+/**
+ * SumUp hosted checkout has no inline form — "paying" means leaving the
+ * site for SumUp's own checkout page. The order is only placed once SumUp
+ * redirects back through /api/payment-return/sumup (see that route for the
+ * actual authorization/capture check).
+ */
+const SumUpPaymentButton = ({
+  notReady,
+  paymentSession,
+}: {
+  notReady: boolean
+  paymentSession?: HttpTypes.StorePaymentSession
+  "data-testid"?: string
+}) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const hostedCheckoutUrl = (
+    paymentSession?.data as Record<string, unknown> | undefined
+  )?.hosted_checkout_url as string | undefined
+
+  const handlePayment = () => {
+    if (!hostedCheckoutUrl) {
+      setErrorMessage(
+        "SumUp-Checkout konnte nicht gestartet werden. Bitte Zahlungsmethode erneut auswählen."
+      )
+      return
+    }
+
+    window.location.href = hostedCheckoutUrl
+  }
+
+  return (
+    <>
+      <button
+        type="button"
+        disabled={notReady || !hostedCheckoutUrl}
+        onClick={handlePayment}
+        data-testid="submit-order-button"
+        className={clx(primaryBtn)}
+      >
+        Weiter zu SumUp →
+      </button>
+      <ErrorMessage
+        error={errorMessage}
+        data-testid="sumup-payment-error-message"
       />
     </>
   )

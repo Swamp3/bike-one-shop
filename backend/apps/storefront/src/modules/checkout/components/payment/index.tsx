@@ -1,5 +1,5 @@
 "use client"
-import { isStripeLike } from "@lib/constants"
+import { getPaymentMethodLabel, isStripeLike, isSumUp } from "@lib/constants"
 import { initiatePaymentSession } from "@lib/data/cart"
 import StepCard from "@modules/checkout/components/step-card"
 import ErrorMessage from "@modules/checkout/components/error-message"
@@ -7,15 +7,17 @@ import PaymentContainer, {
   StripePaymentContainer,
 } from "@modules/checkout/components/payment-container"
 import { HttpTypes } from "@medusajs/types"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 
 const Payment = ({
   cart,
   availablePaymentMethods,
+  labelOverrides = {},
 }: {
   cart: HttpTypes.StoreCart
   availablePaymentMethods: { id: string }[]
+  labelOverrides?: Record<string, string>
 }) => {
   const activeSession = cart.payment_collection?.payment_sessions?.find(
     (paymentSession) => paymentSession.status === "pending"
@@ -31,6 +33,7 @@ const Payment = ({
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
+  const { countryCode } = useParams()
 
   const isOpen = searchParams.get("step") === "payment"
 
@@ -83,6 +86,16 @@ const Payment = ({
       if (!checkActiveSession) {
         await initiatePaymentSession(cart, {
           provider_id: selectedPaymentMethod,
+          // The SumUp plugin bakes redirect_url into the hosted checkout at
+          // creation time, so the per-request override has to go in here,
+          // not later at the review/pay step.
+          ...(isSumUp(selectedPaymentMethod)
+            ? {
+                data: {
+                  redirect_url: `${window.location.origin}/api/payment-return/sumup?cart_id=${cart.id}&country_code=${countryCode}`,
+                },
+              }
+            : {}),
         })
       }
 
@@ -132,6 +145,10 @@ const Payment = ({
                     paymentProviderId={paymentMethod.id}
                     selectedPaymentOptionId={selectedPaymentMethod}
                     setSelected={setPaymentMethod}
+                    label={getPaymentMethodLabel(
+                      paymentMethod.id,
+                      labelOverrides
+                    )}
                   />
                 )
               )}
@@ -182,7 +199,10 @@ const Payment = ({
               >
                 {activeSession?.provider_id === "pp_system_default"
                   ? "Testzahlung (kein produktiver Anbieter aktiv)"
-                  : activeSession?.provider_id}
+                  : getPaymentMethodLabel(
+                      activeSession?.provider_id,
+                      labelOverrides
+                    )}
               </p>
             </div>
           ) : paidByGiftcard ? (

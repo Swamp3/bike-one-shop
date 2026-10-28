@@ -12,11 +12,9 @@ type PaymentContainerProps = {
   setSelected: (id: string) => void
   disabled?: boolean
   children?: React.ReactNode
-}
-
-const TITLES: Record<string, string> = {
-  pp_system_default: "Testzahlung",
-  pp_paypal_paypal: "PayPal",
+  /** Resolved display title (static default or Store-metadata override —
+   * see @lib/constants's getPaymentMethodLabel). Falls back to the raw id. */
+  label?: string
 }
 
 /**
@@ -33,6 +31,7 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
   setSelected,
   disabled = false,
   children,
+  label,
 }) => {
   const isDevelopment = process.env.NODE_ENV === "development"
   const active = selectedPaymentOptionId === paymentProviderId
@@ -58,7 +57,7 @@ const PaymentContainer: React.FC<PaymentContainerProps> = ({
       />
       <div className="flex-1">
         <div className="text-[14px] font-semibold">
-          {TITLES[paymentProviderId] || paymentProviderId}
+          {label || paymentProviderId}
         </div>
         {isManual(paymentProviderId) && (
           <>
