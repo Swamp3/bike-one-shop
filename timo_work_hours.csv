@@ -32,6 +32,7 @@ SUBTOTAL 2026-09,,,34.5,
 2026-10-01,07:37,07:51,0.5,Compiled project work-hours documentation
 2026-10-12,15:30,17:11,2.0,"Wrote CLAUDE.md for the repo; SumUp sandbox setup guide (SUMUP_SETUP.md); SumUp payment wiring (payment return route, webhook secret middleware, payment-method labels, checkout payment components); sandbox checkout test and review of customer data sent to SumUp; debugged Medusa admin metadata row deletion; multi-language metadata plan added to roadmap"
 2026-10-28,15:25,15:40,0.5,"README restructure (local URLs, dev logins, make targets); work-hours update for October"
-SUBTOTAL 2026-10,,,3.0,
+2026-10,,,2.0,Hosting research for the app (date not recorded)
+SUBTOTAL 2026-10,,,5.0,
 ,,,,
-TOTAL,,,41.5,Sum of all months
+TOTAL,,,43.5,Sum of all months

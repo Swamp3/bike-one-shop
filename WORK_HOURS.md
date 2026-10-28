@@ -59,6 +59,14 @@ No Gemini logs are available locally. Estimate from file creation times in the r
 
 **Subtotal: 7.5 h**
 
+## D. Reported by you: work outside Claude/git
+
+| Date    | Work                                  | Est. (h) |
+|---------|---------------------------------------|----------|
+| 2026-10 | Hosting research for the app (exact date not recorded) | 2.0 |
+
+**Subtotal: 2.0 h**
+
 ## Total
 
 | Part | Hours |
@@ -66,7 +74,8 @@ No Gemini logs are available locally. Estimate from file creation times in the r
 | A. Measured local sessions | 20.5 |
 | B. Estimated from git | 13.5 |
 | C. Gemini work (08-23 and 09-16 per your estimate, 09-18 estimated) | 7.5 |
-| **Total (upper estimate)** | **41.5** |
+| D. Hosting research (your report) | 2.0 |
+| **Total (upper estimate)** | **43.5** |
 
 ### By month
 
@@ -74,7 +83,7 @@ No Gemini logs are available locally. Estimate from file creation times in the r
 |-------|-------|
 | 2026-08 | 4.0 |
 | 2026-09 | 34.5 |
-| 2026-10 | 3.0 |
-| **Total** | **41.5** |
+| 2026-10 | 5.0 |
+| **Total** | **43.5** |
 
-Realistic range: ~35–41.5 h. Caveats: Claude sessions may have run unattended while you did other work (not hands-on time); manual work outside Claude/git (design, testing in browser, reading) is not captured. 2026-09-11 08:08 "Initial commit" and the 09-22 DB schema commit fall inside measured blocks.
+Realistic range: ~37–43.5 h. Caveats: Claude sessions may have run unattended while you did other work (not hands-on time); manual work outside Claude/git (design, testing in browser, reading) is not captured. 2026-09-11 08:08 "Initial commit" and the 09-22 DB schema commit fall inside measured blocks.
