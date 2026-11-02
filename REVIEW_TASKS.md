@@ -32,9 +32,11 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
 - [x] **6. One empty TriCon list marks all bikes sold out.**
   `steps/link-products.ts`, the safety check needs both lists empty.
   Fix: also keep links when only the list feeding them is empty.
-- [ ] **7. The riskiest order paths have no test.**
+- [x] **7. The riskiest order paths have no test.**
   `cancelOrder`, `markOrderPaid`, the order-state loop.
-  Fix: unit tests with a fake service and fake fetch.
+  Fix: unit tests with a fake service and fake fetch, in
+  `__tests__/order-updates.unit.spec.ts` (added with tasks 1, 2, 4, 5, 6).
+  Still untested: the retry job's DB filter, which needs an integration test.
 
 ## Nice to have
 
