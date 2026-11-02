@@ -67,7 +67,7 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
 - [x] **13. Medusa 2.21.1 pulls in vulnerable packages.**
   `npm audit` reports @medusajs/framework and dashboard, zod and vite as high.
   Fix: upgrade to 2.22.2 and re-audit.
-- [ ] **14. The template's `supersecret` passes as a production secret.**
+- [x] **14. The template's `supersecret` passes as a production secret.**
   Medusa only rejects empty secrets, and anyone can forge admin tokens with a
   known JWT secret. Fix: refuse to start in production with the default.
 - [ ] **15. Redis is started but never used.**

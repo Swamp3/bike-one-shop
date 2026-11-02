@@ -18,6 +18,16 @@ const sumupConfigured = Boolean(
   sumupApiKey && sumupMerchantCode && sumupWebhookSecret
 )
 
+// Medusa only rejects empty secrets, and the .env.template value is public:
+// a known JWT_SECRET lets anyone forge admin tokens.
+if (process.env.NODE_ENV === 'production') {
+  for (const key of ['JWT_SECRET', 'COOKIE_SECRET']) {
+    if (process.env[key] === 'supersecret') {
+      throw new Error(`${key} is the public default; set a real value (openssl rand -hex 32)`)
+    }
+  }
+}
+
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
