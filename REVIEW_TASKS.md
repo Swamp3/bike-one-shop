@@ -62,9 +62,14 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
 - [x] **12. Next.js has a critical remote code execution advisory.**
   next 15.5.26 is affected by GHSA-2464-fhr4-w9xw (image optimizer) and by
   cache-poisoning advisories for self-hosted sites. Fix: 15.5.28.
-- [x] **13. Medusa 2.21.1 pulls in vulnerable packages.**
-  `npm audit` reports @medusajs/framework and dashboard, zod and vite as high.
-  Fix: upgrade to 2.22.2 and re-audit.
+- [x] **13. Medusa pulls in vulnerable packages.**
+  `npm audit` reported zod, body-parser, follow-redirects and multer as high.
+  Fix: root `overrides` to fixed versions. The advisories on @medusajs packages
+  come from these and other dependencies, so upgrading Medusa adds little. Staying
+  on 2.21.1: 2.22.2 was tried and dropped, because npm split it between
+  `node_modules` and `apps/backend/node_modules`, and the Store API then fails on
+  `Cannot find module '@medusajs/medusa/link-modules'`. Retry only with a check
+  that `@medusajs/framework` and `@medusajs/medusa` both land in the root.
 - [x] **14. The template's `supersecret` passes as a production secret.**
   Medusa only rejects empty secrets, and anyone can forge admin tokens with a
   known JWT secret. Fix: refuse to start in production with the default.
@@ -84,22 +89,23 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
 - [x] **19. Redis loses its data when the container is recreated.**
   `docker-compose.yml` has no volume or persistence, so pending events still
   vanish after task 15. Fix: append-only file on a named volume.
-- [x] **20. The production start path was undocumented, and the obvious one hangs.**
-  `npm run start` in `apps/backend` boots, but link modules fail to load and every
-  Store API request hangs. Only `.medusa/server` with its own `npm install` works,
-  and that install has no lockfile and ignores root overrides.
-  Fix: overrides also in `apps/backend/package.json`, steps documented below.
+- [x] **20. The production start path was undocumented.**
+  Medusa's docs say to run `npm install` in `.medusa/server`. Here that fails with a
+  peer conflict, and it would skip the lockfile and overrides anyway.
+  Fix: start from `.medusa/server` on the workspace install, steps below.
 
 ## Server checklist (not code, do when setting up the vServer)
 
 Backend deploy, in this order:
 
-1. `npx medusa build` in `backend/apps/backend`. It deletes `.medusa/server`.
-2. `npm install --omit=dev` in `.medusa/server`. Exact versions can drift, since
-   there is no lockfile there: run `npm audit --omit=dev` and smoke test.
+1. `npm ci` in `backend/`, which applies the lockfile and overrides.
+2. `npx medusa build` in `backend/apps/backend`. It deletes `.medusa/server`.
+   `medusa start` in `apps/backend` itself exits with "Could not find index.html".
 3. Link `.medusa/server/static` to a directory outside the build, or uploaded
-   product images are deleted by step 1.
+   product images are deleted by step 2.
 4. `npx medusa db:migrate`, then `npx medusa start`, both from `.medusa/server`.
+   Pass settings through the service environment (systemd `EnvironmentFile`):
+   `.env` is read from the current directory, and the build does not copy it.
 
 Run **exactly one** backend process, under systemd, with no cluster mode. Upload
 locks are per process (`lib/tridata/run-guard.ts`). In a test, six leftover
@@ -125,7 +131,6 @@ processes each re-sent the same order at once.
   not exist. Not run in this review. Decide whether production gets the demo
   catalog at all before first migrating an empty database.
 
-Remaining `npm audit` highs after these fixes: `vite`, `postcss`, `source-map-js`
-(build tools) and Medusa's `graphql-codegen`/`lodash` chain. No fix available
-short of a newer Medusa. The SumUp webhook signature gap (TODO.md) is still open.
-
+Remaining `npm audit` highs: `vite`, `postcss`, `source-map-js` (build tools) and
+Medusa's `graphql-codegen`/`lodash` chain. The SumUp webhook signature gap
+(TODO.md) is still open.

@@ -23,24 +23,24 @@
     "test:unit": "TEST_TYPE=unit NODE_OPTIONS=--experimental-vm-modules jest --silent --runInBand --forceExit"
   },
   "dependencies": {
-    "@medusajs/admin-sdk": "2.22.2",
-    "@medusajs/admin-shared": "2.22.2",
-    "@medusajs/caching": "2.22.2",
-    "@medusajs/cli": "2.22.2",
-    "@medusajs/dashboard": "2.22.2",
-    "@medusajs/draft-order": "2.22.2",
-    "@medusajs/framework": "2.22.2",
-    "@medusajs/medusa": "2.22.2",
-    "@medusajs/ui": "4.2.9",
+    "@medusajs/admin-sdk": "2.21.1",
+    "@medusajs/admin-shared": "2.21.1",
+    "@medusajs/caching": "2.21.1",
+    "@medusajs/cli": "2.21.1",
+    "@medusajs/dashboard": "2.21.1",
+    "@medusajs/draft-order": "2.21.1",
+    "@medusajs/framework": "2.21.1",
+    "@medusajs/medusa": "2.21.1",
+    "@medusajs/ui": "4.2.4",
     "@sumup/medusa-plugin": "^0.1.0",
     "@tanstack/react-query": "5.64.2",
     "fast-xml-parser": "^4.5.7",
     "react-i18next": "13.5.0",
     "react-router-dom": "7.18.2",
-    "zod": "4.6.6"
+    "zod": "4.2.0"
   },
   "devDependencies": {
-    "@medusajs/test-utils": "2.22.2",
+    "@medusajs/test-utils": "2.21.1",
     "@swc/core": "^1.7.28",
     "@swc/jest": "^0.2.36",
     "@types/jest": "^29.5.13",
@@ -59,10 +59,5 @@
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
-  "packageManager": "npm@10.9.7",
-  "overrides": {
-    "body-parser": "1.20.9",
-    "follow-redirects": "^1.16.2",
-    "zod": "4.6.6"
-  }
+  "packageManager": "npm@10.9.7"
 }
