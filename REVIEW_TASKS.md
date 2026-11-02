@@ -64,7 +64,7 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
 - [x] **12. Next.js has a critical remote code execution advisory.**
   next 15.5.26 is affected by GHSA-2464-fhr4-w9xw (image optimizer) and by
   cache-poisoning advisories for self-hosted sites. Fix: 15.5.28.
-- [ ] **13. Medusa 2.21.1 pulls in vulnerable packages.**
+- [x] **13. Medusa 2.21.1 pulls in vulnerable packages.**
   `npm audit` reports @medusajs/framework and dashboard, zod and vite as high.
   Fix: upgrade to 2.22.2 and re-audit.
 - [ ] **14. The template's `supersecret` passes as a production secret.**
