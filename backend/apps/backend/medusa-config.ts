@@ -18,6 +18,8 @@ const sumupConfigured = Boolean(
   sumupApiKey && sumupMerchantCode && sumupWebhookSecret
 )
 
+const redisUrl = process.env.REDIS_URL
+
 // Medusa only rejects empty secrets, and the .env.template value is public:
 // a known JWT_SECRET lets anyone forge admin tokens.
 if (process.env.NODE_ENV === 'production') {
@@ -31,6 +33,7 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
+    redisUrl,
     http: {
       storeCors: process.env.STORE_CORS!,
       adminCors: process.env.ADMIN_CORS!,
@@ -53,6 +56,20 @@ module.exports = defineConfig({
     // src/lib/tridata/config.ts).
     { resolve: './src/modules/tridata-sync' },
     { resolve: './src/modules/tridata-stock-snapshot' },
+    // Without these, events and scheduled workflows live in memory, so a
+    // restart loses them (e.g. an order.placed that has not run yet).
+    ...(redisUrl
+      ? [
+          {
+            resolve: '@medusajs/medusa/event-bus-redis',
+            options: { redisUrl },
+          },
+          {
+            resolve: '@medusajs/medusa/workflow-engine-redis',
+            options: { redis: { url: redisUrl } },
+          },
+        ]
+      : []),
     ...(sumupConfigured
     ? [
         {

@@ -70,7 +70,7 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
 - [x] **14. The template's `supersecret` passes as a production secret.**
   Medusa only rejects empty secrets, and anyone can forge admin tokens with a
   known JWT secret. Fix: refuse to start in production with the default.
-- [ ] **15. Redis is started but never used.**
+- [x] **15. Redis is started but never used.**
   `medusa-config.ts` does not wire `REDIS_URL`, so events, workflows and sessions
   live in memory and a restart loses them.
   Fix: use Redis for those when `REDIS_URL` is set.
