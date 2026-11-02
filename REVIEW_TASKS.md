@@ -74,7 +74,7 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
   `medusa-config.ts` does not wire `REDIS_URL`, so events, workflows and sessions
   live in memory and a restart loses them.
   Fix: use Redis for those when `REDIS_URL` is set.
-- [ ] **16. Product images point at localhost on the server.**
+- [x] **16. Product images point at localhost on the server.**
   The local file provider defaults to `http://localhost:9000/static`, and
   `next.config.js` only allows localhost and S3 image hosts.
   Fix: build the URL from `MEDUSA_BACKEND_URL`, allow that host.

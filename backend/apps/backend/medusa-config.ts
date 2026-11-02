@@ -19,6 +19,7 @@ const sumupConfigured = Boolean(
 )
 
 const redisUrl = process.env.REDIS_URL
+const backendUrl = process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000'
 
 // Medusa only rejects empty secrets, and the .env.template value is public:
 // a known JWT_SECRET lets anyone forge admin tokens.
@@ -56,6 +57,20 @@ module.exports = defineConfig({
     // src/lib/tridata/config.ts).
     { resolve: './src/modules/tridata-sync' },
     { resolve: './src/modules/tridata-stock-snapshot' },
+    // The provider's default URL is localhost, which would be stored on every
+    // uploaded image. Point it at this server instead.
+    {
+      resolve: '@medusajs/medusa/file',
+      options: {
+        providers: [
+          {
+            resolve: '@medusajs/medusa/file-local',
+            id: 'local',
+            options: { backend_url: `${backendUrl}/static` },
+          },
+        ],
+      },
+    },
     // Without these, events and scheduled workflows live in memory, so a
     // restart loses them (e.g. an order.placed that has not run yet).
     ...(redisUrl
@@ -83,7 +98,7 @@ module.exports = defineConfig({
                   apiKey: sumupApiKey,
                   merchantCode: sumupMerchantCode,
                   checkoutMode: process.env.SUMUP_CHECKOUT_MODE || 'hosted',
-                  returnUrl: `${process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000'}/hooks/payment/sumup_sumup?wh_secret=${sumupWebhookSecret}`,
+                  returnUrl: `${backendUrl}/hooks/payment/sumup_sumup?wh_secret=${sumupWebhookSecret}`,
                   redirectUrl: `${process.env.STOREFRONT_URL || 'http://localhost:8000'}/api/payment-return/sumup`,
                 },
               },

@@ -8,6 +8,11 @@ checkEnvVariables()
 const S3_HOSTNAME = process.env.MEDUSA_CLOUD_S3_HOSTNAME
 const S3_PATHNAME = process.env.MEDUSA_CLOUD_S3_PATHNAME
 
+// Product images uploaded through the backend's local file provider.
+const backendUrl = new URL(
+  process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "http://localhost:9000"
+)
+
 /**
  * @type {import('next').NextConfig}
  */
@@ -27,8 +32,10 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
+        protocol: backendUrl.protocol.replace(":", ""),
+        hostname: backendUrl.hostname,
+        port: backendUrl.port,
+        pathname: "/static/**",
       },
       {
         protocol: "https",
