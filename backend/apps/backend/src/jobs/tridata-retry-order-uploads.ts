@@ -4,7 +4,7 @@ import { runExclusive } from "../lib/tridata/run-guard"
 import { ensureTridataConfigured } from "../workflows/tridata/helpers/tracked-call"
 import { retryTridataOrderUploadsWorkflow } from "../workflows/tridata"
 
-/** Retries failed UploadOrder calls whose backoff elapsed (max 10 attempts). */
+/** Retries failed UploadOrder calls whose backoff elapsed (max 48 attempts, about 2 days). */
 export default async function tridataRetryOrderUploadsJob(container: MedusaContainer) {
   if (!ensureTridataConfigured(container)) {
     return

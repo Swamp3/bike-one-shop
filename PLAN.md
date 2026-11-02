@@ -1406,7 +1406,7 @@ retry, never blocks placement; "already exists" fault counts as sent),
 mark-paid, cancel/storno, order-state poll. Subscribers on `order.placed`,
 `order.canceled`, `payment.captured`; jobs for stock (cron
 `TRIDATA_STOCK_SYNC_CRON`, default every minute), order states (5 min) and
-upload retries (2 min, max 10 attempts). Every TriCon call writes a sync-log
+upload retries (2 min, max 48 attempts). Every TriCon call writes a sync-log
 row carrying the same correlation id as the `[tridata]` log line. Admin:
 `/admin/tridata/*` API and a "TriCon Sync" page (overview + run-now
 buttons, sync log, orders with retry, stock snapshot) plus an order-detail

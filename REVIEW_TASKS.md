@@ -17,7 +17,7 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
 
 ## Should fix
 
-- [ ] **3. TriCon outage over 4 hours stops order retries.**
+- [x] **3. TriCon outage over 4 hours stops order retries.**
   `helpers/backoff.ts`, 10 attempts add up to 243 minutes.
   Fix: `MAX_UPLOAD_ATTEMPTS = 48` (about 2 days).
 - [ ] **4. An order with no sync row is never uploaded.**
