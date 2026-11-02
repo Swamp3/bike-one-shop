@@ -54,17 +54,6 @@ export type TridataStockColorSizeBranch = TridataStockBranch & {
   Barcode: string
 }
 
-export type TridataStockByArtikel = {
-  ArtikelID: string
-  Artikelnummer: string
-  LagerbestandGesamt: number
-  ReserviertGesamt: number
-  BestelltGesamt: number
-  MengeVerfuegbarGesamt: number
-  MengeVerfuegbarLokaleFiliale: number
-  raw: ParsedXmlObject
-}
-
 export type TridataOrderState =
   | "Neu"
   | "InBearbeitung"

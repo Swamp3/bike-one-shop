@@ -9,8 +9,8 @@
  * Usage:
  *
  *   const log = createIntegrationLogger(logger, "tridata")
- *   const result = await log.call("DownloadArtikel", { limit: 100 }, () =>
- *     client.downloadArtikel({ limit: 100 })
+ *   const result = await log.call("DownloadArtikelAll", {}, () =>
+ *     client.downloadArtikelAll()
  *   )
  */
 import type { Logger } from "@medusajs/framework/types";

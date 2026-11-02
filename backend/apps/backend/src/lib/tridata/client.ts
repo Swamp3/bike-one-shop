@@ -1,7 +1,7 @@
 /**
  * TriCon/Tridata SOAP client.
  *
- * Implements the 12 functions in
+ * Implements the functions the shop uses from
  * planning/3-Architecture_Tech_Stack/tricon-mock-contract.md against
  * TRIDATA_ENDPOINT_URL (the mock in dev, the real TriCon endpoint once
  * TriData grants access). Envelope building/parsing lives in ./soap.ts.
@@ -24,7 +24,6 @@ import {
   extractBoolean,
   extractList,
   extractRecord,
-  formatTridataDateTime,
   ParsedXml,
   ParsedXmlObject,
   requireNumber,
@@ -42,20 +41,17 @@ import type {
   TridataGrFaKombi,
   TridataOrderStateResult,
   TridataStockBranch,
-  TridataStockByArtikel,
   TridataStockColorSizeBranch,
   TridataUploadOrderTO,
 } from "./types"
 
 export type TridataFunctionName =
   | "DownloadArtikelAll"
-  | "DownloadArtikel"
   | "DownloadGrFaKombi"
   | "DownloadStockBranch"
   | "DownloadStockBranchDelta"
   | "DownloadStockColorSizeBranch"
   | "DownloadStockColorSizeBranchDelta"
-  | "DownloadStockByArtikel"
   | "UploadOrder"
   | "UploadOrderChangeBezahlt"
   | "UploadOrderChangeStorno"
@@ -200,17 +196,6 @@ export class TridataClient {
     )
   }
 
-  async downloadArtikel(lastChange: Date | string) {
-    const value =
-      lastChange instanceof Date ? formatTridataDateTime(lastChange) : lastChange
-    return this.invoke(
-      "DownloadArtikel",
-      { LastChange: value },
-      { lastChange: value },
-      (r) => extractList(r, "Artikel").map(mapArtikel)
-    )
-  }
-
   async downloadGrFaKombi() {
     return this.invoke("DownloadGrFaKombi", {}, {}, (r) =>
       extractList(r, "ArtikelGrFaKombi").map(mapKombi)
@@ -247,29 +232,6 @@ export class TridataClient {
     }
     return this.invoke("DownloadStockColorSizeBranch", {}, {}, (r) =>
       extractList(r, "StockColorSizeBranch").map(mapStockColorSizeBranch)
-    )
-  }
-
-  async downloadStockByArtikel(artikelnummer: string) {
-    return this.invoke(
-      "DownloadStockByArtikel",
-      { Artikelnummer: artikelnummer },
-      { artikelnummer },
-      (r): TridataStockByArtikel => {
-        const raw = extractRecord(r)
-        return {
-          ArtikelID: asText(raw.ArtikelID).toLowerCase(),
-          Artikelnummer: asText(raw.Artikelnummer),
-          LagerbestandGesamt: toNumber(raw.LagerbestandGesamt),
-          ReserviertGesamt: toNumber(raw.ReserviertGesamt),
-          BestelltGesamt: toNumber(raw.BestelltGesamt),
-          MengeVerfuegbarGesamt: toNumber(raw.MengeVerfuegbarGesamt),
-          MengeVerfuegbarLokaleFiliale: toNumber(
-            raw.MengeVerfuegbarLokaleFiliale
-          ),
-          raw,
-        }
-      }
     )
   }
 

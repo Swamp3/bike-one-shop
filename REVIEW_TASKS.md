@@ -46,6 +46,8 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
   `helpers/tracked-call.ts`, a failed log write after a successful upload marks
   the order failed, and the retry then becomes a false conflict.
   Fix: a failed log write never changes the call's result.
-- [ ] **10. Unused code.**
+- [x] **10. Unused code.**
   `TridataClient.downloadArtikel`, `downloadStockByArtikel`, the
   `TridataStockByArtikel` type, and `tridata_order_map.payload_hash`.
+  The client code is gone. Still open: dropping `payload_hash` needs
+  `medusa db:generate` against a running database.
