@@ -61,7 +61,7 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
   `docker-compose.yml` publishes 5432 (password `medusa`) and 6379 (no auth) on
   all interfaces, and Docker's published ports bypass ufw.
   Fix: bind to 127.0.0.1, take the Postgres password from the environment.
-- [ ] **12. Next.js has a critical remote code execution advisory.**
+- [x] **12. Next.js has a critical remote code execution advisory.**
   next 15.5.26 is affected by GHSA-2464-fhr4-w9xw (image optimizer) and by
   cache-poisoning advisories for self-hosted sites. Fix: 15.5.28.
 - [ ] **13. Medusa 2.21.1 pulls in vulnerable packages.**
