@@ -78,7 +78,7 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
   The local file provider defaults to `http://localhost:9000/static`, and
   `next.config.js` only allows localhost and S3 image hosts.
   Fix: build the URL from `MEDUSA_BACKEND_URL`, allow that host.
-- [ ] **17. Missing storefront settings fail silently.**
+- [x] **17. Missing storefront settings fail silently.**
   An unset `NEXT_PUBLIC_BASE_URL` gives canonical URLs and a sitemap on
   `https://localhost:8000`. Fix: fail the build, add a `.env.template`.
 - [ ] **18. Leftover starter code.**

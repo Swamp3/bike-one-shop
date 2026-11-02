@@ -2,6 +2,15 @@ const c = require("ansi-colors");
 
 const requiredEnvs = [
   {
+    key: "NEXT_PUBLIC_MEDUSA_BACKEND_URL",
+    description: "Public URL of the Medusa backend, also used for image hosts.",
+  },
+  {
+    key: "NEXT_PUBLIC_BASE_URL",
+    description:
+      "Public URL of this storefront. Canonical URLs and the sitemap use it.",
+  },
+  {
     key: "NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY",
     // TODO: we need a good doc to point this to
     description:
