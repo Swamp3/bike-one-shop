@@ -88,11 +88,20 @@ export async function cancelOrder(
       return out({ status: "skipped", reason: "never uploaded" })
     }
     if (map.upload_status !== "sent") {
+      // An earlier attempt may have reached TriCon (timeout, or a conflict), so
+      // the order can be live in TriBike with no storno: someone has to check.
+      const conflict = map.upload_status === "conflict"
+      const mayExist = conflict || map.attempts > 0
       await service.updateTridataOrderMaps({
         id: map.id,
-        upload_status: "skipped",
+        upload_status: conflict ? "conflict" : "skipped",
         next_attempt_at: null,
-        last_error: "order canceled before upload",
+        last_error: conflict
+          ? map.last_error
+          : mayExist
+            ? "order canceled; an earlier upload attempt may have reached TriCon, check TriBike"
+            : "order canceled before upload",
+        ...(mayExist ? { attention: "review" } : {}),
       })
       return out({ status: "skipped", reason: "canceled before upload" })
     }

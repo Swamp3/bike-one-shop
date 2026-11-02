@@ -1,7 +1,7 @@
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import type { MedusaContainer } from "@medusajs/framework/types"
 import { TRIDATA_SYNC_MODULE } from "../../../modules/tridata-sync"
-import { syncOrderStates } from "../steps/order-updates"
+import { cancelOrder, syncOrderStates } from "../steps/order-updates"
 
 type Map = Record<string, unknown> & { id: string; order_id: string }
 
@@ -112,5 +112,42 @@ describe("order-state poll re-sends what the event handlers missed", () => {
     const calls = fakeTricon("Geliefert")
     await syncOrderStates(fakeContainer(sentMap(), canceledOrder))
     expect(calls).not.toContain("UploadOrderChangeStorno")
+  })
+})
+
+describe("cancelOrder before a confirmed upload", () => {
+  const env = process.env
+
+  beforeEach(() => {
+    process.env = {
+      ...env,
+      TRIDATA_ENDPOINT_URL: "http://tricon.test/soap",
+      TRIDATA_IDENTIFY_GUID: "11111111-1111-1111-1111-111111111111",
+    }
+  })
+  afterEach(() => {
+    process.env = env
+  })
+
+  it("skips quietly when no upload was ever attempted", async () => {
+    const map = sentMap({ upload_status: "pending", attempts: 0 })
+    await cancelOrder(fakeContainer(map, canceledOrder), "order_1")
+    expect(map.upload_status).toBe("skipped")
+    expect(map.attention).toBeNull()
+  })
+
+  it("flags a failed attempt, which may have reached TriCon", async () => {
+    const map = sentMap({ upload_status: "failed", attempts: 2 })
+    await cancelOrder(fakeContainer(map, canceledOrder), "order_1")
+    expect(map.upload_status).toBe("skipped")
+    expect(map.attention).toBe("review")
+  })
+
+  it("keeps a conflict and its message", async () => {
+    const map = sentMap({ upload_status: "conflict", attempts: 1, last_error: "CONFLICT: x" })
+    await cancelOrder(fakeContainer(map, canceledOrder), "order_1")
+    expect(map.upload_status).toBe("conflict")
+    expect(map.last_error).toBe("CONFLICT: x")
+    expect(map.attention).toBe("review")
   })
 })

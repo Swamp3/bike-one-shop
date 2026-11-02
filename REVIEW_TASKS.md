@@ -10,7 +10,7 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
   their event. A failed call is never retried. Payment captured or order
   cancelled during an in-flight upload is also lost.
   Fix: re-check open orders in the order-state poll loop.
-- [ ] **2. Cancelling hides an order TriCon may already have.**
+- [x] **2. Cancelling hides an order TriCon may already have.**
   `steps/order-updates.ts`, `cancelOrder` marks every non-`sent` order `skipped`,
   though a timed-out upload may have arrived, and it erases `conflict`.
   Fix: keep `conflict`, set `attention: "review"` when an attempt was made.
