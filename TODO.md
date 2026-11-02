@@ -8,6 +8,42 @@ Status as of 2026-09-29, after Task 12 (national availability, real
 inventory, color variants) and Task 13 (Wilier Adlar bike configurator
 MVP) landed.
 
+## In progress — due mid-November 2026 (test phase on dedicated Linux server)
+
+- **TriCon mock + sync inspection screens (PLAN.md Task 14).** Plan:
+  `planning/3-Architecture_Tech_Stack/tricon-mock-plan.md`; wire contract:
+  `planning/3-Architecture_Tech_Stack/tricon-mock-contract.md`. Stateful
+  SOAP mock (`backend/apps/tricon-mock`, port 3001) with its own UI for
+  items/stock/orders/request log, shop-side `tridata-sync` +
+  `tridata-stock-snapshot` modules, stock/order/order-state sync, and a
+  "TriCon Sync" page in Medusa admin. Target ready 2026-11-13.
+- **TriCon admin: actions for rejected/cancelled-in-TriBike orders
+  (Task 14 follow-up).** Today the "Re-upload, new ID" / "Mark sent"
+  buttons only exist for `conflict` (duplicate WebShopOrderID) orders,
+  and the `rejected` / `canceled_in_tribike` / `partially_delivered`
+  attention flags can't be cleared once handled. Add: (1) allow
+  "Re-upload, new ID" for `Abgelehnt` orders once the cause is fixed in
+  TriBike; (2) a "Mark resolved" button that clears the attention flag,
+  logged with the admin user; (3) a shortcut from the alert to Medusa's
+  refund + cancel for paid orders that can't be delivered (verify how
+  Medusa 2.21.1 handles cancel with a captured payment). Also ask
+  BikeOne/TriData what `Abgelehnt` means in their process (fixable
+  error vs. always cancel + refund) — TriCon returns no reason.
+- **Test server setup.** Dedicated Linux server arriving mid-November
+  runs backend, storefront and the mock. Needs: storefront production
+  build fixed (Task 3), env vars incl. `TRIDATA_*` pointed at the local
+  mock, mock UI behind basic auth, `/soap` not exposed publicly.
+
+- **Before the first real order goes to TriData (legal gate, from the
+  2026-10-29 `legal-security-reviewer` pass on Task 14 — not legal advice,
+  needs lawyer sign-off):** confirm where TriCon/TriBike is hosted
+  (on-prem at BikeOne vs. TriData) and sign an AVV (GDPR Art. 28) with
+  TriData if they process or can access the data; name the ERP transfer in
+  the privacy policy; define an erasure/retention process for customer
+  records in TriBike (no delete function in TriCon). Test server: put the
+  storefront behind basic auth/IP allowlist + noindex, only fake customer
+  data (example.com) in test orders.
+
 ## Blocked on someone outside this project
 
 - **Compositing prototype for the configurator preview.** The Wilier
@@ -45,7 +81,10 @@ MVP) landed.
   installation uses "one interface for all branches" or "one interface per
   branch" (`planning/3-Architecture_Tech_Stack/tricon-integration-notes.md`)
   — the answer decides whether per-store stock/pickup routing is even
-  possible with the current setup.
+  possible with the current setup. **Update 2026-10-29:** confirmed that
+  one TriCon connection covers both stores (TriCon/TriData/TriBike is one
+  combined system), so the all-branches functions (`Filialname`) apply.
+  Until real credentials arrive, the shop syncs against the mock above.
 - **Real product photos, per color.** Color selection is now fully real
   and working — a color-swatch selector on the PDP, wired to the gallery
   (the caption updates live, e.g. "Produktfoto folgt — Farbe: Schwarz").
@@ -121,8 +160,6 @@ MVP) landed.
   per-instance-values entry above) extends cheaply — suffix keys by locale
   (`payment_label_pp_sumup_sumup_en`), have the backend route prefer the
   suffixed key and fall back to the base one.
-- **Next.js production build fails** on its own `/404`/`/500` prerender.
-  Doesn't affect local dev; needs fixing before any real deploy.
 - **Mobile header layout.** The icon cluster (search/language/store/cart)
   should default to one item per row instead of today's horizontal row —
   flagged by you, explicitly deferred, needs its own mobile-layout pass.

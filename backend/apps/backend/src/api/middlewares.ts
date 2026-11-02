@@ -1,6 +1,19 @@
-import { configureStoreSearch, defineMiddlewares } from '@medusajs/framework/http'
+import {
+  configureStoreSearch,
+  defineMiddlewares,
+  validateAndTransformBody,
+  validateAndTransformQuery,
+} from '@medusajs/framework/http'
 import type { MedusaRequest, MedusaResponse, MedusaNextFunction } from '@medusajs/framework/http'
 import { timingSafeEqual } from 'node:crypto'
+import {
+  AdminTridataEmptyBody,
+  AdminTridataOrdersQuery,
+  AdminTridataResolveBody,
+  AdminTridataStockSnapshotsQuery,
+  AdminTridataSyncLogsQuery,
+  AdminTridataSyncStockBody,
+} from './admin/tridata/validators'
 
 // SumUp doesn't document a signed-webhook scheme, so this is a shared-secret
 // compensating control: medusa-config.ts registers the webhook callback URL
@@ -49,6 +62,48 @@ export default defineMiddlewares({
       method: ['POST'],
       matcher: '/hooks/payment/sumup_sumup',
       middlewares: [verifySumupWebhookSecret],
+    },
+    // TriCon sync admin API (src/api/admin/tridata). Admin routes are
+    // authenticated by Medusa; these only validate inputs.
+    {
+      method: ['GET'],
+      matcher: '/admin/tridata/sync-logs',
+      middlewares: [validateAndTransformQuery(AdminTridataSyncLogsQuery, {})],
+    },
+    {
+      method: ['GET'],
+      matcher: '/admin/tridata/orders',
+      middlewares: [validateAndTransformQuery(AdminTridataOrdersQuery, {})],
+    },
+    {
+      method: ['GET'],
+      matcher: '/admin/tridata/stock-snapshots',
+      middlewares: [validateAndTransformQuery(AdminTridataStockSnapshotsQuery, {})],
+    },
+    {
+      method: ['POST'],
+      matcher: '/admin/tridata/sync-stock',
+      middlewares: [validateAndTransformBody(AdminTridataSyncStockBody)],
+    },
+    {
+      method: ['POST'],
+      matcher: '/admin/tridata/link-products',
+      middlewares: [validateAndTransformBody(AdminTridataEmptyBody)],
+    },
+    {
+      method: ['POST'],
+      matcher: '/admin/tridata/sync-order-states',
+      middlewares: [validateAndTransformBody(AdminTridataEmptyBody)],
+    },
+    {
+      method: ['POST'],
+      matcher: '/admin/tridata/orders/:id/resolve',
+      middlewares: [validateAndTransformBody(AdminTridataResolveBody)],
+    },
+    {
+      method: ['POST'],
+      matcher: '/admin/tridata/retry-order/:id',
+      middlewares: [validateAndTransformBody(AdminTridataEmptyBody)],
     },
   ],
 })

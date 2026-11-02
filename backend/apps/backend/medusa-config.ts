@@ -37,7 +37,13 @@ module.exports = defineConfig({
         },
       ]
     : [],
-  modules: sumupConfigured
+  modules: [
+    // TriCon/Tridata ERP sync state (always registered; the sync itself only
+    // runs once TRIDATA_ENDPOINT_URL + TRIDATA_IDENTIFY_GUID are set — see
+    // src/lib/tridata/config.ts).
+    { resolve: './src/modules/tridata-sync' },
+    { resolve: './src/modules/tridata-stock-snapshot' },
+    ...(sumupConfigured
     ? [
         {
           resolve: '@medusajs/medusa/payment',
@@ -58,5 +64,6 @@ module.exports = defineConfig({
           },
         },
       ]
-    : [],
+    : []),
+  ],
 })

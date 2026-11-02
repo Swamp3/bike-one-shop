@@ -98,6 +98,23 @@ Status: **mostly done — one known issue**
   upstream Next.js patch. **Follow-up task, not a blocker for the
   walking-skeleton bar** since dev mode is the primary smoke-test path
   and it fully works.
+- **Fixed 2026-10-29.** Root cause: two React copies. The backend/admin
+  needs React 18, which npm hoists to `backend/node_modules`; the
+  storefront has React 19 (and Next.js) nested in its own
+  `node_modules`, but Next's dependency `styled-jsx` was hoisted to the
+  root and so resolved React 18. Next renders the pages-router error
+  pages through styled-jsx's registry, so `/404` ran hooks against the
+  wrong React (null dispatcher -> `useContext` of null). Confirmed by
+  giving the storefront a local styled-jsx copy (build passes).
+  `transpilePackages` doesn't help, since Next loads styled-jsx through
+  its own require hook. Fix: `apps/storefront/scripts/ensure-local-styled-jsx.js`,
+  run as `prebuild`/`prestart`, copies styled-jsx into the storefront's
+  `node_modules` when the hoisted copy resolves a different React
+  (idempotent, survives `npm install`). Verified: `npm run build` from
+  `backend/` builds all apps; `next start` serves `/`, `/de`,
+  `/de/store` with 200 and unknown routes with 404. Note: the build
+  prerenders from the Store API, so the backend must be running during
+  `next build`.
 - Out of scope (unchanged): custom BikeOne design system / wireframe
   integration — wireframes in `wireframes/` are the reference for that
   later work, not wired in yet.
@@ -1351,6 +1368,110 @@ after verification, including the detached `@medusajs/cli/cli.js start
 --types` and `next-server` children a plain `pkill -f` pattern has missed
 before on this project.
 
+
+### Task 14 — TriCon mock + sync inspection screens (in progress)
+
+Started 2026-10-29, target 2026-11-13 (test phase on a dedicated Linux
+server from mid-November). Plan:
+`planning/3-Architecture_Tech_Stack/tricon-mock-plan.md`; wire contract
+shared by mock and client:
+`planning/3-Architecture_Tech_Stack/tricon-mock-contract.md`.
+
+Decisions: stateful Node/Fastify mock (`backend/apps/tricon-mock`, JSON
+state file, no native deps) instead of WireMock, because uploaded orders
+and edited stock must flow back on later calls. One TriCon connection
+covers both stores (confirmed by the user), so `Filialname`-based
+branch functions apply. Mock UI is for the developer only (sync
+verification, occasional stock edits).
+
+Status is updated below as parts land.
+
+**Shop side (2026-10-29): built and verified end-to-end against the mock.**
+`TridataClient` (`src/lib/tridata/client.ts` + `soap.ts`) implements the 12
+contract functions with hand-built SOAP 1.1 envelopes, `fast-xml-parser`
+with entity processing off and DOCTYPE responses rejected (XXE), typed
+fault/transport/response errors and a request timeout. Config comes from
+`TRIDATA_ENDPOINT_URL` (or `TRIDATA_WSDL_URL` minus `?wsdl`) plus
+`TRIDATA_IDENTIFY_GUID`; without both, jobs/subscribers skip with one info
+log. New modules `tridata-sync` (`TridataProductMap` per variant,
+`TridataOrderMap`, append-only `TridataSyncLog`, `TridataSyncCursor` for
+LastChange watermarks/run state) and `tridata-stock-snapshot` (float
+quantities per inventory item x location), with read-only links to
+variant/order/inventory item/stock location. Workflows in
+`src/workflows/tridata/`: link-products (SKU matching per contract),
+sync-stock (delta via cursor, `InventoryLevel.stocked_quantity =
+floor(MengeVerfuegbar) + reserved` through Medusa's batch inventory-levels
+workflow, hash-skip of unchanged rows), upload-order (idempotent, backoff
+retry, never blocks placement; "already exists" fault counts as sent),
+mark-paid, cancel/storno, order-state poll. Subscribers on `order.placed`,
+`order.canceled`, `payment.captured`; jobs for stock (cron
+`TRIDATA_STOCK_SYNC_CRON`, default every minute), order states (5 min) and
+upload retries (2 min, max 10 attempts). Every TriCon call writes a sync-log
+row carrying the same correlation id as the `[tridata]` log line. Admin:
+`/admin/tridata/*` API and a "TriCon Sync" page (overview + run-now
+buttons, sync log, orders with retry, stock snapshot) plus an order-detail
+widget. E2E against the mock: 62/62 variants linked, full stock sync moved
+103 inventory levels to TriBike's values, a stock edit in the mock arrived
+via delta, order #1 uploaded with correct IDs/paid flag, re-upload
+idempotent, `Geliefert` state pulled back, injected failures logged without
+advancing the cursor.
+
+Security/legal review fixes (same day): `Filialname` only from a real
+`pickup` fulfillment set whose location is in `TRIDATA_BRANCH_MAP` (no
+customer-writable metadata); `.env.template` ships empty TriCon values and
+`make setup` fills in the mock defaults; in production the mock GUID and
+non-https endpoints are refused unless `TRIDATA_ALLOW_INSECURE_ENDPOINT=true`
+(test server only). An "already exists" fault now sets the new `conflict`
+status (admin review, never auto-retried) instead of `sent`; uploads take a
+per-order in-process lock, the retry job skips attempts younger than the
+client timeout, and `TRIDATA_ORDER_ID_OFFSET` separates WebShopOrderID
+ranges per environment (the value sent is stored). Variants that lose their
+TriBike link get 0 available stock at mapped locations, any link change
+resets the stock cursors, and the first stock run after 03:00 is a full
+sync; duplicate SKUs/match keys are reported as conflicts and unmatched
+shop SKUs are shown on the admin Overview. Stock rows with missing
+quantities fail the run, LastChange is compared as timestamps, SOAP
+responses are capped at 20 MB, error logs are scrubbed (email, phone, GUID),
+phones are only sent with `TRIDATA_SEND_PHONE=true`, and `tridata_sync_log`
+is purged daily after `TRIDATA_SYNC_LOG_RETENTION_DAYS` (30).
+
+Conflict resolution (same day): `POST /admin/tridata/orders/:id/resolve`
+with `mark_sent` (admin confirmed the TriBike record is this order; the paid
+flag is re-sent if paid) or `reupload_with_new_id` (new WebShopOrderID in a
+separate band, `display_id + offset + bump * 100000000`, checked against
+existing maps, then uploaded again). Both are confirm-prompted buttons on the
+Orders tab and the order widget, and both are logged in `TridataSyncLog` with
+the admin user id. E2E via the Store API with fake customers
+(`tricon-test-1/2@example.com`, system payment provider temporarily enabled
+for the DE region, then reset to SumUp-only): both orders were uploaded on
+`order.placed` unpaid; an admin capture -> `payment.captured` ->
+`UploadOrderChangeBezahlt` -> paid in the mock; an admin cancel ->
+`UploadOrderChangeStorno` -> `StorniertExtern`, pulled back by the state
+sync; a forced conflict was resolved both ways (WebShopOrderID 2 kept, then
+re-issued as 100000002). Dev order #1 was not touched; test orders #2
+(pending, captured) and #3 (canceled) remain in the dev DB.
+
+TriBike state -> Medusa order (same day): the order-state sync now also
+applies states to the Medusa order (`steps/apply-tribike-states.ts`).
+`Geliefert` creates a fulfillment for all unfulfilled items through
+`createOrderFulfillmentWorkflow` (no notification; location from the
+shipping option's fulfillment set, else Filialname, else the first mapped
+branch) and marks it delivered. `Teilgeliefert`/`Abgelehnt`/`StorniertTriData`
+only set an `attention` flag with an admin alert (no auto-cancel), and
+`Neu`/`InBearbeitung`/`StorniertExtern` change nothing. Applied state, apply
+errors and pending re-runs live on `TridataOrderMap`; never-applied final
+states are backfilled. E2E: dev order #1 (Geliefert) became fulfilled +
+delivered at Oldenburg; test order #2 showed the Teilgeliefert and then
+Abgelehnt alerts and stayed unchanged in Medusa. Inventory: the fulfillment
+lowered stocked and reserved by the same quantity, and a forced full TriCon
+stock sync afterwards found all 124 rows unchanged, so there is no double
+count.
+
+Open: Click & Collect is deferred until the real TriCon endpoint (no pickup
+fulfillment set, every order goes out as `Versand`); checkout stock re-check
+(`DownloadStockByArtikel`) is in the client but not wired into checkout; the
+admin page and widget have not been checked visually in a browser.
+
 ## Later milestones (not started)
 
 - **Task 13 follow-ups, surfaced by the frontend work:** (1) the separate,
@@ -1370,10 +1491,9 @@ before on this project.
   prerender crash) — needed before any real deploy, not needed for
   local dev.
 - Finish SumUp activation once sandbox credentials exist — see Task 5.
-- TriCon/Tridata SOAP integration itself (client stubbed + logged, see
-  Task 6; WireMock mock first if sandbox access is delayed further,
-  real sandbox when Tridata grants access — see
-  `planning/3-Architecture_Tech_Stack/local-dev-setup.md` "Open blocker")
+- TriCon/Tridata SOAP integration itself — in progress against a
+  stateful mock instead of WireMock, see Task 14; real sandbox when
+  Tridata grants access.
 - **Real Click & Collect order fulfillment — directly tied to TriCon
   order sync, not a separate blocker.** Task 11 built the honest part
   (preferred-store selection, real and working). Per

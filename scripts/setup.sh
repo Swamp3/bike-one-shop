@@ -58,6 +58,25 @@ else
   ok "created, pointed at the compose Postgres instance"
 fi
 
+step "Pointing the backend at the local TriCon mock (TRIDATA_* in .env)"
+# Fills TRIDATA_ENDPOINT_URL / TRIDATA_IDENTIFY_GUID with the mock's dev
+# values only when they are missing or empty — never overwrites a real value.
+set_env_if_empty() {
+  local key="$1" value="$2"
+  if grep -qE "^${key}=.+" "$BACKEND_ENV"; then
+    ok "$key already set, leaving it"
+  elif grep -qE "^${key}=$" "$BACKEND_ENV"; then
+    sed -i.bak -e "s#^${key}=\$#${key}=${value}#" "$BACKEND_ENV"
+    rm -f "$BACKEND_ENV.bak"
+    ok "$key set to the mock default"
+  else
+    printf '%s=%s\n' "$key" "$value" >>"$BACKEND_ENV"
+    ok "$key added with the mock default"
+  fi
+}
+set_env_if_empty TRIDATA_ENDPOINT_URL "http://localhost:3001/soap"
+set_env_if_empty TRIDATA_IDENTIFY_GUID "00000000-0000-0000-0000-000000000001"
+
 step "Running database migrations (also seeds demo data on first run)"
 (cd "$BACKEND_APP_DIR" && npx medusa db:migrate)
 

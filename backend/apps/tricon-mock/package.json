@@ -1,0 +1,24 @@
+{
+  "name": "@dtc/tricon-mock",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Stateful TriCon (TriData/TriBike) SOAP mock with an inspection UI, for local dev and the test server.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "seed": "tsx src/seed.ts",
+    "test": "node --import tsx --test \"test/**/*.test.ts\"",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.0",
+    "fastify": "^5.2.0",
+    "@fastify/formbody": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

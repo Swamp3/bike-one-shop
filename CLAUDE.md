@@ -14,7 +14,8 @@ Current status lives in `PLAN.md` (detailed build log, task-by-task) and `TODO.m
 .
 ├── backend/                 # turborepo monorepo (npm workspaces) — see backend/CLAUDE.md
 │   ├── apps/backend/        # Medusa.js v2 API server
-│   └── apps/storefront/     # Next.js storefront
+│   ├── apps/storefront/     # Next.js storefront
+│   └── apps/tricon-mock/    # stateful TriCon SOAP mock + inspection UI (:3001), see its README
 ├── docker-compose.yml       # Postgres 16 + Redis 7 for local dev
 ├── planning/                # requirements, architecture decisions, DB schema design, local-dev setup notes
 ├── wireframes/               # interactive mobile-first HTML mockups — design reference, not yet wired into the storefront
@@ -40,22 +41,20 @@ make dev     # runs both backend (:9000) and storefront (:8000)
 - Backend health check: `curl http://localhost:9000/health`
 - Storefront: `http://localhost:8000` (redirects to the seeded `/de` region — Germany-only for now)
 - Admin dashboard: `http://localhost:9000/app` (`make setup` prints the dev admin login)
-- Production build: `npm run build` from `backend/` builds backend + admin dashboard cleanly. The storefront's `next build` currently fails on Next.js's own auto-generated `/404`/`/500` error-page prerendering (not a real app route) — `next dev` is unaffected; see `PLAN.md` Task 3.
+- Production build: `npm run build` from `backend/` builds backend, admin dashboard and storefront. The storefront build prerenders pages from the Store API, so the backend must be running (`make backend`) while it builds. Its `prebuild`/`prestart` hook (`apps/storefront/scripts/ensure-local-styled-jsx.js`) works around a React 18/19 hoisting conflict that used to crash the `/404` prerender — see `PLAN.md` Task 3.
 
 ## Architecture
 
-**Backend logic currently lives outside the "custom module" pattern the Medusa convention (`backend/AGENTS.md`) describes.** `src/modules/`, `src/workflows/`, `src/links/`, `src/subscribers/`, `src/jobs/` are all still scaffold-only (README stubs, no real code). Actual custom logic instead lives in:
-- `backend/apps/backend/src/lib/tridata/client.ts` — logged TriCon/Tridata ERP client stub (not yet wired to a real WSDL endpoint; see TODO.md)
-- `backend/apps/backend/src/lib/integration-logger.ts` — shared logging for integration code
+**Backend logic is partly in the "custom module" pattern the Medusa convention (`backend/AGENTS.md`) describes.** The TriCon/Tridata integration (PLAN.md Task 14) follows it: `src/modules/tridata-sync` and `src/modules/tridata-stock-snapshot`, `src/links/tridata-*`, `src/workflows/tridata/`, `src/subscribers/tridata-*`, `src/jobs/tridata-*`, admin API under `src/api/admin/tridata/`, admin page `src/admin/routes/tricon/` + order widget. Its SOAP client is `src/lib/tridata/` (against the mock until real credentials exist; wire contract in `planning/3-Architecture_Tech_Stack/tricon-mock-contract.md`), logging via `src/lib/integration-logger.ts`. Older custom logic still lives outside that pattern:
 - `backend/apps/backend/src/search/` — product search helpers (option-value resolution, pricing, product-id resolution) used to back storefront search/filtering
 - `backend/apps/backend/src/migration-scripts/initial-data-seed.ts` and `src/scripts/seed-demo-products.ts` — data seeding
 - `backend/apps/backend/src/api/store/custom/` and `src/api/admin/custom/` — currently placeholder routes only
 
-When adding real business logic (the planned `product-brand`, `store-profile`, `tridata-stock-snapshot`, `saved-payment-instrument`, `order-fulfillment-extension`, `tridata-sync` modules from the schema design), follow the Medusa module/workflow convention in `backend/AGENTS.md` rather than extending the `src/lib` stub pattern further — the stubs predate those modules being built out.
+When adding real business logic (the remaining planned `product-brand`, `store-profile`, `saved-payment-instrument`, `order-fulfillment-extension` modules from the schema design), follow the Medusa module/workflow convention in `backend/AGENTS.md`, as the tridata modules do.
 
 **Storefront** (`backend/apps/storefront/src/`) follows the standard Medusa Next.js starter layout: `app/[countryCode]/(main)` and `(checkout)` route groups, feature-oriented `modules/<feature>/{components,templates}` (cart, checkout, click-collect, account, products, store, order, shipping, layout, home, collections, categories), `lib/data` for server actions calling the Medusa API, `lib/hooks`/`lib/util` for client helpers. It still runs Medusa's generic starter UI — the custom design in `wireframes/` (interactive HTML mockups) isn't wired in yet.
 
-**Integrations are feature-flagged on credentials, not removed:** SumUp payment provider and TriCon/Tridata ERP sync are both implemented and conditionally wired but inactive without real sandbox credentials (`SUMUP_API_KEY`/`SUMUP_MERCHANT_CODE`, TriCon WSDL URL). Don't assume "not active" means "not implemented" — check `PLAN.md` for the relevant task before rebuilding something that already exists gated behind an env var.
+**Integrations are feature-flagged on credentials, not removed:** SumUp payment provider and TriCon/Tridata ERP sync are both implemented and conditionally wired but inactive without real sandbox credentials (`SUMUP_API_KEY`/`SUMUP_MERCHANT_CODE`; `TRIDATA_ENDPOINT_URL`/`TRIDATA_IDENTIFY_GUID`, which `make setup` points at the local mock). Don't assume "not active" means "not implemented" — check `PLAN.md` for the relevant task before rebuilding something that already exists gated behind an env var.
 
 **Known unresolved security gap:** the installed `@sumup/medusa-plugin` (v0.1.0) does not verify incoming payment webhook signatures. Not exploitable today (nothing is live), but must be fixed (patch/fork the provider, or add a server-side status re-check) before real transactions go live. Route any related change through the `legal-security-reviewer` subagent.
 
