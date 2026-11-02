@@ -73,7 +73,7 @@ export async function markOrderPaid(
   }
 }
 
-async function cancelOrder(
+export async function cancelOrder(
   container: MedusaContainer,
   orderId: string
 ): Promise<SimpleResult> {
@@ -141,78 +141,118 @@ export const cancelTridataOrderStep = createStep(
 
 const STATE_BATCH = 100
 
+/**
+ * Re-sends a storno or paid flag this open order still needs: the event
+ * handlers run only once, so a failed call or an event that fired during the
+ * upload would otherwise never reach TriCon. Both calls are safe to repeat.
+ */
+async function reconcileOrder(
+  container: MedusaContainer,
+  orderId: string,
+  tribikeState: string | null
+): Promise<SimpleResult> {
+  try {
+    const order = await loadOrderForUpload(container, orderId)
+    if (order?.status !== "canceled") {
+      return await markOrderPaid(container, orderId)
+    }
+    return tribikeState && TRIDATA_FINAL_ORDER_STATES.includes(tribikeState)
+      ? { order_id: orderId, status: "skipped", reason: "final in TriBike" }
+      : await cancelOrder(container, orderId)
+  } catch (e) {
+    return { order_id: orderId, status: "failed", reason: scrubError((e as Error).message) }
+  }
+}
+
 /** DownloadOrderStateByOrder for sent orders not yet in a final TriBike state. */
+export async function syncOrderStates(container: MedusaContainer) {
+  const summary = {
+    status: "skipped" as "skipped" | "success" | "failed",
+    checked: 0,
+    changed: 0,
+    reconciled: 0,
+    failed: 0,
+  }
+  if (!ensureTridataConfigured(container)) {
+    return summary
+  }
+  const startedAt = Date.now()
+  const service = getTridataSyncService(container)
+  await updateCursor(container, "order_state", { last_run_at: new Date() })
+  const open = await service.listTridataOrderMaps(
+    {
+      upload_status: "sent",
+      $or: [
+        { tribike_state: null },
+        { tribike_state: { $nin: TRIDATA_FINAL_ORDER_STATES } },
+      ],
+    },
+    { take: STATE_BATCH, order: { state_checked_at: "ASC" } }
+  )
+  const client = getTridataClient(container)
+  let lastError: string | null = null
+  for (const map of open) {
+    summary.checked++
+    const res = await trackedCall(
+      container,
+      {
+        functionName: "DownloadOrderStateByOrder",
+        direction: "inbound",
+        entityType: "order",
+        entityId: map.order_id,
+        summary: { webShopOrderId: map.web_shop_order_id },
+      },
+      () => client.downloadOrderStateByOrder(map.web_shop_order_id),
+      (data) => ({ orderState: data.OrderState })
+    )
+    if (!res.ok) {
+      summary.failed++
+      lastError = res.error.message
+      continue
+    }
+    const state = res.data.OrderState || null
+    if (state !== map.tribike_state) {
+      summary.changed++
+    }
+    await service.updateTridataOrderMaps({
+      id: map.id,
+      tribike_state: state,
+      state_checked_at: new Date(),
+      last_correlation_id: res.correlationId,
+      // Applied to the Medusa order by apply-tribike-order-states.
+      ...(state !== map.tribike_state ? { medusa_apply_pending: true } : {}),
+    })
+    const reconciled = await reconcileOrder(container, map.order_id, state)
+    if (reconciled.status === "sent") {
+      summary.reconciled++
+    } else if (reconciled.status === "failed") {
+      summary.failed++
+      lastError = reconciled.reason ?? "reconcile failed"
+    }
+  }
+  summary.status = summary.failed ? "failed" : "success"
+  await writeRunSummary(container, {
+    functionName: "sync-order-states",
+    direction: "inbound",
+    status: summary.status,
+    durationMs: Date.now() - startedAt,
+    summary,
+    error: lastError ?? undefined,
+  })
+  await updateCursor(
+    container,
+    "order_state",
+    summary.failed && summary.failed === summary.checked
+      ? { last_error: lastError }
+      : { last_success_at: new Date(), last_error: lastError }
+  )
+  return summary
+}
+
 export const syncTridataOrderStatesStep = createStep(
   "sync-tridata-order-states",
   async (_input: Record<string, never>, { container }) => {
-    const summary = { status: "skipped" as "skipped" | "success" | "failed", checked: 0, changed: 0, failed: 0 }
-    if (!ensureTridataConfigured(container)) {
-      return new StepResponse(summary)
-    }
-    const startedAt = Date.now()
-    const service = getTridataSyncService(container)
-    await updateCursor(container, "order_state", { last_run_at: new Date() })
-    const open = await service.listTridataOrderMaps(
-      {
-        upload_status: "sent",
-        $or: [
-          { tribike_state: null },
-          { tribike_state: { $nin: TRIDATA_FINAL_ORDER_STATES } },
-        ],
-      },
-      { take: STATE_BATCH, order: { state_checked_at: "ASC" } }
-    )
-    const client = getTridataClient(container)
-    let lastError: string | null = null
-    for (const map of open) {
-      summary.checked++
-      const res = await trackedCall(
-        container,
-        {
-          functionName: "DownloadOrderStateByOrder",
-          direction: "inbound",
-          entityType: "order",
-          entityId: map.order_id,
-          summary: { webShopOrderId: map.web_shop_order_id },
-        },
-        () => client.downloadOrderStateByOrder(map.web_shop_order_id),
-        (data) => ({ orderState: data.OrderState })
-      )
-      if (!res.ok) {
-        summary.failed++
-        lastError = res.error.message
-        continue
-      }
-      const state = res.data.OrderState || null
-      if (state !== map.tribike_state) {
-        summary.changed++
-      }
-      await service.updateTridataOrderMaps({
-        id: map.id,
-        tribike_state: state,
-        state_checked_at: new Date(),
-        last_correlation_id: res.correlationId,
-        // Applied to the Medusa order by apply-tribike-order-states.
-        ...(state !== map.tribike_state ? { medusa_apply_pending: true } : {}),
-      })
-    }
-    summary.status = summary.failed ? "failed" : "success"
-    await writeRunSummary(container, {
-      functionName: "sync-order-states",
-      direction: "inbound",
-      status: summary.status,
-      durationMs: Date.now() - startedAt,
-      summary,
-      error: lastError ?? undefined,
-    })
-    await updateCursor(
-      container,
-      "order_state",
-      summary.failed && summary.failed === summary.checked
-        ? { last_error: lastError }
-        : { last_success_at: new Date(), last_error: lastError }
-    )
-    return new StepResponse(summary)
+    return new StepResponse(await syncOrderStates(container))
   }
 )
 

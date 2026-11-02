@@ -5,7 +5,7 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
 
 ## Must fix
 
-- [ ] **1. Paid flag and cancellation can never reach TriCon.**
+- [x] **1. Paid flag and cancellation can never reach TriCon.**
   `steps/order-updates.ts`, `markOrderPaid` / `cancelOrder` only run once from
   their event. A failed call is never retried. Payment captured or order
   cancelled during an in-flight upload is also lost.
