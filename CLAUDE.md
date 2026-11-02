@@ -42,6 +42,8 @@ make dev     # runs both backend (:9000) and storefront (:8000)
 - Storefront: `http://localhost:8000` (redirects to the seeded `/de` region — Germany-only for now)
 - Admin dashboard: `http://localhost:9000/app` (`make setup` prints the dev admin login)
 - Production build: `npm run build` from `backend/` builds backend, admin dashboard and storefront. The storefront build prerenders pages from the Store API, so the backend must be running (`make backend`) while it builds. Its `prebuild`/`prestart` hook (`apps/storefront/scripts/ensure-local-styled-jsx.js`) works around a React 18/19 hoisting conflict that used to crash the `/404` prerender — see `PLAN.md` Task 3.
+- Running a production build: only from `apps/backend/.medusa/server` after its own `npm install --omit=dev`. `npm run start` in `apps/backend` boots but hangs every Store API request. Full server steps: `REVIEW_TASKS.md`.
+- `backend/package.json` overrides keep `next` nested in the storefront (React 19). Without them npm hoists it next to the backend's React 18 and the build breaks.
 
 ## Architecture
 

@@ -105,8 +105,9 @@ MVP) landed.
   still placeholder `#` links in the footer — real legal content needed,
   reviewed via `legal-security-reviewer` before publishing (see also GDPR
   item below).
-- **Hosting provider.** Comparison exists (`planning/3-Architecture_Tech_Stack/decisions.md`),
-  no decision made — blocks any real deploy, not local dev.
+- **Hosting provider.** Comparison exists (`planning/3-Architecture_Tech_Stack/decisions.md`).
+  Leaning towards a netcup VPS 4000 G12.5 (2026-11-02), not final. Server
+  setup checklist: `REVIEW_TASKS.md`.
 
 ## Known gaps, no external blocker — just not built yet
 

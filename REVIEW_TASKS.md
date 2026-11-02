@@ -84,3 +84,48 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
 - [x] **19. Redis loses its data when the container is recreated.**
   `docker-compose.yml` has no volume or persistence, so pending events still
   vanish after task 15. Fix: append-only file on a named volume.
+- [x] **20. The production start path was undocumented, and the obvious one hangs.**
+  `npm run start` in `apps/backend` boots, but link modules fail to load and every
+  Store API request hangs. Only `.medusa/server` with its own `npm install` works,
+  and that install has no lockfile and ignores root overrides.
+  Fix: overrides also in `apps/backend/package.json`, steps documented below.
+
+## Server checklist (not code, do when setting up the vServer)
+
+Backend deploy, in this order:
+
+1. `npx medusa build` in `backend/apps/backend`. It deletes `.medusa/server`.
+2. `npm install --omit=dev` in `.medusa/server`. Exact versions can drift, since
+   there is no lockfile there: run `npm audit --omit=dev` and smoke test.
+3. Link `.medusa/server/static` to a directory outside the build, or uploaded
+   product images are deleted by step 1.
+4. `npx medusa db:migrate`, then `npx medusa start`, both from `.medusa/server`.
+
+Run **exactly one** backend process, under systemd, with no cluster mode. Upload
+locks are per process (`lib/tridata/run-guard.ts`). In a test, six leftover
+processes each re-sent the same order at once.
+
+- Build the storefront with the backend running and public `NEXT_PUBLIC_*` values.
+- Set real `JWT_SECRET`, `COOKIE_SECRET`, `POSTGRES_PASSWORD`, plus `STORE_CORS`,
+  `ADMIN_CORS`, `AUTH_CORS`, `MEDUSA_BACKEND_URL`, `STOREFRONT_URL`. Changing
+  `POSTGRES_PASSWORD` does not affect an existing Postgres volume.
+- Set `TRIDATA_STOCK_SYNC_CRON=*/10 * * * *`.
+- Reverse proxy with TLS. Session and auth cookies need https in production.
+- Rate limit `/auth/*` at the proxy: Medusa has no login rate limit.
+- Keep query strings out of proxy logs for `/hooks/payment/sumup_sumup`, because
+  they carry `SUMUP_WEBHOOK_SECRET`.
+- Firewall: only 22, 80, 443. Keep the TriCon mock on loopback.
+- Off-server backups of Postgres and the uploads directory, with a tested restore.
+  A netcup snapshot on the same provider is not enough on its own.
+- Log rotation for backend, storefront and proxy.
+- Sign netcup's AVV (GDPR Art. 28). Have `legal-security-reviewer` run before
+  going live, and keep test orders to fake data.
+- Seeding: `db:migrate` from `.medusa/server` looks for
+  `example-product-images` five levels up, which is `backend/apps/` there and does
+  not exist. Not run in this review. Decide whether production gets the demo
+  catalog at all before first migrating an empty database.
+
+Remaining `npm audit` highs after these fixes: `vite`, `postcss`, `source-map-js`
+(build tools) and Medusa's `graphql-codegen`/`lodash` chain. No fix available
+short of a newer Medusa. The SumUp webhook signature gap (TODO.md) is still open.
+
