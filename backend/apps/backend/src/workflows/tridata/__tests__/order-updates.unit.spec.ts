@@ -1,7 +1,7 @@
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import type { MedusaContainer } from "@medusajs/framework/types"
 import { TRIDATA_SYNC_MODULE } from "../../../modules/tridata-sync"
-import { cancelOrder, syncOrderStates } from "../steps/order-updates"
+import { cancelOrder, findOrdersWithoutMap, syncOrderStates } from "../steps/order-updates"
 
 type Map = Record<string, unknown> & { id: string; order_id: string }
 
@@ -149,5 +149,30 @@ describe("cancelOrder before a confirmed upload", () => {
     expect(map.upload_status).toBe("conflict")
     expect(map.last_error).toBe("CONFLICT: x")
     expect(map.attention).toBe("review")
+  })
+})
+
+describe("findOrdersWithoutMap", () => {
+  const container = (orderIds: string[], mappedIds: string[]) => {
+    const deps: Record<string, unknown> = {
+      [TRIDATA_SYNC_MODULE]: {
+        listTridataOrderMaps: async () => mappedIds.map((order_id) => ({ order_id })),
+      },
+      [ContainerRegistrationKeys.QUERY]: {
+        graph: async () => ({ data: orderIds.map((id) => ({ id })) }),
+      },
+    }
+    return { resolve: (key: string) => deps[key] } as unknown as MedusaContainer
+  }
+  const now = new Date("2026-11-02T12:00:00.000Z")
+
+  it("returns only the orders with no row", async () => {
+    expect(
+      await findOrdersWithoutMap(container(["a", "b", "c"], ["a", "c"]), now, now)
+    ).toEqual(["b"])
+  })
+
+  it("returns nothing when there are no recent orders", async () => {
+    expect(await findOrdersWithoutMap(container([], []), now, now)).toEqual([])
   })
 })

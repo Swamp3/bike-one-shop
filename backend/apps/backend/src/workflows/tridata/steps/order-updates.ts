@@ -1,4 +1,5 @@
 import type { MedusaContainer } from "@medusajs/framework/types"
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
 import { getTridataConfig } from "../../../lib/tridata/config"
 import { TRIDATA_FINAL_ORDER_STATES } from "../../../lib/tridata/types"
@@ -265,7 +266,40 @@ export const syncTridataOrderStatesStep = createStep(
   }
 )
 
-/** Re-attempts failed (and stuck pending) uploads whose backoff has elapsed. */
+const ORPHAN_WINDOW_MS = 24 * 60 * 60_000
+
+/**
+ * Recent orders with no TridataOrderMap row: their order.placed event was lost
+ * (restart, in-memory event bus) or the handler died before creating the row.
+ * The window also stops old orders uploading when credentials are first set.
+ */
+export async function findOrdersWithoutMap(
+  container: MedusaContainer,
+  now: Date,
+  placedBefore: Date
+): Promise<string[]> {
+  const query = container.resolve(ContainerRegistrationKeys.QUERY)
+  const { data } = await query.graph({
+    entity: "order",
+    fields: ["id"],
+    filters: {
+      is_draft_order: false,
+      created_at: { $gte: new Date(now.getTime() - ORPHAN_WINDOW_MS), $lte: placedBefore },
+    },
+  })
+  const ids = (data as { id: string }[]).map((o) => o.id)
+  if (!ids.length) {
+    return []
+  }
+  const maps = await getTridataSyncService(container).listTridataOrderMaps(
+    { order_id: ids },
+    { take: null, select: ["order_id"] }
+  )
+  const mapped = new Set(maps.map((m) => m.order_id))
+  return ids.filter((id) => !mapped.has(id))
+}
+
+/** Re-attempts failed (and stuck pending) uploads whose backoff has elapsed, and orders with no row yet. */
 export const retryTridataOrderUploadsStep = createStep(
   "retry-tridata-order-uploads",
   async (_input: Record<string, never>, { container }) => {
@@ -307,9 +341,10 @@ export const retryTridataOrderUploadsStep = createStep(
       { take: 50, order: { next_attempt_at: "ASC" } }
     )
     summary.status = "success"
-    for (const map of due) {
+    const orphans = await findOrdersWithoutMap(container, now, stuckBefore)
+    for (const orderId of [...due.map((m) => m.order_id), ...orphans]) {
       summary.due++
-      const result = await uploadOrderToTridata(container, { order_id: map.order_id })
+      const result = await uploadOrderToTridata(container, { order_id: orderId })
       if (result.status === "sent") {
         summary.sent++
       } else if (result.status === "failed") {
