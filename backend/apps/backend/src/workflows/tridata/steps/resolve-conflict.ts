@@ -146,7 +146,11 @@ async function resolveConflict(
   }
 }
 
-/** Admin conflict resolution; serialized with uploads via the per-order lock. */
+/**
+ * Admin conflict resolution. Has its own lock key, not the upload one, because
+ * the re-upload path takes the upload lock itself. Conflict orders are never
+ * retried automatically and the admin page hides Retry for them.
+ */
 export const resolveTridataOrderConflictStep = createStep(
   "resolve-tridata-order-conflict",
   async (input: ResolveConflictInput, { container }) => {

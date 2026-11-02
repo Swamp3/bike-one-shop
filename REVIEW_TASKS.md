@@ -40,7 +40,7 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
 
 ## Nice to have
 
-- [ ] **8. Messages that are no longer true.**
+- [x] **8. Messages that are no longer true.**
   `steps/upload-order.ts` conflict error, `steps/resolve-conflict.ts` lock comment.
 - [ ] **9. A DB error can look like a TriCon failure.**
   `helpers/tracked-call.ts`, a failed log write after a successful upload marks

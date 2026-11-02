@@ -309,7 +309,7 @@ async function uploadOrderUnlocked(
     const error =
       `CONFLICT: TriCon already has WebShopOrderID ${webShopOrderId}. Check in TriBike whether it ` +
       "is this order or another environment's order (then fix TRIDATA_ORDER_ID_OFFSET). Not retried " +
-      "automatically; resolving it needs a developer (no admin action for this yet)."
+      "automatically; resolve it on the TriCon Sync admin page."
     await service.updateTridataOrderMaps({
       id: map.id,
       upload_status: "conflict",
