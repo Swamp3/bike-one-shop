@@ -83,3 +83,6 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
   `https://localhost:8000`. Fix: fail the build, add a `.env.template`.
 - [x] **18. Leftover starter code.**
   Placeholder `/store/custom` and `/admin/custom` routes, unused `next-sitemap.js`.
+- [x] **19. Redis loses its data when the container is recreated.**
+  `docker-compose.yml` has no volume or persistence, so pending events still
+  vanish after task 15. Fix: append-only file on a named volume.

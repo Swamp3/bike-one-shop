@@ -19,6 +19,10 @@ services:
 
   redis:
     image: redis:7
+    # Events and scheduled workflows live here: keep them across restarts.
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
     ports:
       - "127.0.0.1:6379:6379"
     healthcheck:
@@ -29,3 +33,4 @@ services:
 
 volumes:
   postgres_data:
+  redis_data:
