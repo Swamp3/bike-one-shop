@@ -48,7 +48,7 @@ make dev     # runs both backend (:9000) and storefront (:8000)
 **Backend logic is partly in the "custom module" pattern the Medusa convention (`backend/AGENTS.md`) describes.** The TriCon/Tridata integration (PLAN.md Task 14) follows it: `src/modules/tridata-sync` and `src/modules/tridata-stock-snapshot`, `src/links/tridata-*`, `src/workflows/tridata/`, `src/subscribers/tridata-*`, `src/jobs/tridata-*`, admin API under `src/api/admin/tridata/`, admin page `src/admin/routes/tricon/` + order widget. Its SOAP client is `src/lib/tridata/` (against the mock until real credentials exist; wire contract in `planning/3-Architecture_Tech_Stack/tricon-mock-contract.md`), logging via `src/lib/integration-logger.ts`. Older custom logic still lives outside that pattern:
 - `backend/apps/backend/src/search/` — product search helpers (option-value resolution, pricing, product-id resolution) used to back storefront search/filtering
 - `backend/apps/backend/src/migration-scripts/initial-data-seed.ts` and `src/scripts/seed-demo-products.ts` — data seeding
-- `backend/apps/backend/src/api/store/custom/` and `src/api/admin/custom/` — currently placeholder routes only
+- `backend/apps/backend/src/api/store/custom/payment-method-labels/` — public read of storefront payment labels from Store metadata
 
 When adding real business logic (the remaining planned `product-brand`, `store-profile`, `saved-payment-instrument`, `order-fulfillment-extension` modules from the schema design), follow the Medusa module/workflow convention in `backend/AGENTS.md`, as the tridata modules do.
 

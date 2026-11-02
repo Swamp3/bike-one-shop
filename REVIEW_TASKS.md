@@ -81,5 +81,5 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
 - [x] **17. Missing storefront settings fail silently.**
   An unset `NEXT_PUBLIC_BASE_URL` gives canonical URLs and a sitemap on
   `https://localhost:8000`. Fix: fail the build, add a `.env.template`.
-- [ ] **18. Leftover starter code.**
+- [x] **18. Leftover starter code.**
   Placeholder `/store/custom` and `/admin/custom` routes, unused `next-sitemap.js`.
