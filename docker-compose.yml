@@ -3,10 +3,12 @@ services:
     image: postgres:16
     environment:
       - POSTGRES_USER=medusa
-      - POSTGRES_PASSWORD=medusa
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-medusa}
       - POSTGRES_DB=medusa
+    # Loopback only: Docker's published ports bypass ufw/iptables rules, so
+    # "5432:5432" would put the database on the internet on a vServer.
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -18,7 +20,7 @@ services:
   redis:
     image: redis:7
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s

@@ -57,7 +57,7 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
 Second review, 2026-11-02, assuming one vServer (netcup VPS 4000 G12.5) running
 everything: Postgres, Redis, backend, storefront, reverse proxy.
 
-- [ ] **11. Postgres and Redis are open to the internet.**
+- [x] **11. Postgres and Redis are open to the internet.**
   `docker-compose.yml` publishes 5432 (password `medusa`) and 6379 (no auth) on
   all interfaces, and Docker's published ports bypass ufw.
   Fix: bind to 127.0.0.1, take the Postgres password from the environment.
