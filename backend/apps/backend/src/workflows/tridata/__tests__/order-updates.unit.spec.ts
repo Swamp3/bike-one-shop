@@ -109,6 +109,13 @@ describe("order-state poll re-sends what the event handlers missed", () => {
     expect(calls).not.toContain("UploadOrderChangeStorno")
   })
 
+  it("moves an order back in the queue when its poll fails", async () => {
+    const map = sentMap({ state_checked_at: null })
+    fakeTricon("Neu", ["DownloadOrderStateByOrder"])
+    await syncOrderStates(fakeContainer(map, paidOrder))
+    expect(map.state_checked_at).toBeInstanceOf(Date)
+  })
+
   it("sends no storno for an order already final in TriBike", async () => {
     const calls = fakeTricon("Geliefert")
     await syncOrderStates(fakeContainer(sentMap(), canceledOrder))

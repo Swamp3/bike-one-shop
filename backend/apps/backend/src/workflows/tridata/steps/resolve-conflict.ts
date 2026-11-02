@@ -87,6 +87,7 @@ async function resolveConflict(
       // Unknown whether the existing record carries the paid flag: re-send it if paid.
       bezahlt_sent: false,
       tribike_state: map.tribike_state ?? "Neu",
+      state_checked_at: new Date(),
     })
     await log({ web_shop_order_id: previous }, "success")
     const paid = await markOrderPaid(container, input.order_id)

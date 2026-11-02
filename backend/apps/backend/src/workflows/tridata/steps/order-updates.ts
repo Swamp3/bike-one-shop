@@ -218,6 +218,8 @@ export async function syncOrderStates(container: MedusaContainer) {
     if (!res.ok) {
       summary.failed++
       lastError = res.error.message
+      // Move it back in the queue, or orders that keep failing block the batch.
+      await service.updateTridataOrderMaps({ id: map.id, state_checked_at: new Date() })
       continue
     }
     const state = res.data.OrderState || null

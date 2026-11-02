@@ -25,7 +25,7 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
   so a restart loses the event and the retry job only sees existing rows.
   Fix: retry job also uploads recent orders that have no row. A Redis event bus
   for production stays open: it is a hosting decision.
-- [ ] **5. New orders can stop being polled.**
+- [x] **5. New orders can stop being polled.**
   `steps/order-updates.ts`, sort by `state_checked_at ASC` puts empty values
   last, and failed polls never update the date.
   Fix: set the date on upload, on `mark_sent` and on failed polls.

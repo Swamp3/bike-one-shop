@@ -333,6 +333,8 @@ async function uploadOrderUnlocked(
       bezahlt_sent: bezahlt,
       paid_sent_at: bezahlt ? now : map.paid_sent_at,
       tribike_state: map.tribike_state ?? "Neu",
+      // Never null: the poll sorts ASC, and Postgres puts nulls last.
+      state_checked_at: now,
       last_correlation_id: res.correlationId,
       payload_hash: payloadHash(to),
     })
