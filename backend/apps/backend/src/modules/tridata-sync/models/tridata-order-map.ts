@@ -36,7 +36,6 @@ const TridataOrderMap = model
     /** Needs a human: partially_delivered | rejected | canceled_in_tribike | review */
     attention: model.text().nullable(),
     last_correlation_id: model.text().nullable(),
-    payload_hash: model.text().nullable(),
   })
   .indexes([
     { on: ["order_id"], unique: true, where: "deleted_at IS NULL" },

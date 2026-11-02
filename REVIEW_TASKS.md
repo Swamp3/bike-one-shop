@@ -49,8 +49,6 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
 - [x] **10. Unused code.**
   `TridataClient.downloadArtikel`, `downloadStockByArtikel`, the
   `TridataStockByArtikel` type, and `tridata_order_map.payload_hash`.
-  The client code is gone. Still open: dropping `payload_hash` needs
-  `medusa db:generate` against a running database.
 
 # Production readiness review (netcup VPS)
 

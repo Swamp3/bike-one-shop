@@ -10,7 +10,6 @@ import {
   ProductMapEntry,
   SourceOrder,
 } from "../helpers/build-upload-order"
-import { payloadHash } from "../helpers/hash"
 import {
   ensureTridataConfigured,
   getTridataClient,
@@ -336,7 +335,6 @@ async function uploadOrderUnlocked(
       // Never null: the poll sorts ASC, and Postgres puts nulls last.
       state_checked_at: now,
       last_correlation_id: res.correlationId,
-      payload_hash: payloadHash(to),
     })
     return { ...base, status: "sent", correlation_id: res.correlationId }
   }
