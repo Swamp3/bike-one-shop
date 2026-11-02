@@ -77,6 +77,8 @@ export function ensureTridataConfigured(container: MedusaContainer): boolean {
 /**
  * Runs one TriCon call and appends a TridataSyncLog row for it (success or
  * failure). Never throws for TriCon errors; the caller decides what to do.
+ * A failed log write only loses the row: it must not change the call's result,
+ * or a successful upload would be retried into a false conflict.
  */
 export async function trackedCall<T>(
   container: MedusaContainer,
@@ -86,30 +88,39 @@ export async function trackedCall<T>(
 ): Promise<TrackedResult<T>> {
   const service = getTridataSyncService(container)
   const startedAt = Date.now()
+  const writeLog = async (row: {
+    correlation_id: string | null
+    status: "success" | "failed"
+    duration_ms: number
+    error?: string
+    summary: Record<string, unknown> | null
+  }) => {
+    try {
+      await service.createTridataSyncLogs({
+        direction: ctx.direction,
+        function_name: ctx.functionName,
+        entity_type: ctx.entityType ?? null,
+        entity_id: ctx.entityId ?? null,
+        ...row,
+      })
+    } catch (e) {
+      container
+        .resolve<Logger>(ContainerRegistrationKeys.LOGGER)
+        .error(
+          `[tridata] could not write sync log for ${ctx.functionName}: ${scrubError((e as Error).message)}`
+        )
+    }
+  }
+  let result: TridataCallResult<T>
   try {
-    const result = await call()
-    await service.createTridataSyncLogs({
-      direction: ctx.direction,
-      function_name: ctx.functionName,
-      entity_type: ctx.entityType ?? null,
-      entity_id: ctx.entityId ?? null,
-      correlation_id: result.correlationId,
-      status: "success",
-      duration_ms: result.durationMs,
-      summary: { ...(ctx.summary ?? {}), ...(summarize?.(result.data) ?? {}) },
-    })
-    return { ok: true, ...result }
+    result = await call()
   } catch (e) {
     const error =
       e instanceof TridataError
         ? e
         : new TridataError(e instanceof Error ? e.message : String(e))
     const durationMs = error.durationMs ?? Date.now() - startedAt
-    await service.createTridataSyncLogs({
-      direction: ctx.direction,
-      function_name: ctx.functionName,
-      entity_type: ctx.entityType ?? null,
-      entity_id: ctx.entityId ?? null,
+    await writeLog({
       correlation_id: error.correlationId ?? null,
       status: "failed",
       duration_ms: durationMs,
@@ -123,6 +134,13 @@ export async function trackedCall<T>(
       durationMs,
     }
   }
+  await writeLog({
+    correlation_id: result.correlationId,
+    status: "success",
+    duration_ms: result.durationMs,
+    summary: { ...(ctx.summary ?? {}), ...(summarize?.(result.data) ?? {}) },
+  })
+  return { ok: true, ...result }
 }
 
 /** Run-level summary row (not a TriCon call itself), e.g. the result of a link-products run. */

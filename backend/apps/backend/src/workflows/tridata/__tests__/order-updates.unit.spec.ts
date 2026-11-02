@@ -1,6 +1,7 @@
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import type { MedusaContainer } from "@medusajs/framework/types"
 import { TRIDATA_SYNC_MODULE } from "../../../modules/tridata-sync"
+import { trackedCall } from "../helpers/tracked-call"
 import { isSuspiciousEmptyCatalog } from "../steps/link-products"
 import { cancelOrder, findOrdersWithoutMap, syncOrderStates } from "../steps/order-updates"
 
@@ -199,5 +200,27 @@ describe("isSuspiciousEmptyCatalog", () => {
     expect(isSuspiciousEmptyCatalog(10, 0, [plain])).toBe(false)
     expect(isSuspiciousEmptyCatalog(0, 10, [grfa])).toBe(false)
     expect(isSuspiciousEmptyCatalog(0, 0, [])).toBe(false)
+  })
+})
+
+describe("trackedCall", () => {
+  it("keeps a successful call successful when the log write fails", async () => {
+    const errors: string[] = []
+    const deps: Record<string, unknown> = {
+      [TRIDATA_SYNC_MODULE]: {
+        createTridataSyncLogs: async () => {
+          throw new Error("db down")
+        },
+      },
+      [ContainerRegistrationKeys.LOGGER]: { error: (m: string) => errors.push(m) },
+    }
+    const container = { resolve: (key: string) => deps[key] } as unknown as MedusaContainer
+    const res = await trackedCall(
+      container,
+      { functionName: "UploadOrder", direction: "outbound" },
+      async () => ({ data: true, correlationId: "c1", durationMs: 1 })
+    )
+    expect(res.ok).toBe(true)
+    expect(errors).toHaveLength(1)
   })
 })
