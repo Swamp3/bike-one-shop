@@ -29,7 +29,7 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
   `steps/order-updates.ts`, sort by `state_checked_at ASC` puts empty values
   last, and failed polls never update the date.
   Fix: set the date on upload, on `mark_sent` and on failed polls.
-- [ ] **6. One empty TriCon list marks all bikes sold out.**
+- [x] **6. One empty TriCon list marks all bikes sold out.**
   `steps/link-products.ts`, the safety check needs both lists empty.
   Fix: also keep links when only the list feeding them is empty.
 - [ ] **7. The riskiest order paths have no test.**

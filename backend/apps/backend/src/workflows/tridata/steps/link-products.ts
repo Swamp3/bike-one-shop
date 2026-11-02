@@ -68,6 +68,22 @@ const emptySummary = (): LinkProductsSummary => ({
   conflicts: [],
 })
 
+/**
+ * Safety net: an empty list while links built from it exist is far more likely
+ * a TriCon-side problem than "everything went offline"; do not unlink (and
+ * zero) the shop because of it. Kombis feed GrFa links, Artikel the others.
+ */
+export function isSuspiciousEmptyCatalog(
+  artikelCount: number,
+  kombiCount: number,
+  existing: { grfa: boolean }[]
+): boolean {
+  return (
+    (kombiCount === 0 && existing.some((row) => row.grfa)) ||
+    (artikelCount === 0 && existing.some((row) => !row.grfa))
+  )
+}
+
 export const linkTridataProductsStep = createStep(
   "link-tridata-products",
   async (_input: Record<string, never>, { container }) => {
@@ -141,11 +157,11 @@ export const linkTridataProductsStep = createStep(
     const matchedVariantIds = new Set(result.matches.map((m) => m.variant_id))
     let stale = existing.filter((row) => !matchedVariantIds.has(row.variant_id))
 
-    // Safety net: an empty catalog while links exist is far more likely a
-    // TriCon-side problem than "everything went offline"; do not unlink
-    // (and zero) the whole shop because of it.
-    const suspiciousEmpty =
-      artikelRes.data.length === 0 && kombiRes.data.length === 0 && existing.length > 0
+    const suspiciousEmpty = isSuspiciousEmptyCatalog(
+      artikelRes.data.length,
+      kombiRes.data.length,
+      existing
+    )
     if (suspiciousEmpty) {
       stale = []
     }
@@ -217,7 +233,7 @@ export const linkTridataProductsStep = createStep(
       unmatchedShop: result.unmatchedShop.slice(0, SAMPLE),
       conflicts: result.conflicts.slice(0, SAMPLE),
       error: suspiciousEmpty
-        ? "TriCon returned an empty catalog; existing links were kept"
+        ? "TriCon returned an empty catalog list; existing links were kept"
         : undefined,
     }
     return new StepResponse(output)

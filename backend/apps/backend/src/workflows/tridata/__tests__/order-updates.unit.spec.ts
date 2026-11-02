@@ -1,6 +1,7 @@
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import type { MedusaContainer } from "@medusajs/framework/types"
 import { TRIDATA_SYNC_MODULE } from "../../../modules/tridata-sync"
+import { isSuspiciousEmptyCatalog } from "../steps/link-products"
 import { cancelOrder, findOrdersWithoutMap, syncOrderStates } from "../steps/order-updates"
 
 type Map = Record<string, unknown> & { id: string; order_id: string }
@@ -174,5 +175,22 @@ describe("findOrdersWithoutMap", () => {
 
   it("returns nothing when there are no recent orders", async () => {
     expect(await findOrdersWithoutMap(container([], []), now, now)).toEqual([])
+  })
+})
+
+describe("isSuspiciousEmptyCatalog", () => {
+  const grfa = { grfa: true }
+  const plain = { grfa: false }
+
+  it("catches an empty Kombi list while GrFa links exist", () => {
+    expect(isSuspiciousEmptyCatalog(10, 0, [grfa, plain])).toBe(true)
+  })
+  it("catches an empty Artikel list while non-GrFa links exist", () => {
+    expect(isSuspiciousEmptyCatalog(0, 10, [plain])).toBe(true)
+  })
+  it("allows empty lists that no existing link depends on", () => {
+    expect(isSuspiciousEmptyCatalog(10, 0, [plain])).toBe(false)
+    expect(isSuspiciousEmptyCatalog(0, 10, [grfa])).toBe(false)
+    expect(isSuspiciousEmptyCatalog(0, 0, [])).toBe(false)
   })
 })
