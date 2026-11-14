@@ -40,10 +40,17 @@ Maintain `PLAN.md` as the single source of truth. Each run:
 Each task needs: a goal, acceptance criteria, the files/areas it touches,
 and what's explicitly out of scope.
 
+Detailed feature plans and other working notes go in
+`.working-files/<feature-slug>/`, linked from the `PLAN.md` task. Keep
+`PLAN.md` itself to status and short task entries. When a feature is
+done, fold any lasting decisions into `planning/` and delete its working
+folder (see "Working files vs. documentation" in the root `CLAUDE.md`).
+
 ## Step 3 — Delegate
 
-For each ready task, invoke a sub-worker (via the Agent tool) with a
-self-contained brief:
+For each ready task, invoke a sub-worker (via the Agent tool, using the
+`expert-developer` agent for implementation work) with a self-contained
+brief:
 
 - Goal + acceptance criteria, copied from the plan
 - Relevant file paths / existing patterns to follow

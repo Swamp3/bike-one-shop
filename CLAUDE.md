@@ -17,6 +17,7 @@ Current status lives in `PLAN.md` (detailed build log, task-by-task) and `TODO.m
 │   ├── apps/storefront/     # Next.js storefront
 │   └── apps/tricon-mock/    # stateful TriCon SOAP mock + inspection UI (:3001), see its README
 ├── docker-compose.yml       # Postgres 16 + Redis 7 for local dev
+├── .working-files/          # in-progress feature plans and notes, not documentation (see below)
 ├── planning/                # requirements, architecture decisions, DB schema design, local-dev setup notes
 ├── wireframes/               # interactive mobile-first HTML mockups — design reference, not yet wired into the storefront
 ├── example-product-images/  # sample product photos used for seeding
@@ -27,6 +28,16 @@ Current status lives in `PLAN.md` (detailed build log, task-by-task) and `TODO.m
 ```
 
 `backend/` has its own `CLAUDE.md` which points to `backend/AGENTS.md` — that file is the authoritative source for backend/storefront directory structure, package-manager detection, build/lint/test commands (including single-test invocations), DB migration commands, code style, and Medusa-specific conventions/common-mistakes. Read it before doing any work inside `backend/`. Do not duplicate its content here; this file only covers what's outside that scope.
+
+## Working files vs. documentation
+
+Files you create while working on a planned feature go in `.working-files/<feature-slug>/`, never in `planning/`, the repo root, or next to the code. That covers implementation plans, scratch notes, analyses, open-question lists, review checklists and sample data extracts. Example: `.working-files/plp-layout/plan.md`.
+
+- Documentation stays where it is: `README.md`, `PLAN.md`, `TODO.md`, `planning/`, `backend/AGENTS.md`, app READMEs. Edit it only when the content is a lasting fact about the system or a decision that was made.
+- `PLAN.md` and `TODO.md` remain the status sources. Link to the working folder from the relevant task instead of copying its content.
+- When a feature is done, move whatever is still true (decisions, contracts, setup steps) into the matching doc (for example `planning/3-Architecture_Tech_Stack/decisions.md`), then delete the feature's working folder in the same change.
+- `.working-files/` is committed so other sessions and people can pick up the work. Never put secrets, credentials, or real customer or personal data in it, including raw exports.
+- It is a dot-directory: `ls` and some search tools skip it unless you pass hidden-file flags (`ls -a`, `rg --hidden`).
 
 ## Local development (repo root)
 
@@ -68,3 +79,4 @@ This is a German/EU e-commerce site: Impressum, GDPR, TTDSG (cookie consent), Wi
 
 - `.claude/agents/legal-security-reviewer.md` — security + DACH/EU legal compliance review gate (see above)
 - `.claude/agents/project-manager.md` — assesses repo state, plans next steps, delegates implementation to sub-workers
+- `.claude/agents/expert-developer.md` — implements, fixes and verifies scoped tasks under `backend/`; the project-manager's default sub-worker

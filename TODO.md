@@ -106,8 +106,9 @@ MVP) landed.
   reviewed via `legal-security-reviewer` before publishing (see also GDPR
   item below).
 - **Hosting provider.** Comparison exists (`planning/3-Architecture_Tech_Stack/decisions.md`).
-  Leaning towards a netcup VPS 4000 G12.5 (2026-11-02), not final. Server
-  setup checklist: `REVIEW_TASKS.md`.
+  Decision (2026-11-09): Strato CP4-18 dedicated server (Xeon E3-1230v6,
+  4C/8T, 32 GB ECC, 2x480 GB SSD RAID 1), replacing the netcup VPS 4000
+  G12.5 idea. Not ordered yet. Server setup checklist: `REVIEW_TASKS.md`.
 
 ## Known gaps, no external blocker — just not built yet
 

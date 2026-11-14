@@ -6,7 +6,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-medusa}
       - POSTGRES_DB=medusa
     # Loopback only: Docker's published ports bypass ufw/iptables rules, so
-    # "5432:5432" would put the database on the internet on a vServer.
+    # "5432:5432" would put the database on the internet on a server.
     ports:
       - "127.0.0.1:5432:5432"
     volumes:

@@ -50,10 +50,11 @@ Findings from the code review of the TriCon/Tridata ERP sync (PLAN.md Task 14),
   `TridataClient.downloadArtikel`, `downloadStockByArtikel`, the
   `TridataStockByArtikel` type, and `tridata_order_map.payload_hash`.
 
-# Production readiness review (netcup VPS)
+# Production readiness review (Strato CP4-18)
 
-Second review, 2026-11-02, assuming one vServer (netcup VPS 4000 G12.5) running
-everything: Postgres, Redis, backend, storefront, reverse proxy.
+Second review, 2026-11-02, written for one netcup vServer (VPS 4000 G12.5), now
+assumed to be one Strato CP4-18 dedicated server (Xeon E3-1230v6, 32 GB ECC, 2x480 GB
+SSD RAID 1) running everything: Postgres, Redis, backend, storefront, reverse proxy.
 
 - [x] **11. Postgres and Redis are open to the internet.**
   `docker-compose.yml` publishes 5432 (password `medusa`) and 6379 (no auth) on
@@ -94,7 +95,7 @@ everything: Postgres, Redis, backend, storefront, reverse proxy.
   peer conflict, and it would skip the lockfile and overrides anyway.
   Fix: start from `.medusa/server` on the workspace install, steps below.
 
-## Server checklist (not code, do when setting up the vServer)
+## Server checklist (not code, do when setting up the server)
 
 Backend deploy, in this order:
 
@@ -122,9 +123,11 @@ processes each re-sent the same order at once.
   they carry `SUMUP_WEBHOOK_SECRET`.
 - Firewall: only 22, 80, 443. Keep the TriCon mock on loopback.
 - Off-server backups of Postgres and the uploads directory, with a tested restore.
-  A netcup snapshot on the same provider is not enough on its own.
+  RAID 1 only covers a dead disk, not deletion, corruption or a lost server, and
+  there are no hypervisor snapshots on a dedicated server, so the backup is the
+  only way back.
 - Log rotation for backend, storefront and proxy.
-- Sign netcup's AVV (GDPR Art. 28). Have `legal-security-reviewer` run before
+- Sign Strato's AVV (GDPR Art. 28). Have `legal-security-reviewer` run before
   going live, and keep test orders to fake data.
 - Seeding: `db:migrate` from `.medusa/server` looks for
   `example-product-images` five levels up, which is `backend/apps/` there and does

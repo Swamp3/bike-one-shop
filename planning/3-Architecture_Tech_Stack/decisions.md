@@ -65,3 +65,13 @@ Build every reusable piece of UI — buttons, cards, common layouts (sidebar+con
 | Vercel (frontend only) | Best-in-class Next.js hosting — an even stronger fit now than for Angular SSR, since Next.js is Medusa's own flagship storefront target | Cannot host the Medusa backend/worker/Postgres — pair with one of the above |
 
 Ballpark cost also improves versus the old Shopware estimate: removing the mandatory-OpenSearch requirement removes the single biggest cost-risk line item (a real production OpenSearch cluster alone could run ~$1,600/month on AWS). A precise updated price comparison is worth redoing once Phase 6 architecture is further along and an actual host shortlist is picked — not repeated here to avoid stale numbers; see the Phase 6 planning record for the reasoning behind removing OpenSearch as a cost driver.
+
+### Decision (2026-11-09): Strato CP4-18 dedicated server
+
+One Strato CP4-18 runs everything (Postgres, Redis, Medusa backend, Next.js storefront, reverse proxy): Intel Xeon E3-1230v6 (4C/8T, 3.5 GHz, turbo 3.9 GHz), 32 GB DDR4 ECC, 2x480 GB SSD in software RAID 1. Replaces the earlier netcup VPS 4000 G12.5 favorite.
+
+- **Why:** the CPU is from 2017 but single-thread speed is still fine for a Node/Postgres shop with two stores' worth of traffic. Dedicated cores (no noisy neighbors), ECC RAM and mirrored disks fit a single-box setup. 32 GB leaves room for Postgres, Redis, backend, storefront and a build on the same machine.
+- **Trade-offs:** no hypervisor snapshots or live resize, hardware faults mean a support ticket and a swap, and the box is the single point of failure. RAID 1 is not a backup, so off-server Postgres and uploads backups with a tested restore are mandatory (`REVIEW_TASKS.md`).
+- **Revisit if:** sustained CPU load above ~60%, or storefront builds get slow. Then move the storefront to a separate host or a newer plan.
+- **Still to do:** sign Strato's AVV (GDPR Art. 28), check the data center location, contract term and price at order time.
+
