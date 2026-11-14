@@ -20,6 +20,8 @@ type ProductOptionsContextValue = {
    * order is not consistent between products (see PLAN.md Task 12 §4).
    */
   getOptionValueByTitle: (title: string) => string | undefined
+  /** `product.metadata.color_swatches`: colour name -> hex, edited in the admin's product metadata. */
+  colorSwatches: unknown
 }
 
 const ProductOptionsContext = createContext<ProductOptionsContextValue | null>(
@@ -36,6 +38,21 @@ const optionsAsKeymap = (
 }
 
 /**
+ * The variant a product page opens with: `metadata.default_variant_id` if set
+ * (editable in the admin's product metadata), otherwise the cheapest variant,
+ * so the page starts at the same price the listing shows as "ab".
+ */
+const defaultVariant = (product: HttpTypes.StoreProduct) => {
+  const variants = product.variants ?? []
+  const configured = variants.find(
+    (v) => v.id === product.metadata?.default_variant_id
+  )
+  const price = (v: HttpTypes.StoreProductVariant) =>
+    v.calculated_price?.calculated_amount ?? Number.POSITIVE_INFINITY
+  return configured ?? [...variants].sort((a, b) => price(a) - price(b))[0]
+}
+
+/**
  * Owns the single source of truth for the shopper's option selection
  * (Frame Size, Farbe, ...) on a PDP, so it can be shared between
  * `ProductActions` (which reads it to resolve the selected variant) and
@@ -49,14 +66,17 @@ export function ProductOptionsProvider({
   product: HttpTypes.StoreProduct
   children: React.ReactNode
 }) {
-  const [options, setOptions] = useState<SelectedOptions>({})
+  // Preselect a variant so the page never opens with nothing chosen.
+  const [options, setOptions] = useState<SelectedOptions>(
+    () => optionsAsKeymap(defaultVariant(product)?.options) ?? {}
+  )
 
-  // If there is only 1 variant, preselect the options
+  // A shared link (?v_id=...) wins over the default. Read on the client only,
+  // so the page needs no Suspense boundary for useSearchParams.
   useEffect(() => {
-    if (product.variants?.length === 1) {
-      const variantOptions = optionsAsKeymap(product.variants[0].options)
-      setOptions(variantOptions ?? {})
-    }
+    const id = new URLSearchParams(window.location.search).get("v_id")
+    const fromUrl = product.variants?.find((v) => v.id === id)
+    if (fromUrl) setOptions(optionsAsKeymap(fromUrl.options) ?? {})
   }, [product.variants])
 
   const setOptionValue = (optionId: string, value: string) => {
@@ -75,7 +95,12 @@ export function ProductOptionsProvider({
   }
 
   const value = useMemo(
-    () => ({ options, setOptionValue, getOptionValueByTitle }),
+    () => ({
+      options,
+      setOptionValue,
+      getOptionValueByTitle,
+      colorSwatches: product.metadata?.color_swatches,
+    }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [options, product.options]
   )

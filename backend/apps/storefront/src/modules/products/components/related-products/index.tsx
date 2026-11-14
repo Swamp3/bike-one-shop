@@ -19,7 +19,7 @@ export default async function RelatedProducts({
   }
 
   const categoryId = product.categories?.[0]?.id
-  const fields = "*variants.calculated_price,*collection"
+  const fields = "*variants.calculated_price,*collection,+metadata"
 
   // Prefer same-category products (our catalog is small enough that
   // same-collection/brand matches are usually empty — each brand has one

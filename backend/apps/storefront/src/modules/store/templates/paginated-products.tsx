@@ -1,8 +1,9 @@
 import { listProductsWithSort } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
-import { OptionValueIds } from "@lib/util/product-option-filters"
+import { FacetKey, ProductFilters } from "@lib/util/product-filters"
 import BikeOneProductCard from "@modules/products/components/bikeone-product-card"
 import { Pagination } from "@modules/store/components/pagination"
+import RefinementList from "@modules/store/components/refinement-list"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
 const PRODUCT_LIMIT = 12
@@ -16,14 +17,16 @@ type PaginatedProductsParams = {
   q?: string
 }
 
+/** Listing body shared by store, category and collection pages: sidebar, toolbar, grid. */
 export default async function PaginatedProducts({
-  sortBy,
+  sortBy = "created_at",
   page,
   collectionId,
   categoryId,
   productsIds,
   countryCode,
-  optionValueIds,
+  filters,
+  hiddenFacets,
   q,
 }: {
   sortBy?: SortOptions
@@ -32,11 +35,12 @@ export default async function PaginatedProducts({
   categoryId?: string
   productsIds?: string[]
   countryCode: string
-  optionValueIds?: OptionValueIds
+  filters?: ProductFilters
+  hiddenFacets?: FacetKey[]
   q?: string
 }) {
   const queryParams: PaginatedProductsParams = {
-    limit: 12,
+    limit: PRODUCT_LIMIT,
   }
 
   if (collectionId) {
@@ -67,43 +71,47 @@ export default async function PaginatedProducts({
 
   const {
     response: { products, count },
+    facets,
   } = await listProductsWithSort({
     page,
     queryParams,
     sortBy,
     countryCode,
-    optionValueIds,
+    filters,
+    hiddenFacets,
   })
 
   const totalPages = Math.ceil(count / PRODUCT_LIMIT)
 
-  if (products.length === 0) {
-    return (
-      <div className="rounded-[10px] border border-dashed border-bo-line-strong px-4 py-12 text-center text-[14px] text-bo-ink-muted">
-        {q
-          ? `Keine Ergebnisse für „${q}“.`
-          : "Keine Produkte gefunden. Versuch's mit weniger Filtern."}
-      </div>
-    )
-  }
-
   return (
-    <>
-      <div
-        className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4"
-        data-testid="products-list"
-      >
-        {products.map((p, index) => (
-          <BikeOneProductCard key={p.id} product={p} priority={index === 0} />
-        ))}
-      </div>
-      {totalPages > 1 && (
-        <Pagination
-          data-testid="product-pagination"
-          page={page}
-          totalPages={totalPages}
-        />
+    <RefinementList sortBy={sortBy} facets={facets} count={count}>
+      {products.length === 0 ? (
+        <div className="rounded-[10px] border border-dashed border-bo-line-strong px-4 py-12 text-center text-[14px] text-bo-ink-muted">
+          {q
+            ? `Keine Ergebnisse für „${q}“.`
+            : "Keine Produkte gefunden. Versuch's mit weniger Filtern."}
+        </div>
+      ) : (
+        <>
+          <ul
+            className="m-0 grid list-none grid-cols-2 gap-2.5 p-0 lg:grid-cols-3 lg:gap-4 2xl:grid-cols-4"
+            data-testid="products-list"
+          >
+            {products.map((p, index) => (
+              <li key={p.id}>
+                <BikeOneProductCard product={p} priority={index < 2} />
+              </li>
+            ))}
+          </ul>
+          {totalPages > 1 && (
+            <Pagination
+              data-testid="product-pagination"
+              page={page}
+              totalPages={totalPages}
+            />
+          )}
+        </>
       )}
-    </>
+    </RefinementList>
   )
 }

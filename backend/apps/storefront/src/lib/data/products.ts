@@ -1,7 +1,13 @@
 "use server"
 
 import { sdk } from "@lib/config"
-import { OptionValueIds } from "@lib/util/product-option-filters"
+import {
+  computeFacets,
+  Facets,
+  FacetKey,
+  matchesFilters,
+  ProductFilters,
+} from "@lib/util/product-filters"
 import { sortProducts } from "@lib/util/sort-products"
 import { HttpTypes } from "@medusajs/types"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
@@ -70,7 +76,7 @@ export const listProducts = async ({
           offset,
           region_id: region?.id,
           fields:
-            "*variants.calculated_price,+variants.inventory_quantity,*variants.images,*variants.options,+metadata,+tags,",
+            "*variants.calculated_price,+variants.inventory_quantity,*variants.images,*variants.options,*categories,+metadata,+tags,",
           ...queryParams,
         },
         headers,
@@ -93,30 +99,33 @@ export const listProducts = async ({
 }
 
 /**
- * This will fetch 100 products to the Next.js cache and sort them based on the sortBy parameter.
- * It will then return the paginated products based on the page and limit parameters.
+ * Fetches up to 100 products of a listing (Next.js cache), filters and sorts
+ * them in memory and derives the sidebar facets from the same set.
+ * shortcut: filters, counts and sort only see the first 100 products of a
+ * listing (whole catalogue: 44); move to a search index or a backend facet
+ * endpoint when a listing grows past that.
  */
 export const listProductsWithSort = async ({
-  page = 0,
+  page = 1,
   queryParams,
   sortBy = "created_at",
   countryCode,
-  optionValueIds,
+  filters = {},
+  hiddenFacets = [],
 }: {
   page?: number
   queryParams?: ProductListQueryParams
   sortBy?: SortOptions
   countryCode: string
-  optionValueIds?: OptionValueIds
+  filters?: ProductFilters
+  hiddenFacets?: FacetKey[]
 }): Promise<{
   response: { products: HttpTypes.StoreProduct[]; count: number }
   nextPage: number | null
   queryParams?: ProductListQueryParams
+  facets: Facets
 }> => {
   const limit = queryParams?.limit || 12
-  const optionFilters = Array.from(
-    new Set((optionValueIds || []).filter(Boolean))
-  )
 
   const {
     response: { products },
@@ -124,17 +133,23 @@ export const listProductsWithSort = async ({
     pageParam: 0,
     queryParams: {
       ...queryParams,
-      ...(optionFilters.length ? { option_value_id: optionFilters } : {}),
       limit: 100,
     },
     countryCode,
   })
 
-  const sortedProducts = sortProducts(products, sortBy)
+  // A group that is fixed by the page itself (category, brand) is not filterable there.
+  const activeFilters = { ...filters }
+  hiddenFacets.forEach((key) => delete activeFilters[key])
+
+  const filteredProducts = products.filter((p) =>
+    matchesFilters(p, activeFilters)
+  )
+  const sortedProducts = sortProducts(filteredProducts, sortBy)
 
   const pageParam = (page - 1) * limit
 
-  const filteredCount = products.length
+  const filteredCount = filteredProducts.length
 
   const nextPage = filteredCount > pageParam + limit ? pageParam + limit : null
 
@@ -147,5 +162,6 @@ export const listProductsWithSort = async ({
     },
     nextPage,
     queryParams,
+    facets: computeFacets(products, activeFilters, hiddenFacets),
   }
 }

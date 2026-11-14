@@ -20,14 +20,16 @@ const SortProducts = ({
   setQueryParams,
 }: SortProductsProps) => {
   return (
-    <div className="flex items-center gap-2 text-[13px] text-bo-ink-muted">
-      <label htmlFor="sortSelect">Sortieren:</label>
+    <div className="flex min-w-0 items-center gap-2 text-[13px] text-bo-ink-muted">
+      <label htmlFor="sortSelect" className="sr-only sm:not-sr-only">
+        Sortieren:
+      </label>
       <select
         id="sortSelect"
         data-testid={dataTestId}
         value={sortBy}
         onChange={(e) => setQueryParams("sortBy", e.target.value)}
-        className="cursor-pointer rounded-[7px] border border-bo-line bg-bo-surface px-2.5 py-2 text-[13px] text-bo-ink"
+        className="min-w-0 max-w-full cursor-pointer rounded-[7px] border border-bo-line bg-bo-surface px-2.5 py-2 text-[13px] text-bo-ink"
       >
         {sortOptions.map((o) => (
           <option key={o.value} value={o.value}>

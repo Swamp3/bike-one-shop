@@ -17,10 +17,16 @@ export default function CheckoutLayout({
         <div className="content-container flex items-center gap-3 py-3">
           <LocalizedClientLink
             href="/"
-            className="shrink-0 font-heading text-xl font-bold uppercase italic leading-none tracking-wide"
+            className="shrink-0 leading-none"
             data-testid="store-link"
           >
-            BIKE<span className="text-bo-accent">•</span>ONE
+            <img
+              src="/images/logo/bikeone-logo-white.svg"
+              alt="BikeOne"
+              width={1683}
+              height={269}
+              className="h-6 w-auto md:h-7"
+            />
           </LocalizedClientLink>
           <span className="ml-4 hidden items-center gap-1.5 text-[12px] text-bo-header-muted md:flex">
             <svg

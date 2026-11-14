@@ -2,6 +2,9 @@ import { HttpTypes } from "@medusajs/types"
 import { clx } from "@modules/common/components/ui"
 import React from "react"
 
+import { swatchColor } from "@lib/util/color-swatches"
+import { useProductOptionsContext } from "@modules/products/components/product-options-context"
+
 type ColorSwatchSelectProps = {
   option: HttpTypes.StoreProductOption
   current: string | undefined
@@ -10,23 +13,6 @@ type ColorSwatchSelectProps = {
   disabled: boolean
   "data-testid"?: string
 }
-
-/**
- * Maps the "Farbe" option's actual seeded values (see PLAN.md Task 12 §4 —
- * generic, honest fallback names, not manufacturer-verified) to a real CSS
- * color for the swatch itself. This is a UI affordance only, not a
- * product-spec claim, so it's kept to exactly the color names that exist
- * in the seed data — nothing invented beyond that.
- */
-const COLOR_SWATCH_MAP: Record<string, string> = {
-  Schwarz: "#111111",
-  Blau: "#2554c7",
-  Weiß: "#ffffff",
-  Grau: "#8a8a8a",
-  Grün: "#2f7a3f",
-}
-
-const swatchColor = (name: string) => COLOR_SWATCH_MAP[name] ?? "#cccccc"
 
 /**
  * A distinct, widely-recognized swatch pattern for color options — small
@@ -44,6 +30,7 @@ const ColorSwatchSelect: React.FC<ColorSwatchSelectProps> = ({
   disabled,
 }) => {
   const values = (option.values ?? []).map((v) => v.value)
+  const { colorSwatches } = useProductOptionsContext()
 
   return (
     <div className="flex flex-col gap-y-2.5">
@@ -77,7 +64,7 @@ const ColorSwatchSelect: React.FC<ColorSwatchSelectProps> = ({
             >
               <span
                 className="h-6 w-6 rounded-full border border-black/10"
-                style={{ backgroundColor: swatchColor(v) }}
+                style={{ backgroundColor: swatchColor(v, colorSwatches) }}
               />
             </button>
           )
