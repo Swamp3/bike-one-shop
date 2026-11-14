@@ -13,16 +13,22 @@ export default async function Footer() {
 
   return (
     <footer className="mt-5 border-t border-bo-line bg-bo-surface">
-      <div className="border-b border-bo-line bg-bo-surface-2 px-4 py-6 md:px-6 md:py-8">
-        <h3 className="mb-1 font-heading text-lg font-semibold md:text-[19px]">
-          Neuigkeiten, bevor sie im Laden stehen
-        </h3>
-        <p className="mb-3.5 max-w-[48ch] text-[13px] text-bo-ink-muted">
-          Neue Modelle, Werkstatt-Termine und Filial-Events — max. zweimal im
-          Monat, jederzeit abbestellbar.
-        </p>
-        <NewsletterForm />
-      </div>
+      {process.env.NEXT_PUBLIC_NEWSLETTER_ENABLED !== "false" && (
+        <div className="border-b border-bo-line bg-bo-surface-2 px-4 py-6 md:flex md:items-center md:gap-10 md:px-6 md:py-8">
+          <div>
+            <h3 className="mb-1 font-heading text-lg font-semibold md:text-[19px]">
+              Neuigkeiten, bevor sie im Laden stehen
+            </h3>
+            <p className="mb-3.5 max-w-[48ch] text-[13px] text-bo-ink-muted md:mb-0">
+              Neue Modelle, Werkstatt-Termine und Filial-Events — max. zweimal
+              im Monat, jederzeit abbestellbar.
+            </p>
+          </div>
+          <div className="md:w-full md:max-w-[420px] md:shrink-0">
+            <NewsletterForm />
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-x-4 gap-y-6 px-4 py-6 md:grid-cols-4 md:px-6 md:py-8">
         <div>
@@ -133,7 +139,9 @@ export default async function Footer() {
       </div>
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-bo-line px-4 py-4 text-[11.5px] text-bo-ink-faint md:px-6">
-        <span className="font-mono">© {new Date().getFullYear()} BikeOne GmbH</span>
+        <span className="font-mono">
+          © {new Date().getFullYear()} BikeOne GmbH
+        </span>
         <span>Oldenburg · Osnabrück</span>
       </div>
     </footer>

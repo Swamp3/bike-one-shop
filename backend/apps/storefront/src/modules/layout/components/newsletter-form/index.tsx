@@ -28,7 +28,7 @@ const NewsletterForm = () => {
         />
         <button
           type="submit"
-          className="rounded border-[1.5px] border-bo-ink bg-bo-ink px-[22px] py-[13px] text-[14.5px] font-semibold text-bo-bg hover:bg-bo-accent hover:border-bo-accent"
+          className="rounded-lg border-[1.5px] border-bo-ink bg-bo-ink px-[22px] py-[13px] text-[14.5px] font-semibold text-bo-bg hover:bg-bo-accent hover:border-bo-accent"
         >
           Abonnieren
         </button>

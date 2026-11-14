@@ -64,6 +64,7 @@ const StorePicker = ({
             key={s.name}
             type="button"
             onClick={() => choose(s.name)}
+            aria-pressed={s.name === current.name}
             className="flex w-full items-center justify-between gap-2.5 rounded-[7px] px-2.5 py-2.5 text-left text-[13px] text-bo-header-text hover:bg-bo-header-surface-2"
           >
             <span>
@@ -72,9 +73,11 @@ const StorePicker = ({
                 {s.address}
               </span>
             </span>
-            <span className="shrink-0 font-mono text-[10.5px] text-bo-ok">
-              ● VORRÄTIG
-            </span>
+            {s.name === current.name && (
+              <span className="shrink-0 text-[14px] text-bo-accent" aria-hidden="true">
+                ✓
+              </span>
+            )}
           </button>
         ))}
         <LocalizedClientLink

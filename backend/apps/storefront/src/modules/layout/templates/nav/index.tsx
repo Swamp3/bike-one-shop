@@ -19,16 +19,22 @@ export default async function Nav() {
           <MobileMenu categories={topLevelCategories ?? null} />
           <LocalizedClientLink
             href="/"
-            className="shrink-0 font-heading text-xl font-bold uppercase italic leading-none tracking-wide"
+            className="shrink-0 leading-none"
             data-testid="nav-store-link"
           >
-            BIKE<span className="text-bo-accent">•</span>ONE
+            <img
+              src="/images/logo/bikeone-logo-white.svg"
+              alt="BikeOne"
+              width={1683}
+              height={269}
+              className="h-6 w-auto md:h-7"
+            />
           </LocalizedClientLink>
-          {/* Desktop only: search bar shares the top row with the logo instead of a stacked full-width row below. */}
-          <div className="hidden min-w-0 max-w-[480px] flex-1 md:block">
-            <NavSearch variant="bar" />
-          </div>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex min-w-0 flex-1 items-center justify-end gap-2">
+            {/* Desktop only: search bar sits in the right-hand cluster, left of the icons. */}
+            <div className="hidden min-w-0 max-w-[360px] flex-1 md:block">
+              <NavSearch variant="bar" />
+            </div>
             {/* TODO(mobile-layout): icon cluster (search/language/store/cart) should default to
                 one item per row instead of a horizontal row on mobile — deferred to a later pass. */}
             <NavSearch variant="icon" />
@@ -39,6 +45,25 @@ export default async function Nav() {
             </div>
             <StorePicker variant="compact" />
             <StorePicker variant="mobile" />
+            <LocalizedClientLink
+              href="/account"
+              aria-label="Mein Konto"
+              title="Mein Konto"
+              className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-lg border border-bo-header-line bg-bo-header-surface text-bo-header-text"
+              data-testid="nav-account-link"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="h-[18px] w-[18px]"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21a8 8 0 0 1 16 0" />
+              </svg>
+            </LocalizedClientLink>
             <Suspense
               fallback={
                 <LocalizedClientLink

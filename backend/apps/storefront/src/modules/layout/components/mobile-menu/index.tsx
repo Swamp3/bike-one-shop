@@ -54,15 +54,19 @@ const MobileMenu = ({ categories }: Props) => {
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between border-b border-bo-line px-4 py-3.5">
-          <span className="font-heading text-xl font-bold uppercase italic">
-            BIKE<span className="text-bo-accent">•</span>ONE
-          </span>
+        <div className="flex items-center justify-between border-b border-bo-header-line bg-bo-header px-4 py-3.5">
+          <img
+            src="/images/logo/bikeone-logo-white.svg"
+            alt="BikeOne"
+            width={1683}
+            height={269}
+            className="h-6 w-auto"
+          />
           <button
             type="button"
             aria-label="Menü schließen"
             onClick={() => setOpen(false)}
-            className="text-bo-ink"
+            className="text-bo-header-text"
           >
             <svg
               viewBox="0 0 24 24"
