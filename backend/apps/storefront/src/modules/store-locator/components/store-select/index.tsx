@@ -5,21 +5,7 @@ import { useEffect, useState } from "react"
 import { PREFERRED_STORE_STORAGE_KEY, STORES } from "@lib/data/stores"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { clx } from "@modules/common/components/ui"
-
-// Rough placeholder pin positions on the placeholder map (percent of the
-// map's width/height) — purely decorative, matching the wireframe's own
-// explicitly-labeled "Kartenansicht — Platzhalter". Not a real map.
-const PIN_POSITION: Record<string, { left: string; top: string }> = {
-  oldenburg: { left: "35%", top: "60%" },
-  osnabrueck: { left: "66%", top: "42%" },
-}
-
-const PinIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z" />
-    <circle cx="12" cy="10" r="3" className="fill-bo-surface" />
-  </svg>
-)
+import StoreMap from "@modules/store-locator/components/store-map"
 
 const ClockIcon = ({ className }: { className?: string }) => (
   <svg
@@ -75,39 +61,7 @@ const StoreSelect = () => {
 
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-stretch md:gap-5">
-      <div className="relative aspect-[16/10] shrink-0 overflow-hidden rounded-[10px] border border-bo-line bg-bo-surface-2 [background-image:repeating-linear-gradient(135deg,var(--bo-line)_0px,var(--bo-line)_1px,transparent_1px,transparent_9px)] md:aspect-auto md:w-[42%]">
-        <span className="absolute left-2 top-2 rounded bg-bo-bg px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wide text-bo-ink-faint">
-          Kartenansicht — Platzhalter
-        </span>
-        {STORES.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            onClick={() => select(s.id)}
-            style={PIN_POSITION[s.id]}
-            className="absolute flex -translate-x-1/2 -translate-y-full flex-col items-center"
-          >
-            <PinIcon
-              className={clx(
-                "h-[22px] w-[22px] drop-shadow",
-                selected === s.id
-                  ? "scale-125 text-bo-accent"
-                  : "text-bo-line-strong"
-              )}
-            />
-            <span
-              className={clx(
-                "mt-0.5 whitespace-nowrap rounded border bg-bo-surface px-1.5 py-0.5 text-[10px] font-bold",
-                selected === s.id
-                  ? "border-bo-accent text-bo-accent"
-                  : "border-bo-line text-bo-ink-muted"
-              )}
-            >
-              {s.name}
-            </span>
-          </button>
-        ))}
-      </div>
+      <StoreMap selected={selected} onSelect={select} />
 
       <div className="flex flex-1 flex-col gap-4">
         <div className="flex flex-col gap-2.5">
@@ -122,7 +76,7 @@ const StoreSelect = () => {
             >
               <input
                 type="radio"
-                name="ccStore"
+                name="preferredStore"
                 checked={selected === s.id}
                 onChange={() => select(s.id)}
                 className="mt-0.5 h-[17px] w-[17px] shrink-0 accent-bo-accent"

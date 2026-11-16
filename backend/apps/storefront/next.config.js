@@ -18,6 +18,15 @@ const backendUrl = new URL(
  */
 const nextConfig = {
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: "/:countryCode/click-collect",
+        destination: "/:countryCode/standorte",
+        permanent: true,
+      },
+    ]
+  },
   logging: {
     fetches: {
       fullUrl: true,

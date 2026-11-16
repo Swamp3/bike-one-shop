@@ -6,7 +6,7 @@
  * planning/5-Database_Schema/schema-design.md hasn't been built, so this
  * can't be sourced from the backend today. It's the single source of truth
  * for the header's store-picker (`layout/components/store-picker`) and the
- * Click & Collect store-selection page (`click-collect`), and matches the
+ * store-locator page (`/standorte`, `modules/store-locator`), and matches the
  * footer's (separately hardcoded, untouched) contact details exactly.
  *
  * Swap for a real fetch once that module + a public read route exist.
@@ -18,6 +18,9 @@ export type BikeOneStore = {
   hours: string
   phone: string
   email: string
+  // WGS84, geocoded once from the public street address (Nominatim).
+  lat: number
+  lng: number
 }
 
 export const STORES: BikeOneStore[] = [
@@ -28,6 +31,8 @@ export const STORES: BikeOneStore[] = [
     hours: "Mo–Fr 10:00–18:00, Sa 10:00–14:00",
     phone: "0441 984 894 83",
     email: "OL@bike-one.de",
+    lat: 53.13903,
+    lng: 8.22985,
   },
   {
     id: "osnabrueck",
@@ -36,10 +41,12 @@ export const STORES: BikeOneStore[] = [
     hours: "Di–Fr 10:00–18:00, Sa 10:00–14:00",
     phone: "0541 440 952 84",
     email: "OS@bike-one.de",
+    lat: 52.25632,
+    lng: 7.99289,
   },
 ]
 
 /** localStorage key for the customer's preferred store — shared between the
- * header's store-picker and the Click & Collect page so both read/write the
- * exact same real, persisted preference. */
+ * header's store-picker and the store-locator page (`/standorte`) so both
+ * read/write the exact same real, persisted preference. */
 export const PREFERRED_STORE_STORAGE_KEY = "bikeone_preferred_store"

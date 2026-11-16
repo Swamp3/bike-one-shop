@@ -6,6 +6,7 @@ import { PREFERRED_STORE_STORAGE_KEY, STORES } from "@lib/data/stores"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 const STORAGE_KEY = PREFERRED_STORE_STORAGE_KEY
+export const STORE_PANEL_OPEN_EVENT = "bo:store-panel-open"
 
 const PinIcon = ({ className }: { className?: string }) => (
   <svg
@@ -58,7 +59,14 @@ const StorePicker = ({
   const panel = open && (
     <>
       <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
-      <div className="absolute right-0 top-full z-40 mt-1.5 w-[min(320px,calc(100vw-2rem))] rounded-[10px] border border-bo-header-line bg-bo-header-surface p-2 shadow-2xl">
+      <div
+        className={`absolute top-full z-40 mt-1.5 rounded-[10px] border border-bo-header-line bg-bo-header-surface p-2 shadow-2xl ${
+          // Mobile: no `relative` wrapper, so this spans the header row (like the mobile search panel).
+          variant === "mobile"
+            ? "left-4 right-4"
+            : "right-0 w-[min(320px,calc(100vw-2rem))]"
+        }`}
+      >
         {STORES.map((s) => (
           <button
             key={s.name}
@@ -81,7 +89,7 @@ const StorePicker = ({
           </button>
         ))}
         <LocalizedClientLink
-          href="/click-collect"
+          href="/standorte"
           onClick={() => setOpen(false)}
           className="mt-1 block rounded-[7px] border-t border-bo-header-line px-2.5 pt-2.5 text-[12px] font-semibold text-bo-accent"
         >
@@ -93,11 +101,15 @@ const StorePicker = ({
 
   if (variant === "mobile") {
     return (
-      <div className="relative md:hidden">
+      <div className="md:hidden">
         <button
           type="button"
           aria-label={`Filiale wählen: ${current.name}, ${current.address}`}
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => {
+            // Both panels drop below the header row; the mobile search closes on this event.
+            if (!open) window.dispatchEvent(new Event(STORE_PANEL_OPEN_EVENT))
+            setOpen((v) => !v)
+          }}
           className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-lg border border-bo-header-line bg-bo-header-surface text-bo-header-text"
         >
           <PinIcon className="h-[18px] w-[18px]" />

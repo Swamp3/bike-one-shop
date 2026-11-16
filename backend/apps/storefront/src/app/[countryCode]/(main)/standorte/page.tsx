@@ -1,21 +1,22 @@
 import { Metadata } from "next"
 
 import PlpBreadcrumb from "@modules/store/components/plp-breadcrumb"
-import StoreSelect from "@modules/click-collect/components/store-select"
+import StoreSelect from "@modules/store-locator/components/store-select"
 
 export const metadata: Metadata = {
-  title: "Filiale wählen",
-  description: "Wähle deine bevorzugte BikeOne Filiale in Oldenburg oder Osnabrück.",
+  title: "Standorte",
+  description:
+    "BikeOne Standorte in Oldenburg und Osnabrück – Adressen, Öffnungszeiten, Karte.",
 }
 
-export default function ClickCollectPage() {
+export default function StandortePage() {
   return (
     <div className="pb-16">
-      <PlpBreadcrumb items={[{ label: "Start", href: "/" }, { label: "Filiale wählen" }]} />
+      <PlpBreadcrumb items={[{ label: "Start", href: "/" }, { label: "Standorte" }]} />
 
       <div className="px-4 pt-3.5 md:px-6">
         <h1 className="m-0 font-heading text-[26px] font-semibold leading-tight md:text-[30px]">
-          Filiale wählen
+          Standorte
         </h1>
         <p className="mt-1.5 max-w-[60ch] text-[13.5px] leading-relaxed text-bo-ink-muted">
           Wähle deine bevorzugte BikeOne-Filiale — für Beratung vor Ort, den
