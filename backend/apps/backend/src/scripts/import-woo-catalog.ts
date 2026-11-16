@@ -1,3 +1,4 @@
+// One-time import, do not re-run: its category handles predate the restructure in src/migration-scripts/restructure-categories.ts.
 /**
  * Imports the real bike catalogue from the old WooCommerce shop.
  *

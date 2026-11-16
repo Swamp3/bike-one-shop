@@ -27,7 +27,8 @@ export const listCategories = async (query?: Record<string, unknown>) => {
 }
 
 export const getCategoryByHandle = async (categoryHandle: string[]) => {
-  const handle = `${categoryHandle.join("/")}`
+  // Route params arrive percent-encoded (e.g. "laufr%C3%A4der").
+  const handle = categoryHandle.map(decodeURIComponent).join("/")
 
   const next = {
     ...(await getCacheOptions("categories")),

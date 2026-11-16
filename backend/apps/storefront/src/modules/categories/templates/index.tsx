@@ -1,7 +1,13 @@
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
 
+import {
+  ancestorChain,
+  descendantIds,
+  visibleChildren,
+} from "@lib/util/category-tree"
 import { ProductFilters } from "@lib/util/product-filters"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
 import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
 import PlpBreadcrumb from "@modules/store/components/plp-breadcrumb"
@@ -11,12 +17,14 @@ import PaginatedProducts from "@modules/store/templates/paginated-products"
 
 export default function CategoryTemplate({
   category,
+  allCategories,
   sortBy,
   page,
   countryCode,
   filters,
 }: {
   category: HttpTypes.StoreProductCategory
+  allCategories: HttpTypes.StoreProductCategory[]
   sortBy?: SortOptions
   page?: string
   countryCode: string
@@ -27,12 +35,19 @@ export default function CategoryTemplate({
 
   if (!category || !countryCode) notFound()
 
+  const categoryIds = descendantIds(category, allCategories)
+  const parents = ancestorChain(category, allCategories).slice(0, -1)
+  const children = visibleChildren(category, allCategories)
+
   return (
     <div className="pb-10">
       <PlpBreadcrumb
         items={[
           { label: "Start", href: "/" },
-          { label: "Fahrräder", href: "/store" },
+          ...parents.map((c) => ({
+            label: c.name,
+            href: `/categories/${c.handle}`,
+          })),
           { label: category.name },
         ]}
       />
@@ -44,14 +59,30 @@ export default function CategoryTemplate({
         </p>
       )}
 
+      {children.length > 0 && (
+        <ul className="m-0 flex list-none flex-wrap gap-2 px-4 pb-3 pt-1 md:px-6">
+          {children.map((c) => (
+            <li key={c.id}>
+              <LocalizedClientLink
+                href={`/categories/${c.handle}`}
+                className="block rounded-full border border-bo-line-strong bg-bo-surface-2 px-3 py-1 text-[12.5px] hover:border-bo-accent hover:text-bo-accent"
+              >
+                {c.name}
+              </LocalizedClientLink>
+            </li>
+          ))}
+        </ul>
+      )}
+
       <Suspense fallback={<SkeletonProductGrid />}>
         <PaginatedProducts
           sortBy={sort}
           page={pageNumber}
-          categoryId={category.id}
+          categoryIds={categoryIds}
           countryCode={countryCode}
           filters={filters}
-          hiddenFacets={["kategorie"]}
+          // Parent pages keep the Kategorie facet so visitors can narrow down to a subcategory.
+          hiddenFacets={categoryIds.length > 1 ? undefined : ["kategorie"]}
         />
       </Suspense>
     </div>

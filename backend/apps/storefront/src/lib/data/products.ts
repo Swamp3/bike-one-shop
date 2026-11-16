@@ -8,6 +8,7 @@ import {
   matchesFilters,
   ProductFilters,
 } from "@lib/util/product-filters"
+import { matchesQuery } from "@lib/util/product-search"
 import { sortProducts } from "@lib/util/sort-products"
 import { HttpTypes } from "@medusajs/types"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
@@ -112,6 +113,7 @@ export const listProductsWithSort = async ({
   countryCode,
   filters = {},
   hiddenFacets = [],
+  q = "",
 }: {
   page?: number
   queryParams?: ProductListQueryParams
@@ -119,6 +121,8 @@ export const listProductsWithSort = async ({
   countryCode: string
   filters?: ProductFilters
   hiddenFacets?: FacetKey[]
+  /** Free-text search, matched in memory (see matchesQuery). */
+  q?: string
 }): Promise<{
   response: { products: HttpTypes.StoreProduct[]; count: number }
   nextPage: number | null
@@ -128,7 +132,7 @@ export const listProductsWithSort = async ({
   const limit = queryParams?.limit || 12
 
   const {
-    response: { products },
+    response: { products: listed },
   } = await listProducts({
     pageParam: 0,
     queryParams: {
@@ -137,6 +141,7 @@ export const listProductsWithSort = async ({
     },
     countryCode,
   })
+  const products = listed.filter((p) => matchesQuery(p, q))
 
   // A group that is fixed by the page itself (category, brand) is not filterable there.
   const activeFilters = { ...filters }

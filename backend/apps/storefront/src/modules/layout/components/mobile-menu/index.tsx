@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 type Props = {
+  // Top-level categories from visibleTopLevel(), children already filtered to non-empty ones.
   categories: HttpTypes.StoreProductCategory[] | null
 }
 
@@ -80,9 +81,48 @@ const MobileMenu = ({ categories }: Props) => {
           </button>
         </div>
         <ul className="flex flex-col gap-0.5 p-2">
-          {categories
-            ?.filter((c) => !c.parent_category)
-            .map((c) => (
+          {categories?.map((c) =>
+            c.category_children?.length ? (
+              <li key={c.id}>
+                <details className="group">
+                  <summary className="flex cursor-pointer list-none items-center justify-between rounded-lg px-2.5 py-3 text-[14.5px] font-semibold hover:bg-bo-surface-2 [&::-webkit-details-marker]:hidden">
+                    {c.name}
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="h-4 w-4 text-bo-ink-faint transition-transform group-open:rotate-180"
+                      aria-hidden="true"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </summary>
+                  <ul className="mb-1 flex flex-col gap-0.5 pl-3">
+                    <li>
+                      <LocalizedClientLink
+                        href={`/categories/${c.handle}`}
+                        onClick={() => setOpen(false)}
+                        className="block rounded-lg px-2.5 py-2.5 text-[14px] hover:bg-bo-surface-2"
+                      >
+                        Alle {c.name}
+                      </LocalizedClientLink>
+                    </li>
+                    {c.category_children.map((child) => (
+                      <li key={child.id}>
+                        <LocalizedClientLink
+                          href={`/categories/${child.handle}`}
+                          onClick={() => setOpen(false)}
+                          className="block rounded-lg px-2.5 py-2.5 text-[14px] hover:bg-bo-surface-2"
+                        >
+                          {child.name}
+                        </LocalizedClientLink>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+            ) : (
               <li key={c.id}>
                 <LocalizedClientLink
                   href={`/categories/${c.handle}`}
@@ -92,7 +132,8 @@ const MobileMenu = ({ categories }: Props) => {
                   {c.name}
                 </LocalizedClientLink>
               </li>
-            ))}
+            )
+          )}
           <li>
             <LocalizedClientLink
               href="/store"

@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation"
 import { useParams } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+
+import { STORE_PANEL_OPEN_EVENT } from "@modules/layout/components/store-picker"
 
 const SearchIcon = ({ className }: { className?: string }) => (
   <svg
@@ -18,15 +20,20 @@ const SearchIcon = ({ className }: { className?: string }) => (
 )
 
 /**
- * Submits to /store?q=... (Medusa's native product `q` text filter) rather
- * than live-search-as-you-type — this repo has no search index/Algolia
- * credentials configured to power real suggestions.
+ * Submits to /store?q=... (matched in memory, see lib/util/product-search.ts)
+ * rather than live-search-as-you-type — no search index powers suggestions yet.
  */
 const NavSearch = ({ variant }: { variant: "icon" | "bar" }) => {
   const router = useRouter()
   const { countryCode } = useParams()
   const [value, setValue] = useState("")
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    const close = () => setOpen(false)
+    window.addEventListener(STORE_PANEL_OPEN_EVENT, close)
+    return () => window.removeEventListener(STORE_PANEL_OPEN_EVENT, close)
+  }, [])
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault()

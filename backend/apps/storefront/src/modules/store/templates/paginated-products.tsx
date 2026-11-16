@@ -14,7 +14,6 @@ type PaginatedProductsParams = {
   category_id?: string[]
   id?: string[]
   order?: string
-  q?: string
 }
 
 /** Listing body shared by store, category and collection pages: sidebar, toolbar, grid. */
@@ -22,7 +21,7 @@ export default async function PaginatedProducts({
   sortBy = "created_at",
   page,
   collectionId,
-  categoryId,
+  categoryIds,
   productsIds,
   countryCode,
   filters,
@@ -32,7 +31,7 @@ export default async function PaginatedProducts({
   sortBy?: SortOptions
   page: number
   collectionId?: string
-  categoryId?: string
+  categoryIds?: string[]
   productsIds?: string[]
   countryCode: string
   filters?: ProductFilters
@@ -47,16 +46,12 @@ export default async function PaginatedProducts({
     queryParams["collection_id"] = [collectionId]
   }
 
-  if (categoryId) {
-    queryParams["category_id"] = [categoryId]
+  if (categoryIds) {
+    queryParams["category_id"] = categoryIds
   }
 
   if (productsIds) {
     queryParams["id"] = productsIds
-  }
-
-  if (q) {
-    queryParams["q"] = q
   }
 
   if (sortBy === "created_at") {
@@ -79,6 +74,7 @@ export default async function PaginatedProducts({
     countryCode,
     filters,
     hiddenFacets,
+    q,
   })
 
   const totalPages = Math.ceil(count / PRODUCT_LIMIT)

@@ -73,7 +73,10 @@ export default async function CategoryPage(props: Props) {
   const { sortBy, page } = searchParams
   const filters = parseProductFilters(searchParams)
 
-  const productCategory = await getCategoryByHandle(params.category)
+  const [productCategory, allCategories] = await Promise.all([
+    getCategoryByHandle(params.category),
+    listCategories(),
+  ])
 
   if (!productCategory) {
     notFound()
@@ -82,6 +85,7 @@ export default async function CategoryPage(props: Props) {
   return (
     <CategoryTemplate
       category={productCategory}
+      allCategories={allCategories}
       sortBy={sortBy}
       page={page}
       countryCode={params.countryCode}

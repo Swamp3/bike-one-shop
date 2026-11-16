@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 
 import { listCategories } from "@lib/data/categories"
+import { visibleTopLevel } from "@lib/util/category-tree"
 import CartButton from "@modules/layout/components/cart-button"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import MobileMenu from "@modules/layout/components/mobile-menu"
@@ -9,7 +10,7 @@ import StorePicker from "@modules/layout/components/store-picker"
 
 export default async function Nav() {
   const categories = await listCategories().catch(() => null)
-  const topLevelCategories = categories?.filter((c) => !c.parent_category)
+  const topLevelCategories = categories ? visibleTopLevel(categories) : null
 
   return (
     <div className="sticky top-0 inset-x-0 z-50">
@@ -27,16 +28,14 @@ export default async function Nav() {
               alt="BikeOne"
               width={1683}
               height={269}
-              className="h-6 w-auto md:h-7"
+              className="h-5 w-auto md:h-7"
             />
           </LocalizedClientLink>
-          <div className="ml-auto flex min-w-0 flex-1 items-center justify-end gap-2">
+          <div className="ml-auto flex items-center justify-end gap-1.5 md:min-w-0 md:flex-1 md:gap-2">
             {/* Desktop only: search bar sits in the right-hand cluster, left of the icons. */}
             <div className="hidden min-w-0 max-w-[360px] flex-1 md:block">
               <NavSearch variant="bar" />
             </div>
-            {/* TODO(mobile-layout): icon cluster (search/language/store/cart) should default to
-                one item per row instead of a horizontal row on mobile — deferred to a later pass. */}
             <NavSearch variant="icon" />
             <div className="hidden items-center gap-1 rounded-lg border border-bo-header-line font-mono text-[11px] font-semibold md:flex">
               <span className="px-2.5 py-2 text-bo-header bg-bo-header-text">
@@ -49,7 +48,7 @@ export default async function Nav() {
               href="/account"
               aria-label="Mein Konto"
               title="Mein Konto"
-              className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-lg border border-bo-header-line bg-bo-header-surface text-bo-header-text"
+              className="hidden h-[38px] w-[38px] shrink-0 items-center justify-center rounded-lg border border-bo-header-line bg-bo-header-surface text-bo-header-text md:flex"
               data-testid="nav-account-link"
             >
               <svg
@@ -82,17 +81,36 @@ export default async function Nav() {
 
       {topLevelCategories && topLevelCategories.length > 0 && (
         <nav className="hidden border-b border-bo-line bg-bo-surface md:block">
-          <div className="no-scrollbar flex justify-center gap-0 overflow-x-auto px-4 py-2">
+          {/* No overflow-x scroll here: it would clip the dropdown panels. */}
+          <ul className="m-0 flex list-none justify-center gap-0 px-4 py-2">
             {topLevelCategories.map((c) => (
-              <LocalizedClientLink
-                key={c.id}
-                href={`/categories/${c.handle}`}
-                className="mx-[22px] whitespace-nowrap border-b-2 border-transparent py-1.5 font-heading text-[13px] font-medium uppercase tracking-wide text-bo-ink-muted hover:border-bo-accent hover:text-bo-ink"
-              >
-                {c.name}
-              </LocalizedClientLink>
+              // Dropdown opens on hover and keyboard focus via CSS only, so the nav stays a server component.
+              <li key={c.id} className="group relative mx-[22px]">
+                <LocalizedClientLink
+                  href={`/categories/${c.handle}`}
+                  className="block whitespace-nowrap border-b-2 border-transparent py-1.5 font-heading text-[13px] font-medium uppercase tracking-wide text-bo-ink-muted hover:border-bo-accent hover:text-bo-ink group-focus-within:border-bo-accent group-focus-within:text-bo-ink group-hover:border-bo-accent group-hover:text-bo-ink"
+                >
+                  {c.name}
+                </LocalizedClientLink>
+                {!!c.category_children.length && (
+                  <div className="absolute left-1/2 top-full z-10 hidden -translate-x-1/2 pt-2 group-focus-within:block group-hover:block">
+                    <ul className="m-0 min-w-[220px] list-none rounded-lg border border-bo-line bg-bo-surface py-1.5 shadow-lg">
+                      {c.category_children.map((child) => (
+                        <li key={child.id}>
+                          <LocalizedClientLink
+                            href={`/categories/${child.handle}`}
+                            className="block whitespace-nowrap px-4 py-2 text-[13.5px] text-bo-ink-muted hover:bg-bo-surface-2 hover:text-bo-ink focus-visible:bg-bo-surface-2 focus-visible:text-bo-ink"
+                          >
+                            {child.name}
+                          </LocalizedClientLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </li>
             ))}
-          </div>
+          </ul>
         </nav>
       )}
     </div>
