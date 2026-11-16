@@ -574,6 +574,20 @@ Status: **done** — last page of the custom-storefront milestone
     "Bald verfügbar" note that Click & Collect *ordering* isn't bookable
     yet, same tone as cart/checkout's existing disabled Click & Collect
     card.
+  - **Update 2026-11-14: renamed to `/standorte` ("Standorte") + real
+    map.** The page is store info + preferred-store choice, not a Click
+    & Collect flow, so the route moved to `(main)/standorte` and the
+    module to `modules/store-locator`; `/:countryCode/click-collect`
+    308-redirects there (`next.config.js`), the header store-picker
+    link and `sitemap.ts` point at it. The placeholder map is replaced
+    by `store-locator/components/store-map`: plain `leaflet` (not
+    `react-leaflet`, Hippocratic license) with OpenStreetMap tiles
+    behind a 2-click notice, so no request reaches OSM before
+    "Karte laden" (decision in
+    `planning/3-Architecture_Tech_Stack/decisions.md`). Store
+    coordinates (`lat`/`lng` in `lib/data/stores.ts`) were geocoded once
+    via Nominatim. Go-live follow-ups (privacy policy text, tile
+    provider) are in `TODO.md`.
 - `npx tsc --noEmit` clean. `next lint` shows the same pre-existing
   errors/warnings as Task 10 noted, all in files this task didn't touch
   (`global-error.tsx`, `lib/data/cart.ts`, `shipping-address`,
@@ -1471,6 +1485,53 @@ Open: Click & Collect is deferred until the real TriCon endpoint (no pickup
 fulfillment set, every order goes out as `Versand`); checkout stock re-check
 (`DownloadStockByArtikel`) is in the client but not wired into checkout; the
 admin page and widget have not been checked visually in a browser.
+
+### Task 15 — Category structure Fahrräder / Komponenten / Zubehör
+
+Done 2026-11-16, not committed yet. Plan:
+`.working-files/category-structure/plan.md`; the tree, handle rule and
+TriData mapping rule are in `planning/3-Architecture_Tech_Stack/decisions.md`
+("Product categories").
+
+- Migration script `src/migration-scripts/restructure-categories.ts` (runs
+  after `initial-data-seed.ts`, idempotent) renames the flat categories to
+  German names with ASCII handles, creates the parents Fahrräder and
+  Komponenten and turns Accessories into Zubehör.
+- Storefront: `lib/util/category-tree.ts` (self-check:
+  `node scripts/check-category-tree.mjs` in `apps/storefront`) hides empty
+  categories in the menu, mobile menu and footer. Desktop menu has a CSS-only
+  dropdown per top-level category, the mobile menu `<details>` groups.
+  Category pages list all descendant products, build the breadcrumb from the
+  real parents and show subcategory chips on parent pages.
+- `getCategoryByHandle` decodes percent-encoded route params.
+- The Store API's `*products` on categories only returns published products,
+  so drafts don't make a category look non-empty. Because of that, Komponenten
+  (Laufräder) and Mountainbikes are hidden today: their only products
+  (Miche, Zipp 303, Stumpjumper) are dev-seed products the WooCommerce import
+  set to draft.
+
+### Task 16 — Legal compliance before go-live
+
+Part A code done 2026-11-16, not committed, awaiting `legal-security-reviewer`
+(checkout and order e-mail touch customer data). Plan:
+`.working-files/legal-compliance/plan.md`; open owner decisions are in
+`TODO.md`.
+
+- Pages `/agb`, `/widerrufsrecht`, `/kontakt` (drafts), Impressum link,
+  company data in `lib/data/company.ts`.
+- "inkl. MwSt., zzgl. Versand" next to prices, manufacturer/safety section on
+  the product page (GPSR, data from `collection.metadata` and
+  `product.metadata`), 30-day return and Click & Collect claims replaced by
+  honest wording, checkout button and legal links, registration and newsletter
+  wording.
+- Backend: notification module in `medusa-config.ts` (`notification-local` in
+  dev, real provider via `NOTIFICATION_*` env vars) and an `order.placed`
+  subscriber (`src/subscribers/order-placed-confirmation.ts`, workflow in
+  `src/workflows/order-confirmation/`) that sends the confirmation with the
+  Widerrufsbelehrung and form. No real provider yet, so nothing is sent in
+  production.
+- No cookie banner needed today; cookie/storage text for the Datenschutz is in
+  `.working-files/legal-compliance/cookie-inventory.md`.
 
 ## Later milestones (not started)
 

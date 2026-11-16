@@ -44,6 +44,17 @@ MVP) landed.
   storefront behind basic auth/IP allowlist + noindex, only fake customer
   data (example.com) in test orders.
 
+- **Before go-live: OSM map on `/standorte` (legal + ops gate).** The
+  store map loads OpenStreetMap tiles after a 2-click notice. The privacy
+  policy (currently external, bike-one.org/datenschutz, which the notice
+  links to) must name the OSM map loading, the transfer to the
+  OpenStreetMap Foundation in the UK (check the adequacy decision is
+  still in force) and tile delivery via the Fastly CDN. Decide the tile
+  provider before go-live: OSM's public tiles are for low traffic only
+  (Tile Usage Policy), so use a contracted provider or self-host. If a
+  Content-Security-Policy is added later, allow
+  `img-src https://tile.openstreetmap.org` (or the chosen provider).
+
 ## Blocked on someone outside this project
 
 - **Compositing prototype for the configurator preview.** The Wilier
@@ -101,10 +112,77 @@ MVP) landed.
   supplying the real current colorway names per model.
 - **Real shipping prices.** Both shipping options still carry the original
   demo seed's flat €10 — nobody has given real rates.
-- **German legal pages.** Impressum, AGB, Datenschutz, Widerrufsrecht are
-  still placeholder `#` links in the footer — real legal content needed,
-  reviewed via `legal-security-reviewer` before publishing (see also GDPR
-  item below).
+- **Legal compliance before go-live.** Plan and status:
+  `.working-files/legal-compliance/plan.md` (code part A done 2026-11-16, not
+  committed; needs `legal-security-reviewer` before merge). `/agb`,
+  `/widerrufsrecht`, `/kontakt` are drafts from the statutory model texts, not
+  legal advice. Owner decisions still open:
+  1. **bike-one.org and the shutdown.** Impressum, Datenschutz and
+     Terminbuchung link there. If they live on the WordPress instance that is
+     being stopped, the links die: keep the domain, or move Impressum and
+     Datenschutz into the shop first.
+  2. **Datenschutzerklärung** is probably written for the old site. Needs shop
+     content: accounts, orders, SumUp, freight forwarder, hosting at Strato
+     (data processing agreement), cookies (ready text:
+     `.working-files/legal-compliance/cookie-inventory.md`), OSM map,
+     retention, supervisory authority.
+  3. **Impressum.** Company data in `lib/data/company.ts` (and its copy in
+     `workflows/order-confirmation/build-email.ts`) now matches the current
+     Impressum (BikeOne GmbH, Rheinstrasse 16, 26135 Oldenburg (Oldb), HRB
+     220546, USt-IdNr. DE366536184, Marvin Wilczura). That Impressum is
+     outdated: it cites § 5 TMG (now DDG) and the EU OS platform
+     (discontinued 2025). Update it, wherever it ends up (see 1).
+  4. **Voluntary 30-day return:** the promise was removed from the product
+     page, trust strip and order page (now "14 Tage Widerrufsrecht bei
+     Online-Bestellungen"; old text is in git history). Keep it (then define
+     it in the AGB, separate from the statutory right) or drop it. The account
+     order list (`order-list`) now uses 14 days.
+  5. **Returns and withdrawal: open questions for the owner** are in
+     `.working-files/legal-compliance/rueckfragen-rueckgabe-widerruf.md`
+     (return costs and estimate for bikes, § 357 Abs. 5 BGB; voluntary 30-day
+     return; return address; made-to-order exception for configured builds;
+     refunds; services). Consumer arbitration is decided: the Impressum says
+     BikeOne does not join, AGB § 9 matches. AGB § 4 reserves correct
+     self-supply, valid only with a matching covering purchase. Add a pickup
+     clause once Click & Collect is bookable.
+  6. **Manufacturer data per brand (GPSR).** The product page has a
+     "Herstellerinformationen" block, but no data is entered. Per Medusa
+     collection (Trek, Cervélo, Factor, Specialized, Wilier, Ridley,
+     Pinarello) set `metadata.manufacturer_name`, `manufacturer_address`,
+     `manufacturer_email` in the admin; per product optional
+     `metadata.safety_info` (warnings). Do not go live without it.
+  7. **E-mail provider** for order confirmations (§ 312i/§ 312f BGB). The
+     confirmation e-mail is built and sent through the notification module,
+     but only logs locally until a provider is configured
+     (`NOTIFICATION_PROVIDER_RESOLVE`, `NOTIFICATION_API_KEY`,
+     `NOTIFICATION_FROM` in `backend/apps/backend/.env`; the provider package
+     must be installed in `apps/backend`). In production without a provider no
+     confirmation is sent.
+  8. **BFSG** (accessibility, since June 2025): exempt only if the company is a
+     micro-enterprise (under 10 employees and up to 2 M EUR turnover). Owner
+     checks; otherwise an accessibility statement and a WCAG 2.1 AA audit are
+     needed.
+  9. **Before the first shipment:** LUCID registration and packaging licensing
+     (VerpackG); WEEE and battery registration if e-bikes, lights or batteries
+     are sold.
+  10. **Newsletter:** double opt-in and provider, when built (see below).
+  11. **German VAT rate is missing.** Local DB: tax region Deutschland exists
+      and prices are tax-inclusive, but there is no tax rate, so the shop
+      shows MwSt. 0,00 €. Set a default rate of 19 % on the tax region (Admin >
+      Settings > Tax Regions > Deutschland). Admin settings live in the DB and
+      do not carry over to production: either repeat it there or add an
+      idempotent migration script that creates the rate, so `db:migrate` sets
+      it on every environment.
+  Code follow-ups from the plan:
+  - **Sale prices need the 30-day lowest price (PAngV § 11).** Crossed-out
+    prices in `product-price`, `product-preview/price.tsx`, `line-item-price`
+    and `line-item-unit-price` are marked with `shortcut:` comments. Implement
+    before price lists are used.
+  - **Click & Collect claims** on the product page, trust strip and checkout
+    now say "bald verfügbar"; restore the real wording when pickup orders
+    exist.
+  - Not changed, check: the header store picker still says "Abholung:" and the
+    account order list offers "Rücksendung im Store starten" (UI only).
 - **Hosting provider.** Comparison exists (`planning/3-Architecture_Tech_Stack/decisions.md`).
   Decision (2026-11-09): Strato CP4-18 dedicated server (Xeon E3-1230v6,
   4C/8T, 32 GB ECC, 2x480 GB SSD RAID 1), replacing the netcup VPS 4000
@@ -112,6 +190,11 @@ MVP) landed.
 
 ## Known gaps, no external blocker — just not built yet
 
+- **Category structure Fahrräder / Komponenten / Zubehör (PLAN.md Task 15).**
+  Implemented, awaiting review (not committed). Open: decide whether to publish
+  the drafted seed wheelsets (Miche, Zipp 303) so Komponenten appears in the
+  menu; run the production build; delete
+  `.working-files/category-structure/` once accepted.
 - **Real Click & Collect order fulfillment.** Store selection is real
   (Task 11). What's missing is a real pickup *order* flow: a pickup
   fulfillment set/shipping option in Medusa, the `tridata-stock-snapshot`
@@ -120,6 +203,14 @@ MVP) landed.
   tied to TriCon order sync above (`Filialname` on `UploadOrder` maps
   straight onto the pickup-store field) — largely the same piece of work,
   not two separate ones. See `PLAN.md`'s "Later milestones".
+- **Mobile header overlap + accent-blind search.** Implemented, awaiting
+  review (not committed): mobile header fits at 360/390px (account moved to
+  the drawer), store panel spans the header row, and search matches title,
+  brand, category, groupset and tags in memory, ignoring accents and case
+  (`lib/util/product-search.ts`, self-check `scripts/check-product-search.mjs`).
+  Open: delete `.working-files/mobile-header-search/` once accepted. Upgrade
+  path once the catalog passes 100 products or typos must match: the backend
+  search index (`/store/search`).
 - **`store-profile` custom module.** Each stock location's `opening_hours`
   and `email` are stashed in Medusa's generic `metadata` field for now,
   not a real linked module as `schema-design.md` specifies. Small, not
@@ -131,11 +222,6 @@ MVP) landed.
   on the storefront's payment step) both live outside migrations/code and
   must be set again by hand on any new dev/staging/prod instance — flagging
   now so it isn't forgotten when going live.
-- **Homepage hero copy overstates Click & Collect** ("abholbereit
-  innerhalb von 2 Stunden") — inconsistent with the honest "Bald
-  verfügbar" treatment everywhere else. Quick copy fix, currently
-  untouched because editing the homepage was out of scope for the tasks
-  that found it.
 - **Real newsletter signup.** Footer form is an honest UI-only placeholder
   (matches the wireframe's own behavior) — needs a real email/newsletter
   provider plus double opt-in for GDPR compliance.

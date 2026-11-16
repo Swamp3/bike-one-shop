@@ -35,7 +35,7 @@ form and were untouched):
 | `products/[handle]/page.tsx` (PDP title) | `Bike One` | **Fixed** |
 | `store/page.tsx` (description) | `Bike One` | **Fixed** |
 | `(main)/page.tsx` (homepage title) | `Bike One` | **Fixed** |
-| `click-collect/page.tsx` (description + body copy) | `BIKE ONE` / `BIKE-ONE` | **Fixed** |
+| `standorte/page.tsx`, formerly `click-collect/page.tsx` (description + body copy) | `BIKE ONE` / `BIKE-ONE` | **Fixed** |
 | `modules/layout/templates/footer/index.tsx` (copyright line) | `BIKE ONE` | **Fixed** |
 | `modules/cart/components/sign-in-prompt/index.tsx` | `BIKE ONE` | **Fixed** |
 | `modules/account/components/register/index.tsx` (signup copy) | `BIKE-ONE` | **Fixed** |

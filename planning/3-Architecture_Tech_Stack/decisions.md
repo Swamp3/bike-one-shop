@@ -46,6 +46,31 @@ Prefer container queries (`@container`) over media queries for component-level r
 
 Build every reusable piece of UI — buttons, cards, common layouts (sidebar+content, tab/step nav, etc.) — as a standalone, reusable React component, not one-off markup duplicated per page. This is what the [Click & Collect store-selector wireframe](../../wireframes/click-collect-filiale.html) demonstrated: one component definition, mounted both as a full standalone page and embedded in a narrower checkout context, adapting via its own container query rather than needing two different implementations. This principle is framework-agnostic and survived the Angular→Next.js switch unchanged; only the component implementation language changes (React/JSX instead of Angular templates).
 
+## Store map (`/standorte`)
+
+Decision (2026-11-14): the store-locator map uses plain Leaflet (BSD-2) with OpenStreetMap tiles, loaded only after a 2-click notice ("Karte laden") that names the data transfer to the OpenStreetMap Foundation (UK) and the CDN. Consent applies to that page view only and is not stored. This avoids a site-wide consent banner just for one map. `react-leaflet` was rejected because v5 is under the Hippocratic License 2.1, which is not OSI-approved. OSM's public tile servers are only acceptable for low traffic; the production tile provider is still open (see `TODO.md`).
+
+## Product categories
+
+Decision (2026-11-16): the shop uses a two-level category tree. Handles are the stable key (URLs, filters, future imports):
+
+```
+Fahrräder               fahrraeder
+  Rennräder             rennraeder
+  Gravelbikes           gravelbikes
+  Triathlon & Zeitfahren triathlon-zeitfahren
+  Mountainbikes         mountainbikes
+Komponenten             komponenten
+  Laufräder             laufraeder
+Zubehör                 zubehoer
+```
+
+- Handles are ASCII only: ä→ae, ö→oe, ü→ue, ß→ss. Umlaut handles broke the category route (`/categories/laufräder` returned 404).
+- The storefront menu, mobile menu and footer show only categories that have a published product themselves or below them. Empty categories stay reachable by URL but are not linked.
+- A parent category page lists the products of all its subcategories.
+- The tree is created by the migration script `backend/apps/backend/src/migration-scripts/restructure-categories.ts`. New subcategories (Helme, Pedale, Schaltgruppen, ...) are added once BikeOne sells such products.
+- TriData article import (not built yet): each article's `Warengruppe`/`Kategorien` value maps to one shop category handle through an explicit mapping table. Values without a mapping get no category and are logged, never auto-created.
+
 ## Hosting — open
 
 3-stage setup decided: dev / staging / prod, dockerized. Provider not yet decided. Constraints that narrow the field, **revised for Medusa/Next.js**:

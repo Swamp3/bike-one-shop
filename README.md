@@ -51,7 +51,7 @@ Available after `make dev`:
 | Storefront | http://localhost:8000 | Redirects to `/de` (Germany-only region for now) |
 | Shop / product listing | http://localhost:8000/de/store | |
 | Cart | http://localhost:8000/de/cart | |
-| Click & Collect | http://localhost:8000/de/click-collect | |
+| Standorte | http://localhost:8000/de/standorte | Store info, map, preferred store; `/de/click-collect` redirects here |
 | Customer account | http://localhost:8000/de/account | Login / register, orders, addresses |
 | Checkout | http://localhost:8000/de/checkout | Needs a non-empty cart |
 | Admin dashboard | http://localhost:9000/app | Medusa admin, see [logins](#dev-logins-and-data) |

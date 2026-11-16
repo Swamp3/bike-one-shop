@@ -65,7 +65,7 @@ make dev     # runs both backend (:9000) and storefront (:8000)
 
 When adding real business logic (the remaining planned `product-brand`, `store-profile`, `saved-payment-instrument`, `order-fulfillment-extension` modules from the schema design), follow the Medusa module/workflow convention in `backend/AGENTS.md`, as the tridata modules do.
 
-**Storefront** (`backend/apps/storefront/src/`) follows the standard Medusa Next.js starter layout: `app/[countryCode]/(main)` and `(checkout)` route groups, feature-oriented `modules/<feature>/{components,templates}` (cart, checkout, click-collect, account, products, store, order, shipping, layout, home, collections, categories), `lib/data` for server actions calling the Medusa API, `lib/hooks`/`lib/util` for client helpers. It still runs Medusa's generic starter UI — the custom design in `wireframes/` (interactive HTML mockups) isn't wired in yet.
+**Storefront** (`backend/apps/storefront/src/`) follows the standard Medusa Next.js starter layout: `app/[countryCode]/(main)` and `(checkout)` route groups, feature-oriented `modules/<feature>/{components,templates}` (cart, checkout, store-locator, account, products, store, order, shipping, layout, home, collections, categories), `lib/data` for server actions calling the Medusa API, `lib/hooks`/`lib/util` for client helpers. It still runs Medusa's generic starter UI — the custom design in `wireframes/` (interactive HTML mockups) isn't wired in yet.
 
 **Integrations are feature-flagged on credentials, not removed:** SumUp payment provider and TriCon/Tridata ERP sync are both implemented and conditionally wired but inactive without real sandbox credentials (`SUMUP_API_KEY`/`SUMUP_MERCHANT_CODE`; `TRIDATA_ENDPOINT_URL`/`TRIDATA_IDENTIFY_GUID`, which `make setup` points at the local mock). Don't assume "not active" means "not implemented" — check `PLAN.md` for the relevant task before rebuilding something that already exists gated behind an env var.
 
@@ -73,7 +73,7 @@ When adding real business logic (the remaining planned `product-brand`, `store-p
 
 ## Compliance
 
-This is a German/EU e-commerce site: Impressum, GDPR, TTDSG (cookie consent), Widerrufsrecht (right of withdrawal), and PAngV (price display) requirements all apply. German legal pages are currently placeholders. Use the `legal-security-reviewer` subagent before merging any change touching auth, payments, customer/personal data, third-party dependencies, or checkout/pricing flows — it issues a blocking/non-blocking verdict and is not a substitute for actual legal sign-off.
+This is a German/EU e-commerce site: Impressum, GDPR, TDDDG (cookie consent, formerly TTDSG), Widerrufsrecht (right of withdrawal), and PAngV (price display) requirements all apply. German legal pages are currently placeholders. Use the `legal-security-reviewer` subagent before merging any change touching auth, payments, customer/personal data, third-party dependencies, or checkout/pricing flows — it issues a blocking/non-blocking verdict and is not a substitute for actual legal sign-off.
 
 ## Project-specific subagents
 

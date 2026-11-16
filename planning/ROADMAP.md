@@ -46,7 +46,7 @@ Detail on the build phases (6-13), as of 2026-10-28:
 - **Phase 9 — Testing & QA ⚪.** No automated tests exist yet. Verification so far is manual, per task, recorded in PLAN.md.
 - **Phase 10 — DevOps ⚪.** No CI workflow, no backend containerization. Hosting provider comparison is in `3-Architecture_Tech_Stack/decisions.md` (Hetzner, Vercel for the frontend, others) but no decision; it gates deploy, not local dev. The storefront's production build works since 2026-10-29 (PLAN.md Task 3).
 - **Phase 11 — Copy & SEO 🟡.** Technical SEO audit done and critical blockers fixed (`../SEO_AUDIT.md`), rebrand to "BikeOne", company name corrected in the footer. Remaining: non-blocking SEO opportunities in the audit, real product copy, real manufacturer colorway names.
-- **Phase 12 — Legal ⚪.** Impressum, AGB, Datenschutz and Widerrufsrecht are still placeholder `#` links; Impressum is a legal blocker for launch. GDPR review, cookie consent (TTDSG) and double opt-in for the newsletter haven't happened. Everything touching auth, payments, personal data or checkout goes through the `legal-security-reviewer` subagent, then a real lawyer.
+- **Phase 12 — Legal ⚪.** Impressum, AGB, Datenschutz and Widerrufsrecht are still placeholder `#` links; Impressum is a legal blocker for launch. GDPR review, cookie consent (TDDDG, formerly TTDSG) and double opt-in for the newsletter haven't happened. Everything touching auth, payments, personal data or checkout goes through the `legal-security-reviewer` subagent, then a real lawyer.
 - **Phase 13 — Post-launch ⚪.** Not applicable until launch.
 
 ## How to actually work
