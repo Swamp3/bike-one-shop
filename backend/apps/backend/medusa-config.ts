@@ -18,6 +18,24 @@ const sumupConfigured = Boolean(
   sumupApiKey && sumupMerchantCode && sumupWebhookSecret
 )
 
+// Order confirmation e-mails (PLAN: legal-compliance A7). A real provider is
+// chosen purely by env: NOTIFICATION_PROVIDER_RESOLVE is the provider package
+// (it must be installed and take { api_key, from } options, as the official
+// SendGrid and Resend providers do). Without it, development uses
+// notification-local (logs to the console, sends nothing). Production without
+// a provider registers no notification module, so no confirmation is sent.
+const notificationProvider = process.env.NOTIFICATION_PROVIDER_RESOLVE
+const notificationApiKey = process.env.NOTIFICATION_API_KEY
+const notificationFrom = process.env.NOTIFICATION_FROM
+const notificationConfigured = Boolean(
+  notificationProvider && notificationApiKey && notificationFrom
+)
+if (!notificationConfigured && process.env.NODE_ENV === 'production') {
+  console.warn(
+    '[notification] no e-mail provider configured: order confirmation e-mails will NOT be sent'
+  )
+}
+
 const redisUrl = process.env.REDIS_URL
 const backendUrl = process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000'
 
@@ -71,6 +89,35 @@ module.exports = defineConfig({
         ],
       },
     },
+    ...(notificationConfigured || process.env.NODE_ENV !== 'production'
+      ? [
+          {
+            resolve: '@medusajs/medusa/notification',
+            options: {
+              providers: [
+                notificationConfigured
+                  ? {
+                      resolve: notificationProvider,
+                      id: 'email',
+                      options: {
+                        channels: ['email'],
+                        api_key: notificationApiKey,
+                        from: notificationFrom,
+                      },
+                    }
+                  : {
+                      resolve: '@medusajs/medusa/notification-local',
+                      id: 'local',
+                      options: {
+                        name: 'Local Notification Provider',
+                        channels: ['email'],
+                      },
+                    },
+              ],
+            },
+          },
+        ]
+      : []),
     // Without these, events and scheduled workflows live in memory, so a
     // restart loses them (e.g. an order.placed that has not run yet).
     ...(redisUrl
