@@ -36,6 +36,7 @@ export default function ProductPrice({
           {selectedPrice.calculated_price}
         </span>
       </span>
+      {/* shortcut: reductions need the 30-day lowest price next to the crossed-out price (PAngV § 11), implement before price lists are used (TODO.md) */}
       {selectedPrice.price_type === "sale" && (
         <>
           <p>

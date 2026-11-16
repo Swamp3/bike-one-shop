@@ -1,3 +1,5 @@
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+
 const items = [
   {
     title: "Dein Körper ist unser Maß",
@@ -11,7 +13,8 @@ const items = [
   },
   {
     title: "So schnell wie online, so persönlich wie vor Ort",
-    body: "Click & Collect: online reservieren, innerhalb von 2 Stunden abholbereit im Wunschstore.",
+    // Switch back to the real pitch once pickup orders exist (see TODO.md).
+    body: "Click & Collect in Oldenburg und Osnabrück: bald verfügbar.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="3" y="7" width="18" height="14" rx="2" />
@@ -21,7 +24,17 @@ const items = [
   },
   {
     title: "Ohne Umwege zurück",
-    body: "30 Tage Rückgaberecht, unkompliziert an beiden Standorten — ohne Versandetikett.",
+    body: (
+      <>
+        14 Tage Widerrufsrecht bei Online-Bestellungen.{" "}
+        <LocalizedClientLink
+          href="/widerrufsrecht"
+          className="underline underline-offset-2 hover:text-bo-ink"
+        >
+          Mehr erfahren
+        </LocalizedClientLink>
+      </>
+    ),
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M3 12a9 9 0 1 0 3-6.7" />

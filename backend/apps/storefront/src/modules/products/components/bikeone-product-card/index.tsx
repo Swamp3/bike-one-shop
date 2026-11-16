@@ -5,6 +5,7 @@ import { swatchColor } from "@lib/util/color-swatches"
 import { getProductPrice } from "@lib/util/get-product-price"
 import { variantPrices } from "@lib/util/product-filters"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import PriceNote from "@modules/products/components/price-note"
 import PlaceholderImage from "@modules/common/icons/placeholder-image"
 
 const MAX_DOTS = 6
@@ -111,6 +112,7 @@ export default function BikeOneProductCard({
             </>
           )}
         </div>
+        <PriceNote className="h-[14px] whitespace-nowrap !text-[10.5px]" />
       </div>
     </LocalizedClientLink>
   )

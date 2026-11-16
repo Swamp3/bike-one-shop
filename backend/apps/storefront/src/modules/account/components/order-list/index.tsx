@@ -9,7 +9,8 @@ import BuildGroupCard from "@modules/common/components/build-group-card"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { clx } from "@modules/common/components/ui"
 
-const RETURN_WINDOW_DAYS = 30
+// Statutory withdrawal period; the voluntary 30 days were removed (TODO.md).
+const RETURN_WINDOW_DAYS = 14
 
 const ChevronIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>

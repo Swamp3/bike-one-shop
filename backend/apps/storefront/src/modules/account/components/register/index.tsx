@@ -5,6 +5,7 @@ import { AccountSubmitButton } from "@modules/account/components/account-button"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { TextField } from "@modules/checkout/components/form-field"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { signup } from "@lib/data/customer"
 
 type Props = {
@@ -78,7 +79,16 @@ const Register = ({ setCurrentView }: Props) => {
           data-testid="register-error"
         />
         <p className="text-[11.5px] leading-snug text-bo-ink-faint">
-          Mit der Kontoerstellung akzeptierst du unsere{" "}
+          Es gelten unsere{" "}
+          <LocalizedClientLink
+            href="/agb"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-dashed underline-offset-[2px]"
+          >
+            AGB
+          </LocalizedClientLink>
+          . Hinweise zur Datenverarbeitung findest du in der{" "}
           <a
             href="https://bike-one.org/datenschutz/"
             target="_blank"
@@ -86,10 +96,6 @@ const Register = ({ setCurrentView }: Props) => {
             className="underline decoration-dashed underline-offset-[2px]"
           >
             Datenschutzerklärung
-          </a>{" "}
-          und{" "}
-          <a href="#" className="underline decoration-dashed underline-offset-[2px]">
-            AGB
           </a>
           .
         </p>

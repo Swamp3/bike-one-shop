@@ -23,6 +23,7 @@ const LineItemUnitPrice = ({
 
   return (
     <div className="flex flex-col text-ui-fg-muted justify-center h-full">
+      {/* shortcut: reductions need the 30-day lowest price next to the crossed-out price (PAngV § 11), implement before price lists are used (TODO.md) */}
       {hasReducedPrice && (
         <>
           <p>

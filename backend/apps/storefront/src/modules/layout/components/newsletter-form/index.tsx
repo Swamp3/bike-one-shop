@@ -33,6 +33,18 @@ const NewsletterForm = () => {
           Abonnieren
         </button>
       </form>
+      <p className="mt-2 max-w-[420px] text-[11.5px] leading-snug text-bo-ink-faint">
+        Hinweise zur Datenverarbeitung findest du in der{" "}
+        <a
+          href="https://bike-one.org/datenschutz/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline decoration-dashed underline-offset-[2px]"
+        >
+          Datenschutzerklärung
+        </a>
+        . Du kannst dich jederzeit abmelden.
+      </p>
       {submitted && (
         <div className="mt-2 text-[12.5px] font-semibold text-bo-ok">
           ✓ Bestätigungsmail wurde verschickt (Platzhalter).

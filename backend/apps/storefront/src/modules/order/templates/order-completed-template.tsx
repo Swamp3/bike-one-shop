@@ -82,10 +82,15 @@ export default async function OrderCompletedTemplate({
             Rückgabe &amp; Umtausch
           </h2>
           <p className="m-0 text-[13.5px] leading-relaxed text-bo-ink-muted">
-            30 Tage Rückgaberecht — unkompliziert in jeder Filiale, in
-            Oldenburg oder Osnabrück, ohne Versandetikett. Bei per Spedition
-            geliefertem Sperrgut holen wir die Rücksendung nach Absprache
-            direkt bei dir ab.
+            14 Tage Widerrufsrecht bei Online-Bestellungen. Alle Einzelheiten
+            findest du in unserer{" "}
+            <LocalizedClientLink
+              href="/widerrufsrecht"
+              className="underline underline-offset-2 hover:text-bo-ink"
+            >
+              Widerrufsbelehrung
+            </LocalizedClientLink>
+            .
           </p>
         </div>
 

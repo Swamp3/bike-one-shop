@@ -18,6 +18,7 @@ import { isEqual } from "lodash"
 import { useParams, usePathname, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
+import PriceNote from "@modules/products/components/price-note"
 import MobileActions from "./mobile-actions"
 import { useRouter } from "next/navigation"
 
@@ -321,6 +322,7 @@ export default function ProductActions({
         >
           {ctaLabel}
         </button>
+        <PriceNote href="#versand" className="-mt-2 text-center" />
         <MobileActions
           product={product}
           variant={selectedVariant}

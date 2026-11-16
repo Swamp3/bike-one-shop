@@ -256,8 +256,11 @@ const SumUpPaymentButton = ({
         data-testid="submit-order-button"
         className={clx(primaryBtn)}
       >
-        Weiter zu SumUp →
+        Zahlungspflichtig bestellen
       </button>
+      <p className="m-0 mt-2 text-center text-[12px] text-bo-ink-muted">
+        Du wirst zur Zahlung zu SumUp weitergeleitet.
+      </p>
       <ErrorMessage
         error={errorMessage}
         data-testid="sumup-payment-error-message"

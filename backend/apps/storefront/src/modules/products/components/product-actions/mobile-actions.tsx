@@ -9,6 +9,7 @@ import X from "@modules/common/icons/x"
 import { getProductPrice } from "@lib/util/get-product-price"
 import ColorSwatchSelect from "./color-swatch-select"
 import OptionSelect from "./option-select"
+import PriceNote from "@modules/products/components/price-note"
 import { isColorOption } from "./option-title"
 import { HttpTypes } from "@medusajs/types"
 import { isSimpleProduct } from "@lib/util/product"
@@ -93,6 +94,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                 </span>
               )}
             </div>
+            <PriceNote href="#versand" className="-mt-2" />
             <div
               className={clx("grid w-full grid-cols-2 gap-2.5", {
                 "!grid-cols-1": isSimple,

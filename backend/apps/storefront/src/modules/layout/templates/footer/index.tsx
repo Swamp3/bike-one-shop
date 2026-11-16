@@ -1,5 +1,6 @@
 import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
+import { visibleTopLevel } from "@lib/util/category-tree"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import NewsletterForm from "@modules/layout/components/newsletter-form"
@@ -9,7 +10,7 @@ export default async function Footer() {
     listCollections({ fields: "id,handle,title" }),
     listCategories().catch(() => null),
   ])
-  const topLevelCategories = categories?.filter((c) => !c.parent_category)
+  const topLevelCategories = categories ? visibleTopLevel(categories) : null
 
   return (
     <footer className="mt-5 border-t border-bo-line bg-bo-surface">
@@ -82,7 +83,7 @@ export default async function Footer() {
             Kategorien
           </h4>
           <ul className="flex flex-col gap-2">
-            {topLevelCategories?.slice(0, 6).map((c) => (
+            {topLevelCategories?.map((c) => (
               <li key={c.id}>
                 <LocalizedClientLink
                   href={`/categories/${c.handle}`}
@@ -101,20 +102,23 @@ export default async function Footer() {
           </h4>
           <ul className="flex flex-col gap-2">
             <li>
+              {/* The Impressum still lives on the old site; link there until it moves into the shop. */}
               <a
-                href="#"
+                href="https://bike-one.org/impressum/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
               >
                 Impressum
               </a>
             </li>
             <li>
-              <a
-                href="#"
+              <LocalizedClientLink
+                href="/agb"
                 className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
               >
                 AGB
-              </a>
+              </LocalizedClientLink>
             </li>
             <li>
               <a
@@ -127,12 +131,12 @@ export default async function Footer() {
               </a>
             </li>
             <li>
-              <a
-                href="#"
+              <LocalizedClientLink
+                href="/widerrufsrecht"
                 className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
               >
                 Widerrufsrecht
-              </a>
+              </LocalizedClientLink>
             </li>
           </ul>
         </div>

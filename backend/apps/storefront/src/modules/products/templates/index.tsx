@@ -4,10 +4,12 @@ import { notFound } from "next/navigation"
 import { HttpTypes } from "@medusajs/types"
 import { getBaseURL } from "@lib/util/env"
 import BikeOneGallery from "@modules/products/components/bikeone-gallery"
+import ManufacturerInfo from "@modules/products/components/manufacturer-info"
 import BikeOneSpecTable from "@modules/products/components/bikeone-spec-table"
 import ProductActions from "@modules/products/components/product-actions"
 import { ProductOptionsProvider } from "@modules/products/components/product-options-context"
 import RelatedProducts from "@modules/products/components/related-products"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import PlpBreadcrumb from "@modules/store/components/plp-breadcrumb"
 
 import ProductActionsWrapper from "./product-actions-wrapper"
@@ -74,7 +76,7 @@ const ProductTemplate = ({
               <span className="h-[9px] w-[9px] shrink-0 rounded-full bg-bo-ok" />
               <span className="font-semibold">Verfügbar</span>
               <span className="text-bo-ink-muted">
-                — ab Lager, Click &amp; Collect in Oldenburg oder Osnabrück
+                — ab Lager. Click &amp; Collect: bald verfügbar
               </span>
             </div>
 
@@ -101,8 +103,8 @@ const ProductTemplate = ({
               </svg>
               <span>
                 Versand per Spedition (Fahrrad vormontiert &amp; fahrfertig
-                eingestellt) — oder online reservieren und in einem unserer
-                Stores abholen.
+                eingestellt). Click &amp; Collect in unseren Stores: bald
+                verfügbar.
               </span>
             </div>
 
@@ -131,12 +133,16 @@ const ProductTemplate = ({
                   <path d="M3 12a9 9 0 1 0 3-6.7" />
                   <path d="M3 4v5h5" />
                 </svg>
-                30 Tage Rückgabe, unkompliziert im Store
+                <LocalizedClientLink
+                  href="/widerrufsrecht"
+                  className="underline underline-offset-2 hover:text-bo-ink"
+                >
+                  14 Tage Widerrufsrecht bei Online-Bestellungen
+                </LocalizedClientLink>
               </div>
             </div>
           </div>
         </div>
-      </ProductOptionsProvider>
 
       <section className="px-4 py-7 md:px-6 md:py-9">
         <h2 className="m-0 mb-4 font-heading text-[20px] font-semibold">
@@ -144,6 +150,10 @@ const ProductTemplate = ({
         </h2>
         <BikeOneSpecTable product={product} />
       </section>
+
+      {/* Inside the provider: shows the SKU of the selected variant. */}
+      <ManufacturerInfo product={product} />
+      </ProductOptionsProvider>
 
       {product.description && (
         <section className="px-4 py-7 md:px-6 md:py-9">
@@ -156,7 +166,7 @@ const ProductTemplate = ({
         </section>
       )}
 
-      <section className="px-4 py-7 md:px-6 md:py-9">
+      <section id="versand" className="scroll-mt-24 px-4 py-7 md:px-6 md:py-9">
         <h2 className="m-0 mb-4 font-heading text-[20px] font-semibold">
           Versand &amp; Rückgabe
         </h2>
@@ -168,11 +178,25 @@ const ProductTemplate = ({
             },
             {
               title: "Click & Collect",
-              body: "Online reservieren, abholbereit in Oldenburg oder Osnabrück. Zahlung wahlweise online oder direkt im Store.",
+              // Switch back to the real description once pickup orders exist
+              // (TODO.md: Real Click & Collect order fulfillment).
+              body: "Bald verfügbar: Bestellung im Shop und Abholung in Oldenburg oder Osnabrück.",
             },
             {
-              title: "Rückgabe im Store",
-              body: "30 Tage Rückgaberecht, unkompliziert an beiden Standorten — ohne Versandetikett, ohne Rückfragen.",
+              title: "Widerrufsrecht",
+              body: (
+                <>
+                  14 Tage Widerrufsrecht bei Online-Bestellungen. Alle
+                  Einzelheiten in unserer{" "}
+                  <LocalizedClientLink
+                    href="/widerrufsrecht"
+                    className="underline underline-offset-2 hover:text-bo-ink"
+                  >
+                    Widerrufsbelehrung
+                  </LocalizedClientLink>
+                  .
+                </>
+              ),
             },
           ].map((item) => (
             <div

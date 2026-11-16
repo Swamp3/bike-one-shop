@@ -4,6 +4,11 @@ import StepCard from "@modules/checkout/components/step-card"
 import PaymentButton from "../payment-button"
 import { useSearchParams } from "next/navigation"
 import { HttpTypes } from "@medusajs/types"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
+
+// New tab, so cart and form state are kept.
+const newTab = { target: "_blank", rel: "noopener noreferrer" }
+const link = "underline decoration-dashed underline-offset-[2px]"
 
 const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
   const searchParams = useSearchParams()
@@ -27,8 +32,24 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
       {isOpen && previousStepsCompleted && (
         <>
           <p className="m-0 mb-4 text-[13px] text-bo-ink-muted">
-            Mit Klick auf „Zahlungspflichtig bestellen“ akzeptierst du unsere
-            AGB und Widerrufsbelehrung.
+            Mit Klick auf „Zahlungspflichtig bestellen“ gibst du eine
+            verbindliche Bestellung ab. Es gelten unsere{" "}
+            <LocalizedClientLink href="/agb" {...newTab} className={link}>
+              AGB
+            </LocalizedClientLink>
+            . Die{" "}
+            <LocalizedClientLink href="/widerrufsrecht" {...newTab} className={link}>
+              Widerrufsbelehrung
+            </LocalizedClientLink>{" "}
+            und{" "}
+            <a
+              href="https://bike-one.org/datenschutz/"
+              {...newTab}
+              className={link}
+            >
+              Hinweise zur Datenverarbeitung
+            </a>{" "}
+            findest du hier.
           </p>
           <PaymentButton cart={cart} data-testid="submit-order-button" />
         </>

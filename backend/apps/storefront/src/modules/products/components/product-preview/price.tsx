@@ -8,6 +8,7 @@ export default async function PreviewPrice({ price }: { price: VariantPrice }) {
 
   return (
     <>
+      {/* shortcut: reductions need the 30-day lowest price next to the crossed-out price (PAngV § 11), implement before price lists are used (TODO.md) */}
       {price.price_type === "sale" && (
         <Text
           className="line-through text-ui-fg-muted"

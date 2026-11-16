@@ -84,6 +84,11 @@ const Summary = ({ cart }: SummaryProps) => {
           Zwischensumme
         </div>
         <CartTotals totals={cart} itemCount={itemCount(cart)} />
+        {!cart.shipping_methods?.length && (
+          <div className="mt-1 text-[11.5px] text-bo-ink-faint">
+            zzgl. Versandkosten, die im nächsten Schritt hinzukommen.
+          </div>
+        )}
         <LocalizedClientLink
           href={"/checkout?step=" + step}
           data-testid="checkout-button"

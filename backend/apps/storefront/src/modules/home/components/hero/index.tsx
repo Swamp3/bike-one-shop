@@ -32,8 +32,11 @@ const Hero = () => {
             >
               Bikes entdecken.
             </a>
+            {/* shortcut: appointment booking still lives on the old site
+                (bike-one.org/termin-buchen); replace with an in-shop booking
+                flow or the booking tool's embed once that is decided. */}
             <a
-              href="#"
+              href="https://bike-one.org/termin-buchen/"
               className="inline-flex items-center gap-2 rounded border-[1.5px] border-[rgba(245,242,238,.5)] bg-transparent px-[22px] py-[13px] text-[14.5px] font-semibold text-[#f5f5f5] hover:border-[#f5f5f5]"
             >
               Beratungstermin buchen.

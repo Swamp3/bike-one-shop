@@ -8,7 +8,7 @@ import { getRegion } from "@lib/data/regions"
 export const metadata: Metadata = {
   title: "BikeOne — Fahrräder & Beratung in Oldenburg und Osnabrück",
   description:
-    "40+ Marken, persönliche Beratung und Click & Collect an zwei Standorten in Niedersachsen.",
+    "40+ Marken, persönliche Beratung an zwei Standorten in Niedersachsen.",
 }
 
 export default async function Home(props: {
