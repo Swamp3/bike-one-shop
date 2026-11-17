@@ -57,7 +57,7 @@ MVP) landed.
 
 - **Brevo e-mail on the dev server.** Code done (`src/modules/brevo`, PLAN.md
   Task 17). To switch on: finish the Brevo domain authentication
-  (`mail.bike-one.dev`, `BREVO_SETUP.md`), put the API key and
+  (`bike-one.dev`, `BREVO_SETUP.md`), put the API key and
   `NOTIFICATION_PROVIDER_RESOLVE=./src/modules/brevo` into the dev server's
   `.env`, remove `NOTIFICATION_ALLOW_NONE`, restart, place a test order. Before
   go-live: paid Brevo plan, production domain/key/fixed IP, privacy policy

@@ -31,7 +31,7 @@ Files: `index.ts` (`ModuleProvider(Modules.NOTIFICATION, { services: [BrevoNotif
 - `static identifier = "brevo"`; `static validateOptions(options)` throws unless `api_key` and `from` are non-empty strings.
 - `send(notification)`:
   - Requires `notification.content` with `subject` and `html`; otherwise `MedusaError.Types.INVALID_DATA` (we never use Brevo templates; do not add template support).
-  - Sender: parse `notification.from || options.from`. `"BikeOne <shop@mail.bike-one.dev>"` becomes `{ name, email }` (name at most 70 characters), a bare address becomes `{ email }`.
+  - Sender: parse `notification.from || options.from`. `"BikeOne <order@bike-one.dev>"` becomes `{ name, email }` (name at most 70 characters), a bare address becomes `{ email }`.
   - Body: `{ sender, to: [{ email: notification.to }], subject, htmlContent, textContent }`. The workflow already supplies `text`; send it (better spam score, plain-text clients).
   - `fetch` with `AbortSignal.timeout(15_000)`, header `api-key`, `content-type: application/json`.
   - 201: return `{ id: messageId }`.
@@ -40,7 +40,7 @@ Files: `index.ts` (`ModuleProvider(Modules.NOTIFICATION, { services: [BrevoNotif
 
 ### 2. Reply-To (decided 2026-11-17: do it)
 
-The From address lives on a sending sub-domain with no mailbox, and customers will answer order mails. Add `reply_to` to the provider options and send it as Brevo's `replyTo` object (`{ email, name? }`, parsed like the sender); wire `NOTIFICATION_REPLY_TO` into the options in `medusa-config.ts` (one line). Dev: `NOTIFICATION_FROM="BikeOne <order@mail.bike-one.dev>"`, `NOTIFICATION_REPLY_TO=info@bike-one.dev` (Cloudflare Email Routing forwards that to `info@bike-one.de`). Production uses the same shape on the real domain (see `EMAIL_SETUP.md`).
+The From address lives on a sending sub-domain with no mailbox, and customers will answer order mails. Add `reply_to` to the provider options and send it as Brevo's `replyTo` object (`{ email, name? }`, parsed like the sender); wire `NOTIFICATION_REPLY_TO` into the options in `medusa-config.ts` (one line). Dev: `NOTIFICATION_FROM="BikeOne <order@bike-one.dev>"`, `NOTIFICATION_REPLY_TO=info@bike-one.dev` (Cloudflare Email Routing forwards that to `info@bike-one.de`). Production uses the same shape on the real domain (see `EMAIL_SETUP.md`).
 
 ### 3. Tests
 
@@ -65,14 +65,14 @@ The From address lives on a sending sub-domain with no mailbox, and customers wi
 ### 5. Account setup (the owner, not code)
 
 1. Create the Brevo account (the owner's own login; never share the password or the key in chat or git). Brevo may review new accounts before sending is allowed; start early. Accept the DPA (GDPR Art. 28) in the account settings.
-2. Authenticate the sending domain. Dev and production both use a `mail.` sub-domain (dev: `mail.bike-one.dev`; it keeps the apex records of Cloudflare Email Routing for `info@bike-one.dev` untouched): Brevo, Senders, Domains & dedicated IPs, Domains, Add a domain; add the records it shows (Brevo code TXT, DKIM, DMARC) in Cloudflare DNS with the proxy off ("DNS only"). Add a sender on that domain.
+2. Authenticate the sending domain. Dev authenticated the apex `bike-one.dev` (public DNS shows Brevo's DKIM, code and DMARC there; `mail.bike-one.dev` is only the branded link CNAME); production should use a dedicated sub-domain, because its apex already has mailboxes. (Original plan text follows: dev `mail.bike-one.dev`; it keeps the apex records of Cloudflare Email Routing for `info@bike-one.dev` untouched): Brevo, Senders, Domains & dedicated IPs, Domains, Add a domain; add the records it shows (Brevo code TXT, DKIM, DMARC) in Cloudflare DNS with the proxy off ("DNS only"). Add a sender on that domain.
 3. Create an **API key** (v3), not an SMTP key, with **Restricted** access: only the transactional e-mail resource on Read/write, everything else None (details and the check in `BREVO_SETUP.md` step 6). Put it only in the server's `.env`.
 4. **Authorised IPs:** Brevo can block API calls from IP addresses that are not on the account's authorised list ("Block unknown IP addresses" under Settings, Security, Authorised IPs; separate switches for API and SMTP keys; I could not confirm the default for new accounts). bee5's outbound IP changes, so on the dev account leave API-key blocking **off** (or use the automatic-authorisation mode, if the account offers it), and rely on the key staying secret (root-only `.env`, never in git). Production gets a fixed outbound IP, that IP on the list, and blocking **on**. A blocked call fails with `unauthorized`; check the switch before the first test.
 5. Later newsletters will use a separate `news.` sub-domain; nothing to do now.
 
 ### 6. Deploy and verify on bee5
 
-1. On bee5 in `backend/apps/backend/.env`: set `NOTIFICATION_PROVIDER_RESOLVE=./src/modules/brevo`, `NOTIFICATION_API_KEY`, `NOTIFICATION_FROM="BikeOne <shop@mail.bike-one.dev>"`, and remove `NOTIFICATION_ALLOW_NONE`. Then `make deploy-dev` (code) and, for later env-only changes, `sudo systemctl restart bikeone-backend`.
+1. On bee5 in `backend/apps/backend/.env`: set `NOTIFICATION_PROVIDER_RESOLVE=./src/modules/brevo`, `NOTIFICATION_API_KEY`, `NOTIFICATION_FROM="BikeOne <order@bike-one.dev>"`, and remove `NOTIFICATION_ALLOW_NONE`. Then `make deploy-dev` (code) and, for later env-only changes, `sudo systemctl restart bikeone-backend`.
 2. The log shows no `No e-mail provider configured` and no `SKIPPED`.
 3. Place a test order on `https://shop.bike-one.dev` with an address the owner controls (never real customer data). The mail arrives, is not in spam, and "Show original" shows DKIM, SPF and DMARC pass for the `mail.` domain.
 4. `order.metadata.confirmation_email.status` is `sent`; Brevo's Transactional, Logs shows the message as delivered.
