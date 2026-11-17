@@ -86,6 +86,8 @@ ln -sfn "$ROOT/example-product-images" "$ROOT/backend/apps/example-product-image
   set -a; . ./.env; set +a
   "$MEDUSA" build
   # The build deletes .medusa/server: keep uploads outside it.
+  # Scripts run from apps/backend (e.g. the Woo import) upload into ./static: adopt it.
+  if [ -d static ] && [ ! -L static ]; then cp -a static/. "$DATA_DIR/static/" && rm -rf static; fi
   ln -sfn "$DATA_DIR/static" .medusa/server/static
   ln -sfn "$DATA_DIR/static" static
   cd .medusa/server
