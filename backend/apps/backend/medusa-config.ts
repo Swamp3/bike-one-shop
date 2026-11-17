@@ -57,6 +57,14 @@ if (isServerStart && isProduction && sumupConfigured && !process.env.STOREFRONT_
   )
 }
 
+// The webhook secret is the only thing keeping strangers from triggering SumUp
+// status re-checks (src/lib/sumup-webhook-secret.ts); a short one is guessable.
+if (isServerStart && isProduction && sumupConfigured && (sumupWebhookSecret?.length ?? 0) < 32) {
+  throw new Error(
+    'SUMUP_WEBHOOK_SECRET must be at least 32 characters in production (openssl rand -hex 32)'
+  )
+}
+
 const redisUrl = process.env.REDIS_URL
 const backendUrl = process.env.MEDUSA_BACKEND_URL || 'http://localhost:9000'
 

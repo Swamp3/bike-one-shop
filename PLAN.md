@@ -192,29 +192,29 @@ Status: **prepared, not activated**
 - Env vars added to `.env.template` (all empty/placeholder for now):
   `SUMUP_API_KEY`, `SUMUP_MERCHANT_CODE`, `SUMUP_CHECKOUT_MODE`
   (defaults to `hosted`), `MEDUSA_BACKEND_URL`, `STOREFRONT_URL`.
-- **Security review finding (2026-09-28), not yet fixed:** read the
-  installed plugin's own compiled source
-  (`node_modules/@sumup/medusa-plugin/.medusa/server/src/providers/sumup/service.js`,
-  `getWebhookActionAndData`) — it decides the webhook action purely from
-  `payload.data.event_type`/`.id`, with **no signature/checksum
-  verification of the incoming request at all**. Confirmed no
-  `signature`/`hmac`/`verify` logic anywhere in the package (`grep` over
-  every file in it). This is a gap in the third-party plugin itself
-  (v0.1.0, not SumUp's own official backend SDK), not something this
-  project's code introduced — but as configured today, anyone who can
-  reach `/hooks/payment/sumup_sumup` could POST a forged
-  `CHECKOUT_STATUS_CHANGED` payload and have it treated as authentic
-  (e.g. mark an unpaid order paid). No real transactions have gone through
-  it yet (still unconfigured), so nothing has been exploited — but **this
-  must be fixed or compensated for before real credentials/transactions
-  go live**, not discovered after. Options to evaluate before activation:
-  patch/fork the provider to verify SumUp's webhook signature (check
-  SumUp's own API docs for the exact header/scheme), add an independent
-  server-side confirmation step that re-fetches checkout status from
-  SumUp's API rather than trusting the webhook payload alone, or raise it
-  upstream with the plugin's maintainer. Route through
-  `legal-security-reviewer` regardless, per this repo's own convention for
-  anything touching payments, before enabling with real credentials.
+- **Webhook authenticity (reviewed 2026-09-28, re-checked 2026-11-17, closed in code pending sandbox confirmation).**
+  SumUp documents no webhook signature, so there is nothing to verify by signing
+  (https://developer.sumup.com/online-payments/webhooks/ says to confirm by calling
+  the API). The installed plugin (v0.1.0, `getWebhookActionAndData`) never trusts
+  the body: it only accepts `CHECKOUT_STATUS_CHANGED` with an `id`, re-fetches that
+  checkout from SumUp with our key, and takes action, `session_id`
+  (`checkout_reference`) and amount from SumUp's answer. A forged body can at most
+  trigger a status re-check; a checkout of another merchant should not be retrievable with our key (to confirm in the sandbox).
+  Known weakness (reviewer, 2026-11-17): the callback URL with `wh_secret` is echoed into `payment_session.data.raw_checkout.return_url`, which the storefront cart API returns, so any cart owner can read the secret. Forgery stays impossible (re-fetch), but the secret is no credential. Fix before live: strip it from the stored data or use a per-session token. Layers on top (this repo): `verifySumupWebhookSecret`
+  (`src/lib/sumup-webhook-secret.ts`, wired in `src/api/middlewares.ts`) answers 401
+  to any POST to `/hooks/payment/sumup_sumup` without `?wh_secret=` (timing-safe,
+  fails closed when unset); `medusa-config.ts` refuses a production start with a
+  secret under 32 characters; the job `src/jobs/sumup-reconcile-sessions.ts`
+  (`src/lib/sumup-reconcile.ts`, every 10 min, `SUMUP_RECONCILE_CRON`) re-checks
+  pending SumUp sessions 10 min to 24 h old and runs `processPaymentWorkflow`
+  (capture plus cart completion) only when SumUp reports the checkout paid for that
+  session id and amount, which covers a lost webhook. Tests: unit specs
+  `sumup-webhook-secret`, `sumup-reconcile`, `sumup-plugin-webhook` (pins the
+  plugin behaviour above). Residual: the secret sits in the callback URL query
+  string, so keep it out of proxy access logs and rotate it (`REVIEW_TASKS.md`).
+  Open before live credentials: the sandbox end-to-end run (plan in
+  `.working-files/sumup-webhook-verification/plan.md`) and the
+  `legal-security-reviewer` verdict.
 - No secrets are currently at risk: `SUMUP_API_KEY`/`SUMUP_MERCHANT_CODE`
   are empty in `.env.template` (never a real value), `.env` itself is
   gitignored at both `backend/.gitignore` and

@@ -130,15 +130,14 @@ MVP) landed.
   browser checkout with a sandbox test card on `shop.bike-one.dev`, the
   webhook-driven order update, full and partial refund, the amount-11 failure
   test (`SUMUP_SETUP.md` section 5). Live credentials only after the webhook
-  gap below is fixed.
-- **SumUp webhook signature verification — security gap, not yet fixed.**
-  The installed `@sumup/medusa-plugin` (v0.1.0) does not verify the
-  authenticity of incoming payment webhooks at all. Not exploitable today
-  (nothing is live), but **must be fixed or compensated for before real
-  transactions go live** — patch/fork the provider, or add a server-side
-  status re-check instead of trusting the webhook payload alone. See
-  `PLAN.md` Task 5. Route through `legal-security-reviewer` before
-  activating with real credentials either way.
+  item below is done.
+- **SumUp webhook: closed in code pending sandbox confirmation, run and review open.** The plugin
+  re-fetches the checkout from SumUp and ignores the body (SumUp signs no webhooks);
+  the route needs `?wh_secret=` (readable by a cart owner via the payment session data, so not a secret in practice: strip `raw_checkout.return_url` or use a per-session token before live); a job (`sumup-reconcile-sessions`) completes paid
+  sessions whose webhook was lost. Still to do before live credentials: the sandbox
+  run (`.working-files/sumup-webhook-verification/plan.md` step 1), redact
+  `wh_secret` in the proxy access log and rotate the secret per environment
+  (`REVIEW_TASKS.md`), and `legal-security-reviewer`. See `PLAN.md` Task 5.
 - **TriCon/Tridata WSDL URL + `IdentifyGuid`.** Blocks the real ERP sync
   (Task 6), which in turn blocks: real stock numbers (today's inventory is
   realistic placeholder data, not real counts — Task 12 §3), real Click &

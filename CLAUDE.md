@@ -69,7 +69,7 @@ When adding real business logic (the remaining planned `product-brand`, `store-p
 
 **Integrations are feature-flagged on credentials, not removed:** SumUp payment provider and TriCon/Tridata ERP sync are both implemented and conditionally wired but inactive without real sandbox credentials (`SUMUP_API_KEY`/`SUMUP_MERCHANT_CODE`; `TRIDATA_ENDPOINT_URL`/`TRIDATA_IDENTIFY_GUID`, which `make setup` points at the local mock). Don't assume "not active" means "not implemented" — check `PLAN.md` for the relevant task before rebuilding something that already exists gated behind an env var.
 
-**Known unresolved security gap:** the installed `@sumup/medusa-plugin` (v0.1.0) does not verify incoming payment webhook signatures. Not exploitable today (nothing is live), but must be fixed (patch/fork the provider, or add a server-side status re-check) before real transactions go live. Route any related change through the `legal-security-reviewer` subagent.
+**SumUp webhook:** SumUp signs no webhooks. The installed `@sumup/medusa-plugin` ignores the payload and re-fetches the checkout from SumUp (status, session id, amount), the route needs a shared `?wh_secret=` (which a cart owner can read from their payment session data, so it is only a speed bump), and a reconciliation job covers lost webhooks (`PLAN.md` Task 5). Live credentials still wait on the sandbox run and a `legal-security-reviewer` verdict; route any change to this path through that subagent.
 
 ## Compliance
 

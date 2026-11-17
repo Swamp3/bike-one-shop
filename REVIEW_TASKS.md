@@ -161,8 +161,18 @@ processes each re-sent the same order at once.
   `/*/account` and `/api` paths, 429 over the limit; on the Strato proxy nginx
   `limit_req_zone` keyed on `$http_cf_connecting_ip` (or `$binary_remote_addr`
   without Cloudflare).
-- Keep query strings out of proxy logs for `/hooks/payment/sumup_sumup`, because
-  they carry `SUMUP_WEBHOOK_SECRET`.
+- SumUp webhook secret: `SUMUP_WEBHOOK_SECRET` travels in the callback URL query
+  string (`?wh_secret=`), so it lands in access logs and, at log level `http`, in the backend's own request log (keep `LOG_LEVEL` below `http` or skip `/hooks/payment/`). Redact it in the proxy log
+  format (nginx: log `$uri` instead of `$request`/`$request_uri` for the
+  `/hooks/payment/sumup_sumup` location, or `access_log off` there; Caddy: a
+  `delete`/`replace` filter on `request>uri` query `wh_secret`). Use a different
+  random secret per environment (`openssl rand -hex 32`, at least 32 characters:
+  production refuses to start otherwise). Rotate it after any suspected leak or
+  log exposure: set the new value in `.env`, restart the backend (the callback URL
+  is rebuilt from it at start; new checkouts carry the new URL), and note that
+  checkouts created before the restart still call back with the old secret and get
+  401, so the reconciliation job (`sumup-reconcile-sessions`) completes those
+  within about 20 minutes (10 min minimum session age plus the 10 min cron). Rotate outside business hours.
 - Firewall: only 22, 80, 443. Keep the TriCon mock on loopback.
 - Off-server backups of Postgres and the uploads directory, with a tested restore.
   RAID 1 only covers a dead disk, not deletion, corruption or a lost server, and
@@ -177,5 +187,5 @@ processes each re-sent the same order at once.
   catalog at all before first migrating an empty database.
 
 Remaining `npm audit` highs: `vite`, `postcss`, `source-map-js` (build tools) and
-Medusa's `graphql-codegen`/`lodash` chain. The SumUp webhook signature gap
-(TODO.md) is still open.
+Medusa's `graphql-codegen`/`lodash` chain. The SumUp webhook item (TODO.md)
+is closed in code pending sandbox confirmation; its sandbox run and review are open.

@@ -11,7 +11,6 @@ import type {
   MedusaResponse,
   MedusaNextFunction,
 } from '@medusajs/framework/http'
-import { timingSafeEqual } from 'node:crypto'
 import {
   AdminTridataEmptyBody,
   AdminTridataOrdersQuery,
@@ -25,34 +24,7 @@ import { requireOwnEmail, requireOwnVerification } from '../lib/auth-guards'
 import { authIdentity, bodyField, rateLimit } from '../lib/rate-limit'
 import { linkGuestOrders } from '../lib/link-guest-orders'
 import { scrubError } from '../lib/scrub'
-
-// SumUp doesn't document a signed-webhook scheme, so this is a shared-secret
-// compensating control: medusa-config.ts registers the webhook callback URL
-// with ?wh_secret=<SUMUP_WEBHOOK_SECRET> appended, and this middleware
-// rejects any call to that route without the matching secret before it
-// reaches Medusa's core webhook handler.
-function verifySumupWebhookSecret(
-  req: MedusaRequest,
-  res: MedusaResponse,
-  next: MedusaNextFunction
-) {
-  const expected = process.env.SUMUP_WEBHOOK_SECRET ?? ''
-  const provided = typeof req.query.wh_secret === 'string' ? req.query.wh_secret : ''
-
-  const expectedBuf = Buffer.from(expected)
-  const providedBuf = Buffer.from(provided)
-
-  const matches =
-    expected.length > 0 &&
-    expectedBuf.length === providedBuf.length &&
-    timingSafeEqual(expectedBuf, providedBuf)
-
-  if (!matches) {
-    return res.sendStatus(401)
-  }
-
-  return next()
-}
+import { verifySumupWebhookSecret } from '../lib/sumup-webhook-secret'
 
 // Before a customer's order list is read, move their guest orders (same,
 // verified e-mail address) onto the account. A failure never blocks the list.
