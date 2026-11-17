@@ -69,9 +69,24 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound()
   }
 
+  const title = `${product.title} | BikeOne`
+  const description = product.description ?? product.title
+  const image = product.thumbnail ?? product.images?.[0]?.url
+
   return {
-    title: `${product.title} | BikeOne`,
-    description: product.description ?? product.title,
+    title,
+    description,
+    // Setting openGraph replaces the root one wholesale, so siteName/locale are repeated here.
+    openGraph: {
+      title,
+      description,
+      siteName: "BikeOne",
+      locale: "de_DE",
+      type: "website",
+      // Without an image the root opengraph-image.jpg (BikeOne logo) is used.
+      ...(image && { images: [{ url: image, alt: product.title }] }),
+    },
+    twitter: { card: "summary_large_image", ...(image && { images: [image] }) },
   }
 }
 

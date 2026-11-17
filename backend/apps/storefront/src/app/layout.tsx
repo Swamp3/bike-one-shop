@@ -24,6 +24,9 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
+  applicationName: "BikeOne",
+  // A page's own openGraph block replaces this one, it does not merge: such pages must repeat siteName/locale.
+  openGraph: { siteName: "BikeOne", locale: "de_DE", type: "website" },
 }
 
 export default function RootLayout(props: { children: React.ReactNode }) {
