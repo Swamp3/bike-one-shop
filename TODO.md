@@ -92,9 +92,15 @@ MVP) landed.
   that placeholder basis. Also: Shimano GRX and SRAM Rival are priced
   identically (€3.500) since no real price difference between the two
   was given. Needs real numbers before this goes live.
-- **SumUp sandbox credentials.** Payments are code-complete and gated
-  (`PLAN.md` Task 5) but inactive without real `SUMUP_API_KEY`/
-  `SUMUP_MERCHANT_CODE`. Waiting on you.
+- **SumUp sandbox on the dev server: enabled 2026-11-17, not yet tested
+  end to end.** Sandbox credentials from the local `.env` are in the dev
+  server's `.env` (own `SUMUP_WEBHOOK_SECRET`), the provider is enabled for
+  the Deutschland region, a Store API payment session creates a SumUp checkout
+  and the webhook route answers 401 without the secret. Still to do: a real
+  browser checkout with a sandbox test card on `shop.bike-one.dev`, the
+  webhook-driven order update, full and partial refund, the amount-11 failure
+  test (`SUMUP_SETUP.md` section 5). Live credentials only after the webhook
+  gap below is fixed.
 - **SumUp webhook signature verification — security gap, not yet fixed.**
   The installed `@sumup/medusa-plugin` (v0.1.0) does not verify the
   authenticity of incoming payment webhooks at all. Not exploitable today
