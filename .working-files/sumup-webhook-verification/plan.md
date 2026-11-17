@@ -54,3 +54,41 @@ the URL is registered as the checkout `return_url` in medusa-config.ts). The sto
 ## Not doing
 Patching/forking the plugin (nothing to patch: it already re-fetches), custom HMAC (SumUp does not sign),
 IP allow-listing SumUp (no published ranges found).
+
+## Status 2026-11-17 (implementation pass)
+Done in the working tree (not committed): steps 2-6.
+- Step 2: `src/lib/sumup-reconcile.ts` + `src/jobs/sumup-reconcile-sessions.ts` (every 10 min, `SUMUP_RECONCILE_CRON`;
+  no-op unless SUMUP_API_KEY, SUMUP_MERCHANT_CODE and SUMUP_WEBHOOK_SECRET are set). Uses the payment module's
+  `getWebhookActionAndData` (the plugin's own re-fetch via `retrieveProviderCheckout`) and, only for SUCCESSFUL with
+  matching session id and amount, `processPaymentWorkflow` (capture + completeCartWorkflow), same as the webhook subscriber.
+- Step 3: `verifySumupWebhookSecret` moved to `src/lib/sumup-webhook-secret.ts` (so it is testable); unit spec added.
+- Step 4: REVIEW_TASKS.md has log redaction and rotation steps.
+- Step 5: medusa-config.ts refuses a production start with a webhook secret under 32 chars. The "log which account
+  (sandbox/live)" part is NOT done: no API field known to us that shows it; key prefix `sup_sk` carries no marker.
+- Step 6: PLAN.md Task 5, TODO.md, SUMUP_SETUP.md, CLAUDE.md, REVIEW_TASKS.md rewritten.
+
+Step 1 results (automated, mocked SumUp client; no call to SumUp was made):
+- 1a wrong/missing secret -> 401: unit spec; also live against local backend: POST without secret 401, with wrong secret 401.
+- 1b random checkout id: `sumup-plugin-webhook` spec, SumUp error propagates, no action (so no capture, no state change).
+- 1c body claims PAID but checkout PENDING -> action `pending`, no capture (spec); session id and amount come from the checkout, not the body (spec).
+- 1d replay: not tested with real SumUp. Reconcile: a handled session is no longer `pending`, and Medusa's capture returns early when the payment is already captured (read in core source). Needs sandbox confirmation.
+- 5 (amount/currency): the job compares SumUp's amount to the session amount; currency is not compared (the plugin does not expose it in the webhook result). Medusa's capture guards against over-capture.
+Not run: 1c/1d/1e/1f against real SumUp. The local key has no sandbox marker, so no live API call was made from here.
+Still open: those sandbox runs, the legal-security-reviewer verdict (step 7).
+
+## Reviewer findings (legal-security-reviewer, 2026-11-17), open before live credentials
+1. HIGH, confirmed in the local DB: `payment_session.data.raw_checkout.return_url` contains `?wh_secret=...` and the
+   Store API returns payment session data to the cart owner. The shared secret is therefore readable by shoppers.
+   Fix: strip `raw_checkout.return_url` from what is stored/returned, or derive a per-session token (HMAC of the
+   session id) so a leaked URL is valid for one session only. Needs the plugin's `return_url` handling checked.
+2. MEDIUM: Medusa's HTTP logger writes the full URL (with the secret) at log level `http`: keep it off or skip
+   `/hooks/payment/`. (Added to REVIEW_TASKS.md.)
+3. MEDIUM: the existing webhook path (core subscriber) never compares SumUp's amount/currency to the session
+   amount; only the new job does. Follow-up: wrap the handling with the same check; test "change cart total, pay
+   the old checkout" in the sandbox.
+4. LOW: the job logs "completed" even if cart completion fails after the capture (`continueOnPermanentFailure`):
+   money taken, no order, no alert. Add an order-exists re-check or an alert.
+5. LOW: `scrubError` does not mask `SUMUP_API_KEY` / `SUMUP_WEBHOOK_SECRET`.
+6. Sandbox run still needed: replay, webhook suppressed, `payment_session.amount` type from `query.graph`,
+   duplicate `checkout_reference` when the plugin replaces a checkout. Key-mode guard (sandbox vs live) open.
+Dev deploy judged not blocking: the change only adds a job that completes SumUp-confirmed PAID sessions.
