@@ -2,6 +2,16 @@
 
 How to switch on real e-mail on a server. Code side is done and gated on three env vars (`backend/apps/backend/medusa-config.ts`); without them nothing is sent. Background: `REVIEW_TASKS.md` (server checklist), `PLAN.md` Task 16.
 
+## Decision: Brevo (2026-11-17)
+
+Brevo (France, data in France/Germany) is the chosen provider: transactional now (SMTP relay), newsletters later in the same account. Things to know before the newsletter starts:
+
+- **The free plan's 300 mails/day is one shared cap** for campaigns and transactional mail, as far as the sources I found say (check Brevo's help centre). A newsletter to more than 300 subscribers would use up the day's quota, and order confirmations sent meanwhile could be delayed or dropped. Move to a paid plan before the first newsletter, or the confirmations are at risk.
+- **Footer branding:** free (and Starter) plans add "Sent with Brevo" to campaigns; removing it is a paid add-on. Not confirmed for transactional mail.
+- **Two sending sub-domains:** `mail.` for transactional (order confirmations), `news.` for newsletters, each with its own DKIM/SPF. A complaint spike on the newsletter must not hurt order mail.
+- **Newsletter legal side (not built):** double opt-in (UWG §7, GDPR), a stored consent record, an unsubscribe link in every mail, and the privacy policy naming Brevo. The storefront's newsletter form is a placeholder (`NEXT_PUBLIC_NEWSLETTER_ENABLED=false`) and stays off until this exists. I did not confirm Brevo's double opt-in feature on the free plan.
+- Accept Brevo's DPA (Art. 28) in the account settings.
+
 ## Which provider?
 
 | | Resend | SendGrid |
