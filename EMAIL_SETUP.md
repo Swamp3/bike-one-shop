@@ -57,7 +57,7 @@ NOTIFICATION_FROM=BikeOne <shop@mail.bike-one.dev>
 
 ## 5. Deploy and test
 
-1. Edit the server's `.env` (above), then `make deploy-dev --force` is not needed for env-only changes: `ssh bee5 'sudo systemctl restart bikeone-backend'`.
+1. Edit the server's `.env` (above), then restart the backend. An env-only change needs no deploy: `ssh bee5 'sudo systemctl restart bikeone-backend'`.
 2. Check the log has no `No e-mail provider configured`: `ssh bee5 'sudo journalctl -u bikeone-backend -n 30'`.
 3. Place a test order on `https://shop.bike-one.dev` with an address you own. Never use real customer data on the dev server.
 4. The mail arrives; check it is not in spam (DKIM/SPF pass: "Show original" in Gmail).
