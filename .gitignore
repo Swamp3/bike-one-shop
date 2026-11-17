@@ -1,0 +1,7 @@
+# Secrets and local environment: never commit (templates are fine)
+.env
+.env.*
+!.env.template
+*.pem
+*.key
+.DS_Store

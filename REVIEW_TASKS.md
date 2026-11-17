@@ -144,15 +144,23 @@ processes each re-sent the same order at once.
   at `medusa start`; `medusa build`, `db:migrate` (including
   `setup-german-vat.ts`) and `medusa exec` do not need the mail variables.
 - Reverse proxy with TLS. Session and auth cookies need https in production.
-- Rate limit `/auth/*` at the proxy: Medusa has no login rate limit. The backend
-  now limits per visitor address in memory (`src/lib/rate-limit.ts`: login 10/min,
-  admin login 10/min, register 5/min, verification request 5/min, confirm 10/min,
-  customer create 5/min; it reads `CF-Connecting-IP`, then `X-Forwarded-For`, so
-  the backend port must be reachable through the proxy only, otherwise the
-  headers can be forged). Add the same limits at the edge: Cloudflare, Security,
-  WAF, Rate limiting rules, matching the paths above, 429 over the limit; on the
-  Strato proxy nginx `limit_req_zone` keyed on `$http_cf_connecting_ip` (or
-  `$binary_remote_addr` without Cloudflare).
+- Rate limit `/auth/*`: Medusa has none. The storefront server makes all customer
+  auth calls, so the backend only sees the storefront's address. Built accordingly:
+  the storefront limits per visitor address in its server actions
+  (`apps/storefront/src/lib/util/rate-limit.ts`: login 10/min, signup 5/min,
+  activate 10/min, resend 5/min), and the backend limits per account or login
+  (`src/lib/rate-limit.ts`: login and register per e-mail 10 and 5 per 15 min,
+  verification request/confirm/customer create per auth identity, reset-password
+  per identifier). The admin login (browser to backend) is limited per address:
+  set `TRUST_CF_CONNECTING_IP=true` only when the backend port is reachable
+  through Cloudflare alone, otherwise the header can be forged and the limit
+  uses the socket address. Both read the address from `CF-Connecting-IP`
+  (storefront) or the proxy address, so the storefront and backend ports must
+  not be open to the internet. Add the same per-address limits at the edge:
+  Cloudflare, Security, WAF, Rate limiting rules on `/auth/*`,
+  `/*/account` and `/api` paths, 429 over the limit; on the Strato proxy nginx
+  `limit_req_zone` keyed on `$http_cf_connecting_ip` (or `$binary_remote_addr`
+  without Cloudflare).
 - Keep query strings out of proxy logs for `/hooks/payment/sumup_sumup`, because
   they carry `SUMUP_WEBHOOK_SECRET`.
 - Firewall: only 22, 80, 443. Keep the TriCon mock on loopback.

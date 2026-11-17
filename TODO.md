@@ -76,8 +76,9 @@ MVP) landed.
   the backend, "resend activation mail" button, cleanup of unverified
   registrations after 7 days, neutral message for already-registered addresses,
   activation-mail copies deleted after 7 days. Still open (details and order in
-  `.working-files/account-activation/plan.md`): (1) the same rate limits at the
-  edge (Cloudflare rule / proxy config, `REVIEW_TASKS.md`); (2) privacy policy:
+  `.working-files/account-activation/plan.md`): (1) the same per-address rate limits at the
+  edge (Cloudflare rule / proxy config, `REVIEW_TASKS.md`) and keep the backend and
+  storefront ports off the internet; (2) privacy policy:
   Brevo, order merge, retention (draft German text in the plan), and the
   lawyer's view on 6-year retention of order mails; (3) ask TriData whether
   guest orders moved to an account matter as "one-time customer" in the ERP
