@@ -7,6 +7,7 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import { TextField } from "@modules/checkout/components/form-field"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { signup } from "@lib/data/customer"
+import ResendActivation from "@modules/account/components/resend-activation"
 import { DATENSCHUTZ_URL } from "@lib/data/legal-links"
 
 type Props = {
@@ -31,8 +32,11 @@ const Register = ({ setCurrentView }: Props) => {
           data-testid="register-verification-message"
         >
           Wir haben einen Bestätigungslink an{" "}
-          <strong className="text-bo-ink">{message.email}</strong> gesendet.
-          Bitte bestätige deine E-Mail-Adresse und melde dich anschließend an.
+          <strong className="text-bo-ink">{message.email}</strong> gesendet,
+          sofern für diese Adresse noch kein bestätigtes Konto besteht. Öffne
+          den Link und melde dich dort mit deinem Passwort an. Hast du schon ein
+          Konto, melde dich einfach an.
+          <ResendActivation />
         </div>
       )}
       <form className="flex flex-col gap-3" action={formAction}>

@@ -12,11 +12,14 @@ import {
   getCacheTag,
   getCartId,
   getPendingCustomer,
+  getPendingVerification,
   removeAuthToken,
   removeCartId,
   removePendingCustomer,
+  removePendingVerification,
   setAuthToken,
   setPendingCustomer,
+  setPendingVerification,
 } from "./cookies"
 
 export type CustomerAuthState =
@@ -96,6 +99,7 @@ export async function signup(
     phone: formData.get("phone") as string,
   }
 
+  let addressExisted = false
   try {
     await sdk.auth.register("customer", "emailpass", {
       email: customerForm.email,
@@ -112,6 +116,7 @@ export async function signup(
     ) {
       return { state: "error", error: String(error) }
     }
+    addressExisted = true
   }
 
   // Persist the extra signup fields. The customer record is created during
@@ -121,7 +126,15 @@ export async function signup(
 
   // Continue by logging in. The login response tells us whether the backend
   // requires email verification — we don't need a storefront-side flag.
-  return completeLogin(customerForm.email, password)
+  const result = await completeLogin(customerForm.email, password)
+  // An address that already has an account must not look different from a new
+  // one (that would reveal who is registered): a wrong password here shows the
+  // same neutral "check your inbox" message as a fresh registration. Someone who
+  // does own the account and typed the right password is simply logged in.
+  if (addressExisted && result?.state === "error") {
+    return { state: "verification_required", email: customerForm.email }
+  }
+  return result
 }
 
 export async function login(
@@ -165,10 +178,11 @@ async function completeLogin(
     "verification_required" in result &&
     result.verification_required
   ) {
+    await setPendingVerification({ email, token: result.token })
     try {
       await requestVerificationEmail(email, result.token)
     } catch {
-      // Ignore: the customer can resend from the verification page.
+      // Ignore: the customer can resend with the button.
     }
     return { state: "verification_required", email }
   }
@@ -219,6 +233,7 @@ async function completeLogin(
   }
 
   await setAuthToken(token)
+  await removePendingVerification()
 
   const customerCacheTag = await getCacheTag("customers")
   revalidateTag(customerCacheTag)
@@ -232,19 +247,60 @@ async function completeLogin(
   return { state: "success" }
 }
 
-// Confirms a customer's email using the token from the verification link.
-//
-// The confirm route doesn't require authentication, so this works even when the
-// customer opens the link on a different device than the one they signed up on.
-export async function confirmEmailVerification(
-  token: string
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    await sdk.auth.verification.confirm({ code: token })
-    return { success: true }
-  } catch (error) {
-    return { success: false, error: String(error) }
+// Sends the activation mail again for the login that is waiting for it. The
+// address and token come from the cookie set at login, not from the browser's
+// form, so this cannot be used to mail other addresses (the backend also only
+// mails the identity's own address, once a minute).
+export async function resendActivationEmail(): Promise<{ ok: boolean }> {
+  const pending = await getPendingVerification()
+  if (!pending) {
+    return { ok: false }
   }
+  try {
+    await requestVerificationEmail(pending.email, pending.token)
+    return { ok: true }
+  } catch {
+    return { ok: false }
+  }
+}
+
+// Activates an account from the mailed link. The backend only accepts the code
+// from the login the code was issued for, so the visitor logs in with the
+// registration's address and password here and the code is confirmed with that
+// login: a link that reaches someone else is useless to them.
+export async function activateAccount(
+  _currentState: unknown,
+  formData: FormData
+): Promise<CustomerAuthState> {
+  const code = formData.get("code") as string
+  const email = formData.get("email") as string
+  const password = formData.get("password") as string
+  const countryCode = (formData.get("countryCode") as string) || "de"
+
+  let login: Awaited<ReturnType<typeof sdk.auth.login>>
+  try {
+    login = await sdk.auth.login("customer", "emailpass", { email, password })
+  } catch {
+    return { state: "error", error: "E-Mail-Adresse oder Passwort stimmt nicht." }
+  }
+
+  if (typeof login === "object" && "verification_required" in login && login.verification_required) {
+    try {
+      await sdk.auth.verification.confirm({ code }, { authorization: `Bearer ${login.token}` })
+    } catch {
+      return {
+        state: "error",
+        error:
+          "Dieser Bestätigungslink gehört nicht zu diesem Konto, ist abgelaufen oder wurde schon benutzt. Melde dich an, um einen neuen Link anzufordern.",
+      }
+    }
+  }
+
+  const result = await completeLogin(email, password)
+  if (result?.state === "success") {
+    redirect(`/${countryCode}/account/orders`)
+  }
+  return result
 }
 
 export async function signout(countryCode: string) {

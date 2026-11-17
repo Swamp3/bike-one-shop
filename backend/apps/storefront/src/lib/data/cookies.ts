@@ -115,6 +115,40 @@ export const removePendingCustomer = async () => {
   })
 }
 
+// The token of a login that needs e-mail confirmation (it has no customer
+// attached) and the address it belongs to, kept for the length of a
+// verification code so "resend activation mail" can work without asking for the
+// password again. Never readable by the browser.
+export type PendingVerification = { email: string; token: string }
+
+export const setPendingVerification = async (pending: PendingVerification) => {
+  const cookies = await nextCookies()
+  cookies.set("_medusa_pending_verification", JSON.stringify(pending), {
+    maxAge: 60 * 15,
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+  })
+}
+
+export const getPendingVerification = async (): Promise<PendingVerification | null> => {
+  const cookies = await nextCookies()
+  const value = cookies.get("_medusa_pending_verification")?.value
+  if (!value) {
+    return null
+  }
+  try {
+    return JSON.parse(value) as PendingVerification
+  } catch {
+    return null
+  }
+}
+
+export const removePendingVerification = async () => {
+  const cookies = await nextCookies()
+  cookies.set("_medusa_pending_verification", "", { maxAge: -1 })
+}
+
 export const getCartId = async () => {
   const cookies = await nextCookies()
   return cookies.get("_medusa_cart_id")?.value

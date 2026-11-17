@@ -1,4 +1,5 @@
 import { login } from "@lib/data/customer"
+import ResendActivation from "@modules/account/components/resend-activation"
 import { AccountSubmitButton } from "@modules/account/components/account-button"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
@@ -27,7 +28,8 @@ const Login = ({ setCurrentView }: Props) => {
         >
           Wir haben einen Bestätigungslink an{" "}
           <strong className="text-bo-ink">{message.email}</strong> gesendet.
-          Bitte bestätige deine E-Mail-Adresse und melde dich dann an.
+          Öffne den Link und melde dich dort mit deinem Passwort an.
+          <ResendActivation />
         </div>
       )}
       <form className="flex flex-col gap-3" action={formAction}>
