@@ -1,10 +1,16 @@
 import {
+  authenticate,
   configureStoreSearch,
   defineMiddlewares,
   validateAndTransformBody,
   validateAndTransformQuery,
 } from '@medusajs/framework/http'
-import type { MedusaRequest, MedusaResponse, MedusaNextFunction } from '@medusajs/framework/http'
+import type {
+  AuthenticatedMedusaRequest,
+  MedusaRequest,
+  MedusaResponse,
+  MedusaNextFunction,
+} from '@medusajs/framework/http'
 import { timingSafeEqual } from 'node:crypto'
 import {
   AdminTridataEmptyBody,
@@ -15,6 +21,8 @@ import {
   AdminTridataSyncStockBody,
 } from './admin/tridata/validators'
 import { AdminResendConfirmationBody } from './admin/orders/validators'
+import { linkGuestOrders } from '../lib/link-guest-orders'
+import { scrubError } from '../lib/scrub'
 
 // SumUp doesn't document a signed-webhook scheme, so this is a shared-secret
 // compensating control: medusa-config.ts registers the webhook callback URL
@@ -44,10 +52,35 @@ function verifySumupWebhookSecret(
   return next()
 }
 
+// Before a customer's order list is read, move their guest orders (same,
+// verified e-mail address) onto the account. A failure never blocks the list.
+async function linkGuestOrdersBeforeList(
+  req: AuthenticatedMedusaRequest,
+  _res: MedusaResponse,
+  next: MedusaNextFunction
+) {
+  const customerId = req.auth_context?.actor_id
+  if (customerId) {
+    try {
+      await linkGuestOrders(req.scope, customerId)
+    } catch (e) {
+      req.scope
+        .resolve('logger')
+        .error(`[orders] linking guest orders failed: ${scrubError((e as Error).message, 300)}`)
+    }
+  }
+  return next()
+}
+
 // The product index declares filterable `status` and `sales_channel_ids`, so
 // the route narrows it to published products in the key's sales channels.
 export default defineMiddlewares({
   routes: [
+    {
+      method: ['GET'],
+      matcher: '/store/orders',
+      middlewares: [authenticate('customer', ['session', 'bearer']), linkGuestOrdersBeforeList],
+    },
     {
       method: ['POST'],
       matcher: '/store/search',

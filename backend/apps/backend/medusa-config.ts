@@ -80,6 +80,12 @@ module.exports = defineConfig({
       authCors: process.env.AUTH_CORS!,
       jwtSecret: process.env.JWT_SECRET,
       cookieSecret: process.env.COOKIE_SECRET,
+      // A customer account only works after the e-mail address is confirmed
+      // (activation mail: src/subscribers/auth-verification-requested.ts).
+      // Guest orders are linked only for verified addresses (src/lib/link-guest-orders.ts).
+      authVerificationsPerActor: {
+        customer: [{ entity_type: 'email', auth_provider: 'emailpass' }],
+      },
     }
   },
   plugins: sumupConfigured

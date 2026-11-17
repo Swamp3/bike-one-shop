@@ -105,6 +105,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // The account sub-pages (orders, profile, ...) only exist for a logged-in
+  // customer: without a session their server components fail with a 401 and the
+  // visitor sees an error page. Send them to the login at /account instead.
+  const accountSubPage = request.nextUrl.pathname.match(/^\/([a-z]{2})\/account\/.+/i)
+  if (accountSubPage && !request.cookies.get("_medusa_jwt")) {
+    return NextResponse.redirect(
+      `${request.nextUrl.origin}/${accountSubPage[1]}/account`,
+      307
+    )
+  }
+
   const cacheIdCookie = request.cookies.get("_medusa_cache_id")
   const cacheId = cacheIdCookie?.value || crypto.randomUUID()
 
