@@ -85,6 +85,13 @@ describe("BrevoNotificationService", () => {
     expect(message).not.toContain("test-key-123")
   })
 
+  it("redacts the API key if Brevo echoes it", async () => {
+    mockFetch(400, { code: "unauthorized", message: "bad key test-key-123 from 10.0.0.1" })
+    const message = await messageOf(service.send(notification))
+    expect(message).toContain("<key>")
+    expect(message).not.toContain("test-key-123")
+  })
+
   it("turns a network error into an error without the key", async () => {
     global.fetch = jest.fn().mockRejectedValue(new Error("connect ECONNREFUSED")) as unknown as typeof fetch
     const message = await messageOf(service.send(notification))
@@ -105,5 +112,11 @@ describe("BrevoNotificationService", () => {
     expect(() => BrevoNotificationService.validateOptions(options)).not.toThrow()
     expect(() => BrevoNotificationService.validateOptions({ ...options, api_key: "" })).toThrow("api_key")
     expect(() => BrevoNotificationService.validateOptions({ api_key: "k" })).toThrow("from")
+  })
+
+  it("validateOptions rejects a malformed from or reply_to", () => {
+    expect(() => BrevoNotificationService.validateOptions({ ...options, from: "BikeOne order" })).toThrow("from")
+    expect(() => BrevoNotificationService.validateOptions({ ...options, reply_to: "info@" })).toThrow("reply_to")
+    expect(() => BrevoNotificationService.validateOptions({ api_key: "k", from: "a@b.de" })).not.toThrow()
   })
 })

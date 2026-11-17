@@ -61,7 +61,15 @@ MVP) landed.
   `NOTIFICATION_PROVIDER_RESOLVE=./src/modules/brevo` into the dev server's
   `.env`, remove `NOTIFICATION_ALLOW_NONE`, restart, place a test order. Before
   go-live: paid Brevo plan, production domain/key/fixed IP, privacy policy
-  names Brevo, bounce webhook for failed confirmations.
+  names Brevo, bounce webhook for failed confirmations. From the security
+  review (2026-11-17, Pass): (1) test on the dev server "attempt 1 fails,
+  attempt 2 succeeds" with the same idempotency key (briefly use a wrong key):
+  status must end `sent` and exactly one mail must arrive; the workflow retries
+  4xx too and a timeout after Brevo accepted the mail can send a duplicate;
+  (2) `confirmation_email.status = "sent"` only means Brevo accepted it, not
+  delivered (see the bounce webhook); (3) tracking off for transactional mail
+  (`BREVO_SETUP.md` 7b); (4) sign the Brevo DPA, check sub-processors and the
+  transfer basis before the privacy policy says "EU only".
 - **Cloudflare Access on the admin UI (test server, `shop-admin.bike-one.dev`).**
   Restrict only the admin UI; the storefront, the store API and the SumUp
   webhook (`/hooks/payment/*`) must stay public.

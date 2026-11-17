@@ -10,6 +10,7 @@ type Options = { api_key: string; from: string; reply_to?: string }
 const ENDPOINT = "https://api.brevo.com/v3/smtp/email"
 const TIMEOUT_MS = 15_000
 const NAME_MAX = 70 // Brevo's limit for display names
+const ADDRESS = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/
 
 /** "BikeOne <order@mail.bike-one.dev>" -> { name, email }; a bare address -> { email }. */
 export function parseAddress(value: string): { email: string; name?: string } {
@@ -46,6 +47,20 @@ class BrevoNotificationService extends AbstractNotificationProviderService {
         )
       }
     }
+    for (const key of ["from", "reply_to"]) {
+      const value = options[key]
+      if (value && !ADDRESS.test(parseAddress(String(value)).email)) {
+        throw new MedusaError(
+          MedusaError.Types.INVALID_DATA,
+          `Brevo notification provider: option "${key}" is not an e-mail address`
+        )
+      }
+    }
+  }
+
+  /** Text that ends up in errors: no personal data and never our API key. */
+  private clean(text: string) {
+    return scrubError(text.split(this.options_.api_key).join("<key>"), 200)
   }
 
   async send(
@@ -89,7 +104,7 @@ class BrevoNotificationService extends AbstractNotificationProviderService {
     } catch (e) {
       throw new MedusaError(
         MedusaError.Types.UNEXPECTED_STATE,
-        `Brevo request failed: ${scrubError((e as Error).name + ": " + (e as Error).message, 200)}`
+        `Brevo request failed: ${this.clean((e as Error).name + ": " + (e as Error).message)}`
       )
     }
 
@@ -101,7 +116,7 @@ class BrevoNotificationService extends AbstractNotificationProviderService {
     if (!response.ok) {
       throw new MedusaError(
         MedusaError.Types.UNEXPECTED_STATE,
-        `Brevo rejected the e-mail: HTTP ${response.status} ${result.code ?? "unknown"}: ${scrubError(result.message ?? "", 200)}`
+        `Brevo rejected the e-mail: HTTP ${response.status} ${result.code ?? "unknown"}: ${this.clean(result.message ?? "")}`
       )
     }
     return { id: result.messageId }

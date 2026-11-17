@@ -13,6 +13,7 @@ Brevo's menus change between versions. Where I name a menu path below it is from
 - [ ] 5. Sender `order@mail.bike-one.dev` exists
 - [ ] 6. API key created (v3 API key, not an SMTP key)
 - [ ] 7. IP blocking checked
+- [ ] 7b. Open/click tracking and link rewriting switched off for transactional mail
 - [ ] 8. Key and settings put into bee5's `.env` (after the module exists)
 
 Never paste the API key into chat, git, an issue or a doc. It goes only into the server's `.env`.
@@ -73,6 +74,10 @@ Brevo can reject calls from IP addresses that are not on the account's authorise
 2. Switch **blocking of unknown IP addresses for API keys** to **off** for the dev account, or use the automatic-authorisation mode if your account offers it. Do not enable blocking for the dev account unless you also add bee5's current public IP, and then accept that it breaks when the IP changes.
 3. Production will have a fixed outbound IP: add it to the list and turn blocking **on** there.
 4. If a test later fails with `unauthorized`, this is the first place to look.
+
+## 7b. Tracking off for transactional mail
+
+Tracking pixels and rewritten links in an order confirmation need a legal basis and, usually, consent (TDDDG § 25, GDPR), and they send click data to Brevo. Check in the Brevo account (look for **tracking**, **open tracking**, **click tracking**, **link tracking** in the settings and under Transactional) that they are off for transactional mail, and that no Brevo footer or logo is added to it. After the first test mail, look at its source ("Show original"): the links must point at `shop.bike-one.dev`, not at a Brevo tracking domain. Not verified which of these are on by default.
 
 ## 8. Put it on bee5 (after the module exists)
 
