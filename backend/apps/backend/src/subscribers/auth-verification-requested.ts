@@ -75,6 +75,9 @@ export default async function authVerificationRequestedHandler({
       return
     }
     lastSent.set(key, Date.now())
+    if (lastSent.size > 5000) {
+      for (const [k, at] of lastSent) if (Date.now() - at > THROTTLE_MS) lastSent.delete(k)
+    }
 
     const link = activationLink(storefrontUrl(), data.code)
     // Only where nothing is really sent (notification-local): show the link to click.

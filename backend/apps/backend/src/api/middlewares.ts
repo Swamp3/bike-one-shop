@@ -21,7 +21,8 @@ import {
   AdminTridataSyncStockBody,
 } from './admin/tridata/validators'
 import { AdminResendConfirmationBody } from './admin/orders/validators'
-import { emailpassIdentity } from '../lib/auth-identity'
+import { requireOwnEmail, requireOwnVerification } from '../lib/auth-guards'
+import { rateLimit } from '../lib/rate-limit'
 import { linkGuestOrders } from '../lib/link-guest-orders'
 import { scrubError } from '../lib/scrub'
 
@@ -67,6 +68,9 @@ async function linkGuestOrdersBeforeList(
   const customerId = req.auth_context?.actor_id
   if (customerId && Date.now() - (lastLinkRun.get(customerId) ?? 0) > LINK_INTERVAL_MS) {
     lastLinkRun.set(customerId, Date.now())
+    if (lastLinkRun.size > 5000) {
+      for (const [id, at] of lastLinkRun) if (Date.now() - at > LINK_INTERVAL_MS) lastLinkRun.delete(id)
+    }
     try {
       await linkGuestOrders(req.scope, customerId, req.auth_context.auth_identity_id)
     } catch (e) {
@@ -74,25 +78,6 @@ async function linkGuestOrdersBeforeList(
         .resolve('logger')
         .error(`[orders] linking guest orders failed: ${scrubError((e as Error).message, 300)}`)
     }
-  }
-  return next()
-}
-
-// A customer record may only be created for the address the auth identity
-// registered with: its e-mail is what guest orders and verification are
-// matched against.
-async function requireOwnEmail(
-  req: AuthenticatedMedusaRequest,
-  res: MedusaResponse,
-  next: MedusaNextFunction
-) {
-  const own = await emailpassIdentity(req.scope, req.auth_context?.auth_identity_id)
-  const email = (req.body as { email?: unknown } | undefined)?.email
-  if (!own || typeof email !== 'string' || own.email.toLowerCase() !== email.toLowerCase()) {
-    return res.status(400).json({
-      type: 'invalid_data',
-      message: 'The e-mail must match the address you registered with',
-    })
   }
   return next()
 }
@@ -110,10 +95,26 @@ export default defineMiddlewares({
       method: ['POST'],
       matcher: '/store/customers',
       middlewares: [
+        rateLimit('create-customer', 5),
         authenticate('customer', ['session', 'bearer'], { allowUnregistered: true }),
         requireOwnEmail,
       ],
     },
+    {
+      method: ['POST'],
+      matcher: '/auth/verification/confirm',
+      middlewares: [
+        rateLimit('verification-confirm', 10),
+        authenticate('customer', ['session', 'bearer'], { allowUnregistered: true }),
+        requireOwnVerification,
+      ],
+    },
+    // Medusa has no login rate limit: per visitor address, in memory (the
+    // reverse proxy / Cloudflare should carry the same limits).
+    { method: ['POST'], matcher: '/auth/customer/emailpass', middlewares: [rateLimit('login', 10)] },
+    { method: ['POST'], matcher: '/auth/customer/emailpass/register', middlewares: [rateLimit('register', 5)] },
+    { method: ['POST'], matcher: '/auth/user/emailpass', middlewares: [rateLimit('admin-login', 10)] },
+    { method: ['POST'], matcher: '/auth/verification/request', middlewares: [rateLimit('verification-request', 5)] },
     {
       method: ['POST'],
       matcher: '/store/search',
