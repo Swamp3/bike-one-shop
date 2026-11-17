@@ -38,9 +38,9 @@ Files: `index.ts` (`ModuleProvider(Modules.NOTIFICATION, { services: [BrevoNotif
   - Any other status or a network error: throw `MedusaError.Types.UNEXPECTED_STATE` with the HTTP status and Brevo's `code` and `message` (documented codes include `invalid_parameter`, `missing_parameter`, `unauthorized`, `not_enough_credits`). The message must never contain the recipient, the subject, the body or the API key (`src/lib/scrub.ts` is the existing helper; the workflow already scrubs what it logs).
 - No attachments, no `cc`/`bcc`, no scheduling, no templates. Throw a clear error if `attachments` are passed instead of silently dropping them.
 
-### 2. Optional Reply-To (decide first, see Open questions)
+### 2. Reply-To (decided 2026-11-17: do it)
 
-Customers will answer order mails. If the From mailbox on the sending sub-domain does not exist, replies bounce. Add `reply_to` to the provider options and send it as Brevo's `replyTo` object; wire `NOTIFICATION_REPLY_TO` into the options in `medusa-config.ts` (one line). Skip this task if the From address is a real mailbox.
+The From address lives on a sending sub-domain with no mailbox, and customers will answer order mails. Add `reply_to` to the provider options and send it as Brevo's `replyTo` object (`{ email, name? }`, parsed like the sender); wire `NOTIFICATION_REPLY_TO` into the options in `medusa-config.ts` (one line). Dev: `NOTIFICATION_FROM="BikeOne <bestellung@mail.bike-one.dev>"`, `NOTIFICATION_REPLY_TO=info@bike-one.dev` (Cloudflare Email Routing forwards that to `info@bike-one.de`). Production uses the same shape on the real domain (see `EMAIL_SETUP.md`).
 
 ### 3. Tests
 
@@ -65,9 +65,9 @@ Customers will answer order mails. If the From mailbox on the sending sub-domain
 ### 5. Account setup (the owner, not code)
 
 1. Create the Brevo account (the owner's own login; never share the password or the key in chat or git). Brevo may review new accounts before sending is allowed; start early. Accept the DPA (GDPR Art. 28) in the account settings.
-2. Authenticate the sending domain. For the dev server use a sub-domain such as `mail.bike-one.dev`: Brevo, Senders, Domains & dedicated IPs, Domains, Add a domain; add the records it shows (Brevo code TXT, DKIM, DMARC) in Cloudflare DNS with the proxy off ("DNS only"). Add a sender on that domain.
+2. Authenticate the sending domain. Dev and production both use a `mail.` sub-domain (dev: `mail.bike-one.dev`; it keeps the apex records of Cloudflare Email Routing for `info@bike-one.dev` untouched): Brevo, Senders, Domains & dedicated IPs, Domains, Add a domain; add the records it shows (Brevo code TXT, DKIM, DMARC) in Cloudflare DNS with the proxy off ("DNS only"). Add a sender on that domain.
 3. Create an **API key** (v3), not an SMTP key. Put it only in the server's `.env`.
-4. **Authorised IPs:** Brevo can block API and SMTP calls from IP addresses that are not on the account's authorised list (separate switches for API keys and SMTP keys). If blocking is on, add bee5's public outbound IP, or the calls fail with `unauthorized`. A home or office connection can change its IP; production needs a fixed outbound IP. Check the switch before the first test.
+4. **Authorised IPs:** Brevo can block API calls from IP addresses that are not on the account's authorised list ("Block unknown IP addresses" under Settings, Security, Authorised IPs; separate switches for API and SMTP keys; I could not confirm the default for new accounts). bee5's outbound IP changes, so on the dev account leave API-key blocking **off** (or use the automatic-authorisation mode, if the account offers it), and rely on the key staying secret (root-only `.env`, never in git). Production gets a fixed outbound IP, that IP on the list, and blocking **on**. A blocked call fails with `unauthorized`; check the switch before the first test.
 5. Later newsletters will use a separate `news.` sub-domain; nothing to do now.
 
 ### 6. Deploy and verify on bee5
@@ -88,7 +88,7 @@ Customers will answer order mails. If the From mailbox on the sending sub-domain
 
 ## Open questions
 
-1. **From and Reply-To mailbox.** Is there a monitored mailbox on the sending domain, or should replies go to an existing address (the footer lists `OL@bike-one.de` and `OS@bike-one.de`)? Decides task 2.
+1. ~~From and Reply-To mailbox~~ Decided: dev Reply-To `info@bike-one.dev`, forwarded to `info@bike-one.de` by Cloudflare Email Routing.
 2. **Production domain.** Which domain will production send from (the real shop domain's `mail.` sub-domain)? Brevo's domain records must be added for it when production exists.
 3. **Plan.** The owner will leave the free plan before go-live (decided 2026-11-17). Until then 300 mails/day is plenty for test orders.
 4. **Free-plan footer.** Whether Brevo's "Sent with Brevo" footer is added to API transactional mail on the free plan is unverified; check the first test mail.
