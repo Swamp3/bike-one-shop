@@ -73,7 +73,7 @@ When adding real business logic (the remaining planned `product-brand`, `store-p
 
 ## Compliance
 
-This is a German/EU e-commerce site: Impressum, GDPR, TDDDG (cookie consent, formerly TTDSG), Widerrufsrecht (right of withdrawal), and PAngV (price display) requirements all apply. German legal pages are currently placeholders. Use the `legal-security-reviewer` subagent before merging any change touching auth, payments, customer/personal data, third-party dependencies, or checkout/pricing flows — it issues a blocking/non-blocking verdict and is not a substitute for actual legal sign-off.
+This is a German/EU e-commerce site: Impressum, GDPR, TDDDG (cookie consent, formerly TTDSG), Widerrufsrecht (right of withdrawal), and PAngV (price display) requirements all apply. German legal pages are currently placeholders. Use the `legal-security-reviewer` subagent before merging any change touching auth, payments, customer/personal data, secrets or env config, third-party dependencies, deployment scripts, or checkout/pricing flows — it also scans every commit about to be pushed for secrets, and issues a blocking/non-blocking verdict and is not a substitute for actual legal sign-off.
 
 ## Project-specific subagents
 
