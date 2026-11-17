@@ -18,7 +18,7 @@ const Hero = () => {
             Herbst-Saison 2026
           </div>
           <h1 className="mt-2.5 max-w-[16ch] text-balance font-heading text-[30px] font-semibold leading-[1.08] text-[#f5f5f5] md:text-[46px]">
-            Dein Bike beginnt mit einem Gespräch.
+            Dein Bike, deine Reise.
           </h1>
           <p className="mt-3.5 max-w-[48ch] text-[15px] leading-relaxed text-[#c2c2c2]">
             40+ Marken, persönliche Beratung in Oldenburg und Osnabrück, und

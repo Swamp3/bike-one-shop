@@ -104,7 +104,8 @@ for i in $(seq 1 45); do
 done
 
 step "Building storefront (needs the running backend)"
-(cd "$STOREFRONT_DIR" && NODE_ENV=production npm run build)
+# A clean .next: its persisted fetch cache would keep serving the old catalog (stale product images).
+(cd "$STOREFRONT_DIR" && rm -rf .next && NODE_ENV=production npm run build)
 maintenance_off 8000
 sudo -n systemctl start "$PREFIX-storefront"
 

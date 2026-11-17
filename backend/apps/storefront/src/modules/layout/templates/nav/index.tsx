@@ -37,11 +37,6 @@ export default async function Nav() {
               <NavSearch variant="bar" />
             </div>
             <NavSearch variant="icon" />
-            <div className="hidden items-center gap-1 rounded-lg border border-bo-header-line font-mono text-[11px] font-semibold md:flex">
-              <span className="px-2.5 py-2 text-bo-header bg-bo-header-text">
-                DE
-              </span>
-            </div>
             <StorePicker variant="compact" />
             <StorePicker variant="mobile" />
             <LocalizedClientLink
