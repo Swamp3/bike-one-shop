@@ -70,22 +70,34 @@ const CheckboxGroup = ({
   facet,
   selected,
   toggle,
+  showAllOnDesktop = false,
 }: {
   facet: Facet
   selected: string[]
   toggle: (value: string) => void
+  // Desktop sidebar has room for every value, so skip the "Mehr anzeigen" cut-off there (mobile drawer keeps it).
+  showAllOnDesktop?: boolean
 }) => {
   const [expanded, setExpanded] = useState(false)
   const visible = facet.values.filter(
     (v, i) => expanded || i < VISIBLE_VALUES || selected.includes(v.value)
   )
   const hiddenCount = facet.values.length - visible.length
+  const hiddenOnMobile = new Set(
+    showAllOnDesktop && !expanded
+      ? facet.values.filter((v) => !visible.includes(v)).map((v) => v.value)
+      : []
+  )
+  const shown = showAllOnDesktop && !expanded ? facet.values : visible
 
   return (
     <>
       <ul className="m-0 flex list-none flex-col p-0">
-        {visible.map((v) => (
-          <li key={v.value}>
+        {shown.map((v) => (
+          <li
+            key={v.value}
+            className={hiddenOnMobile.has(v.value) ? "max-md:hidden" : undefined}
+          >
             <label className="flex cursor-pointer items-center gap-2.5 rounded py-1.5 text-[13.5px] has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-bo-accent has-[:focus-visible]:[outline-offset:-2px]">
               <input
                 type="checkbox"
@@ -113,7 +125,9 @@ const CheckboxGroup = ({
           type="button"
           onClick={() => setExpanded(!expanded)}
           aria-expanded={expanded}
-          className="mt-1 text-[12.5px] font-semibold text-bo-accent underline decoration-dashed underline-offset-[3px]"
+          className={`mt-1 text-[12.5px] font-semibold text-bo-accent underline decoration-dashed underline-offset-[3px] ${
+            showAllOnDesktop ? "md:hidden" : ""
+          }`}
         >
           {expanded ? "Weniger anzeigen" : `Mehr anzeigen (${hiddenCount})`}
         </button>
@@ -219,6 +233,7 @@ const FilterPanel = ({
           facet={facet}
           selected={selected}
           toggle={(value) => toggleValue(facet.key, value)}
+          showAllOnDesktop={facet.key === "kategorie"}
         />
       </Group>
     )

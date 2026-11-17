@@ -59,8 +59,9 @@ export default function CategoryTemplate({
         </p>
       )}
 
+      {/* Desktop gets the same links from the nav row and the Kategorie filter. */}
       {children.length > 0 && (
-        <ul className="m-0 flex list-none flex-wrap gap-2 px-4 pb-3 pt-1 md:px-6">
+        <ul className="m-0 flex list-none flex-wrap gap-2 px-4 pb-3 pt-1 md:hidden">
           {children.map((c) => (
             <li key={c.id}>
               <LocalizedClientLink

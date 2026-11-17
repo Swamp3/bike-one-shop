@@ -76,33 +76,36 @@ export default async function Nav() {
 
       {topLevelCategories && topLevelCategories.length > 0 && (
         <nav className="hidden border-b border-bo-line bg-bo-surface md:block">
-          {/* No overflow-x scroll here: it would clip the dropdown panels. */}
-          <ul className="m-0 flex list-none justify-center gap-0 px-4 py-2">
-            {topLevelCategories.map((c) => (
-              // Dropdown opens on hover and keyboard focus via CSS only, so the nav stays a server component.
-              <li key={c.id} className="group relative mx-[22px]">
-                <LocalizedClientLink
-                  href={`/categories/${c.handle}`}
-                  className="block whitespace-nowrap border-b-2 border-transparent py-1.5 font-heading text-[13px] font-medium uppercase tracking-wide text-bo-ink-muted hover:border-bo-accent hover:text-bo-ink group-focus-within:border-bo-accent group-focus-within:text-bo-ink group-hover:border-bo-accent group-hover:text-bo-ink"
-                >
-                  {c.name}
-                </LocalizedClientLink>
-                {!!c.category_children.length && (
-                  <div className="absolute left-1/2 top-full z-10 hidden -translate-x-1/2 pt-2 group-focus-within:block group-hover:block">
-                    <ul className="m-0 min-w-[220px] list-none rounded-lg border border-bo-line bg-bo-surface py-1.5 shadow-lg">
-                      {c.category_children.map((child) => (
-                        <li key={child.id}>
-                          <LocalizedClientLink
-                            href={`/categories/${child.handle}`}
-                            className="block whitespace-nowrap px-4 py-2 text-[13.5px] text-bo-ink-muted hover:bg-bo-surface-2 hover:text-bo-ink focus-visible:bg-bo-surface-2 focus-visible:text-bo-ink"
-                          >
-                            {child.name}
-                          </LocalizedClientLink>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+          {/* Desktop has room for every subcategory, so each top-level group lists its children inline instead of a hover dropdown. */}
+          <ul className="m-0 flex list-none flex-wrap items-center justify-center gap-x-1 gap-y-1 px-4 py-2">
+            {topLevelCategories.map((c, i) => (
+              <li key={c.id} className="flex items-center">
+                {i > 0 && (
+                  <span
+                    aria-hidden="true"
+                    className="mx-4 h-4 w-px bg-bo-line-strong"
+                  />
                 )}
+                <ul className="m-0 flex list-none items-center gap-0 p-0">
+                  <li className="mx-3">
+                    <LocalizedClientLink
+                      href={`/categories/${c.handle}`}
+                      className="block whitespace-nowrap border-b-2 border-transparent py-1.5 font-heading text-[13px] font-semibold uppercase tracking-wide text-bo-ink hover:border-bo-accent"
+                    >
+                      {c.name}
+                    </LocalizedClientLink>
+                  </li>
+                  {c.category_children.map((child) => (
+                    <li key={child.id} className="mx-3">
+                      <LocalizedClientLink
+                        href={`/categories/${child.handle}`}
+                        className="block whitespace-nowrap border-b-2 border-transparent py-1.5 font-heading text-[13px] font-medium uppercase tracking-wide text-bo-ink-muted hover:border-bo-accent hover:text-bo-ink"
+                      >
+                        {child.name}
+                      </LocalizedClientLink>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
