@@ -1,7 +1,8 @@
 SHELL := /bin/bash
 COMPOSE := docker compose -f docker-compose.yml
+DEV_HOST ?= bee5
 
-.PHONY: help setup install up down dev start backend storefront build migrate logs status reset-db clean
+.PHONY: help setup install up down dev start backend storefront build migrate logs status reset-db clean deploy-dev
 
 help: ## Show this help
 	@echo "bike-one-shop — common commands:"
@@ -49,3 +50,6 @@ reset-db: ## Wipe local Postgres/Redis data and re-run setup (DESTRUCTIVE)
 
 clean: down ## Stop infra and remove node_modules
 	rm -rf backend/node_modules backend/apps/backend/node_modules backend/apps/storefront/node_modules
+
+deploy-dev: ## Deploy origin/dev on the dev server (push dev first; see scripts/deploy.sh)
+	ssh $(DEV_HOST) 'cd ~/bike-one-shop && scripts/deploy.sh dev'

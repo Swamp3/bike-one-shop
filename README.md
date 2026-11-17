@@ -108,6 +108,7 @@ Run `make help` for the full list.
 | `make install` | Install npm workspace dependencies |
 | `make build` | Production build of backend + storefront |
 | `make reset-db` | **Destructive**: wipe local Postgres/Redis data and re-run setup |
+| `make deploy-dev` | Deploy `origin/dev` on the dev server (`DEV_HOST`, default `bee5`) |
 | `make clean` | **Destructive**: stop infra and remove `node_modules` |
 
 ## Repo layout
@@ -127,6 +128,19 @@ Run `make help` for the full list.
 ├── SUMUP_SETUP.md           # activating the SumUp sandbox
 └── Makefile                 # repo-root dev commands
 ```
+
+## Deployment (git-based)
+
+One long-lived branch per server: `dev` is deployed to the dev server (bee5, `shop.bike-one.dev`), `production` will be deployed to the production server. Push the branch, then deploy:
+
+```bash
+git push origin <branch>:dev
+make deploy-dev     # ssh bee5 'cd ~/bike-one-shop && scripts/deploy.sh dev'
+```
+
+`scripts/deploy.sh <branch> [--force]` runs on the server: fetches `origin/<branch>` (hard reset, local tracked changes are discarded), runs `npm ci` only when a `package*.json` changed, builds and migrates the backend, builds the storefront against the running backend, restarts the systemd units, and smoke-tests the Store API. Backend and storefront are down for a few minutes while it builds; `scripts/maintenance/` serves a German 503 page on ports 8000 and 9000 meanwhile (it stays up if a deploy fails). There is no automatic rollback: revert on the branch and deploy again. Logs: `journalctl -u bikeone-backend -u bikeone-storefront`.
+
+Per-server state that is not in git: `backend/apps/backend/.env`, `backend/apps/storefront/.env.local`, `~/bike-one-data/` (uploads, admin credentials, last deployed commit), the `bikeone-*` systemd units and a read-only GitHub deploy key (`~/.ssh/bikeone_deploy`, wired in the checkout's `core.sshCommand`). See `REVIEW_TASKS.md` for the env settings a server needs.
 
 ## Production build
 
