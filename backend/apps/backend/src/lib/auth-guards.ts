@@ -1,3 +1,4 @@
+import { Modules } from "@medusajs/framework/utils"
 import type {
   AuthenticatedMedusaRequest,
   MedusaNextFunction,
@@ -44,6 +45,19 @@ export async function requireOwnEmail(
       message: "The e-mail must match the address you registered with",
     })
   }
+  // Only after the address is confirmed: Medusa lets an unverified token create
+  // the customer, which would bind the identity (so the 7-day cleanup skips it)
+  // and let a squatter hold someone else's address for good.
+  const verifications = await req.scope.resolve(Modules.AUTH).listAuthVerifications({
+    auth_identity_id: own.id,
+    entity_id: own.email,
+    entity_type: "email",
+  })
+  if (!verifications.some((v) => v.verified_at)) {
+    return res.status(403).json({
+      type: "not_allowed",
+      message: "Confirm your e-mail address first",
+    })
+  }
   return next()
 }
-

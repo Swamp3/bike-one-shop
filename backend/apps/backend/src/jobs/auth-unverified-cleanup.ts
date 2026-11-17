@@ -4,7 +4,7 @@ import { selectStaleIdentities } from "../lib/stale-identities"
 
 const STALE_DAYS = 7
 const PAGE = 500
-const MAX_PAGES = 20
+const MAX_PAGES = 200 // 100k identities; stale ones are mixed with real customers
 
 /**
  * Deletes registrations that never confirmed their e-mail address (see

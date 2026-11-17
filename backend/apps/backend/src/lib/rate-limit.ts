@@ -12,6 +12,7 @@ import type {
  */
 export function createRateLimiter(limit: number, windowMs: number) {
   const hits = new Map<string, number[]>()
+  let lastSweep = 0
   return {
     check(key: string, now = Date.now()): { allowed: boolean; retryAfterSec: number } {
       const recent = (hits.get(key) ?? []).filter((t) => now - t < windowMs)
@@ -21,10 +22,16 @@ export function createRateLimiter(limit: number, windowMs: number) {
       }
       recent.push(now)
       hits.set(key, recent)
-      if (hits.size > 10_000) {
+      // Drop idle keys at most once per window; with more than 50k keys in play
+      // (spoofed addresses) refuse to track more and let the oldest go.
+      if (hits.size > 10_000 && now - lastSweep >= windowMs) {
+        lastSweep = now
         for (const [k, times] of hits) {
           if (now - times[times.length - 1] >= windowMs) hits.delete(k)
         }
+      }
+      if (hits.size > 50_000) {
+        hits.delete(hits.keys().next().value as string)
       }
       return { allowed: true, retryAfterSec: 0 }
     },
@@ -32,24 +39,37 @@ export function createRateLimiter(limit: number, windowMs: number) {
 }
 
 /**
- * The visitor's address. Behind Cloudflare (tunnel or proxy) that is
- * `CF-Connecting-IP`; behind another proxy the first `X-Forwarded-For` entry.
- * Only trustworthy while the backend port is reachable through the proxy
- * alone (firewall: REVIEW_TASKS.md), otherwise a caller can set these headers.
+ * The caller's address. `req.ip` is the proxy-added address (Express
+ * `trust proxy 1`). Behind Cloudflare alone, TRUST_CF_CONNECTING_IP=true uses
+ * `CF-Connecting-IP`; only set it when the backend port is reachable through
+ * Cloudflare only (firewall), otherwise a caller can forge the header.
+ * Auth calls made by the storefront server arrive from the storefront's own
+ * address, so the storefront limits per visitor itself and the backend limits
+ * per account (see api/middlewares.ts).
  */
 export function clientIp(req: Pick<MedusaRequest, "headers" | "ip">): string {
-  const header = (name: string) => {
-    const value = req.headers[name]
-    return (Array.isArray(value) ? value[0] : value)?.split(",")[0].trim()
+  const cf = req.headers["cf-connecting-ip"]
+  const cfValue = (Array.isArray(cf) ? cf[0] : cf)?.trim()
+  if (process.env.TRUST_CF_CONNECTING_IP === "true" && cfValue) {
+    return cfValue
   }
-  return header("cf-connecting-ip") || header("x-forwarded-for") || req.ip || "unknown"
+  return req.ip || "unknown"
 }
 
-/** Express-style middleware: more than `limit` calls per `windowMs` from one address get 429. */
-export function rateLimit(name: string, limit: number, windowMs = 60_000) {
+/**
+ * Express-style middleware: more than `limit` calls per `windowMs` for one key
+ * get 429. The key defaults to the caller's address; pass `keyOf` to limit per
+ * account (e-mail) or per auth identity instead.
+ */
+export function rateLimit(
+  name: string,
+  limit: number,
+  windowMs = 60_000,
+  keyOf: (req: MedusaRequest) => string | undefined = clientIp
+) {
   const limiter = createRateLimiter(limit, windowMs)
   return (req: MedusaRequest, res: MedusaResponse, next: MedusaNextFunction) => {
-    const result = limiter.check(`${name}:${clientIp(req)}`)
+    const result = limiter.check(`${name}:${keyOf(req) ?? clientIp(req)}`)
     if (!result.allowed) {
       res.setHeader("Retry-After", String(result.retryAfterSec))
       return res.status(429).json({
@@ -60,3 +80,13 @@ export function rateLimit(name: string, limit: number, windowMs = 60_000) {
     return next()
   }
 }
+
+/** Lower-cased string field of the request body (an e-mail or identifier), for per-account limits. */
+export const bodyField = (field: string) => (req: MedusaRequest) => {
+  const value = (req.body as Record<string, unknown> | undefined)?.[field]
+  return typeof value === "string" ? value.trim().toLowerCase() : undefined
+}
+
+/** The authenticated auth identity, for per-login limits after `authenticate`. */
+export const authIdentity = (req: MedusaRequest) =>
+  (req as { auth_context?: { auth_identity_id?: string } }).auth_context?.auth_identity_id

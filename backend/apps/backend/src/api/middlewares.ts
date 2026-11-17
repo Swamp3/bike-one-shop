@@ -22,7 +22,7 @@ import {
 } from './admin/tridata/validators'
 import { AdminResendConfirmationBody } from './admin/orders/validators'
 import { requireOwnEmail, requireOwnVerification } from '../lib/auth-guards'
-import { rateLimit } from '../lib/rate-limit'
+import { authIdentity, bodyField, rateLimit } from '../lib/rate-limit'
 import { linkGuestOrders } from '../lib/link-guest-orders'
 import { scrubError } from '../lib/scrub'
 
@@ -91,12 +91,15 @@ export default defineMiddlewares({
       matcher: '/store/orders',
       middlewares: [authenticate('customer', ['session', 'bearer']), linkGuestOrdersBeforeList],
     },
+    // Auth-call limits. The storefront server makes these calls, so the backend
+    // sees one address: limit per account / login here, per visitor in the
+    // storefront (src/lib/rate-limit.ts there), and per address at the edge.
     {
       method: ['POST'],
       matcher: '/store/customers',
       middlewares: [
-        rateLimit('create-customer', 5),
         authenticate('customer', ['session', 'bearer'], { allowUnregistered: true }),
+        rateLimit('create-customer', 5, 60_000, authIdentity),
         requireOwnEmail,
       ],
     },
@@ -104,17 +107,39 @@ export default defineMiddlewares({
       method: ['POST'],
       matcher: '/auth/verification/confirm',
       middlewares: [
-        rateLimit('verification-confirm', 10),
         authenticate('customer', ['session', 'bearer'], { allowUnregistered: true }),
+        rateLimit('verification-confirm', 10, 60_000, authIdentity),
         requireOwnVerification,
       ],
     },
-    // Medusa has no login rate limit: per visitor address, in memory (the
-    // reverse proxy / Cloudflare should carry the same limits).
-    { method: ['POST'], matcher: '/auth/customer/emailpass', middlewares: [rateLimit('login', 10)] },
-    { method: ['POST'], matcher: '/auth/customer/emailpass/register', middlewares: [rateLimit('register', 5)] },
+    {
+      method: ['POST'],
+      matcher: '/auth/customer/emailpass',
+      middlewares: [rateLimit('login', 10, 15 * 60_000, bodyField('email'))],
+    },
+    {
+      method: ['POST'],
+      matcher: '/auth/customer/emailpass/register',
+      middlewares: [rateLimit('register', 5, 15 * 60_000, bodyField('email'))],
+    },
+    // Called by the admin dashboard in the browser, so the visitor address is real.
     { method: ['POST'], matcher: '/auth/user/emailpass', middlewares: [rateLimit('admin-login', 10)] },
-    { method: ['POST'], matcher: '/auth/verification/request', middlewares: [rateLimit('verification-request', 5)] },
+    {
+      method: ['POST'],
+      matcher: '/auth/verification/request',
+      middlewares: [rateLimit('verification-request', 5, 60_000, authIdentity)],
+    },
+    // Password reset is not built yet; limit it already so it cannot mail-bomb an address.
+    {
+      method: ['POST'],
+      matcher: '/auth/customer/emailpass/reset-password',
+      middlewares: [rateLimit('reset-password', 3, 15 * 60_000, bodyField('identifier'))],
+    },
+    {
+      method: ['POST'],
+      matcher: '/auth/customer/emailpass/update',
+      middlewares: [rateLimit('reset-update', 5, 15 * 60_000)],
+    },
     {
       method: ['POST'],
       matcher: '/store/search',

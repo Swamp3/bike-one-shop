@@ -6,15 +6,27 @@ const hash = (code: string) => createHash("sha256").update(code).digest("hex")
 
 const run = async (
   guard: typeof requireOwnEmail,
-  opts: { body: unknown; authIdentityId?: string; identityEmail?: string | null; verification?: Record<string, unknown> | null }
+  opts: {
+    body: unknown
+    authIdentityId?: string
+    identityEmail?: string | null
+    verification?: Record<string, unknown> | null
+    emailVerified?: boolean
+  }
 ) => {
   const auth = {
     retrieveAuthIdentity: jest.fn(async () => {
       if (opts.identityEmail == null) throw new Error("nope")
       return { id: "authid_1", provider_identities: [{ provider: "emailpass", entity_id: opts.identityEmail }] }
     }),
-    listAuthVerifications: jest.fn(async (filters: { provider_metadata?: { token_hash?: string } }) =>
-      opts.verification && filters.provider_metadata?.token_hash === hash("good-code") ? [opts.verification] : []
+    listAuthVerifications: jest.fn(
+      async (filters: { provider_metadata?: { token_hash?: string }; auth_identity_id?: string }) => {
+        if (filters.provider_metadata) {
+          return opts.verification && filters.provider_metadata.token_hash === hash("good-code") ? [opts.verification] : []
+        }
+        // requireOwnEmail asks for the identity's own verification row
+        return [{ verified_at: opts.emailVerified === false ? null : new Date() }]
+      }
     ),
   }
   const req = {
@@ -30,6 +42,16 @@ const run = async (
 }
 
 describe("requireOwnEmail", () => {
+  it("refuses an identity whose e-mail is not confirmed yet (no squatting by creating a customer early)", async () => {
+    const r = await run(requireOwnEmail, {
+      body: { email: "erika@example.com" },
+      authIdentityId: "authid_1",
+      identityEmail: "erika@example.com",
+      emailVerified: false,
+    })
+    expect(r.next).not.toHaveBeenCalled()
+    expect(r.status).toHaveBeenCalledWith(403)
+  })
   it("lets the identity's own address through, in any case", async () => {
     const r = await run(requireOwnEmail, { body: { email: "ERIKA@example.com" }, authIdentityId: "authid_1", identityEmail: "erika@example.com" })
     expect(r.next).toHaveBeenCalled()
