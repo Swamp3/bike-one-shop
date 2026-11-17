@@ -6,9 +6,28 @@ Implementer: `expert-developer` for the code tasks. Every code task goes through
 
 Built 2026-11-17 (PLAN.md Task 17): customer accounts need a confirmed e-mail address (`authVerificationsPerActor` in `medusa-config.ts`). `src/subscribers/auth-verification-requested.ts` sends the German activation mail through Brevo, only to the address of the requesting auth identity and at most once a minute per address (in memory). `src/lib/link-guest-orders.ts` moves guest orders with the same verified address onto the account, called by a middleware on `GET /store/orders` (at most every 5 minutes per customer). `POST /store/customers` must use the identity's own address. The storefront already had the verify page (`/de/verify-account`) and the `verification_required` state.
 
-The security review of this feature (Pass after fixes is pending) left these items. None blocks the dev server; all are go-live gates, in the order below.
+The two security reviews of this feature (first: two High findings, fixed; second: both confirmed fixed, one Medium design issue left, task 0) left these items. None blocks the dev server; all are go-live gates, in the order below.
 
 ## Tasks
+
+### 0. Blocking for real customers: pre-account takeover through the confirm link (decision needed)
+
+Found by the second security review (2026-11-17). Not a problem on the dev server (no real data), a blocker before real customers:
+
+1. An attacker registers an emailpass identity with the victim's address and the attacker's own password (Medusa does not check ownership).
+2. The attacker logs in, gets `verification_required`, and requests verification. The subscriber mails the victim, because the victim's address is that identity's own address.
+3. If the victim clicks the link, `POST /auth/verification/confirm` verifies the row by the code alone (the route is unauthenticated and never compares the identity).
+4. The attacker logs in with the known password, creates the customer for the victim's address, and `linkGuestOrders` moves the victim's guest orders (names, addresses, purchases) onto the attacker's account.
+
+It needs one click by the victim on a mail that says "ignore this if you did not register". Options:
+
+- **(a) Recommended:** confirm only together with the identity. Override `/auth/verification/confirm` with a route that requires the identity's bearer token and checks that the verification row's `auth_identity_id` equals the token's identity. The verify page then asks the visitor to log in (address and password) first and confirms afterwards, so the mail link works on any device, but only for someone who knows the password. The victim does not know the attacker's password, so the attack fails; the real owner logs in with their own. Cost: custom route plus storefront page change (login step), a unit test for the route and for the attack.
+- **(b)** Keep the one-click link but do not link orders on verification alone: an extra authenticated "show my earlier orders" step with a second code mailed to the address. More friction for every legitimate customer.
+- **(c)** Accept the residual risk knowingly and document it. This is a product and data-protection decision for the owner and a lawyer (Art. 32 GDPR); do not choose it silently.
+
+Until one is done, do not take real customers or real orders, and keep linking behind a switch if needed (`LINK_GUEST_ORDERS=false` env check in the middleware) so the feature can be turned off without a deploy of code.
+
+Small follow-ups from the same review (not blocking): evict old entries from the two in-memory throttle maps; a unit test for `requireOwnEmail` and for `emailpassIdentity`; one live register, confirm, login, create customer, list orders run on the dev server; the 5-minute linking interval starts when the run starts, so a customer who confirms right after an earlier attempt can wait up to 5 minutes for merged orders (set the timestamp only after a run that had a verified identity, or accept).
 
 ### 1. Rate limit the auth endpoints at the edge (highest priority)
 
@@ -86,6 +105,7 @@ The mail carries the same company block as the order confirmation (`COMPANY` and
 
 ## Order of work
 
+0. Task 0: owner decision (a, b or c), then build it.
 1. Task 1 (edge limits). Dev and production rules, documented.
 2. Tasks 2 and 3 together (storefront cookie plus button; cleanup job). One review.
 3. Task 5 notification retention job, and the policy text to the owner.

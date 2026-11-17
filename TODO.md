@@ -70,6 +70,11 @@ MVP) landed.
   delivered (see the bounce webhook); (3) tracking off for transactional mail
   (`BREVO_SETUP.md` 7b); (4) sign the Brevo DPA, check sub-processors and the
   transfer basis before the privacy policy says "EU only".
+- **Account activation, DECISION NEEDED before real customers:** a pre-account
+  takeover is still possible with one click by the victim on the activation mail
+  (an attacker registers the victim's address, the victim confirms, the attacker
+  claims the victim's guest orders). Options a/b/c and a recommendation: task 0
+  in `.working-files/account-activation/plan.md`. Fine on the dev server.
 - **Account activation: open items (security review 2026-11-17).** Activation
   mail, guest-order linking and the identity binding are built (PLAN.md Task
   17). Still open before go-live: (1) rate limit `/auth/*` and
