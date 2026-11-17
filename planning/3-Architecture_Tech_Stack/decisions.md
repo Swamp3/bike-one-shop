@@ -71,6 +71,10 @@ Zubehör                 zubehoer
 - The tree is created by the migration script `backend/apps/backend/src/migration-scripts/restructure-categories.ts`. New subcategories (Helme, Pedale, Schaltgruppen, ...) are added once BikeOne sells such products.
 - TriData article import (not built yet): each article's `Warengruppe`/`Kategorien` value maps to one shop category handle through an explicit mapping table. Values without a mapping get no category and are logged, never auto-created.
 
+## Product gallery photos
+
+Decision (2026-11-17): a product image with `metadata.option_title` + `option_value` is shown only while that option value is selected (e.g. Farbe). An image without both is a shared photo: shown for every selection, after the tagged ones, and instead of the "Produktfoto folgt" placeholder when the selection has no tagged photo. Tagging is done by hand in the image metadata (no admin UI yet).
+
 ## Hosting — open
 
 3-stage setup decided: dev / staging / prod, dockerized. Provider not yet decided. Constraints that narrow the field, **revised for Medusa/Next.js**:
