@@ -9,26 +9,14 @@ import { HttpTypes } from "@medusajs/types"
 import BuildGroupCard from "@modules/common/components/build-group-card"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { clx } from "@modules/common/components/ui"
+import StatusPill from "@modules/order/components/status-pill"
+import { STATUS_LABEL } from "@modules/order/lib/order-status"
 
 const ChevronIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
     <path d="m6 9 6 6 6-6" />
   </svg>
 )
-
-/** Maps Medusa's real fulfillment status onto the wireframe's status pill —
- * there's no in-store-pickup fulfillment option today (see PLAN.md Task 10),
- * so "Abgeholt in Filiale" from the wireframe never actually occurs here. */
-const STATUS_LABEL: Record<HttpTypes.StoreOrder["fulfillment_status"], { label: string; ok?: boolean }> = {
-  not_fulfilled: { label: "In Bearbeitung" },
-  partially_fulfilled: { label: "Teilweise bearbeitet" },
-  fulfilled: { label: "Bereit zum Versand" },
-  partially_shipped: { label: "Teilweise versendet" },
-  shipped: { label: "In Zustellung" },
-  partially_delivered: { label: "Teilweise zugestellt" },
-  delivered: { label: "Zugestellt", ok: true },
-  canceled: { label: "Storniert" },
-}
 
 const daysAgo = (date: string | Date) => {
   const diffMs = Date.now() - new Date(date).getTime()
@@ -58,14 +46,7 @@ const OrderRow = ({ order }: { order: HttpTypes.StoreOrder }) => {
             vor {age} {age === 1 ? "Tag" : "Tagen"}
           </div>
         </div>
-        <span
-          className={clx(
-            "whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-bold tracking-wide",
-            status.ok ? "bg-bo-ok-bg text-bo-ok" : "bg-bo-wait-bg text-bo-wait"
-          )}
-        >
-          {status.label}
-        </span>
+        <StatusPill status={status} />
         <span className="whitespace-nowrap font-mono text-[15px] font-extrabold">
           {convertToLocale({ amount: order.total, currency_code: order.currency_code })}
         </span>

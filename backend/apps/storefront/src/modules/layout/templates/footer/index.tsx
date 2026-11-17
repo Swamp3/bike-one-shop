@@ -14,7 +14,7 @@ export default async function Footer() {
   const topLevelCategories = categories ? visibleTopLevel(categories) : null
 
   return (
-    <footer className="mt-5 border-t border-bo-line bg-bo-surface">
+    <footer className="mt-5 border-t border-bo-line bg-bo-surface" data-print-chrome>
       {/* Hidden until a provider and double opt-in exist. */}
       {process.env.NEXT_PUBLIC_NEWSLETTER_ENABLED === "true" && (
         <div className="border-b border-bo-line bg-bo-surface-2 px-4 py-6 md:flex md:items-center md:gap-10 md:px-6 md:py-8">

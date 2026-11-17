@@ -10,10 +10,8 @@ export const retrieveOrder = async (id: string) => {
     ...(await getAuthHeaders()),
   }
 
-  const next = {
-    ...(await getCacheOptions("orders")),
-  }
-
+  // Not cached: the order status changes outside the storefront (TriCon order-state sync, admin),
+  // and no storefront action revalidates the "orders" tag for it. Memoized per request only.
   return sdk.client
     .fetch<HttpTypes.StoreOrderResponse>(`/store/orders/${id}`, {
       method: "GET",
@@ -22,8 +20,7 @@ export const retrieveOrder = async (id: string) => {
           "*payment_collections.payments,*items,*items.metadata,*items.variant,*items.product,+item_discount_total,+shipping_discount_total",
       },
       headers,
-      next,
-      cache: "force-cache",
+      cache: "no-store",
     })
     .then(({ order }) => order)
     .catch((err) => medusaError(err))

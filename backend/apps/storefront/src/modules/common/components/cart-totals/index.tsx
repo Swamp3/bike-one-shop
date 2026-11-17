@@ -24,13 +24,7 @@ type CartTotalsProps = {
  * real Medusa cart/order totals, nothing hardcoded.
  */
 const CartTotals: React.FC<CartTotalsProps> = ({ totals, itemCount }) => {
-  const {
-    currency_code,
-    total,
-    tax_total,
-    item_total,
-    shipping_total,
-  } = totals
+  const { currency_code, total, tax_total, item_total, shipping_total } = totals
   // Prices are gross (tax-inclusive), so every row shows gross amounts and the
   // rows add up to the total; the VAT row is the part already contained.
   // item_discount_total is already gross; a free-shipping code is only in
@@ -44,7 +38,8 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals, itemCount }) => {
       <div className="flex flex-col text-[13.5px] text-bo-ink-muted">
         <div className="flex items-baseline justify-between py-1.5">
           <span>
-            Zwischensumme{typeof itemCount === "number" ? ` (${itemCount} Artikel)` : ""}
+            Zwischensumme
+            {typeof itemCount === "number" ? ` (${itemCount} Artikel)` : ""}
           </span>
           <span
             className="font-semibold text-bo-ink"
@@ -72,8 +67,8 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals, itemCount }) => {
             {shipping_total
               ? convertToLocale({ amount: shipping_total, currency_code })
               : shippingDiscount > 0
-                ? "Kostenlos"
-                : "—"}
+              ? "Kostenlos"
+              : "—"}
           </span>
         </div>
         {!!discount && (
@@ -88,16 +83,19 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals, itemCount }) => {
             </span>
           </div>
         )}
-        <div className="flex items-baseline justify-between py-1.5">
-          <span>darin enthaltene MwSt.</span>
-          <span
-            className="font-semibold text-bo-ink"
-            data-testid="cart-taxes"
-            data-value={tax_total || 0}
-          >
-            {convertToLocale({ amount: tax_total ?? 0, currency_code })}
-          </span>
-        </div>
+        {/* A 0,00 VAT line would read as "no VAT included", so it is only shown when there is VAT. */}
+        {!!tax_total && (
+          <div className="flex items-baseline justify-between py-1.5">
+            <span>darin enthaltene MwSt.</span>
+            <span
+              className="font-semibold text-bo-ink"
+              data-testid="cart-taxes"
+              data-value={tax_total || 0}
+            >
+              {convertToLocale({ amount: tax_total ?? 0, currency_code })}
+            </span>
+          </div>
+        )}
       </div>
       <div className="mt-2 flex items-baseline justify-between border-t border-bo-line pt-3 font-heading text-[19px] font-semibold">
         <span>Gesamt inkl. MwSt.</span>

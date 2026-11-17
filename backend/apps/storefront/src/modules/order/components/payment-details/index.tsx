@@ -8,7 +8,7 @@ type PaymentDetailsProps = {
 }
 
 const PaymentDetails = async ({ order }: PaymentDetailsProps) => {
-  const payment = order.payment_collections?.[0].payments?.[0]
+  const payment = order.payment_collections?.[0]?.payments?.[0]
 
   if (!payment) {
     return null
@@ -25,15 +25,23 @@ const PaymentDetails = async ({ order }: PaymentDetailsProps) => {
           ? "Testzahlung (kein produktiver Anbieter aktiv)"
           : getPaymentMethodLabel(payment.provider_id, labelOverrides)}
       </p>
-      <p className="m-0 mt-1 font-mono text-bo-ink-muted" data-testid="payment-amount">
+      <p
+        className="m-0 mt-1 font-mono text-bo-ink-muted"
+        data-testid="payment-amount"
+      >
         {isStripeLike(payment.provider_id) && payment.data?.card_last4
           ? `**** **** **** ${payment.data.card_last4}`
           : `${convertToLocale({
               amount: payment.amount,
               currency_code: order.currency_code,
-            })} bezahlt am ${new Date(
-              payment.created_at ?? ""
-            ).toLocaleString("de-DE")}`}
+            })} ${
+              // Only a captured payment is "bezahlt"; created_at is just when the session started.
+              payment.captured_at
+                ? `bezahlt am ${new Date(payment.captured_at).toLocaleString(
+                    "de-DE"
+                  )}`
+                : "(Zahlung noch nicht abgeschlossen)"
+            }`}
       </p>
     </div>
   )

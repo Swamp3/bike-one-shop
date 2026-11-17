@@ -140,6 +140,16 @@ MVP) landed.
   `SUMUP_WEBHOOK_SECRET` IN THE SAME RESTART that deploys this code (old sessions carry the old URL, readable by shoppers, and the old value would become the HMAC key; never reuse a secret that was in session data as a live key; SQL cleanup only after rotating, `REVIEW_TASKS.md`), verify after the deploy: wrapper boots, 401 without a valid token, SumUp keeps `ref`/`wh_token` on callbacks, `payment_session.amount` type,
   the sandbox run (`.working-files/sumup-webhook-verification/plan.md`, including
   "cart total changed, old checkout paid"), and `legal-security-reviewer` on the new code. See `PLAN.md` Task 5.
+- **Order access control, must be fixed before real customers (reviewer, 2026-11-17).**
+  Medusa's `GET /store/orders/:id` has no auth or owner check: the order id is the only
+  secret, so anyone with an `order_...` id sees the full order (name, address, phone,
+  items). The account page only hides it behind the login form, which is a UI gate.
+  Add a backend middleware (customer auth with `allowUnauthenticated`, then
+  `order.customer_id === actor_id`) and keep a tokenised path for the guest
+  confirmation page `/order/[id]/confirmed`. Open as well: the order printout letterhead
+  uses the unconfirmed phone number in `lib/data/company.ts` and lacks register data
+  (Geschäftsführer, HRB, USt-IdNr; ask the lawyer whether a Bestellübersicht needs it),
+  and a real checkout order must be checked for a non-zero VAT line.
 - **TriCon/Tridata WSDL URL + `IdentifyGuid`.** Blocks the real ERP sync
   (Task 6), which in turn blocks: real stock numbers (today's inventory is
   realistic placeholder data, not real counts — Task 12 §3), real Click &

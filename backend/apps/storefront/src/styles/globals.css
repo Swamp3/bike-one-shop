@@ -60,6 +60,27 @@
   --bo-wait-bg: #3b2d0d;
 }
 
+@media print {
+  /* Always print light, whatever theme the screen uses. */
+  :root:root:root {
+    --bo-bg: #ffffff;
+    --bo-surface: #ffffff;
+    --bo-surface-2: #ffffff;
+    --bo-line: #dee2e6;
+    --bo-line-strong: #adb5bd;
+    --bo-ink: #000000;
+    --bo-ink-muted: #000000;
+    --bo-ink-faint: #333333;
+  }
+  body {
+    background: #ffffff;
+  }
+  /* Site header/footer/banners are hidden only on pages that opt in with data-print-order. */
+  body:has([data-print-order]) [data-print-chrome] {
+    display: none !important;
+  }
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {

@@ -13,7 +13,7 @@ export default async function Nav() {
   const topLevelCategories = categories ? visibleTopLevel(categories) : null
 
   return (
-    <div className="sticky top-0 inset-x-0 z-50">
+    <div className="sticky top-0 inset-x-0 z-50" data-print-chrome>
       <header className="border-b border-bo-header-line bg-bo-header text-bo-header-text">
         <div className="relative flex items-center gap-2.5 px-4 py-2.5 md:gap-4 md:px-6 md:py-3">
           {/* Mobile only: mobile menu drawer trigger. Left untouched per scope. */}

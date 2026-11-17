@@ -75,7 +75,19 @@ export default async function OrderCompletedTemplate({
           </h2>
           <ConfirmationItems order={order} />
           <div className="mt-3 border-t border-bo-line pt-3">
-            <CartTotals totals={order} itemCount={itemCount} />
+            <CartTotals
+              totals={{
+                total: order.total,
+                subtotal: order.subtotal,
+                tax_total: order.tax_total,
+                item_total: order.item_total,
+                shipping_total: order.shipping_total,
+                item_discount_total: order.item_discount_total,
+                shipping_discount_total: order.shipping_discount_total,
+                currency_code: order.currency_code,
+              }}
+              itemCount={itemCount}
+            />
           </div>
         </div>
 

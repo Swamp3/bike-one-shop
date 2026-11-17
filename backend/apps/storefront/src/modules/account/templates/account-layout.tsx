@@ -18,10 +18,12 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
   }
 
   return (
-    <div className="pb-12" data-testid="account-page">
-      <PlpBreadcrumb items={[{ label: "Start", href: "/" }, { label: "Mein Konto" }]} />
+    <div className="pb-12 print:pb-0" data-testid="account-page">
+      <div className="print:hidden">
+        <PlpBreadcrumb items={[{ label: "Start", href: "/" }, { label: "Mein Konto" }]} />
+      </div>
 
-      <div className="px-4 pb-4 pt-3.5 md:px-6">
+      <div className="px-4 pb-4 pt-3.5 md:px-6 print:hidden">
         <p className="m-0 mb-0.5 text-[13px] text-bo-ink-faint">
           Hallo, {customer.first_name} 👋
         </p>
@@ -30,8 +32,10 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-[230px_1fr] md:gap-8 md:px-6">
-        <AccountNav customer={customer} />
+      <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-[230px_1fr] md:gap-8 md:px-6 print:block print:p-0">
+        <div className="print:hidden">
+          <AccountNav customer={customer} />
+        </div>
         <div className="min-w-0">{children}</div>
       </div>
     </div>
