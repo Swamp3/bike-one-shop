@@ -3,9 +3,12 @@ import { Suspense } from "react"
 
 import VerifyAccount from "@modules/account/components/verify-account"
 
+// The URL carries a one-time code: keep it out of search indexes and Referer headers.
 export const metadata: Metadata = {
-  title: "Verify your email",
-  description: "Verify your email address to complete your registration.",
+  title: "Konto aktivieren",
+  description: "Bestätige deine E-Mail-Adresse, um dein Konto zu aktivieren.",
+  robots: { index: false, follow: false },
+  referrer: "no-referrer",
 }
 
 export default function VerifyAccountPage() {

@@ -4,6 +4,7 @@ import { sdk } from "@lib/config"
 import medusaError from "@lib/util/medusa-error"
 import { HttpTypes } from "@medusajs/types"
 import { FetchError } from "@medusajs/js-sdk"
+import { allowAttempt, TOO_MANY_ATTEMPTS } from "@lib/util/rate-limit"
 import { revalidateTag } from "next/cache"
 import { redirect } from "next/navigation"
 import {
@@ -91,6 +92,12 @@ export async function signup(
   _currentState: unknown,
   formData: FormData
 ): Promise<CustomerAuthState> {
+  if (!(await allowAttempt("signup", 5))) {
+    return { state: "error", error: TOO_MANY_ATTEMPTS }
+  }
+  // A fresh registration starts without a pending activation of an earlier one,
+  // so the resend button behaves the same for every address.
+  await removePendingVerification()
   const password = formData.get("password") as string
   const customerForm = {
     email: formData.get("email") as string,
@@ -141,6 +148,9 @@ export async function login(
   _currentState: unknown,
   formData: FormData
 ): Promise<CustomerAuthState> {
+  if (!(await allowAttempt("login", 10))) {
+    return { state: "error", error: TOO_MANY_ATTEMPTS }
+  }
   const email = formData.get("email") as string
   const password = formData.get("password") as string
 
@@ -252,6 +262,9 @@ async function completeLogin(
 // form, so this cannot be used to mail other addresses (the backend also only
 // mails the identity's own address, once a minute).
 export async function resendActivationEmail(): Promise<{ ok: boolean }> {
+  if (!(await allowAttempt("resend", 5))) {
+    return { ok: false }
+  }
   const pending = await getPendingVerification()
   if (!pending) {
     return { ok: false }
@@ -272,10 +285,15 @@ export async function activateAccount(
   _currentState: unknown,
   formData: FormData
 ): Promise<CustomerAuthState> {
+  if (!(await allowAttempt("activate", 10))) {
+    return { state: "error", error: TOO_MANY_ATTEMPTS }
+  }
   const code = formData.get("code") as string
   const email = formData.get("email") as string
   const password = formData.get("password") as string
-  const countryCode = (formData.get("countryCode") as string) || "de"
+  const country = formData.get("countryCode") as string
+  // The country comes from a form field: only a two-letter code is used in the redirect.
+  const countryCode = /^[a-z]{2}$/.test(country ?? "") ? country : "de"
 
   let login: Awaited<ReturnType<typeof sdk.auth.login>>
   try {

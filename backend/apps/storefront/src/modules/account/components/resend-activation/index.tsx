@@ -12,7 +12,7 @@ const COOLDOWN_SECONDS = 60
  */
 const ResendActivation = () => {
   const [seconds, setSeconds] = useState(0)
-  const [result, setResult] = useState<"idle" | "sent" | "failed">("idle")
+  const [sent, setSent] = useState(false)
 
   useEffect(() => {
     if (seconds <= 0) return
@@ -22,8 +22,10 @@ const ResendActivation = () => {
 
   const resend = async () => {
     setSeconds(COOLDOWN_SECONDS)
-    const { ok } = await resendActivationEmail()
-    setResult(ok ? "sent" : "failed")
+    // The same message whatever happened: it must not reveal whether an
+    // activation was waiting for this address.
+    await resendActivationEmail()
+    setSent(true)
   }
 
   return (
@@ -39,9 +41,7 @@ const ResendActivation = () => {
           : "Bestätigungs-E-Mail erneut senden"}
       </button>
       <p className="m-0 mt-1 text-[12.5px] text-bo-ink-muted" role="status" aria-live="polite">
-        {result === "sent" && "Wir haben dir eine neue E-Mail geschickt. Prüfe auch den Spam-Ordner."}
-        {result === "failed" &&
-          "Das hat gerade nicht geklappt. Melde dich bitte noch einmal an, dann senden wir den Link erneut."}
+        {sent && "Falls eine Bestätigung auf dich wartet, haben wir dir eine neue E-Mail geschickt. Prüfe auch den Spam-Ordner."}
       </p>
     </div>
   )
