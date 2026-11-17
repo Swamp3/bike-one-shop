@@ -66,7 +66,7 @@ The From address lives on a sending sub-domain with no mailbox, and customers wi
 
 1. Create the Brevo account (the owner's own login; never share the password or the key in chat or git). Brevo may review new accounts before sending is allowed; start early. Accept the DPA (GDPR Art. 28) in the account settings.
 2. Authenticate the sending domain. Dev and production both use a `mail.` sub-domain (dev: `mail.bike-one.dev`; it keeps the apex records of Cloudflare Email Routing for `info@bike-one.dev` untouched): Brevo, Senders, Domains & dedicated IPs, Domains, Add a domain; add the records it shows (Brevo code TXT, DKIM, DMARC) in Cloudflare DNS with the proxy off ("DNS only"). Add a sender on that domain.
-3. Create an **API key** (v3), not an SMTP key. Put it only in the server's `.env`.
+3. Create an **API key** (v3), not an SMTP key, with **Restricted** access: only the transactional e-mail resource on Read/write, everything else None (details and the check in `BREVO_SETUP.md` step 6). Put it only in the server's `.env`.
 4. **Authorised IPs:** Brevo can block API calls from IP addresses that are not on the account's authorised list ("Block unknown IP addresses" under Settings, Security, Authorised IPs; separate switches for API and SMTP keys; I could not confirm the default for new accounts). bee5's outbound IP changes, so on the dev account leave API-key blocking **off** (or use the automatic-authorisation mode, if the account offers it), and rely on the key staying secret (root-only `.env`, never in git). Production gets a fixed outbound IP, that IP on the list, and blocking **on**. A blocked call fails with `unauthorized`; check the switch before the first test.
 5. Later newsletters will use a separate `news.` sub-domain; nothing to do now.
 

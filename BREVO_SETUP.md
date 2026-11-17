@@ -62,9 +62,11 @@ Brevo: **Senders, Domains & Dedicated IPs**, **Senders**, **Add a sender**: name
 ## 6. API key
 
 1. Brevo: profile menu, **SMTP & API**, **API Keys**, **Generate a new API key**. Name it `bike-one-dev-bee5`.
-2. Copy it immediately; Brevo shows it once.
-3. Use a **v3 API key**. The **SMTP** tab has separate SMTP keys; those are not what the shop uses.
-4. Keep it in your password manager until step 8. Create a different key for production later, so a leak on dev does not touch production, and so each can be revoked alone.
+2. **Access level: restricted, sending only.** Brevo's help centre says a key can be created with the **Restricted** option, where you choose a level per resource (None, Read, Read/write, All); older keys stay full-access until switched. The shop only calls `POST /v3/smtp/email`, so set the **transactional e-mail** resource (it may be labelled "Transactional emails" or "SMTP"; I could not read the exact menu names) to **Read/write** and everything else, especially contacts, campaigns, account and senders, to **None**. A leaked key then can send mail but cannot read your contacts or change the account.
+3. If your dashboard offers no Restricted option, the key is full-access: that makes the root-only `.env` and the IP list (step 7) the only protection, so be stricter about both, and rotate the key if it ever appears anywhere it should not.
+4. Copy the key immediately; Brevo shows it once. Use a **v3 API key**, not an SMTP key (the **SMTP** tab has separate SMTP keys; the shop does not use them).
+5. Keep it in your password manager until step 8. Create a different key for production later, so a leak on dev does not touch production, and so each can be revoked alone.
+6. After the first test order works, check the restriction held: with the new key, `curl -s -o /dev/null -w "%{http_code}\n" -H "api-key: <key>" https://api.brevo.com/v3/contacts` should answer 401 or 403, not 200. (Run it in your own terminal; do not paste the key anywhere else.)
 
 ## 7. IP blocking
 
