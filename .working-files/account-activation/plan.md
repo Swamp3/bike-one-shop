@@ -8,6 +8,10 @@ Built 2026-11-17 (PLAN.md Task 17): customer accounts need a confirmed e-mail ad
 
 The two security reviews of this feature (first: two High findings, fixed; second: both confirmed fixed, one Medium design issue left, task 0) left these items. None blocks the dev server; all are go-live gates, in the order below.
 
+## Status (2026-11-17)
+
+Built: task 0 (option a), the in-app part of task 1, tasks 2, 3 and 4, and the activation-mail part of task 5's retention job. Still open and not code: the edge rate-limit rules (Cloudflare dashboard / proxy config, task 1), the privacy-policy text (task 5), the TriData question (task 6), the footer confirmation (task 7), and the password-reset plan (task 8). Details per task below; the old "Tasks" text is kept as the specification.
+
 ## Tasks
 
 ### 0. Blocking for real customers: pre-account takeover through the confirm link (decision needed)
@@ -85,7 +89,7 @@ The policy is still on the old site (`https://bike-one.org/datenschutz/`, linked
 - **Order merge:** "Haben Sie vor der Registrierung als Gast bestellt, ordnen wir diese Bestellungen nach der Bestätigung Ihrer E-Mail-Adresse Ihrem Kundenkonto zu."
 - **Retention:** unverified registrations are deleted after 7 days (task 3); the notification table keeps recipient address and mail content (see below).
 - **Draft paragraph (German) for the lawyer:** "Kundenkonto: Wenn Sie ein Kundenkonto anlegen, verarbeiten wir Ihre E-Mail-Adresse, Ihren Namen und ein verschlüsselt gespeichertes Passwort, um das Konto zu führen (Art. 6 Abs. 1 lit. b DSGVO). Wir senden Ihnen eine E-Mail, mit der Sie Ihre Adresse bestätigen; den Versand übernimmt unser Dienstleister Brevo (Sendinblue SAS, Frankreich) als Auftragsverarbeiter. Nicht bestätigte Registrierungen löschen wir nach sieben Tagen. Haben Sie zuvor als Gast bestellt, ordnen wir diese Bestellungen nach der Bestätigung Ihrer Adresse Ihrem Konto zu."
-- **Notification table retention (new, from the review):** Medusa stores every sent mail with the recipient and the full content, which includes the one-time activation link (valid 15 minutes) and, for order confirmations, addresses and items. Decide a retention period (for example 90 days for order mails, 7 days for activation mails) and add a small job `src/jobs/notification-retention.ts` that deletes older rows (notification module `deleteNotifications`). Accept: unit test with a fake service; documented in the policy.
+- **Notification table retention (from the review):** Medusa stores every sent mail with the recipient and the full content, which includes the one-time activation link (valid 15 minutes) and, for order confirmations, addresses and items. Built: `src/jobs/notification-retention.ts` deletes the copies of activation mails after 7 days. Order confirmations are NOT deleted: they are business letters with a 6-year retention duty (§ 257 HGB, § 147 AO); the policy should say so and the lawyer confirms the period.
 
 ### 6. TriCon / TriBike and moved orders
 

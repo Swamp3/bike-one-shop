@@ -1667,4 +1667,10 @@ provider comparison: `EMAIL_SETUP.md`.
   with the same verified address onto the account before `GET /store/orders`
   (at most every 5 minutes per customer); `POST /store/customers` must use the
   identity's own address. Open items: `TODO.md`, "Account activation".
+- 2026-11-17 (later): activation confirms only with the issuing login
+  (`requireOwnVerification`, storefront `activateAccount`), in-memory rate limits
+  per visitor address (`src/lib/rate-limit.ts`), `resendActivationEmail` with a
+  cookie-held token, jobs `auth-unverified-cleanup` (7 days, dry run via
+  `AUTH_CLEANUP_DRY_RUN=true`) and `notification-retention` (activation mails,
+  7 days). Open items: `TODO.md`.
 

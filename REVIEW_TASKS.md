@@ -144,7 +144,15 @@ processes each re-sent the same order at once.
   at `medusa start`; `medusa build`, `db:migrate` (including
   `setup-german-vat.ts`) and `medusa exec` do not need the mail variables.
 - Reverse proxy with TLS. Session and auth cookies need https in production.
-- Rate limit `/auth/*` at the proxy: Medusa has no login rate limit.
+- Rate limit `/auth/*` at the proxy: Medusa has no login rate limit. The backend
+  now limits per visitor address in memory (`src/lib/rate-limit.ts`: login 10/min,
+  admin login 10/min, register 5/min, verification request 5/min, confirm 10/min,
+  customer create 5/min; it reads `CF-Connecting-IP`, then `X-Forwarded-For`, so
+  the backend port must be reachable through the proxy only, otherwise the
+  headers can be forged). Add the same limits at the edge: Cloudflare, Security,
+  WAF, Rate limiting rules, matching the paths above, 429 over the limit; on the
+  Strato proxy nginx `limit_req_zone` keyed on `$http_cf_connecting_ip` (or
+  `$binary_remote_addr` without Cloudflare).
 - Keep query strings out of proxy logs for `/hooks/payment/sumup_sumup`, because
   they carry `SUMUP_WEBHOOK_SECRET`.
 - Firewall: only 22, 80, 443. Keep the TriCon mock on loopback.

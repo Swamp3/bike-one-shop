@@ -70,26 +70,20 @@ MVP) landed.
   delivered (see the bounce webhook); (3) tracking off for transactional mail
   (`BREVO_SETUP.md` 7b); (4) sign the Brevo DPA, check sub-processors and the
   transfer basis before the privacy policy says "EU only".
-- **Account activation, DECISION NEEDED before real customers:** a pre-account
-  takeover is still possible with one click by the victim on the activation mail
-  (an attacker registers the victim's address, the victim confirms, the attacker
-  claims the victim's guest orders). Options a/b/c and a recommendation: task 0
-  in `.working-files/account-activation/plan.md`. Fine on the dev server.
-- **Account activation: open items (security review 2026-11-17).** Activation
-  mail, guest-order linking and the identity binding are built (PLAN.md Task
-  17). Still open before go-live: (1) rate limit `/auth/*` and
-  `/auth/verification/request` per IP at the reverse proxy (only an in-memory
-  per-address throttle exists); (2) a "resend activation mail" button on the
-  login/verification page (today: log in again); (3) clean up unverified
-  identities older than about 7 days, because an unverified registration with
-  someone else's address blocks that person from registering; (4) the
-  register route's "already exists" error reveals registered addresses
-  (Medusa behaviour); (5) privacy policy: guest orders are merged into the
-  account after e-mail verification, activation mail via Brevo; (6) check
-  that moving an order to another customer needs a re-sync to TriCon
-  (`updateOrders` emits no order event); (7) legal footer of the activation
-  mail uses the same seller data as the order confirmation, owner to confirm.
-  Plan with tasks, order and acceptance: `.working-files/account-activation/plan.md`.
+- **Account activation: built 2026-11-17, open items before go-live.** Done:
+  the activation link now only works together with a login of the account it
+  was issued for (closes the pre-account takeover), per-address rate limits in
+  the backend, "resend activation mail" button, cleanup of unverified
+  registrations after 7 days, neutral message for already-registered addresses,
+  activation-mail copies deleted after 7 days. Still open (details and order in
+  `.working-files/account-activation/plan.md`): (1) the same rate limits at the
+  edge (Cloudflare rule / proxy config, `REVIEW_TASKS.md`); (2) privacy policy:
+  Brevo, order merge, retention (draft German text in the plan), and the
+  lawyer's view on 6-year retention of order mails; (3) ask TriData whether
+  guest orders moved to an account matter as "one-time customer" in the ERP
+  (no event is emitted when an order changes customer); (4) owner confirms the
+  seller footer data; (5) password reset flow (missing, own plan); (6) one live
+  run of register, activate, login, orders per release.
 - **Cloudflare Access on the admin UI (test server, `shop-admin.bike-one.dev`).**
   Restrict only the admin UI; the storefront, the store API and the SumUp
   webhook (`/hooks/payment/*`) must stay public.
