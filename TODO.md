@@ -55,6 +55,25 @@ MVP) landed.
   Content-Security-Policy is added later, allow
   `img-src https://tile.openstreetmap.org` (or the chosen provider).
 
+- **Cloudflare Access on the admin UI (test server, `shop-admin.bike-one.dev`).**
+  Restrict only the admin UI; the storefront, the store API and the SumUp
+  webhook (`/hooks/payment/*`) must stay public.
+  1. Zero Trust → Access controls → Applications → Create new application →
+     Self-hosted and private.
+  2. Add public hostname: subdomain `shop-admin` on `bike-one.dev`, path `app*`.
+  3. Add an Allow policy for your e-mail only.
+  4. Enable the One-time PIN login method, then Create.
+  5. No Access app for `shop.bike-one.dev` or for the whole `shop-admin` host.
+  6. Test: `https://shop-admin.bike-one.dev/app` shows the PIN login, and a
+     curl of `/store/products` and `/hooks/payment/…` is not intercepted. Not
+     verified whether Cloudflare wants the path as `app*` or `/app*`; check on
+     the first try.
+  Gap: with Access only on `/app*`, the Medusa admin API (`/admin/*`) is
+  protected by Medusa's own login alone. To put Access in front of it too, add
+  a second hostname entry with path `admin*` to the same app (browser calls
+  from the admin UI come from the same host, so they carry the Access cookie).
+  Test the admin login afterwards.
+
 ## Blocked on someone outside this project
 
 - **Compositing prototype for the configurator preview.** The Wilier
@@ -110,11 +129,16 @@ MVP) landed.
   cervelo.com, factorbikes.com, specialized.com from this environment was
   blocked at the network level. Needs either verified access or you
   supplying the real current colorway names per model.
-- **Real shipping prices.** Both shipping options still carry the original
-  demo seed's flat €10 — nobody has given real rates.
+- **Real shipping prices and delivery times.** Nobody has given real rates.
+  The seed has flat 10 €, but the local DB currently holds Standard 100 € and
+  Express 200 € (something changed them after seeding; found 2026-11-16). The
+  owner has to name the real prices and delivery times; the shop no longer
+  states a delivery time or stock availability.
 - **Legal compliance before go-live.** Plan and status:
-  `.working-files/legal-compliance/plan.md` (code part A done 2026-11-16, not
-  committed; needs `legal-security-reviewer` before merge). `/agb`,
+  `.working-files/legal-compliance/plan.md` (code part A done 2026-11-16;
+  first `legal-security-reviewer` verdict: needs changes, see
+  `review-2026-11-16.md`; the code findings were fixed the same day, a second
+  review is still to do). `/agb`,
   `/widerrufsrecht`, `/kontakt` are drafts from the statutory model texts, not
   legal advice. Owner decisions still open:
   1. **bike-one.org and the shutdown.** Impressum, Datenschutz and
@@ -156,8 +180,13 @@ MVP) landed.
      but only logs locally until a provider is configured
      (`NOTIFICATION_PROVIDER_RESOLVE`, `NOTIFICATION_API_KEY`,
      `NOTIFICATION_FROM` in `backend/apps/backend/.env`; the provider package
-     must be installed in `apps/backend`). In production without a provider no
-     confirmation is sent.
+     must be installed in `apps/backend`). In production without a provider
+     the backend refuses to start unless `NOTIFICATION_ALLOW_NONE=true` (test
+     servers only; then no confirmation is sent). The e-mail should come from
+     an EU provider (processing agreement); the installed SendGrid provider
+     drops the plain-text part. `order-completed-template.tsx` and
+     `confirmation-hero` still say "Bestellbestätigung wurde geschickt";
+     revisit together with the provider.
   8. **BFSG** (accessibility, since June 2025): exempt only if the company is a
      micro-enterprise (under 10 employees and up to 2 M EUR turnover). Owner
      checks; otherwise an accessibility statement and a WCAG 2.1 AA audit are
@@ -165,14 +194,69 @@ MVP) landed.
   9. **Before the first shipment:** LUCID registration and packaging licensing
      (VerpackG); WEEE and battery registration if e-bikes, lights or batteries
      are sold.
-  10. **Newsletter:** double opt-in and provider, when built (see below).
-  11. **German VAT rate is missing.** Local DB: tax region Deutschland exists
-      and prices are tax-inclusive, but there is no tax rate, so the shop
-      shows MwSt. 0,00 €. Set a default rate of 19 % on the tax region (Admin >
-      Settings > Tax Regions > Deutschland). Admin settings live in the DB and
-      do not carry over to production: either repeat it there or add an
-      idempotent migration script that creates the rate, so `db:migrate` sets
-      it on every environment.
+  10. **Newsletter:** hidden by default (`NEXT_PUBLIC_NEWSLETTER_ENABLED`
+      must be `"true"` to show it; keep it unset in production). Double opt-in
+      and provider come when it is built (see below).
+  11. **German VAT (done in code).** `setup-german-vat.ts` in
+      `src/migration-scripts` creates the 19 % default rate (`DE-MWST-19`) and
+      tax-inclusive price preferences on `db:migrate`, so production gets it
+      without Admin clicks (Admin > Settings > Tax Regions > Deutschland shows
+      it). Verified locally with a fake cart (tax_total = total/1.19*0.19,
+      shipping taxed). Not run on an empty DB, and 19 % is hardcoded for
+      every product: reduced rates or exempt products are for the tax advisor.
+      Add the script to the server checklist in `REVIEW_TASKS.md`. The TriCon
+      order upload sends gross amounts only (`VKBrutto`, `ShippingCost`, no tax
+      fields); tell the TriCon owner and check whether TriCon derives net and
+      VAT itself.
+  12. **Withdrawal function (EU 2023/2673, Art. 11a Directive 2011/83/EU, German
+      § 356a BGB).** Ask the lawyer whether it applies from 19 June 2026 and
+      whether it is a release blocker. Nothing exists in the shop.
+  13. **Impressum on bike-one.org:** "geschäftsführender Gesellschafter" should
+      read "Geschäftsführer", add a phone number, cite DDG instead of § 5 TMG,
+      drop the discontinued EU OS platform. Confirm which phone number is the
+      company's: `COMPANY.phone` (storefront `lib/data/company.ts` and the copy
+      in `build-email.ts`) is the Oldenburg store number as a placeholder.
+  14. **AGB § 2 model.** The contract is formed by the order confirmation
+      e-mail (AGB, Widerruf page and e-mail say the same). Owner and lawyer
+      confirm, or switch to a separate acceptance with a deadline (§ 308 Nr. 1
+      BGB). The e-mail links the AGB only; ask the lawyer whether the AGB text
+      must be in the mail (no shared package between storefront and backend, so
+      the legal texts exist as copies: storefront pages and `build-email.ts`).
+  15. **Datenschutzerklärung additions:** retention of the notification table
+      (it stores recipient e-mails).
+  16. **Belehrung in "du" or "Sie"?** The model (Anlage 1 zu Art. 246a § 1 Abs. 2
+      S. 2 EGBGB) is in "Sie" and says "beigefügte" Muster-Widerrufsformular;
+      ours is in "du" and says "das unten stehende". Ask the lawyer whether the
+      model protection survives the adaptation (page and `build-email.ts`).
+  17. **Monitor the confirmation e-mail.** Under AGB § 2 a failed confirmation
+      means no contract. After 3 attempts the result is stored on the order
+      (`metadata.confirmation_email.status`); alert on the log prefix
+      `[notification] order confirmation` and on orders with status "failed".
+      Resend: `POST /admin/orders/:id/resend-confirmation` (tested without
+      auth only: 401; not with an admin token). Orders without a recipient
+      address or skipped by `NOTIFICATION_ALLOW_NONE` get no status. Who
+      watches, and how fast, is an owner decision.
+  19. **Follow-ups from the third review (2026-11-16, OK to merge, not OK for
+      go-live), all small:**
+      - If `NODE_ENV` is not `production` on a server, `notification-local` is
+        used and the order is still recorded as `confirmation_email.status =
+        "sent"`: fail at `start` when `NODE_ENV` is unset, and do not record
+        "sent" for the local provider. Before the first real order place one
+        order and check that a real mail arrives.
+      - Alert on failed confirmations (log prefix or a daily job listing
+        status "failed"); owner decides who acts.
+      - The start guards check `process.argv` for `start`: production must run
+        exactly `medusa start`; `medusa develop` with `NODE_ENV=production`
+        skips them.
+      - Record `status: "skipped"` for orders skipped by
+        `NOTIFICATION_ALLOW_NONE`; a failed resend should not overwrite an
+        earlier "sent"; the resend route does not check for a missing e-mail or
+        a canceled order.
+      - One unit test for `sendOrderConfirmationWithRetry` (retry loop, record
+        step) is missing; provider error text is logged after scrubbing only
+        e-mails, phones and GUIDs.
+  18. **Guest orders:** the order page links to "Bestellübersicht"
+      (`/account/orders`, login needed); guests only have the contact link.
   Code follow-ups from the plan:
   - **Sale prices need the 30-day lowest price (PAngV § 11).** Crossed-out
     prices in `product-price`, `product-preview/price.tsx`, `line-item-price`
@@ -181,8 +265,8 @@ MVP) landed.
   - **Click & Collect claims** on the product page, trust strip and checkout
     now say "bald verfügbar"; restore the real wording when pickup orders
     exist.
-  - Not changed, check: the header store picker still says "Abholung:" and the
-    account order list offers "Rücksendung im Store starten" (UI only).
+  - Not changed, check: the header store picker still says "Abholung:". The
+    fake "Rücksendung im Store starten" button was removed from the order list.
 - **Hosting provider.** Comparison exists (`planning/3-Architecture_Tech_Stack/decisions.md`).
   Decision (2026-11-09): Strato CP4-18 dedicated server (Xeon E3-1230v6,
   4C/8T, 32 GB ECC, 2x480 GB SSD RAID 1), replacing the netcup VPS 4000

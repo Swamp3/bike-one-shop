@@ -16,11 +16,17 @@ export const metadata: Metadata = {
  * go-live; the open points are in TODO.md ("German legal pages"). In particular:
  *  - § 4 reserves correct self-supply; that is only valid with a matching
  *    covering purchase at the supplier.
- *  - § 9 says BikeOne does not take part in consumer arbitration (§ 36 VSBG);
- *    the owner has to confirm that choice.
- *  - § 2 promises an automatic order confirmation by e-mail (required by
- *    § 312i BGB). No notification provider is configured in medusa-config.ts
- *    yet, so the shop has to send one before go-live.
+ *  - § 9 says BikeOne is not willing to take part in consumer arbitration
+ *    (§ 36 VSBG, same wording as the Impressum); the owner has to confirm that
+ *    choice. "Nicht verpflichtet" would need 10 or fewer employees.
+ *  - § 2 / § 3 (OWNER AND LAWYER DECISION): one model is implemented. The
+ *    contract is formed when BikeOne sends the order confirmation e-mail; the
+ *    automatic receipt notice (§ 312i BGB) and the acceptance are the same
+ *    e-mail (build-email.ts says the same), and the price is due at contract
+ *    formation. Alternative: a separate acceptance with a deadline
+ *    (§ 308 Nr. 1 BGB). If the owner picks that, change § 2, § 3 and the e-mail.
+ *    The e-mail is sent by the order.placed subscriber; production without a
+ *    notification provider now fails at startup (medusa-config.ts).
  *  - A clause for pickup in a store is missing on purpose: Click & Collect is
  *    not bookable yet (see /standorte). Add it when it goes live.
  */
@@ -50,10 +56,11 @@ export default function AgbPage() {
         ein verbindliches Angebot ab.
       </p>
       <p>
-        Den Eingang deiner Bestellung bestätigen wir dir automatisch per
-        E-Mail. Diese Bestätigung ist noch keine Annahme. Der Vertrag kommt
-        zustande, wenn wir dein Angebot annehmen, zum Beispiel durch eine
-        Auftrags- oder Versandbestätigung oder durch die Lieferung der Ware.
+        Nach dem Absenden erhältst du von uns automatisch eine
+        Bestellbestätigung per E-Mail. Mit dieser E-Mail nehmen wir dein
+        Angebot an; der Vertrag kommt in diesem Moment zustande. Die
+        E-Mail enthält die Angaben zu deiner Bestellung, die Widerrufsbelehrung
+        und das Muster-Widerrufsformular.
       </p>
       <p>
         Diese AGB kannst du jederzeit hier abrufen, speichern und ausdrucken.
@@ -70,7 +77,7 @@ export default function AgbPage() {
       <p>
         Es gelten die Zahlungsarten, die dir im Bestellvorgang angeboten
         werden. Die Zahlung wird über unseren Zahlungsdienstleister abgewickelt.
-        Der Kaufpreis ist mit Abschluss der Bestellung fällig, soweit im
+        Der Kaufpreis ist mit Vertragsschluss (§ 2) fällig, soweit im
         Bestellvorgang nichts anderes angegeben ist.
       </p>
 
@@ -125,7 +132,7 @@ export default function AgbPage() {
 
       <h2>§ 9 Streitbeilegung</h2>
       <p>
-        Wir sind nicht bereit und nicht verpflichtet, an einem
+        Wir sind nicht bereit, an einem
         Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
         teilzunehmen.
       </p>

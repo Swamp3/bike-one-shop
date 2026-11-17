@@ -1,6 +1,7 @@
 import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
 import { visibleTopLevel } from "@lib/util/category-tree"
+import { DATENSCHUTZ_URL, IMPRESSUM_URL } from "@lib/data/legal-links"
 
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import NewsletterForm from "@modules/layout/components/newsletter-form"
@@ -14,7 +15,8 @@ export default async function Footer() {
 
   return (
     <footer className="mt-5 border-t border-bo-line bg-bo-surface">
-      {process.env.NEXT_PUBLIC_NEWSLETTER_ENABLED !== "false" && (
+      {/* Hidden until a provider and double opt-in exist. */}
+      {process.env.NEXT_PUBLIC_NEWSLETTER_ENABLED === "true" && (
         <div className="border-b border-bo-line bg-bo-surface-2 px-4 py-6 md:flex md:items-center md:gap-10 md:px-6 md:py-8">
           <div>
             <h3 className="mb-1 font-heading text-lg font-semibold md:text-[19px]">
@@ -102,9 +104,8 @@ export default async function Footer() {
           </h4>
           <ul className="flex flex-col gap-2">
             <li>
-              {/* The Impressum still lives on the old site; link there until it moves into the shop. */}
               <a
-                href="https://bike-one.org/impressum/"
+                href={IMPRESSUM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
@@ -122,7 +123,7 @@ export default async function Footer() {
             </li>
             <li>
               <a
-                href="https://bike-one.org/datenschutz/"
+                href={DATENSCHUTZ_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"

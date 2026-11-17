@@ -20,8 +20,11 @@ export const metadata: Metadata = {
  *  - The order confirmation e-mail repeats this Widerrufsbelehrung and the
  *    form (backend/apps/backend/src/workflows/order-confirmation/build-email.ts).
  *    Keep both copies in sync.
- *  - The made-to-order exception is listed in case configured builds count as
- *    such; the owner has to confirm whether they do.
+ *  - The Widerrufsbelehrung block is verbatim from the model; keep it that
+ *    way. Explanatory remarks go only into the separate "Hinweise" section
+ *    after the form. The made-to-order exception is not mentioned until
+ *    the owner says configured builds are really offered (Rückfragen file, no. 5).
+ *  - COMPANY.phone is a placeholder the owner has to confirm.
  */
 export default function WiderrufsrechtPage() {
   return (
@@ -45,7 +48,7 @@ export default function WiderrufsrechtPage() {
       </p>
       <p>
         Um dein Widerrufsrecht auszuüben, musst du uns ({COMPANY.name},{" "}
-        {COMPANY.street}, {COMPANY.city}, E-Mail:{" "}
+        {COMPANY.street}, {COMPANY.city}, Telefon: {COMPANY.phone}, E-Mail:{" "}
         <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>) mittels einer
         eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder
         eine E-Mail) über deinen Entschluss, diesen Vertrag zu widerrufen,
@@ -95,18 +98,6 @@ export default function WiderrufsrechtPage() {
         ihnen zurückzuführen ist.
       </p>
 
-      <h2>Wann es kein Widerrufsrecht gibt</h2>
-      <p>
-        Das Widerrufsrecht gilt für Verträge, die im Fernabsatz, also zum
-        Beispiel über diesen Online-Shop, geschlossen werden. Kaufst du in
-        einer unserer Filialen vor Ort, besteht es nicht.
-      </p>
-      <p>
-        Es besteht außerdem nicht bei Verträgen zur Lieferung von Waren, die
-        nach deinen Vorgaben angefertigt werden oder eindeutig auf deine
-        persönlichen Bedürfnisse zugeschnitten sind (§ 312g Abs. 2 Nr. 1 BGB).
-      </p>
-
       <h2>Muster-Widerrufsformular</h2>
       <p>
         Wenn du den Vertrag widerrufen willst, kannst du dieses Formular
@@ -115,8 +106,8 @@ export default function WiderrufsrechtPage() {
       </p>
       <ul className="list-none pl-0">
         <li>
-          An: {COMPANY.name}, {COMPANY.street}, {COMPANY.city}, E-Mail:{" "}
-          {COMPANY.email}
+          An: {COMPANY.name}, {COMPANY.street}, {COMPANY.city}, Telefon:{" "}
+          {COMPANY.phone}, E-Mail: {COMPANY.email}
         </li>
         <li>
           Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen
@@ -131,6 +122,16 @@ export default function WiderrufsrechtPage() {
         <li>Datum:</li>
       </ul>
       <p>(*) Unzutreffendes streichen.</p>
+
+      <h2>Hinweise</h2>
+      <p>
+        Diese Hinweise gehören nicht zur Widerrufsbelehrung oben.
+      </p>
+      <p>
+        Das Widerrufsrecht gilt für Verträge, die im Fernabsatz, also zum
+        Beispiel über diesen Online-Shop, geschlossen werden. Kaufst du in
+        einer unserer Filialen vor Ort, besteht es nicht.
+      </p>
     </LegalPage>
   )
 }

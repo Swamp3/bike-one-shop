@@ -14,6 +14,7 @@ import {
   AdminTridataSyncLogsQuery,
   AdminTridataSyncStockBody,
 } from './admin/tridata/validators'
+import { AdminResendConfirmationBody } from './admin/orders/validators'
 
 // SumUp doesn't document a signed-webhook scheme, so this is a shared-secret
 // compensating control: medusa-config.ts registers the webhook callback URL
@@ -104,6 +105,11 @@ export default defineMiddlewares({
       method: ['POST'],
       matcher: '/admin/tridata/retry-order/:id',
       middlewares: [validateAndTransformBody(AdminTridataEmptyBody)],
+    },
+    {
+      method: ['POST'],
+      matcher: '/admin/orders/:id/resend-confirmation',
+      middlewares: [validateAndTransformBody(AdminResendConfirmationBody)],
     },
   ],
 })

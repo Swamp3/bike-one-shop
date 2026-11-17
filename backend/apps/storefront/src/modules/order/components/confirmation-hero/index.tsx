@@ -31,7 +31,7 @@ const ConfirmationHero = ({ order }: { order: HttpTypes.StoreOrder }) => {
         </b>
       </div>
       <p className="m-0 mt-2 text-[13px] text-bo-ink-muted">
-        Bestellbestätigung gesendet an{" "}
+        Wir senden die Bestellbestätigung an{" "}
         <span className="font-semibold text-bo-ink" data-testid="order-email">
           {order.email}
         </span>

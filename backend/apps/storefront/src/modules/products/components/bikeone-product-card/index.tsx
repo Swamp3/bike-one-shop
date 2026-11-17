@@ -112,7 +112,8 @@ export default function BikeOneProductCard({
             </>
           )}
         </div>
-        <PriceNote className="h-[14px] whitespace-nowrap !text-[10.5px]" />
+        {/* 12px; may wrap on narrow cards. All cards carry the same text, so grid rows stay equal. */}
+        <PriceNote />
       </div>
     </LocalizedClientLink>
   )

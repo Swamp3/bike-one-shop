@@ -7,6 +7,7 @@ import ErrorMessage from "@modules/checkout/components/error-message"
 import { TextField } from "@modules/checkout/components/form-field"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { signup } from "@lib/data/customer"
+import { DATENSCHUTZ_URL } from "@lib/data/legal-links"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
@@ -90,7 +91,7 @@ const Register = ({ setCurrentView }: Props) => {
           </LocalizedClientLink>
           . Hinweise zur Datenverarbeitung findest du in der{" "}
           <a
-            href="https://bike-one.org/datenschutz/"
+            href={DATENSCHUTZ_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="underline decoration-dashed underline-offset-[2px]"

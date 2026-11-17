@@ -5,6 +5,7 @@ import PaymentButton from "../payment-button"
 import { useSearchParams } from "next/navigation"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { DATENSCHUTZ_URL } from "@lib/data/legal-links"
 
 // New tab, so cart and form state are kept.
 const newTab = { target: "_blank", rel: "noopener noreferrer" }
@@ -43,7 +44,7 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
             </LocalizedClientLink>{" "}
             und{" "}
             <a
-              href="https://bike-one.org/datenschutz/"
+              href={DATENSCHUTZ_URL}
               {...newTab}
               className={link}
             >

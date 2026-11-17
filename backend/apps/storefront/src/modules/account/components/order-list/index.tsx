@@ -2,15 +2,13 @@
 
 import { useState } from "react"
 
+import { COMPANY } from "@lib/data/company"
 import { convertToLocale } from "@lib/util/money"
 import { getBuildBaseItem, groupLineItemsByBuild } from "@lib/util/group-line-items"
 import { HttpTypes } from "@medusajs/types"
 import BuildGroupCard from "@modules/common/components/build-group-card"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { clx } from "@modules/common/components/ui"
-
-// Statutory withdrawal period; the voluntary 30 days were removed (TODO.md).
-const RETURN_WINDOW_DAYS = 14
 
 const ChevronIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
@@ -39,17 +37,11 @@ const daysAgo = (date: string | Date) => {
 
 const OrderRow = ({ order }: { order: HttpTypes.StoreOrder }) => {
   const [open, setOpen] = useState(false)
-  const [returnRequested, setReturnRequested] = useState(false)
 
   const status = STATUS_LABEL[order.fulfillment_status] ?? {
     label: order.fulfillment_status,
   }
   const age = daysAgo(order.created_at)
-  // Approximation: there's no separate "delivered at" timestamp surfaced
-  // here, so the 30-day return window is measured from the order date, not
-  // the actual delivery date (see PLAN.md Task 11).
-  const canReturn = order.fulfillment_status === "delivered"
-  const returnExpired = canReturn && age > RETURN_WINDOW_DAYS
 
   return (
     <div className="overflow-hidden rounded-xl border border-bo-line bg-bo-surface">
@@ -113,35 +105,25 @@ const OrderRow = ({ order }: { order: HttpTypes.StoreOrder }) => {
           })}
 
           <div className="mt-3 flex flex-col gap-1 border-t border-dashed border-bo-line pt-3">
-            {!canReturn && (
-              <span className="text-[12px] text-bo-ink-faint">
-                Rücksendung erst nach Zustellung möglich.
-              </span>
-            )}
-            {canReturn && returnExpired && (
-              <span className="text-[12px] text-bo-ink-faint">
-                Rückgabefrist abgelaufen ({RETURN_WINDOW_DAYS} Tage).
-              </span>
-            )}
-            {canReturn && !returnExpired && !returnRequested && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setReturnRequested(true)
-                }}
-                className="self-start text-[12.5px] font-semibold text-bo-accent underline decoration-dashed underline-offset-[3px]"
+            {/* No return window here: the statutory period starts at receipt
+                (§ 356 BGB), which this list does not know. */}
+            <span className="text-[12px] text-bo-ink-faint">
+              Informationen zum Widerruf findest du unter{" "}
+              <LocalizedClientLink
+                href="/widerrufsrecht"
+                className="underline decoration-dashed underline-offset-[3px] hover:text-bo-accent"
               >
-                Rücksendung im Store starten
-              </button>
-            )}
-            {returnRequested && (
-              <span className="text-[12px] font-semibold text-bo-ok">
-                ✓ Bring den Artikel mit der Bestellnummer #{order.display_id} in
-                eine unserer Filialen (Oldenburg oder Osnabrück) — dort wird die
-                Rücksendung direkt bearbeitet.
-              </span>
-            )}
+                Widerrufsrecht
+              </LocalizedClientLink>
+              . Bei Fragen schreib uns an{" "}
+              <a
+                href={`mailto:${COMPANY.email}`}
+                className="underline decoration-dashed underline-offset-[3px] hover:text-bo-accent"
+              >
+                {COMPANY.email}
+              </a>
+              .
+            </span>
             <LocalizedClientLink
               href={`/account/orders/details/${order.id}`}
               className="mt-2 self-start text-[12.5px] font-semibold text-bo-ink-muted underline decoration-dashed underline-offset-[3px] hover:text-bo-accent"

@@ -23,16 +23,37 @@ const sumupConfigured = Boolean(
 // (it must be installed and take { api_key, from } options, as the official
 // SendGrid and Resend providers do). Without it, development uses
 // notification-local (logs to the console, sends nothing). Production without
-// a provider registers no notification module, so no confirmation is sent.
+// a provider refuses to start (the confirmation e-mail is a legal duty,
+// § 312i BGB), unless NOTIFICATION_ALLOW_NONE=true is set explicitly for a
+// test server that takes no real orders; then no notification module is
+// registered and no confirmation is sent.
 const notificationProvider = process.env.NOTIFICATION_PROVIDER_RESOLVE
 const notificationApiKey = process.env.NOTIFICATION_API_KEY
 const notificationFrom = process.env.NOTIFICATION_FROM
 const notificationConfigured = Boolean(
   notificationProvider && notificationApiKey && notificationFrom
 )
-if (!notificationConfigured && process.env.NODE_ENV === 'production') {
+// The config is also loaded by `medusa build`, `db:migrate` and `medusa exec`
+// (build/CI hosts without mail variables), so the fail-fast checks below that
+// need runtime settings only run for `medusa start`. shortcut: argv sniffing,
+// replace with a start-only loader if the CLI changes how it is invoked.
+const isServerStart = process.argv.slice(2).includes('start')
+const isProduction = process.env.NODE_ENV === 'production'
+if (isServerStart && !notificationConfigured && isProduction) {
+  if (process.env.NOTIFICATION_ALLOW_NONE !== 'true') {
+    throw new Error(
+      'No e-mail provider configured: set NOTIFICATION_PROVIDER_RESOLVE, NOTIFICATION_API_KEY and NOTIFICATION_FROM, or NOTIFICATION_ALLOW_NONE=true on a test server that takes no real orders'
+    )
+  }
   console.warn(
-    '[notification] no e-mail provider configured: order confirmation e-mails will NOT be sent'
+    '[notification] NOTIFICATION_ALLOW_NONE=true: order confirmation e-mails will NOT be sent'
+  )
+}
+
+// The SumUp return URL must point at the real shop, not localhost.
+if (isServerStart && isProduction && sumupConfigured && !process.env.STOREFRONT_URL) {
+  throw new Error(
+    'STOREFRONT_URL is not set: SumUp needs it for the payment return URL'
   )
 }
 

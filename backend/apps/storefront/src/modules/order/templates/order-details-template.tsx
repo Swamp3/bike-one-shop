@@ -6,7 +6,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import Help from "@modules/order/components/help"
 import Items from "@modules/order/components/items"
 import OrderDetails from "@modules/order/components/order-details"
-import OrderSummary from "@modules/order/components/order-summary"
+import CartTotals from "@modules/common/components/cart-totals"
 import ShippingDetails from "@modules/order/components/shipping-details"
 import React from "react"
 
@@ -36,7 +36,11 @@ const OrderDetailsTemplate: React.FC<OrderDetailsTemplateProps> = ({
         <OrderDetails order={order} showStatus />
         <Items order={order} />
         <ShippingDetails order={order} />
-        <OrderSummary order={order} />
+        {/* Same totals block as the order confirmation page: gross amounts, discount without double-counted VAT. */}
+        <CartTotals
+          totals={order}
+          itemCount={order.items?.reduce((sum, i) => sum + i.quantity, 0) ?? 0}
+        />
         <Help />
       </div>
     </div>

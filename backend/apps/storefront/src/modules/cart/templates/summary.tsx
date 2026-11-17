@@ -4,6 +4,7 @@ import CartTotals from "@modules/common/components/cart-totals"
 import DiscountCode from "@modules/checkout/components/discount-code"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
+import { SHIPPING_COSTS_NOTE } from "@lib/util/shipping-note"
 
 type SummaryProps = {
   cart: HttpTypes.StoreCart
@@ -47,8 +48,8 @@ const Summary = ({ cart }: SummaryProps) => {
           <div>
             <div className="text-[14px] font-semibold">Versand</div>
             <div className="mt-0.5 text-[12.5px] text-bo-ink-muted">
-              Spedition, Bike vormontiert &amp; fahrfertig eingestellt.
-              Versandart &amp; -kosten werden im nächsten Schritt festgelegt.
+              Spedition, Bike vormontiert &amp; fahrfertig eingestellt.{" "}
+              {SHIPPING_COSTS_NOTE}
             </div>
           </div>
         </div>
@@ -84,11 +85,6 @@ const Summary = ({ cart }: SummaryProps) => {
           Zwischensumme
         </div>
         <CartTotals totals={cart} itemCount={itemCount(cart)} />
-        {!cart.shipping_methods?.length && (
-          <div className="mt-1 text-[11.5px] text-bo-ink-faint">
-            zzgl. Versandkosten, die im nächsten Schritt hinzukommen.
-          </div>
-        )}
         <LocalizedClientLink
           href={"/checkout?step=" + step}
           data-testid="checkout-button"

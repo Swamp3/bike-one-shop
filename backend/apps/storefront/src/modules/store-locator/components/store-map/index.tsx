@@ -6,9 +6,8 @@ import type * as Leaflet from "leaflet"
 import { useEffect, useRef, useState } from "react"
 
 import { STORES } from "@lib/data/stores"
+import { DATENSCHUTZ_URL } from "@lib/data/legal-links"
 
-// Same Datenschutz page the footer links to.
-const PRIVACY_POLICY_URL = "https://bike-one.org/datenschutz/"
 const OSMF_PRIVACY_POLICY_URL = "https://osmfoundation.org/wiki/Privacy_Policy"
 
 // shortcut: OSM's public tile servers are only allowed for low traffic (OSM
@@ -132,7 +131,7 @@ const StoreMap = ({ selected, onSelect }: StoreMapProps) => {
             <p className="mt-1.5">
               Mehr dazu in unserer{" "}
               <a
-                href={PRIVACY_POLICY_URL}
+                href={DATENSCHUTZ_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-bo-accent underline"

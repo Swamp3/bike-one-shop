@@ -107,6 +107,10 @@ Backend deploy, in this order:
 4. `npx medusa db:migrate`, then `npx medusa start`, both from `.medusa/server`.
    Pass settings through the service environment (systemd `EnvironmentFile`):
    `.env` is read from the current directory, and the build does not copy it.
+   The migration `setup-german-vat.ts` runs here too (19 % default rate
+   `DE-MWST-19` and tax-inclusive price preferences). After the first migrate
+   check Admin > Settings > Tax Regions > Deutschland: without the rate the
+   shop shows MwSt. 0,00 €.
 
 Run **exactly one** backend process, under systemd, with no cluster mode. Upload
 locks are per process (`lib/tridata/run-guard.ts`). In a test, six leftover
@@ -117,6 +121,27 @@ processes each re-sent the same order at once.
   `ADMIN_CORS`, `AUTH_CORS`, `MEDUSA_BACKEND_URL`, `STOREFRONT_URL`. Changing
   `POSTGRES_PASSWORD` does not affect an existing Postgres volume.
 - Set `TRIDATA_STOCK_SYNC_CRON=*/10 * * * *`.
+- Order confirmation e-mail: set `NOTIFICATION_PROVIDER_RESOLVE`,
+  `NOTIFICATION_API_KEY` and `NOTIFICATION_FROM` (provider package installed in
+  `apps/backend`). In production the backend refuses to start without them.
+  A test server that takes no real orders can set `NOTIFICATION_ALLOW_NONE=true`
+  instead; it then sends nothing, so it must never take real orders.
+  `STOREFRONT_URL` is required too (the confirmation workflow fails without it).
+  Check the backend log for `[notification] order confirmation ... failed`.
+  The send is tried 3 times (2 s and 10 s backoff); the result is stored on the
+  order as `metadata.confirmation_email = { status: "sent" | "failed", at }`.
+  Monitor the log prefix `[notification] order confirmation` (also
+  `... SKIPPED` when `NOTIFICATION_ALLOW_NONE=true` is set, which must not be on
+  a real server) and orders with `confirmation_email.status = "failed"`. Under
+  the AGB the contract is formed when the confirmation e-mail is sent, so a
+  failed confirmation means there is no contract yet: send it again with
+  `POST /admin/orders/<order_id>/resend-confirmation` (admin auth, empty body
+  `{}`; answers `{ "status": "sent" | "failed" }`) or contact the customer.
+- Set `NODE_ENV=production` for the backend. All production guards depend on it:
+  `JWT_SECRET`/`COOKIE_SECRET` not the public default, TriCon endpoint, mail
+  provider, `STOREFRONT_URL`. The mail and SumUp `STOREFRONT_URL` checks run only
+  at `medusa start`; `medusa build`, `db:migrate` (including
+  `setup-german-vat.ts`) and `medusa exec` do not need the mail variables.
 - Reverse proxy with TLS. Session and auth cookies need https in production.
 - Rate limit `/auth/*` at the proxy: Medusa has no login rate limit.
 - Keep query strings out of proxy logs for `/hooks/payment/sumup_sumup`, because

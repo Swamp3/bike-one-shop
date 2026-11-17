@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 
 import { HttpTypes } from "@medusajs/types"
 import { getBaseURL } from "@lib/util/env"
+import { SHIPPING_COSTS_NOTE } from "@lib/util/shipping-note"
 import BikeOneGallery from "@modules/products/components/bikeone-gallery"
 import ManufacturerInfo from "@modules/products/components/manufacturer-info"
 import BikeOneSpecTable from "@modules/products/components/bikeone-spec-table"
@@ -72,14 +73,6 @@ const ProductTemplate = ({
               {product.title}
             </h1>
 
-            <div className="flex items-center gap-2 text-[13.5px]">
-              <span className="h-[9px] w-[9px] shrink-0 rounded-full bg-bo-ok" />
-              <span className="font-semibold">Verfügbar</span>
-              <span className="text-bo-ink-muted">
-                — ab Lager. Click &amp; Collect: bald verfügbar
-              </span>
-            </div>
-
             <Suspense
               fallback={
                 <ProductActions disabled product={product} region={region} />
@@ -104,7 +97,7 @@ const ProductTemplate = ({
               <span>
                 Versand per Spedition (Fahrrad vormontiert &amp; fahrfertig
                 eingestellt). Click &amp; Collect in unseren Stores: bald
-                verfügbar.
+                verfügbar. {SHIPPING_COSTS_NOTE}
               </span>
             </div>
 
@@ -174,7 +167,7 @@ const ProductTemplate = ({
           {[
             {
               title: "Versand per Spedition",
-              body: "Lieferzeit 3–5 Werktage, Fahrrad vormontiert und fahrfertig eingestellt. Versandkosten werden im Warenkorb berechnet.",
+              body: `Fahrrad vormontiert und fahrfertig eingestellt. ${SHIPPING_COSTS_NOTE}`,
             },
             {
               title: "Click & Collect",

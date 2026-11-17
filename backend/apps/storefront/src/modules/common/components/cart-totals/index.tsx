@@ -9,9 +9,10 @@ type CartTotalsProps = {
     subtotal?: number | null
     tax_total?: number | null
     currency_code: string
-    item_subtotal?: number | null
-    shipping_subtotal?: number | null
-    discount_subtotal?: number | null
+    item_total?: number | null
+    shipping_total?: number | null
+    item_discount_total?: number | null
+    shipping_discount_total?: number | null
   }
   itemCount?: number
 }
@@ -27,10 +28,16 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals, itemCount }) => {
     currency_code,
     total,
     tax_total,
-    item_subtotal,
-    shipping_subtotal,
-    discount_subtotal,
+    item_total,
+    shipping_total,
   } = totals
+  // Prices are gross (tax-inclusive), so every row shows gross amounts and the
+  // rows add up to the total; the VAT row is the part already contained.
+  // item_discount_total is already gross; a free-shipping code is only in
+  // shipping_discount_total and is shown on the shipping row, not in "Rabatt".
+  const discount = totals.item_discount_total ?? 0
+  const shippingDiscount = totals.shipping_discount_total ?? 0
+  const subtotal = (item_total ?? 0) + discount
 
   return (
     <div>
@@ -42,9 +49,9 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals, itemCount }) => {
           <span
             className="font-semibold text-bo-ink"
             data-testid="cart-subtotal"
-            data-value={item_subtotal || 0}
+            data-value={subtotal}
           >
-            {convertToLocale({ amount: item_subtotal ?? 0, currency_code })}
+            {convertToLocale({ amount: subtotal, currency_code })}
           </span>
         </div>
         <div className="flex items-baseline justify-between py-1.5">
@@ -52,27 +59,37 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals, itemCount }) => {
           <span
             className="font-semibold text-bo-ink"
             data-testid="cart-shipping"
-            data-value={shipping_subtotal || 0}
+            data-value={shipping_total || 0}
           >
-            {shipping_subtotal
-              ? convertToLocale({ amount: shipping_subtotal, currency_code })
-              : "—"}
+            {shippingDiscount > 0 && (
+              <span className="mr-1.5 font-normal text-bo-ink-muted line-through">
+                {convertToLocale({
+                  amount: (shipping_total ?? 0) + shippingDiscount,
+                  currency_code,
+                })}
+              </span>
+            )}
+            {shipping_total
+              ? convertToLocale({ amount: shipping_total, currency_code })
+              : shippingDiscount > 0
+                ? "Kostenlos"
+                : "—"}
           </span>
         </div>
-        {!!discount_subtotal && (
+        {!!discount && (
           <div className="flex items-baseline justify-between py-1.5 text-bo-ok">
             <span>Rabatt</span>
             <span
               className="font-semibold"
               data-testid="cart-discount"
-              data-value={discount_subtotal || 0}
+              data-value={discount}
             >
-              −{convertToLocale({ amount: discount_subtotal, currency_code })}
+              −{convertToLocale({ amount: discount, currency_code })}
             </span>
           </div>
         )}
         <div className="flex items-baseline justify-between py-1.5">
-          <span>MwSt.</span>
+          <span>darin enthaltene MwSt.</span>
           <span
             className="font-semibold text-bo-ink"
             data-testid="cart-taxes"
@@ -83,7 +100,7 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals, itemCount }) => {
         </div>
       </div>
       <div className="mt-2 flex items-baseline justify-between border-t border-bo-line pt-3 font-heading text-[19px] font-semibold">
-        <span>Gesamt</span>
+        <span>Gesamt inkl. MwSt.</span>
         <span
           className="font-mono tabular-nums"
           data-testid="cart-total"
@@ -91,9 +108,6 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals, itemCount }) => {
         >
           {convertToLocale({ amount: total ?? 0, currency_code })}
         </span>
-      </div>
-      <div className="mt-1.5 text-[11.5px] text-bo-ink-faint">
-        inkl. MwSt.
       </div>
     </div>
   )

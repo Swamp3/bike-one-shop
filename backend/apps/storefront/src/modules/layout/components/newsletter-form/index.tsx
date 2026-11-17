@@ -2,10 +2,14 @@
 
 import { useState } from "react"
 
+import { DATENSCHUTZ_URL } from "@lib/data/legal-links"
+
 /**
- * UI-only placeholder — no email/newsletter provider is wired up yet.
- * Matches the wireframe's own behavior (shows a static confirmation, sends
- * nothing).
+ * UI-only placeholder: no newsletter provider or double opt-in exists yet, so
+ * nothing is sent or stored. The footer only renders this when
+ * NEXT_PUBLIC_NEWSLETTER_ENABLED=true; keep it off until the real signup
+ * exists. The form must never claim that a mail was sent or promise an
+ * unsubscribe link while it is a placeholder.
  */
 const NewsletterForm = () => {
   const [submitted, setSubmitted] = useState(false)
@@ -36,18 +40,18 @@ const NewsletterForm = () => {
       <p className="mt-2 max-w-[420px] text-[11.5px] leading-snug text-bo-ink-faint">
         Hinweise zur Datenverarbeitung findest du in der{" "}
         <a
-          href="https://bike-one.org/datenschutz/"
+          href={DATENSCHUTZ_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="underline decoration-dashed underline-offset-[2px]"
         >
           Datenschutzerklärung
         </a>
-        . Du kannst dich jederzeit abmelden.
+        .
       </p>
       {submitted && (
-        <div className="mt-2 text-[12.5px] font-semibold text-bo-ok">
-          ✓ Bestätigungsmail wurde verschickt (Platzhalter).
+        <div className="mt-2 text-[12.5px] font-semibold text-bo-ink-muted">
+          Demnächst verfügbar. Es wurde nichts gespeichert oder gesendet.
         </div>
       )}
     </div>

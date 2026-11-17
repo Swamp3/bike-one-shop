@@ -1532,6 +1532,29 @@ Part A code done 2026-11-16, not committed, awaiting `legal-security-reviewer`
   production.
 - No cookie banner needed today; cookie/storage text for the Datenschutz is in
   `.working-files/legal-compliance/cookie-inventory.md`.
+- First `legal-security-reviewer` pass (verdict: needs changes, blocking for
+  go-live) in `.working-files/legal-compliance/review-2026-11-16.md`. Code
+  findings fixed the same day, second review still to do:
+  `src/migration-scripts/setup-german-vat.ts` (19 % rate, tax-inclusive price
+  preferences; fake cart verified, TriCon upload sends gross only), AGB § 2/§ 3
+  with the confirmation e-mail as acceptance, Widerrufsbelehrung verbatim with
+  a separate "Hinweise" section and a phone number, newsletter hidden by
+  default, shared shipping-cost wording and "Gesamt inkl. MwSt." labels,
+  order list without the fake return button, central
+  `lib/data/legal-links.ts` and a checkout footer, backend start fails in
+  production without a mail provider (`NOTIFICATION_ALLOW_NONE=true` for test
+  servers) and without `STOREFRONT_URL`, e-mail with seller footer and billing
+  address. Still open: owner decisions in `TODO.md`.
+- Second review (same day, still needs changes) and round 3
+  (`.working-files/legal-compliance/plan-round3.md`): confirmation e-mail is
+  retried 3 times and the result stored in `order.metadata.confirmation_email`,
+  admin resend route `POST /admin/orders/:id/resend-confirmation`, e-mail totals
+  with discount fixed (`item_discount_total`; the old e-mail also printed
+  "Rabatt: -0,00 €" on every order), cart totals use the gross item discount
+  and show a free-shipping code on the shipping row (order details page now
+  uses the same `CartTotals`), the order page no longer says the e-mail was
+  sent or promises a shipping mail, mail and SumUp start guards run only at
+  `medusa start`, warnings in `setup-german-vat.ts`. A third review is pending.
 
 ## Later milestones (not started)
 

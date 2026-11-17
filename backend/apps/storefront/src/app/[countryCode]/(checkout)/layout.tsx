@@ -1,3 +1,4 @@
+import { DATENSCHUTZ_URL, IMPRESSUM_URL } from "@lib/data/legal-links"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 /**
@@ -61,6 +62,38 @@ export default function CheckoutLayout({
         </div>
       </header>
       <div data-testid="checkout-container">{children}</div>
+      <footer className="border-t border-bo-line bg-bo-surface">
+        <nav
+          aria-label="Rechtliches"
+          className="content-container flex flex-wrap gap-x-5 gap-y-2 py-4 text-[12.5px] text-bo-ink-muted"
+        >
+          <a
+            href={IMPRESSUM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-bo-accent hover:underline"
+          >
+            Impressum
+          </a>
+          <a
+            href={DATENSCHUTZ_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-bo-accent hover:underline"
+          >
+            Datenschutz
+          </a>
+          <LocalizedClientLink href="/agb" target="_blank" className="hover:text-bo-accent hover:underline">
+            AGB
+          </LocalizedClientLink>
+          <LocalizedClientLink href="/widerrufsrecht" target="_blank" className="hover:text-bo-accent hover:underline">
+            Widerrufsrecht
+          </LocalizedClientLink>
+          <LocalizedClientLink href="/kontakt" target="_blank" className="hover:text-bo-accent hover:underline">
+            Kontakt
+          </LocalizedClientLink>
+        </nav>
+      </footer>
     </div>
   )
 }

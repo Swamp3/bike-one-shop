@@ -10,4 +10,8 @@ export const COMPANY = {
   street: "Rheinstrasse 16",
   city: "26135 Oldenburg (Oldb)",
   email: "info@bike-one.de",
+  // OWNER TO CONFIRM: this is the Oldenburg store number (seed data); the
+  // owner has to say which number is the company's. Needed in the
+  // Widerrufsbelehrung (Gestaltungshinweis, "soweit verfügbar") and Impressum.
+  phone: "0441 984 894 83",
 } as const

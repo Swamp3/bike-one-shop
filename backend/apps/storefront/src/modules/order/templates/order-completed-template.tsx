@@ -42,13 +42,29 @@ export default async function OrderCompletedTemplate({
             <li className="flex gap-2.5">
               <CheckIcon />
               <span>
-                Du erhältst eine Versandbestätigung mit Sendungsverfolgung,
-                sobald dein Paket unterwegs ist.
+                Wir senden dir eine Bestellbestätigung an deine E-Mail-Adresse.
+                Mit dieser E-Mail kommt der Vertrag zustande.
               </span>
             </li>
             <li className="flex gap-2.5">
               <CheckIcon />
-              <span>Eine Bestellbestätigung wurde an deine E-Mail-Adresse geschickt.</span>
+              <span>
+                Fragen zu deiner Bestellung? Schau in deine{" "}
+                <LocalizedClientLink
+                  href="/account/orders"
+                  className="underline underline-offset-2 hover:text-bo-ink"
+                >
+                  Bestellübersicht
+                </LocalizedClientLink>{" "}
+                oder nimm{" "}
+                <LocalizedClientLink
+                  href="/kontakt"
+                  className="underline underline-offset-2 hover:text-bo-ink"
+                >
+                  Kontakt
+                </LocalizedClientLink>{" "}
+                zu uns auf.
+              </span>
             </li>
           </ul>
         </div>

@@ -2,6 +2,7 @@
 import { setShippingMethod } from "@lib/data/cart"
 import { calculatePriceForShippingOption } from "@lib/data/fulfillment"
 import { convertToLocale } from "@lib/util/money"
+import { SHIPPING_COSTS_NOTE } from "@lib/util/shipping-note"
 import { HttpTypes } from "@medusajs/types"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import StepCard from "@modules/checkout/components/step-card"
@@ -168,6 +169,9 @@ const Shipping: React.FC<ShippingProps> = ({
     >
       {isOpen ? (
         <>
+          <p className="m-0 mb-3 text-[12.5px] text-bo-ink-muted">
+            {SHIPPING_COSTS_NOTE}
+          </p>
           <div data-testid="delivery-options-container" className="flex flex-col gap-2">
             {_shippingMethods?.map((option) => {
               const isDisabled =

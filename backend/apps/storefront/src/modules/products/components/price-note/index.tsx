@@ -12,7 +12,7 @@ export default function PriceNote({
 }) {
   return (
     <span
-      className={`block text-[11px] font-normal leading-[14px] text-bo-ink-muted ${className}`}
+      className={`block text-[12px] font-normal leading-[16px] text-bo-ink-muted ${className}`}
       data-testid="price-note"
     >
       inkl. MwSt., zzgl.{" "}
