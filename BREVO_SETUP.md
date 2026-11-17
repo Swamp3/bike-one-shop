@@ -9,8 +9,8 @@ Brevo's menus change between versions. Where I name a menu path below it is from
 - [ ] 1. Cloudflare: `info@bike-one.dev` forwards to `info@bike-one.de`
 - [ ] 2. Brevo account created and activated
 - [ ] 3. Brevo DPA accepted
-- [ ] 4. Sending domain `bike-one.dev` authenticated, branded link sub-domain `mail` (DNS records in Cloudflare)
-- [ ] 5. Sender `order@bike-one.dev` exists
+- [ ] 4. Sending domain authenticated in Brevo (DNS records in Cloudflare)
+- [ ] 5. Sender `order@mail.bike-one.dev` exists
 - [ ] 6. API key created (v3 API key, not an SMTP key)
 - [ ] 7. IP blocking checked
 - [ ] 7b. Open/click tracking and link rewriting switched off for transactional mail
@@ -42,9 +42,9 @@ Brevo will process customer e-mail addresses and order content for you, so it is
 1. In the account settings, find the **data processing agreement** (DPA) under legal / privacy / account settings, or via Brevo's legal pages, and accept or sign it. Keep a copy.
 2. Note for later: the privacy policy (`/datenschutz`) has to name Brevo as a recipient and say it is hosted in the EU. The lawyer or owner signs that off; this is not legal advice.
 
-## 4. Authenticate the sending domain `bike-one.dev`
+## 4. Authenticate the sending domain
 
-1. Brevo: **Senders, Domains & Dedicated IPs**, **Domains**, **Add a domain**. Enter `bike-one.dev` (the apex). This is how the dev account was set up: the DNS shows Brevo's DKIM (`brevo1/2._domainkey`), code TXT and DMARC on `bike-one.dev` itself.
+1. Brevo: **Senders, Domains & Dedicated IPs**, **Domains**, **Add a domain**. Enter the domain you will send from. Dev: the sender is `order@mail.bike-one.dev` (the owner's decision after Brevo rejected the apex address as sender, 2026-11-17). Public DNS showed Brevo's DKIM, code TXT and DMARC records on the apex `bike-one.dev` and the branded link CNAMEs on `mail`; whichever domain Brevo lists as authenticated is the one the sender address must belong to.
 2. Brevo shows the DNS records to add, with names relative to `bike-one.dev` (`mail` means `mail.bike-one.dev`). Typically: a **Brevo code** TXT record, two **DKIM** records (host names like `brevo1._domainkey`) and a **DMARC** TXT record. The optional **branded sub-domain** (enter the prefix `mail`) adds three CNAMEs (`mail`, `r.mail`, `img.mail`, pointing at `brevosend.com`); it only serves Brevo's link and image domain and has nothing to do with sending. Add exactly what Brevo shows, not what I list here.
 3. In Cloudflare: **DNS**, **Records**, **Add record** for each one.
    - In the Name field enter the host **without** `.bike-one.dev` (Cloudflare adds the zone). Example: if Brevo says `r.mail.bike-one.dev`, enter `r.mail`.
@@ -55,9 +55,9 @@ Brevo will process customer e-mail addresses and order content for you, so it is
 
 ## 5. Sender
 
-The sender address must be on the domain you authenticated in step 4: `order@bike-one.dev`. (`mail.bike-one.dev` is only the branded link CNAME; it cannot carry mail.)
+The sender address must be on a domain Brevo lists as authenticated in step 4. Dev uses `order@mail.bike-one.dev`.
 
-Brevo: **Senders, Domains & Dedicated IPs**, **Senders**, **Add a sender**: name `BikeOne`, e-mail `order@bike-one.dev`. If Brevo sends a confirmation mail to that address, add a Cloudflare Email Routing rule (step 1) `order` forwarding to `info@bike-one.de`, which also lets replies to it arrive. Do not create a real mailbox for it; replies are handled by Reply-To.
+Brevo: **Senders, Domains & Dedicated IPs**, **Senders**, **Add a sender**: name `BikeOne`, e-mail `order@mail.bike-one.dev`. If Brevo sends a confirmation mail to that address, the sub-domain has no mailbox: tell me, or add an Email Routing rule for it if Cloudflare allows one on the sub-domain. Do not create a real mailbox for it; replies are handled by Reply-To.
 
 ## 6. API key
 
@@ -91,7 +91,7 @@ The module is deployed with `make deploy-dev`; the server keeps sending nothing 
 ```
 NOTIFICATION_PROVIDER_RESOLVE=./src/modules/brevo
 NOTIFICATION_API_KEY=<the key from step 6>
-NOTIFICATION_FROM="BikeOne <order@bike-one.dev>"
+NOTIFICATION_FROM="BikeOne <order@mail.bike-one.dev>"
 NOTIFICATION_REPLY_TO=info@bike-one.dev
 ```
 

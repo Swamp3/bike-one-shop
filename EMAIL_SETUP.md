@@ -42,11 +42,11 @@ Either way the provider is a **processor** under GDPR Art. 28: accept its DPA, l
 
 ## 1. Pick the sending address
 
-Dev authenticates the apex `bike-one.dev` in Brevo (that is how the account was set up), with Reply-To to a real mailbox. For production a dedicated sending sub-domain is safer (see below):
+Send from a sub-domain authenticated in Brevo, with Reply-To to a real mailbox:
 
 | | From | Reply-To |
 | --- | --- | --- |
-| Dev (`bike-one.dev`, apex authenticated) | `BikeOne <order@bike-one.dev>` | `info@bike-one.dev`, forwarded to `info@bike-one.de` by Cloudflare Email Routing |
+| Dev (`bike-one.dev`) | `BikeOne <order@mail.bike-one.dev>` | `info@bike-one.dev`, forwarded to `info@bike-one.de` by Cloudflare Email Routing |
 | Production (assuming the shop domain is `bike-one.de`, not decided) | `BikeOne <order@mail.bike-one.de>` (sub-domain authenticated) | `info@bike-one.de` |
 
 Why a sub-domain: the apex already has its own mail setup (Email Routing on `bike-one.dev`; the real mailboxes such as `OL@bike-one.de` on `bike-one.de` with their own SPF/DKIM), and a sub-domain keeps Brevo's records from colliding with those and keeps shop mail reputation separate from staff mail. Why not `noreply@`: customers do reply to order mails, and the shop has to stay reachable. `order@` reads clearly in a German inbox. Do not create a mailbox for it; replies go to `info@` through Reply-To.
@@ -76,7 +76,7 @@ On the server, in `backend/apps/backend/.env`:
 ```
 NOTIFICATION_PROVIDER_RESOLVE=@medusajs/medusa/notification-sendgrid
 NOTIFICATION_API_KEY=<key>
-NOTIFICATION_FROM=BikeOne <order@bike-one.dev>
+NOTIFICATION_FROM=BikeOne <order@mail.bike-one.dev>
 ```
 
 Delete `NOTIFICATION_ALLOW_NONE=true` if it is there. No package to install: the provider ships with `@medusajs/medusa`.
@@ -88,7 +88,7 @@ The provider module is `backend/apps/backend/src/modules/brevo` (Brevo's REST AP
 ```
 NOTIFICATION_PROVIDER_RESOLVE=./src/modules/brevo
 NOTIFICATION_API_KEY=<Brevo v3 API key>
-NOTIFICATION_FROM="BikeOne <order@bike-one.dev>"
+NOTIFICATION_FROM="BikeOne <order@mail.bike-one.dev>"
 NOTIFICATION_REPLY_TO=info@bike-one.dev
 ```
 

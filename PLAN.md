@@ -1656,6 +1656,6 @@ provider comparison: `EMAIL_SETUP.md`.
   REST API via `fetch`, no new dependency; subject + html + text, `replyTo`,
   errors with status/code only, no attachments/templates), `reply_to` option
   wired from `NOTIFICATION_REPLY_TO` in `medusa-config.ts`, 8 unit tests.
-- Open: Brevo account + domain authentication (`bike-one.dev`), API key
+- Open: Brevo account + domain authentication (`mail.bike-one.dev`), API key
   in the dev server's `.env`, test order, then the paid plan and production
   domain before go-live. Bounce/complaint webhooks and newsletters are later.
