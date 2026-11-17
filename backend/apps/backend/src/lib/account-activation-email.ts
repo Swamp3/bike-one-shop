@@ -1,3 +1,5 @@
+import { COMPANY, SELLER } from "../workflows/order-confirmation/build-email"
+
 const esc = (text: string) =>
   text
     .replace(/&/g, "&amp;")
@@ -19,6 +21,13 @@ export function buildActivationEmail(link: string, expiresAt?: Date | string) {
     expires && !Number.isNaN(expires.getTime())
       ? `Der Link ist bis ${expires.toLocaleString("de-DE", { timeZone: "Europe/Berlin" })} Uhr gültig.`
       : "Der Link ist nur begrenzt gültig."
+  const footer = [
+    COMPANY.name,
+    `${COMPANY.street}, ${COMPANY.city}`,
+    `${SELLER.register}, USt-IdNr. ${SELLER.vatId}`,
+    `Geschäftsführer: ${SELLER.managingDirector}`,
+    `E-Mail: ${COMPANY.email}`,
+  ]
   const subject = "Bitte bestätige deine E-Mail-Adresse – BikeOne"
   const text = [
     "Hallo,",
@@ -32,7 +41,8 @@ export function buildActivationEmail(link: string, expiresAt?: Date | string) {
     "",
     "Wenn du kein Konto angelegt hast, kannst du diese E-Mail ignorieren.",
     "",
-    "BikeOne",
+    "",
+    ...footer,
   ].join("\n")
   const html = [
     "<p>Hallo,</p>",
@@ -40,7 +50,7 @@ export function buildActivationEmail(link: string, expiresAt?: Date | string) {
     `<p><a href="${esc(link)}">E-Mail-Adresse bestätigen</a></p>`,
     `<p>${esc(expiryLine)}<br>Nach der Bestätigung siehst du in deinem Konto auch Bestellungen, die du bisher mit dieser E-Mail-Adresse als Gast aufgegeben hast.</p>`,
     "<p>Wenn du kein Konto angelegt hast, kannst du diese E-Mail ignorieren.</p>",
-    "<p>BikeOne</p>",
+    `<p>${footer.map(esc).join("<br>")}</p>`,
   ].join("\n")
   return { subject, text, html }
 }

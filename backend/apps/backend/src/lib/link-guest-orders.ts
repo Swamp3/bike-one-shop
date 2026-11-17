@@ -1,19 +1,25 @@
 import type { MedusaContainer } from "@medusajs/framework"
 import { ContainerRegistrationKeys, Modules } from "@medusajs/framework/utils"
+import { emailpassIdentity } from "./auth-identity"
 
 /**
  * Moves orders placed as a guest with this customer's e-mail address onto the
  * customer's account. Safe to call repeatedly (idempotent) and cheap.
  *
- * Only for a customer with an account whose e-mail address is VERIFIED: the
- * orders contain addresses and purchases, so anyone who could register with a
- * stranger's address must not be able to claim them. Orders that already
- * belong to another account are never touched. Returns the number of orders
- * moved; logs only ids and the count.
+ * Only for a customer with an account whose e-mail address is VERIFIED, and
+ * only through the customer's OWN auth identity: the customer's e-mail must be
+ * the address that identity registered with, the identity must be bound to
+ * this customer, and the verification row must belong to that identity. (The
+ * customer's e-mail comes from a request body and the verification endpoint
+ * accepts any address, so checking "some verified row for this address" would
+ * let an attacker claim a victim's orders after the victim clicks a mail.)
+ * Orders that already belong to another account are never touched. Returns
+ * the number of orders moved; logs only ids and the count.
  */
 export async function linkGuestOrders(
   container: MedusaContainer,
-  customerId: string
+  customerId: string,
+  authIdentityId: string | undefined
 ): Promise<number> {
   const query = container.resolve(ContainerRegistrationKeys.QUERY)
   const logger = container.resolve(ContainerRegistrationKeys.LOGGER)
@@ -30,9 +36,13 @@ export async function linkGuestOrders(
     return 0
   }
 
-  const auth = container.resolve(Modules.AUTH)
-  const verifications = await auth.listAuthVerifications({
-    entity_id: email,
+  const identity = await emailpassIdentity(container, authIdentityId)
+  if (!identity || identity.customerId !== customerId || identity.email.toLowerCase() !== email) {
+    return 0
+  }
+  const verifications = await container.resolve(Modules.AUTH).listAuthVerifications({
+    auth_identity_id: identity.id,
+    entity_id: identity.email,
     entity_type: "email",
   })
   if (!verifications.some((v) => v.verified_at)) {

@@ -21,6 +21,7 @@ import {
   AdminTridataSyncStockBody,
 } from './admin/tridata/validators'
 import { AdminResendConfirmationBody } from './admin/orders/validators'
+import { emailpassIdentity } from '../lib/auth-identity'
 import { linkGuestOrders } from '../lib/link-guest-orders'
 import { scrubError } from '../lib/scrub'
 
@@ -54,20 +55,44 @@ function verifySumupWebhookSecret(
 
 // Before a customer's order list is read, move their guest orders (same,
 // verified e-mail address) onto the account. A failure never blocks the list.
+// shortcut: at most once per customer every 5 minutes, in memory (one backend
+// process); the check costs a few queries.
+const LINK_INTERVAL_MS = 5 * 60_000
+const lastLinkRun = new Map<string, number>()
 async function linkGuestOrdersBeforeList(
   req: AuthenticatedMedusaRequest,
   _res: MedusaResponse,
   next: MedusaNextFunction
 ) {
   const customerId = req.auth_context?.actor_id
-  if (customerId) {
+  if (customerId && Date.now() - (lastLinkRun.get(customerId) ?? 0) > LINK_INTERVAL_MS) {
+    lastLinkRun.set(customerId, Date.now())
     try {
-      await linkGuestOrders(req.scope, customerId)
+      await linkGuestOrders(req.scope, customerId, req.auth_context.auth_identity_id)
     } catch (e) {
       req.scope
         .resolve('logger')
         .error(`[orders] linking guest orders failed: ${scrubError((e as Error).message, 300)}`)
     }
+  }
+  return next()
+}
+
+// A customer record may only be created for the address the auth identity
+// registered with: its e-mail is what guest orders and verification are
+// matched against.
+async function requireOwnEmail(
+  req: AuthenticatedMedusaRequest,
+  res: MedusaResponse,
+  next: MedusaNextFunction
+) {
+  const own = await emailpassIdentity(req.scope, req.auth_context?.auth_identity_id)
+  const email = (req.body as { email?: unknown } | undefined)?.email
+  if (!own || typeof email !== 'string' || own.email.toLowerCase() !== email.toLowerCase()) {
+    return res.status(400).json({
+      type: 'invalid_data',
+      message: 'The e-mail must match the address you registered with',
+    })
   }
   return next()
 }
@@ -80,6 +105,14 @@ export default defineMiddlewares({
       method: ['GET'],
       matcher: '/store/orders',
       middlewares: [authenticate('customer', ['session', 'bearer']), linkGuestOrdersBeforeList],
+    },
+    {
+      method: ['POST'],
+      matcher: '/store/customers',
+      middlewares: [
+        authenticate('customer', ['session', 'bearer'], { allowUnregistered: true }),
+        requireOwnEmail,
+      ],
     },
     {
       method: ['POST'],

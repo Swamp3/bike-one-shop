@@ -1659,3 +1659,12 @@ provider comparison: `EMAIL_SETUP.md`.
 - Open: Brevo account + domain authentication (`mail.bike-one.dev`), API key
   in the dev server's `.env`, test order, then the paid plan and production
   domain before go-live. Bounce/complaint webhooks and newsletters are later.
+
+- 2026-11-17: customer accounts now require e-mail confirmation
+  (`authVerificationsPerActor`); `src/subscribers/auth-verification-requested.ts`
+  sends the German activation mail (only to the auth identity's own address,
+  one per minute per address); `src/lib/link-guest-orders.ts` moves guest orders
+  with the same verified address onto the account before `GET /store/orders`
+  (at most every 5 minutes per customer); `POST /store/customers` must use the
+  identity's own address. Open items: `TODO.md`, "Account activation".
+

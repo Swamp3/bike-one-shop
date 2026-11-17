@@ -70,6 +70,20 @@ MVP) landed.
   delivered (see the bounce webhook); (3) tracking off for transactional mail
   (`BREVO_SETUP.md` 7b); (4) sign the Brevo DPA, check sub-processors and the
   transfer basis before the privacy policy says "EU only".
+- **Account activation: open items (security review 2026-11-17).** Activation
+  mail, guest-order linking and the identity binding are built (PLAN.md Task
+  17). Still open before go-live: (1) rate limit `/auth/*` and
+  `/auth/verification/request` per IP at the reverse proxy (only an in-memory
+  per-address throttle exists); (2) a "resend activation mail" button on the
+  login/verification page (today: log in again); (3) clean up unverified
+  identities older than about 7 days, because an unverified registration with
+  someone else's address blocks that person from registering; (4) the
+  register route's "already exists" error reveals registered addresses
+  (Medusa behaviour); (5) privacy policy: guest orders are merged into the
+  account after e-mail verification, activation mail via Brevo; (6) check
+  that moving an order to another customer needs a re-sync to TriCon
+  (`updateOrders` emits no order event); (7) legal footer of the activation
+  mail uses the same seller data as the order confirmation, owner to confirm.
 - **Cloudflare Access on the admin UI (test server, `shop-admin.bike-one.dev`).**
   Restrict only the admin UI; the storefront, the store API and the SumUp
   webhook (`/hooks/payment/*`) must stay public.
