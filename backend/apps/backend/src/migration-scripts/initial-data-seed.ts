@@ -346,11 +346,11 @@ export default async function initial_data_seed({
         prices: [
           {
             currency_code: "eur",
-            amount: 10,
+            amount: 100,
           },
           {
             region_id: region.id,
-            amount: 10,
+            amount: 100,
           },
         ],
         rules: [
@@ -366,6 +366,8 @@ export default async function initial_data_seed({
           },
         ],
       },
+      // Express is not offered yet: kept but hidden from the storefront
+      // (rule enabled_in_store=false); enable it in the admin once it is real.
       {
         name: "Express-Versand",
         price_type: "flat",
@@ -390,7 +392,7 @@ export default async function initial_data_seed({
         rules: [
           {
             attribute: "enabled_in_store",
-            value: "true",
+            value: "false",
             operator: "eq",
           },
           {
