@@ -71,8 +71,6 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   const title = `${product.title} | BikeOne`
   const description = product.description ?? product.title
-  const image = product.thumbnail ?? product.images?.[0]?.url
-
   return {
     title,
     description,
@@ -83,10 +81,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       siteName: "BikeOne",
       locale: "de_DE",
       type: "website",
-      // Without an image the root opengraph-image.jpg (BikeOne logo) is used.
-      ...(image && { images: [{ url: image, alt: product.title }] }),
+      // og:image comes from ./opengraph-image.tsx (product photo + title + logo).
     },
-    twitter: { card: "summary_large_image", ...(image && { images: [image] }) },
+    twitter: { card: "summary_large_image" },
   }
 }
 
