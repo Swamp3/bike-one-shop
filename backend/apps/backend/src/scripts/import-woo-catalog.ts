@@ -1,4 +1,4 @@
-// One-time import, do not re-run: its category handles predate the restructure in src/migration-scripts/restructure-categories.ts.
+// One-time import per database. Run it after `medusa db:migrate`: its category handles are the restructured ones from src/migration-scripts/restructure-categories.ts.
 /**
  * Imports the real bike catalogue from the old WooCommerce shop.
  *
@@ -90,9 +90,9 @@ const BRAND_COLLECTIONS: Record<string, { title: string; handle: string }> = {
 }
 
 const CATEGORIES: Record<string, { name: string; handle: string }> = {
-  RoadBikes: { name: "Road Bikes", handle: "road-bikes" },
-  GravelBikes: { name: "Gravel Bikes", handle: "gravel-bikes" },
-  "TT / Triathlon": { name: "Triathlon / TT", handle: "triathlon-tt" },
+  RoadBikes: { name: "Rennräder", handle: "rennraeder" },
+  GravelBikes: { name: "Gravelbikes", handle: "gravelbikes" },
+  "TT / Triathlon": { name: "Triathlon & Zeitfahren", handle: "triathlon-zeitfahren" },
 }
 
 const MATERIALS: Record<string, string> = { Carbon: "Carbon", Aluminum: "Aluminium" }
