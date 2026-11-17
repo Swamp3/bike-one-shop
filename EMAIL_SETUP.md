@@ -4,7 +4,7 @@ How to switch on real e-mail on a server. Code side is done and gated on three e
 
 ## Decision: Brevo (2026-11-17)
 
-Brevo (France, data in France/Germany) is the chosen provider: transactional now (SMTP relay), newsletters later in the same account. Things to know before the newsletter starts:
+Step-by-step account and DNS instructions for you: `BREVO_SETUP.md`. Brevo (France, data in France/Germany) is the chosen provider: transactional now (SMTP relay), newsletters later in the same account. Things to know before the newsletter starts:
 
 - **The free plan's 300 mails/day is one shared cap** for campaigns and transactional mail, as far as the sources I found say (check Brevo's help centre). A newsletter to more than 300 subscribers would use up the day's quota, and order confirmations sent meanwhile could be delayed or dropped. Move to a paid plan before the first newsletter, or the confirmations are at risk.
 - **Footer branding:** free (and Starter) plans add "Sent with Brevo" to campaigns; removing it is a paid add-on. Not confirmed for transactional mail.
