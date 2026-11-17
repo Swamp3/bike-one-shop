@@ -85,16 +85,21 @@ export default async function Footer() {
             Kategorien
           </h4>
           <ul className="flex flex-col gap-2">
-            {topLevelCategories?.map((c) => (
-              <li key={c.id}>
-                <LocalizedClientLink
-                  href={`/categories/${c.handle}`}
-                  className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
-                >
-                  {c.name}
-                </LocalizedClientLink>
-              </li>
-            ))}
+            {/* Subcategories (Rennräder, Gravelbikes, ...) are the useful links; a top-level category without any stands for itself. */}
+            {topLevelCategories
+              ?.flatMap((c) =>
+                c.category_children.length ? c.category_children : [c]
+              )
+              .map((c) => (
+                <li key={c.id}>
+                  <LocalizedClientLink
+                    href={`/categories/${c.handle}`}
+                    className="text-[13px] text-bo-ink-muted hover:text-bo-accent hover:underline"
+                  >
+                    {c.name}
+                  </LocalizedClientLink>
+                </li>
+              ))}
           </ul>
         </div>
 
