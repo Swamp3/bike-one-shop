@@ -200,18 +200,33 @@ Status: **prepared, not activated**
   checkout from SumUp with our key, and takes action, `session_id`
   (`checkout_reference`) and amount from SumUp's answer. A forged body can at most
   trigger a status re-check; a checkout of another merchant should not be retrievable with our key (to confirm in the sandbox).
-  Known weakness (reviewer, 2026-11-17): the callback URL with `wh_secret` is echoed into `payment_session.data.raw_checkout.return_url`, which the storefront cart API returns, so any cart owner can read the secret. Forgery stays impossible (re-fetch), but the secret is no credential. Fix before live: strip it from the stored data or use a per-session token. Layers on top (this repo): `verifySumupWebhookSecret`
-  (`src/lib/sumup-webhook-secret.ts`, wired in `src/api/middlewares.ts`) answers 401
-  to any POST to `/hooks/payment/sumup_sumup` without `?wh_secret=` (timing-safe,
-  fails closed when unset); `medusa-config.ts` refuses a production start with a
-  secret under 32 characters; the job `src/jobs/sumup-reconcile-sessions.ts`
+  Reviewer findings of 2026-11-17, fixed in code (unit-tested, not yet run against the
+  SumUp sandbox): (1) the callback URL used to carry the shared `wh_secret` and was echoed
+  into `payment_session.data.raw_checkout.return_url`, readable by the cart owner. Now
+  the provider wrapper `src/modules/sumup-payment` (registered in `medusa-config.ts`
+  instead of the plugin's provider, same id `pp_sumup_sumup`) registers
+  `?ref=<session id>&wh_token=<HMAC(secret, session id)>`, pins `redirect_url` and the
+  reference too (a shopper could pass their own via the session `data`), and
+  `verifySumupWebhookSecret` (`src/lib/sumup-webhook-secret.ts`, wired in
+  `src/api/middlewares.ts`) answers 401 without a valid token for that `ref`
+  (timing-safe, fails closed when unset). Sessions created before this carry the old
+  URL, readable by those shoppers: `SUMUP_WEBHOOK_SECRET` MUST be rotated in the same restart that deploys this code on every environment that created SumUp sessions before it (the dev server), as the old value is now the HMAC key; a secret ever stored in session data is never a live key (`REVIEW_TASKS.md`). (2) The HTTP logger still logs the URL
+  and cannot be configured to skip a path (hard-coded in the framework); the token is
+  per session (a leaked token only allows re-checking that one session; it does not expire), so this matters little now. (3) `verifySumupWebhookEvent`
+  (`src/lib/sumup-webhook-check.ts`) runs before Medusa queues the event: for a paid
+  checkout SumUp's session id and amount must equal the payment session's and the
+  URL's `ref`, else nothing is queued or captured (error log); a failed lookup answers
+  503 so SumUp retries. Same check function as the job. Currency is still not compared.
+  (3b, second review) the route is rate limited per `ref` (20/min), malformed checkout ids (`/^[A-Za-z0-9_-]{1,64}$/`) are answered 200 and dropped before any SumUp call (the SDK interpolates the id unencoded), the job logs `reconcilePaidMismatch`, and the wrapper passes only allow-listed `data` keys to the plugin and strips a top-level `return_url` from stored data; the storefront's `redirect_url` (carries cart_id/country_code, needed by the return route) is accepted only for the configured page and origin. (4) The job counts a session only if an order exists afterwards, otherwise logs an
+  error (session id only). (5) `scrubError` masks `SUMUP_API_KEY` and
+  `SUMUP_WEBHOOK_SECRET`. Other layers: `medusa-config.ts` refuses a production start
+  with a secret under 32 characters; the job `src/jobs/sumup-reconcile-sessions.ts`
   (`src/lib/sumup-reconcile.ts`, every 10 min, `SUMUP_RECONCILE_CRON`) re-checks
   pending SumUp sessions 10 min to 24 h old and runs `processPaymentWorkflow`
   (capture plus cart completion) only when SumUp reports the checkout paid for that
   session id and amount, which covers a lost webhook. Tests: unit specs
-  `sumup-webhook-secret`, `sumup-reconcile`, `sumup-plugin-webhook` (pins the
-  plugin behaviour above). Residual: the secret sits in the callback URL query
-  string, so keep it out of proxy access logs and rotate it (`REVIEW_TASKS.md`).
+  `sumup-webhook-secret`, `sumup-webhook-check`, `sumup-payment-provider`,
+  `sumup-reconcile`, `scrub`, `sumup-plugin-webhook` (pins the plugin behaviour above), `sumup-webhook-route`. Unverified on a running server: boot registration of the wrapper, 401 on dev (dev still runs the old code), whether SumUp keeps the `ref`/`wh_token` query on callbacks, `query.graph` amount type.
   Open before live credentials: the sandbox end-to-end run (plan in
   `.working-files/sumup-webhook-verification/plan.md`) and the
   `legal-security-reviewer` verdict.

@@ -25,6 +25,7 @@ import { authIdentity, bodyField, rateLimit } from '../lib/rate-limit'
 import { linkGuestOrders } from '../lib/link-guest-orders'
 import { scrubError } from '../lib/scrub'
 import { verifySumupWebhookSecret } from '../lib/sumup-webhook-secret'
+import { verifySumupWebhookEvent } from '../lib/sumup-webhook-check'
 
 // Before a customer's order list is read, move their guest orders (same,
 // verified e-mail address) onto the account. A failure never blocks the list.
@@ -126,7 +127,14 @@ export default defineMiddlewares({
     {
       method: ['POST'],
       matcher: '/hooks/payment/sumup_sumup',
-      middlewares: [verifySumupWebhookSecret],
+      middlewares: [
+        verifySumupWebhookSecret,
+        // per payment session (the token-checked ref), not per address: SumUp's own retries are few
+        rateLimit('sumup-webhook', 20, 60_000, (req) =>
+          typeof req.query.ref === 'string' ? req.query.ref : undefined
+        ),
+        verifySumupWebhookEvent,
+      ],
     },
     // TriCon sync admin API (src/api/admin/tridata). Admin routes are
     // authenticated by Medusa; these only validate inputs.

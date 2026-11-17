@@ -161,18 +161,49 @@ processes each re-sent the same order at once.
   `/*/account` and `/api` paths, 429 over the limit; on the Strato proxy nginx
   `limit_req_zone` keyed on `$http_cf_connecting_ip` (or `$binary_remote_addr`
   without Cloudflare).
-- SumUp webhook secret: `SUMUP_WEBHOOK_SECRET` travels in the callback URL query
-  string (`?wh_secret=`), so it lands in access logs and, at log level `http`, in the backend's own request log (keep `LOG_LEVEL` below `http` or skip `/hooks/payment/`). Redact it in the proxy log
-  format (nginx: log `$uri` instead of `$request`/`$request_uri` for the
-  `/hooks/payment/sumup_sumup` location, or `access_log off` there; Caddy: a
-  `delete`/`replace` filter on `request>uri` query `wh_secret`). Use a different
-  random secret per environment (`openssl rand -hex 32`, at least 32 characters:
-  production refuses to start otherwise). Rotate it after any suspected leak or
-  log exposure: set the new value in `.env`, restart the backend (the callback URL
-  is rebuilt from it at start; new checkouts carry the new URL), and note that
-  checkouts created before the restart still call back with the old secret and get
-  401, so the reconciliation job (`sumup-reconcile-sessions`) completes those
-  within about 20 minutes (10 min minimum session age plus the 10 min cron). Rotate outside business hours.
+- SumUp webhook token: each checkout's callback URL is
+  `/hooks/payment/sumup_sumup?ref=<session id>&wh_token=<HMAC of the session id>`.
+  The shared `SUMUP_WEBHOOK_SECRET` is never in a URL, so it is not in
+  `payment_session.data`, access logs or the backend's http log; a logged URL only
+  yields that one session's token: a leaked token only allows re-checking that
+  one session (it does not expire). Medusa's HTTP logger cannot be told to skip `/hooks/payment/`, so the
+  token still shows at log level `http`; redacting the query in the proxy log
+  (nginx: log `$uri`) is optional now. Use a different random secret per
+  environment (`openssl rand -hex 32`, at least 32 characters: production refuses
+  to start otherwise).
+  MANDATORY on every server that created SumUp sessions before this change (the
+  dev server): rotate `SUMUP_WEBHOOK_SECRET` in the SAME restart that deploys this
+  code. Earlier sessions and SumUp checkouts hold the OLD URL
+  `...?wh_secret=<secret>` in `payment_session.data.raw_checkout.return_url`,
+  readable by those shoppers, and the old value is now the HMAC key for the new
+  tokens. A secret that was ever stored in session data must never be reused as a
+  live key (use a fresh one per environment). After rotating, the old checkouts'
+  callbacks get 401 (no token), so the reconciliation job
+  (`sumup-reconcile-sessions`) completes the paid ones within about 20 minutes
+  (10 min minimum session age plus the 10 min cron). Only after rotating may
+  you clear the stale data of open sessions
+  (`UPDATE payment_session SET data = data #- '{raw_checkout,return_url}' WHERE
+  provider_id = 'pp_sumup_sumup'`; check the row count first). Rotate also after
+  any suspected leak, outside business hours. Not yet verified on a server: that
+  the dev route answers 401 without a valid token (dev still runs the old code),
+  that the wrapper registers at boot, and that SumUp keeps the `ref`/`wh_token`
+  query on callbacks.
+- SumUp webhook flood: the backend limits `/hooks/payment/sumup_sumup` to 20
+  calls per minute per `ref` (memory-backed, single process). Also limit at the
+  proxy, e.g. nginx `limit_req_zone $binary_remote_addr zone=hooks:10m rate=30r/m;`
+  and `limit_req zone=hooks burst=20 nodelay;` in `location /hooks/payment/`
+  (or `$http_cf_connecting_ip` behind Cloudflare).
+- SumUp payment mismatch runbook. Alert on these backend log keys (prefix
+  `[sumup]`, error level): `webhookRejected` (SumUp says paid, but session id or
+  amount differ from the payment session, or the URL's `ref`; a malformed
+  checkout id is logged at warn level with the same key), `reconcilePaidMismatch`
+  (same, found by the job; repeats every 10 minutes for 24 h) and
+  `reconcileCapturedWithoutOrder` (captured, cart did not complete). Each carries
+  the payment session id only. Steps: find the session and its cart/order in the
+  admin or DB; if the customer was charged and no order exists, either create the
+  order manually or refund the SumUp transaction (SumUp dashboard) and tell the
+  customer; if the cart total changed after the checkout was created, refund and
+  ask the customer to pay again.
 - Firewall: only 22, 80, 443. Keep the TriCon mock on loopback.
 - Off-server backups of Postgres and the uploads directory, with a tested restore.
   RAID 1 only covers a dead disk, not deletion, corruption or a lost server, and

@@ -126,18 +126,20 @@ MVP) landed.
   end to end.** Sandbox credentials from the local `.env` are in the dev
   server's `.env` (own `SUMUP_WEBHOOK_SECRET`), the provider is enabled for
   the Deutschland region, a Store API payment session creates a SumUp checkout
-  and the webhook route answers 401 without the secret. Still to do: a real
+  and the webhook route answers 401 without the secret (old code; the per-session-token version answering 401 without a valid token is pending verification after the deploy). Still to do: a real
   browser checkout with a sandbox test card on `shop.bike-one.dev`, the
   webhook-driven order update, full and partial refund, the amount-11 failure
   test (`SUMUP_SETUP.md` section 5). Live credentials only after the webhook
   item below is done.
-- **SumUp webhook: closed in code pending sandbox confirmation, run and review open.** The plugin
+- **SumUp webhook: security-review findings fixed in code, sandbox run and re-review open.** The plugin
   re-fetches the checkout from SumUp and ignores the body (SumUp signs no webhooks);
-  the route needs `?wh_secret=` (readable by a cart owner via the payment session data, so not a secret in practice: strip `raw_checkout.return_url` or use a per-session token before live); a job (`sumup-reconcile-sessions`) completes paid
-  sessions whose webhook was lost. Still to do before live credentials: the sandbox
-  run (`.working-files/sumup-webhook-verification/plan.md` step 1), redact
-  `wh_secret` in the proxy access log and rotate the secret per environment
-  (`REVIEW_TASKS.md`), and `legal-security-reviewer`. See `PLAN.md` Task 5.
+  the callback URL now carries a per-session HMAC token (`ref`, `wh_token`), not the shared
+  secret; the route compares SumUp's session id and amount to the payment session before
+  queueing; a job (`sumup-reconcile-sessions`) completes paid sessions whose webhook was
+  lost and alerts if the cart did not complete. Still to do: on the dev server rotate
+  `SUMUP_WEBHOOK_SECRET` IN THE SAME RESTART that deploys this code (old sessions carry the old URL, readable by shoppers, and the old value would become the HMAC key; never reuse a secret that was in session data as a live key; SQL cleanup only after rotating, `REVIEW_TASKS.md`), verify after the deploy: wrapper boots, 401 without a valid token, SumUp keeps `ref`/`wh_token` on callbacks, `payment_session.amount` type,
+  the sandbox run (`.working-files/sumup-webhook-verification/plan.md`, including
+  "cart total changed, old checkout paid"), and `legal-security-reviewer` on the new code. See `PLAN.md` Task 5.
 - **TriCon/Tridata WSDL URL + `IdentifyGuid`.** Blocks the real ERP sync
   (Task 6), which in turn blocks: real stock numbers (today's inventory is
   realistic placeholder data, not real counts — Task 12 §3), real Click &

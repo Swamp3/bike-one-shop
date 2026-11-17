@@ -92,3 +92,43 @@ Still open: those sandbox runs, the legal-security-reviewer verdict (step 7).
 6. Sandbox run still needed: replay, webhook suppressed, `payment_session.amount` type from `query.graph`,
    duplicate `checkout_reference` when the plugin replaces a checkout. Key-mode guard (sandbox vs live) open.
 Dev deploy judged not blocking: the change only adds a job that completes SumUp-confirmed PAID sessions.
+
+## Fixes of the reviewer findings (2026-11-17, working tree, unit-tested only; no sandbox/live run)
+1. FIXED (code). Per-session token: `src/modules/sumup-payment` wraps the plugin's provider (same id) and registers
+   `return_url = <hook>?ref=<session id>&wh_token=HMAC-SHA256(SUMUP_WEBHOOK_SECRET, session id)`; the shared secret is
+   in no URL. `verifySumupWebhookSecret` checks the token for the `ref`. The plugin lets `return_url` differ per
+   checkout (`data.return_url ?? options.returnUrl`), so no stripping of stored data was needed; the wrapper also pins
+   `redirect_url` and `checkout_reference` (a shopper could set them through the session `data`). Old sessions still hold
+   the old URL: one-time secret rotation, steps in REVIEW_TASKS.md. Not run: a real checkout through the wrapper
+   (the dev server was not touched; `medusa build` compiles it, the provider registration at boot is unverified).
+2. NOT FIXED, mitigated. The framework's http logger skip list is hard-coded, no config. With finding 1 the logged URL
+   holds only a per-session token. Proxy-log redaction is optional (REVIEW_TASKS.md).
+3. FIXED (code). `verifySumupWebhookEvent` (src/lib/sumup-webhook-check.ts) runs before Medusa queues the event: paid
+   checkout -> session id and amount must equal the payment session and the URL's `ref`, else 200 without queueing and an
+   error log (session id only); lookup failure -> 503 (SumUp retries). Shares `sumupEventMatchesSession` with the job.
+   Cost: one extra SumUp GET per webhook. Currency still not compared. Sandbox test "cart total changed, old checkout
+   paid" still to run.
+4. FIXED (code). The job re-queries cart_payment_collection / order_cart after the workflow; no order -> error log
+   `reconcileCapturedWithoutOrder` (session id) and not counted. A session without a linked cart counts as completed.
+5. FIXED (code). `scrubError` masks `SUMUP_API_KEY` and `SUMUP_WEBHOOK_SECRET` (values of 8+ characters).
+Still open: sandbox run (replay, webhook suppressed, amount change, duplicate checkout_reference on replacement),
+key-mode guard, reviewer re-check of this change.
+
+## Second review round (2026-11-17, working tree, unit-tested only)
+- Rate limit: `/hooks/payment/sumup_sumup` limited to 20/min per token-checked `ref` (repo's `rateLimit`, memory-backed);
+  nginx `limit_req` note in REVIEW_TASKS.md. FIXED.
+- Id validation: `body.id` must match `/^[A-Za-z0-9_-]{1,64}$/`, else 200 (no SumUp retry for a request that can never be
+  valid), warn log `webhookRejected`, no SumUp call. FIXED.
+- Silent mismatch: job logs error `reconcilePaidMismatch`; middleware already logs `webhookRejected`; runbook and alert
+  keys in REVIEW_TASKS.md. FIXED.
+- Wrapper: only allow-listed `data` keys reach the plugin (`checkout_mode`; on update the stored checkout keys); top-level
+  `return_url` is stripped from stored data. DEVIATION: top-level `redirect_url` is kept, validated against the configured page
+  and origin, because the storefront's return route needs the cart_id/country_code it carries (my first version pinned it to
+  the bare URL, which would have broken the return flow; the storefront sends `data.redirect_url` only). Core stores the
+  caller's original `data` at top level on create regardless of the wrapper (`{...input.data, ...provider data}`), so a shopper's
+  junk keys persist in the row but are never passed to the plugin and are dropped on the next update. FIXED.
+- Scrub test fixture no longer key-shaped. FIXED.
+- Docs: rotation is MANDATORY in the same restart that deploys this code (old secret was readable and is now the HMAC key;
+  never reuse a secret that was in session data); wording "a leaked token only allows re-checking that one session (it does
+  not expire)". Still unverified: wrapper boot registration, 401 on dev after deploy, whether SumUp keeps the `ref`/`wh_token`
+  query on callbacks, `query.graph` amount type, whether SumUp echoes `redirect_url`.

@@ -7,8 +7,15 @@ jest.mock("@medusajs/medusa/core-flows", () => ({
 
 type Session = { id: string; amount: number; data?: Record<string, unknown> }
 
-const setup = (sessions: Session[], events: Record<string, unknown>) => {
-  const graph = jest.fn(async () => ({ data: sessions }))
+const setup = (sessions: Session[], events: Record<string, unknown>, orders: unknown[] = [{ id: "order_1" }]) => {
+  const graph = jest.fn(async ({ entity }: { entity: string }) => ({
+    data:
+      entity === "payment_session"
+        ? sessions
+        : entity === "cart_payment_collection"
+          ? [{ cart_id: "cart_1" }]
+          : orders,
+  }))
   const getWebhookActionAndData = jest.fn(async (input: { payload: { data: { id: string } } }) => {
     const ev = events[input.payload.data.id]
     if (ev instanceof Error) throw ev
@@ -19,7 +26,7 @@ const setup = (sessions: Session[], events: Record<string, unknown>) => {
     resolve: (key: string) =>
       ({ logger, query: { graph }, payment: { getWebhookActionAndData } })[key],
   }
-  return { container: container as never, graph, getWebhookActionAndData }
+  return { container: container as never, graph, getWebhookActionAndData, logger }
 }
 
 const paid = (session_id: string, amount: number) => ({
@@ -58,13 +65,16 @@ describe("reconcileSumupSessions", () => {
     expect(run).not.toHaveBeenCalled()
   })
 
-  it("rejects a paid checkout whose reference or amount does not match the session", async () => {
-    const { container } = setup([sess("ps_1"), sess("ps_2")], {
+  it("rejects a paid checkout whose reference or amount does not match the session, with an error log", async () => {
+    const { container, logger } = setup([sess("ps_1"), sess("ps_2")], {
       co_ps_1: paid("ps_other", 50),
       co_ps_2: paid("ps_2", 5),
     })
     expect(await reconcileSumupSessions(container)).toBe(0)
     expect(run).not.toHaveBeenCalled()
+    expect(logger.error).toHaveBeenCalledTimes(2)
+    expect(logger.error.mock.calls[0][0]).toContain("reconcilePaidMismatch")
+    expect(logger.error.mock.calls[0][0]).toContain("ps_1")
   })
 
   it("skips sessions without a checkout id and survives a failing session", async () => {
@@ -75,5 +85,13 @@ describe("reconcileSumupSessions", () => {
     expect(await reconcileSumupSessions(container)).toBe(1)
     expect(getWebhookActionAndData).toHaveBeenCalledTimes(2)
     expect(run).toHaveBeenCalledTimes(1)
+  })
+
+  it("does not count a captured session whose cart produced no order, and logs an error", async () => {
+    const { container, logger } = setup([sess("ps_1")], { co_ps_1: paid("ps_1", 50) }, [])
+    expect(await reconcileSumupSessions(container)).toBe(0)
+    expect(run).toHaveBeenCalledTimes(1)
+    expect(logger.error).toHaveBeenCalledTimes(1)
+    expect(logger.error.mock.calls[0][0]).toContain("ps_1")
   })
 })

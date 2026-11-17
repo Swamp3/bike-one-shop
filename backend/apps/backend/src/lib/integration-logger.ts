@@ -37,6 +37,7 @@ export interface IntegrationLogger {
   /** For events that aren't a single outbound call (e.g. a webhook received, a sync job starting). */
   info(action: string, meta?: IntegrationLogMeta): void;
   warn(action: string, meta?: IntegrationLogMeta): void;
+  error(action: string, meta?: IntegrationLogMeta): void;
 }
 
 let counter = 0;
@@ -102,6 +103,9 @@ export function createIntegrationLogger(
     },
     warn(action: string, meta?: IntegrationLogMeta) {
       logger.warn(`[${scope}] ${action}${formatMeta(meta)}`);
+    },
+    error(action: string, meta?: IntegrationLogMeta) {
+      logger.error(`[${scope}] ${action}${formatMeta(meta)}`);
     },
   };
 }

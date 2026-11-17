@@ -10,10 +10,10 @@ loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 const sumupApiKey = process.env.SUMUP_API_KEY
 const sumupMerchantCode = process.env.SUMUP_MERCHANT_CODE
 const sumupWebhookSecret = process.env.SUMUP_WEBHOOK_SECRET
-// Required alongside apiKey/merchantCode: it's what lets the middleware in
-// src/api/middlewares.ts reject forged calls to the SumUp webhook route
-// (SumUp doesn't document a signed-webhook scheme, so this is a shared-secret
-// compensating control instead). Fail closed, same as the other two.
+// Required alongside apiKey/merchantCode: it signs the per-session webhook URL
+// (src/modules/sumup-payment) and lets the middleware in src/api/middlewares.ts
+// reject forged calls to the SumUp webhook route (SumUp doesn't document a
+// signed-webhook scheme). Fail closed, same as the other two.
 const sumupConfigured = Boolean(
   sumupApiKey && sumupMerchantCode && sumupWebhookSecret
 )
@@ -176,13 +176,15 @@ module.exports = defineConfig({
           options: {
             providers: [
               {
-                resolve: '@sumup/medusa-plugin/providers/sumup',
+                // wrapper around the plugin's provider: per-session webhook URL (src/modules/sumup-payment)
+                resolve: './src/modules/sumup-payment',
                 id: 'sumup',
                 options: {
                   apiKey: sumupApiKey,
                   merchantCode: sumupMerchantCode,
                   checkoutMode: process.env.SUMUP_CHECKOUT_MODE || 'hosted',
-                  returnUrl: `${backendUrl}/hooks/payment/sumup_sumup?wh_secret=${sumupWebhookSecret}`,
+                  // base only: the wrapper adds ?ref=&wh_token= per payment session; the secret never goes in a URL
+                  returnUrl: `${backendUrl}/hooks/payment/sumup_sumup`,
                   redirectUrl: `${process.env.STOREFRONT_URL || 'http://localhost:8000'}/api/payment-return/sumup`,
                 },
               },
