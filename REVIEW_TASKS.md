@@ -121,9 +121,10 @@ processes each re-sent the same order at once.
   `ADMIN_CORS`, `AUTH_CORS`, `MEDUSA_BACKEND_URL`, `STOREFRONT_URL`. Changing
   `POSTGRES_PASSWORD` does not affect an existing Postgres volume.
 - Set `TRIDATA_STOCK_SYNC_CRON=*/10 * * * *`.
-- Order confirmation e-mail: set `NOTIFICATION_PROVIDER_RESOLVE`,
-  `NOTIFICATION_API_KEY` and `NOTIFICATION_FROM` (provider package installed in
-  `apps/backend`). In production the backend refuses to start without them.
+- Order confirmation e-mail: set `NOTIFICATION_PROVIDER_RESOLVE`
+  (`./src/modules/brevo`), `NOTIFICATION_API_KEY`, `NOTIFICATION_FROM` and
+  `NOTIFICATION_REPLY_TO` (setup: `BREVO_SETUP.md`; Brevo's authorised-IP
+  list must allow the server, or sends fail with `unauthorized`). In production the backend refuses to start without them.
   A test server that takes no real orders can set `NOTIFICATION_ALLOW_NONE=true`
   instead; it then sends nothing, so it must never take real orders.
   `STOREFRONT_URL` is required too (the confirmation workflow fails without it).

@@ -1646,3 +1646,16 @@ Part A code done 2026-11-16, not committed, awaiting `legal-security-reviewer`
   directly rather than delegated, with the same
   verify-before-trusting-output discipline the delegation step would
   normally apply.
+
+### Task 17 — Brevo for order confirmation e-mail
+
+Plan: `.working-files/brevo-email/plan.md`; account/DNS steps: `BREVO_SETUP.md`;
+provider comparison: `EMAIL_SETUP.md`.
+
+- Done 2026-11-17: custom notification provider `src/modules/brevo` (Brevo
+  REST API via `fetch`, no new dependency; subject + html + text, `replyTo`,
+  errors with status/code only, no attachments/templates), `reply_to` option
+  wired from `NOTIFICATION_REPLY_TO` in `medusa-config.ts`, 8 unit tests.
+- Open: Brevo account + domain authentication (`mail.bike-one.dev`), API key
+  in the dev server's `.env`, test order, then the paid plan and production
+  domain before go-live. Bounce/complaint webhooks and newsletters are later.

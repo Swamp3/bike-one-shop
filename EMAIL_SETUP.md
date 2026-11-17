@@ -34,7 +34,7 @@ Mailjet (France-based, EU servers) is another option; I did not look into it. Am
 
 **Cloudflare Email Service (public beta since 2026-04, SMTP submission beta since 2026-06-08).** Transactional only. SMTP: `smtp.mx.cloudflare.net`, port 465 (implicit TLS), user `api_token`, password a Cloudflare API token with "Email Sending: Edit". Needs the **Workers Paid** plan (about $5/month, not on the pages I read); includes 3,000 mails/month, then $0.35 per 1,000. For a domain already on Cloudflare DNS (as `bike-one.dev` is) onboarding is one click: it adds MX/SPF/DKIM/DMARC on a `cf-bounce` sub-domain. Before onboarding you can only send to verified addresses of your account, after it to anyone. Limits: 50 recipients per mail, new accounts get an unpublished "conservative" daily quota that grows with reputation (a form requests more). Open points: still beta with no stated SLA; Cloudflare is a US company, and the Email Service pages say nothing on data location, DPA or log retention (Cloudflare's general DPA may cover it, ask/verify); deliverability of a new sender is unproven. It fits the generic SMTP module below, so trying it costs no extra code. **Good for the dev server now, not my pick for the production go-live while it is beta.** Sources: [docs](https://developers.cloudflare.com/email-service/), [pricing](https://developers.cloudflare.com/email-service/platform/pricing/), [limits](https://developers.cloudflare.com/email-service/platform/limits/), [SMTP changelog](https://developers.cloudflare.com/changelog/post/2026-06-08-smtp-submission/).
 
-**None of these has a Medusa provider**, so any of them needs a custom provider module. The cheapest way: **one generic SMTP provider** (`nodemailer`, about 40 lines, host/port/user/password/from from env). Then Cloudflare, Scaleway, Brevo, Mailjet, or the shop's own mailbox SMTP are an env change, with no new code per provider. Resend or SendGrid APIs are then optional.
+**None of these has an official Medusa provider**, so each needs a custom provider module (Brevo's exists, see 4b). The cheapest way: **one generic SMTP provider** (`nodemailer`, about 40 lines, host/port/user/password/from from env). Then Cloudflare, Scaleway, Brevo, Mailjet, or the shop's own mailbox SMTP are an env change, with no new code per provider. Resend or SendGrid APIs are then optional.
 
 **Recommendation:** an EU provider through one SMTP module. For this shop: **Scaleway TEM** if you want pure transactional sending with EU-only processing and pay-per-use pennies, **Brevo** if you want a free tier and may add newsletters later. Both are fine for the test server. The cost is the SMTP module (not written yet). If you want mail working today with no code at all, use SendGrid (built in), and switch later: only three env vars and the provider module change.
 
@@ -81,21 +81,20 @@ NOTIFICATION_FROM=BikeOne <shop@mail.bike-one.dev>
 
 Delete `NOTIFICATION_ALLOW_NONE=true` if it is there. No package to install: the provider ships with `@medusajs/medusa`.
 
-## 4b. SMTP (Scaleway, Brevo, Mailjet, own mailbox): wire it
+## 4b. Brevo (chosen): wire it
 
-Not in the repo yet. It needs a module `src/modules/smtp` (service extending `AbstractNotificationProviderService`, `identifier = "smtp"`, `send()` calls `nodemailer` `sendMail({ from, to, subject, html })` and throws on an error) and the `nodemailer` package in `apps/backend`. The order-confirmation workflow already builds the HTML, so no templates are needed. The provider's options need SMTP host, port, user and password in addition to `from`, which `medusa-config.ts` does not pass yet (it only passes `api_key` and `from`), so that file changes too. A new dependency goes through the `legal-security-reviewer` first. Then, for example:
+The provider module is `backend/apps/backend/src/modules/brevo` (Brevo's REST API via `fetch`, no extra dependency). Account and DNS steps: `BREVO_SETUP.md`. On the server, in `backend/apps/backend/.env`:
 
 ```
-NOTIFICATION_PROVIDER_RESOLVE=./src/modules/smtp
-NOTIFICATION_API_KEY=<smtp password or key>
-NOTIFICATION_FROM=BikeOne <shop@mail.bike-one.dev>
-NOTIFICATION_SMTP_HOST=smtp.tem.scaleway.com
-NOTIFICATION_SMTP_USER=<smtp user>
+NOTIFICATION_PROVIDER_RESOLVE=./src/modules/brevo
+NOTIFICATION_API_KEY=<Brevo v3 API key>
+NOTIFICATION_FROM="BikeOne <order@mail.bike-one.dev>"
+NOTIFICATION_REPLY_TO=info@bike-one.dev
 ```
 
-## 4c. Resend: wire it
+Delete `NOTIFICATION_ALLOW_NONE=true` when the key is in. The provider sends subject, HTML and plain text, no Brevo templates and no attachments. A rejection by Brevo shows up in the log with its status and error code (for example `HTTP 400 unauthorized` when the server's IP is blocked), never with the recipient or the key.
 
-Same idea with a `src/modules/resend` module and the `resend` package (`resend.emails.send({ from, to, subject, html })`). Medusa's guide for reference: https://docs.medusajs.com/resources/integrations/guides/resend. Env: `NOTIFICATION_PROVIDER_RESOLVE=./src/modules/resend`, `NOTIFICATION_API_KEY`, `NOTIFICATION_FROM`.
+Other providers (Resend, an SMTP relay) would each need their own small module like this one; SendGrid is built into Medusa (4a).
 
 ## 5. Deploy and test
 

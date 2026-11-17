@@ -1,6 +1,6 @@
 # Brevo setup (your part)
 
-What you do in Brevo and Cloudflare so the shop can send order confirmations. Why Brevo and the code plan: `EMAIL_SETUP.md` and `.working-files/brevo-email/plan.md`. The provider module that talks to Brevo is **not written yet**; everything below can be done now, and the last section says what to do once it exists.
+What you do in Brevo and Cloudflare so the shop can send order confirmations. Why Brevo and the code plan: `EMAIL_SETUP.md` and `.working-files/brevo-email/plan.md`. The provider module that talks to Brevo exists (`backend/apps/backend/src/modules/brevo`); step 8 switches it on.
 
 Brevo's menus change between versions. Where I name a menu path below it is from memory or from their docs, so search the dashboard for the word in **bold** if a path is not there.
 
@@ -76,10 +76,10 @@ Brevo can reject calls from IP addresses that are not on the account's authorise
 
 ## 8. Put it on bee5 (after the module exists)
 
-Do this only after the Brevo provider module is implemented and deployed (`make deploy-dev`). The code path ignores the key otherwise.
+The module is deployed with `make deploy-dev`; the server keeps sending nothing until these variables are set.
 
 1. `ssh bee5`, then edit `~/bike-one-shop/backend/apps/backend/.env`.
-2. Delete the line `NOTIFICATION_ALLOW_NONE=true` and add (these names are what `medusa-config.ts` reads; the first and the Reply-To line are final once the plan's tasks 1 and 2 are built):
+2. Delete the line `NOTIFICATION_ALLOW_NONE=true` and add (these names are what `medusa-config.ts` reads):
 
 ```
 NOTIFICATION_PROVIDER_RESOLVE=./src/modules/brevo

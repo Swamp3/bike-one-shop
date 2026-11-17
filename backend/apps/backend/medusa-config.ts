@@ -20,8 +20,8 @@ const sumupConfigured = Boolean(
 
 // Order confirmation e-mails (PLAN: legal-compliance A7). A real provider is
 // chosen purely by env: NOTIFICATION_PROVIDER_RESOLVE is the provider package
-// (it must be installed and take { api_key, from } options, as the official
-// SendGrid and Resend providers do). Without it, development uses
+// or module (./src/modules/brevo is the one we use; it must take { api_key,
+// from } options, as the official SendGrid provider does). Without it, development uses
 // notification-local (logs to the console, sends nothing). Production without
 // a provider refuses to start (the confirmation e-mail is a legal duty,
 // § 312i BGB), unless NOTIFICATION_ALLOW_NONE=true is set explicitly for a
@@ -124,6 +124,8 @@ module.exports = defineConfig({
                         channels: ['email'],
                         api_key: notificationApiKey,
                         from: notificationFrom,
+                        // Brevo module only; other providers ignore it.
+                        reply_to: process.env.NOTIFICATION_REPLY_TO,
                       },
                     }
                   : {

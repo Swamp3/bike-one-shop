@@ -55,6 +55,13 @@ MVP) landed.
   Content-Security-Policy is added later, allow
   `img-src https://tile.openstreetmap.org` (or the chosen provider).
 
+- **Brevo e-mail on the dev server.** Code done (`src/modules/brevo`, PLAN.md
+  Task 17). To switch on: finish the Brevo domain authentication
+  (`mail.bike-one.dev`, `BREVO_SETUP.md`), put the API key and
+  `NOTIFICATION_PROVIDER_RESOLVE=./src/modules/brevo` into the dev server's
+  `.env`, remove `NOTIFICATION_ALLOW_NONE`, restart, place a test order. Before
+  go-live: paid Brevo plan, production domain/key/fixed IP, privacy policy
+  names Brevo, bounce webhook for failed confirmations.
 - **Cloudflare Access on the admin UI (test server, `shop-admin.bike-one.dev`).**
   Restrict only the admin UI; the storefront, the store API and the SumUp
   webhook (`/hooks/payment/*`) must stay public.
