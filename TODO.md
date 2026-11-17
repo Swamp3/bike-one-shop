@@ -84,6 +84,7 @@ MVP) landed.
   that moving an order to another customer needs a re-sync to TriCon
   (`updateOrders` emits no order event); (7) legal footer of the activation
   mail uses the same seller data as the order confirmation, owner to confirm.
+  Plan with tasks, order and acceptance: `.working-files/account-activation/plan.md`.
 - **Cloudflare Access on the admin UI (test server, `shop-admin.bike-one.dev`).**
   Restrict only the admin UI; the storefront, the store API and the SumUp
   webhook (`/hooks/payment/*`) must stay public.
