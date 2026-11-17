@@ -40,7 +40,7 @@ Files: `index.ts` (`ModuleProvider(Modules.NOTIFICATION, { services: [BrevoNotif
 
 ### 2. Reply-To (decided 2026-11-17: do it)
 
-The From address lives on a sending sub-domain with no mailbox, and customers will answer order mails. Add `reply_to` to the provider options and send it as Brevo's `replyTo` object (`{ email, name? }`, parsed like the sender); wire `NOTIFICATION_REPLY_TO` into the options in `medusa-config.ts` (one line). Dev: `NOTIFICATION_FROM="BikeOne <bestellung@mail.bike-one.dev>"`, `NOTIFICATION_REPLY_TO=info@bike-one.dev` (Cloudflare Email Routing forwards that to `info@bike-one.de`). Production uses the same shape on the real domain (see `EMAIL_SETUP.md`).
+The From address lives on a sending sub-domain with no mailbox, and customers will answer order mails. Add `reply_to` to the provider options and send it as Brevo's `replyTo` object (`{ email, name? }`, parsed like the sender); wire `NOTIFICATION_REPLY_TO` into the options in `medusa-config.ts` (one line). Dev: `NOTIFICATION_FROM="BikeOne <order@mail.bike-one.dev>"`, `NOTIFICATION_REPLY_TO=info@bike-one.dev` (Cloudflare Email Routing forwards that to `info@bike-one.de`). Production uses the same shape on the real domain (see `EMAIL_SETUP.md`).
 
 ### 3. Tests
 

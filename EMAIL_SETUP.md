@@ -46,10 +46,10 @@ Send from a dedicated `mail.` sub-domain and let replies go to a real mailbox vi
 
 | | From | Reply-To |
 | --- | --- | --- |
-| Dev (`bike-one.dev`) | `BikeOne <bestellung@mail.bike-one.dev>` | `info@bike-one.dev`, forwarded to `info@bike-one.de` by Cloudflare Email Routing |
-| Production (assuming the shop domain is `bike-one.de`, not decided) | `BikeOne <bestellung@mail.bike-one.de>` | `info@bike-one.de` |
+| Dev (`bike-one.dev`) | `BikeOne <order@mail.bike-one.dev>` | `info@bike-one.dev`, forwarded to `info@bike-one.de` by Cloudflare Email Routing |
+| Production (assuming the shop domain is `bike-one.de`, not decided) | `BikeOne <order@mail.bike-one.de>` | `info@bike-one.de` |
 
-Why a sub-domain: the apex already has its own mail setup (Email Routing on `bike-one.dev`; the real mailboxes such as `OL@bike-one.de` on `bike-one.de` with their own SPF/DKIM), and a sub-domain keeps Brevo's records from colliding with those and keeps shop mail reputation separate from staff mail. Why not `noreply@`: customers do reply to order mails, and the shop has to stay reachable. `bestellung@` reads clearly in a German inbox. Do not create a mailbox for it; replies go to `info@` through Reply-To.
+Why a sub-domain: the apex already has its own mail setup (Email Routing on `bike-one.dev`; the real mailboxes such as `OL@bike-one.de` on `bike-one.de` with their own SPF/DKIM), and a sub-domain keeps Brevo's records from colliding with those and keeps shop mail reputation separate from staff mail. Why not `noreply@`: customers do reply to order mails, and the shop has to stay reachable. `order@` reads clearly in a German inbox. Do not create a mailbox for it; replies go to `info@` through Reply-To.
 
 ## 2. Create the account and verify the domain
 
