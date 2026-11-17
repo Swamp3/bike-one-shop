@@ -33,20 +33,20 @@ export const getCacheTag = async (tag: string): Promise<string> => {
   }
 }
 
+// Every Store API read is force-cached. The revalidate is an upper bound so
+// edits in the admin (products, prices, images) show up within a minute even
+// when no tag is invalidated, and requests without a cache id are not cached
+// forever.
 export const getCacheOptions = async (
   tag: string
-): Promise<{ tags: string[] } | Record<string, never>> => {
+): Promise<{ revalidate?: number; tags?: string[] }> => {
   if (typeof window !== "undefined") {
     return {}
   }
 
   const cacheTag = await getCacheTag(tag)
 
-  if (!cacheTag) {
-    return {}
-  }
-
-  return { tags: [`${cacheTag}`] }
+  return { revalidate: 60, ...(cacheTag ? { tags: [cacheTag] } : {}) }
 }
 
 // `sameSite: "lax"` rather than `"strict"`: the customer returns from a

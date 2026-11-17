@@ -11,7 +11,20 @@ How to switch on real e-mail on a server. Code side is done and gated on three e
 | EU / GDPR | DPA with EU Standard Contractual Clauses accepted at sign-up, EU-US Data Privacy Framework. You can **send** from Ireland (eu-west-1), but account data is stored in the US | Twilio DPA with SCCs. EU data residency for SendGrid: not verified, check with Twilio |
 | Setup effort | Account + domain DNS + provider module | Account + domain DNS |
 
-**Recommendation:** Resend for this shop. Volume is far below 100 orders a day, so the free plan covers the test server and likely production; the developer experience is better. The cost is the small provider module (not written yet). If you want mail working this afternoon with no code, use SendGrid, and switch later: only three env vars and the provider module change.
+**EU-based alternatives** (both US options above store data in the US). Figures from the providers' own pages in 2026-11, confirm before signing up:
+
+| | Scaleway Transactional Email (France) | Brevo (France) |
+| --- | --- | --- |
+| Hosting | Scaleway's own infrastructure only | France and Germany |
+| Cost | 300 mails included, then €0.25 per 1,000, no monthly fee. Default quota 10,000/month, raisable | Free: 300 mails/day. Paid plans above that |
+| Integration | SMTP relay (`smtp.tem.scaleway.com`) and API | SMTP relay and REST API |
+| Fit | Pure transactional sender, no marketing upsell; billed per use | Also does newsletters later (own consent/double opt-in needed). Check whether the free plan adds a Brevo footer to transactional mail |
+
+Mailjet (France-based, EU servers) is another option; I did not look into it. Amazon SES in Frankfurt and Mailgun's EU region keep data in the EU but the companies are US-based, so they do not fix the US-parent question.
+
+**None of these has a Medusa provider**, so any of them needs a custom provider module. The cheapest way: **one generic SMTP provider** (`nodemailer`, about 40 lines, host/port/user/password/from from env). Then Scaleway, Brevo, Mailjet, or the shop's own mailbox SMTP are an env change, with no new code per provider. Resend or SendGrid APIs are then optional.
+
+**Recommendation:** an EU provider through one SMTP module. For this shop: **Scaleway TEM** if you want pure transactional sending with EU-only processing and pay-per-use pennies, **Brevo** if you want a free tier and may add newsletters later. Both are fine for the test server. The cost is the SMTP module (not written yet). If you want mail working today with no code at all, use SendGrid (built in), and switch later: only three env vars and the provider module change.
 
 Either way the provider is a **processor** under GDPR Art. 28: accept its DPA, list it in the privacy policy (`datenschutz`), and keep the transfer to the US (SCCs / DPF) in there. This is not legal advice; the owner/lawyer signs off.
 
@@ -20,6 +33,10 @@ Either way the provider is a **processor** under GDPR Art. 28: accept its DPA, l
 Use a dedicated sub-domain so mail problems never touch the main domain's reputation, for example `mail.bike-one.dev` for the dev server and the real shop domain's `mail.` sub-domain in production. From address: `BikeOne <shop@mail.bike-one.dev>`. Use a mailbox people can reply to, or set a Reply-To; customers will answer order mails.
 
 ## 2. Create the account and verify the domain
+
+**Scaleway TEM:** Scaleway console, **Transactional Email → Create domain**, enter the sub-domain, add the SPF/DKIM/DMARC records it shows, then create SMTP credentials (API key) for the project.
+
+**Brevo:** account, **Senders, Domains & dedicated IPs → Domains → Add a domain**, add the records (Brevo code, DKIM, DMARC), then **SMTP & API → SMTP** for host, login and an SMTP key.
 
 **Resend:** sign up at resend.com, **Domains → Add Domain**, enter the sub-domain, choose region **Ireland (eu-west-1)**, add the DNS records it shows (SPF, DKIM, and the return-path MX).
 
@@ -45,15 +62,21 @@ NOTIFICATION_FROM=BikeOne <shop@mail.bike-one.dev>
 
 Delete `NOTIFICATION_ALLOW_NONE=true` if it is there. No package to install: the provider ships with `@medusajs/medusa`.
 
-## 4b. Resend: wire it
+## 4b. SMTP (Scaleway, Brevo, Mailjet, own mailbox): wire it
 
-Not in the repo yet. It needs a module `src/modules/resend` (service extending `AbstractNotificationProviderService`, `identifier = "resend"`, `send()` calls `resend.emails.send({ from, to, subject, html })` and throws on an error) and the `resend` package in `apps/backend`. The order-confirmation workflow already builds the HTML, so no React templates are needed. Medusa's guide for reference: https://docs.medusajs.com/resources/integrations/guides/resend. A new dependency goes through the `legal-security-reviewer` first. Then:
+Not in the repo yet. It needs a module `src/modules/smtp` (service extending `AbstractNotificationProviderService`, `identifier = "smtp"`, `send()` calls `nodemailer` `sendMail({ from, to, subject, html })` and throws on an error) and the `nodemailer` package in `apps/backend`. The order-confirmation workflow already builds the HTML, so no templates are needed. The provider's options need SMTP host, port, user and password in addition to `from`, which `medusa-config.ts` does not pass yet (it only passes `api_key` and `from`), so that file changes too. A new dependency goes through the `legal-security-reviewer` first. Then, for example:
 
 ```
-NOTIFICATION_PROVIDER_RESOLVE=./src/modules/resend
-NOTIFICATION_API_KEY=<key>
+NOTIFICATION_PROVIDER_RESOLVE=./src/modules/smtp
+NOTIFICATION_API_KEY=<smtp password or key>
 NOTIFICATION_FROM=BikeOne <shop@mail.bike-one.dev>
+NOTIFICATION_SMTP_HOST=smtp.tem.scaleway.com
+NOTIFICATION_SMTP_USER=<smtp user>
 ```
+
+## 4c. Resend: wire it
+
+Same idea with a `src/modules/resend` module and the `resend` package (`resend.emails.send({ from, to, subject, html })`). Medusa's guide for reference: https://docs.medusajs.com/resources/integrations/guides/resend. Env: `NOTIFICATION_PROVIDER_RESOLVE=./src/modules/resend`, `NOTIFICATION_API_KEY`, `NOTIFICATION_FROM`.
 
 ## 5. Deploy and test
 
