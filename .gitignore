@@ -18,3 +18,4 @@ node_modules
 # media: 1.1 GB, copied into public/ by npm run assets:copy from .conversion/media-cache, never committed (decision d21)
 /public/wp-content/uploads/
 /.conversion/video-download/
+/public/_redirects

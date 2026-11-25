@@ -42,3 +42,75 @@ from,to,status,source,note
 /?p=829,/portfolio/portfolio-name-14/,301,shortlink,unverified shortlink
 /?p=831,/portfolio/portfolio-name-15/,301,shortlink,unverified shortlink
 /termin-buchen,/termin-buchen/,301,crawl,
+/cart/,{SHOP_URL},301,decision,redesign IA
+/checkout-2/,{SHOP_URL},301,decision,redesign IA
+/checkout/,{SHOP_URL},301,decision,redesign IA
+/my-account-2/,{SHOP_URL},301,decision,redesign IA
+/my-account/,{SHOP_URL},301,decision,redesign IA
+/product-category/gravel-bikes/,{SHOP_URL},301,decision,redesign IA
+/product-category/road-bikes/,{SHOP_URL},301,decision,redesign IA
+/product-category/tt-bikes/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-aspero-5/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-aspero/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-caledonia-5/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-caledonia/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-p-series/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-p5-2/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-r5/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-s5/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-soloist/,{SHOP_URL},301,decision,redesign IA
+/product/factor-aluto/,{SHOP_URL},301,decision,redesign IA
+/product/factor-hanzo/,{SHOP_URL},301,decision,redesign IA
+/product/factor-monza/,{SHOP_URL},301,decision,redesign IA
+/product/factor-one/,{SHOP_URL},301,decision,redesign IA
+/product/factor-ostro-vam/,{SHOP_URL},301,decision,redesign IA
+/product/factor-slick/,{SHOP_URL},301,decision,redesign IA
+/product/pinarello-dogma-f/,{SHOP_URL},301,decision,redesign IA
+/product/pinarello-f/,{SHOP_URL},301,decision,redesign IA
+/product/ridley-falcn/,{SHOP_URL},301,decision,redesign IA
+/product/ridley-kanzo-alu-equipped/,{SHOP_URL},301,decision,redesign IA
+/product/ridley-kanzo-alu/,{SHOP_URL},301,decision,redesign IA
+/product/ridley-kanzo-carbon/,{SHOP_URL},301,decision,redesign IA
+/product/ridley-noah/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-crux-dsw/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-diverge-al/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-diverge-carbon-pro/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-diverge-carbon-sport/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-diverge-carbon/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-tarmac-sl8/,{SHOP_URL},301,decision,redesign IA
+/product/trek-checkpoint-carbon-kopie/,{SHOP_URL},301,decision,redesign IA
+/product/trek-checkpoint-carbon-sl7/,{SHOP_URL},301,decision,redesign IA
+/product/trek-checkpoint-carbon/,{SHOP_URL},301,decision,redesign IA
+/product/trek-emonda-alr/,{SHOP_URL},301,decision,redesign IA
+/product/trek-madone-domane-sl/,{SHOP_URL},301,decision,redesign IA
+/product/trek-madone-sl/,{SHOP_URL},301,decision,redesign IA
+/product/trek-madone-slr/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-adlar/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-filante-sl/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-filante-slr/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-rapida/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-rave-slr-id2/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-supersonica/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-turbine-sl/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-turbine-slr-kopie/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-turbine-slr/,{SHOP_URL},301,decision,redesign IA
+/shop/,{SHOP_URL},301,decision,redesign IA
+/wp-sitemap-posts-product-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/wp-sitemap-taxonomies-product_cat-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/shop/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/product/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/product-category/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/product-brand/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/brand/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/cart/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/checkout/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/my-account/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/wishlist/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/checkout-2/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/my-account-2/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/produkt/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/produkt-kategorie/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/warenkorb/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/kasse/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/mein-konto/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/wunschliste/*,{SHOP_URL},301,decision,"redesign IA, everything below"
