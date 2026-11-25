@@ -1,0 +1,137 @@
+[
+  {
+    "name": "template-1",
+    "signature": "body-col-1c cosy-body enable-footer-fullwidth enable-header-fullwidth enable-header-sticky enable-header-transparency footer-v2col48 header-v1 js-comp-ver-8.4.1 la_portfolio-template-default lastudio-cosy page-title-vhide single single-la_portfolio theme-cosy vc_responsive woocommerce-no-js wp-child-theme-cosy-child wp-singular wp-theme-cosy wpb-js-composer | div div div div div div div div a img div div h1 div a div div div div span span div span span div span span div span span div div p p",
+    "count": 15,
+    "representative": "/portfolio/portfolio-name-3/",
+    "paths": [
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/"
+    ]
+  },
+  {
+    "name": "page",
+    "signature": "body-col-1c cosy-body enable-footer-fullwidth enable-header-fullwidth enable-header-sticky footer-v2col48 fp-nav-control-position-off header-v1 js-comp-ver-8.4.1 lastudio-cosy page page-template-default page-title-vhide theme-cosy vc_responsive woocommerce-no-js wp-child-theme-cosy-child wp-singular wp-theme-cosy wpb-js-composer | div div div div div div div div div div h2 div span span span span div div div div div",
+    "count": 10,
+    "representative": "/ebikes/",
+    "paths": [
+      "/alle-fahrrader/",
+      "/blog/",
+      "/ebikes/",
+      "/gravel-bikes/",
+      "/main-bike/",
+      "/racebikes/",
+      "/sale/",
+      "/termin-buchen-oldenburg/",
+      "/termin-buchen-osnabrueck/",
+      "/tt-triathlon/"
+    ]
+  },
+  {
+    "name": "archive",
+    "signature": "archive body-col-1c cosy-body enable-footer-fullwidth enable-header-fullwidth enable-header-sticky enable-header-transparency footer-v2col48 header-v1 js-comp-ver-8.4.1 lastudio-cosy page-title-vhide tax-product_brand theme-cosy vc_responsive woocommerce woocommerce-no-js woocommerce-page wp-child-theme-cosy-child wp-theme-cosy wpb-js-composer | div div div div div div i span div p div p ul li a li a li a div div span i span i div p ul li a li a li a li a li a div a",
+    "count": 9,
+    "representative": "/Marke/factor/",
+    "paths": [
+      "/Marke/cervelo/",
+      "/Marke/factor/",
+      "/Marke/pinarello/",
+      "/Marke/ridley/",
+      "/Marke/specialized/",
+      "/Marke/trek/",
+      "/Marke/wilier/",
+      "/author/lawrencebennier-com/",
+      "/category/allgemein/"
+    ]
+  },
+  {
+    "name": "template-2",
+    "signature": "body-col-2cl cosy-body enable-footer-fullwidth enable-header-fullwidth enable-header-sticky enable-header-transparency footer-v2col48 header-v1 js-comp-ver-8.4.1 la_team_member-template-default lastudio-cosy page-title-vhide single single-la_team_member theme-cosy vc_responsive woocommerce-no-js wp-child-theme-cosy-child wp-singular wp-theme-cosy wpb-js-composer | div div div article header h1 div div img div p footer div",
+    "count": 7,
+    "representative": "/team-member/charlotte-neal/",
+    "paths": [
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/"
+    ]
+  },
+  {
+    "name": "single-post",
+    "signature": "body-col-1c cosy-body enable-footer-fullwidth enable-header-fullwidth enable-header-sticky enable-header-transparency footer-v2col48 header-v1 js-comp-ver-8.4.1 lastudio-cosy page-title-vhide post-template-default single single-format-standard single-post theme-cosy vc_responsive woocommerce-no-js wp-child-theme-cosy-child wp-singular wp-theme-cosy wpb-js-composer | div div div article header h1 div span i a span a i span time time div p p strong hr h2 p p ul li strong li strong li strong hr h2 p h3 p strong h3 p strong",
+    "count": 5,
+    "representative": "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+    "paths": [
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ]
+  },
+  {
+    "name": "page-3",
+    "signature": "body-col-1c cosy-body enable-footer-fullwidth enable-header-fullwidth enable-header-sticky enable-header-transparency footer-v2col48 fp-nav-control-position-off header-v1 js-comp-ver-8.4.1 lastudio-cosy page page-template-default page-title-vhide theme-cosy vc_responsive woocommerce-no-js wp-child-theme-cosy-child wp-singular wp-theme-cosy wpb-js-composer | div div div section img span div p strong br strong p p strong div div p strong br br br strong a p div div div div div iframe div p br strong br strong br strong br a",
+    "count": 4,
+    "representative": "/termin-buchen/",
+    "paths": [
+      "/impressum/",
+      "/stellenangebote/",
+      "/termin-buchen/",
+      "/ueber-uns/"
+    ]
+  },
+  {
+    "name": "archive-3",
+    "signature": "archive body-col-1c cosy-body enable-footer-fullwidth enable-header-fullwidth enable-header-sticky enable-header-transparency footer-v2col48 header-v1 js-comp-ver-8.4.1 lastudio-cosy page-title-vhide tax-la_portfolio_category theme-cosy vc_responsive woocommerce-no-js wp-child-theme-cosy-child wp-theme-cosy wpb-js-composer | div div div div article div div a img div div header h4 a a article div div a img div div header h4 a a article div div a img div div header h4 a a article div div",
+    "count": 2,
+    "representative": "/portfolio-category/branding-design/",
+    "paths": [
+      "/portfolio-category/branding-design/",
+      "/portfolio-category/branding-design/page/2/"
+    ]
+  },
+  {
+    "name": "archive-2",
+    "signature": "archive author body-col-2cl cosy-body enable-footer-fullwidth enable-header-fullwidth enable-header-sticky enable-header-transparency footer-v2col48 header-v1 js-comp-ver-8.4.1 lastudio-cosy page-title-vhide theme-cosy vc_responsive woocommerce-no-js wp-child-theme-cosy-child wp-theme-cosy wpb-js-composer | div div",
+    "count": 1,
+    "representative": "/author/marvin/",
+    "paths": [
+      "/author/marvin/"
+    ]
+  },
+  {
+    "name": "home",
+    "signature": "body-col-1c cosy-body enable-footer-fullwidth enable-header-fullwidth enable-header-sticky enable-header-transparency footer-v2col48 fp-nav-control-position-off header-v1 home js-comp-ver-8.4.1 lastudio-cosy page page-template-default page-title-vhide theme-cosy vc_responsive woocommerce-no-js wp-child-theme-cosy-child wp-singular wp-theme-cosy wpb-js-composer | div div div div div p rs-module-wrap rs-module rs-slides rs-slide img rs-bgvideo a rs-slide img rs-bgvideo a div div div div p strong p br br div div div a figure img div figure img div p strong p br",
+    "count": 1,
+    "representative": "/",
+    "paths": [
+      "/"
+    ]
+  },
+  {
+    "name": "page-2",
+    "signature": "body-col-1c cosy-body enable-footer-fullwidth enable-header-fullwidth enable-header-sticky footer-v2col48 fp-nav-control-position-off header-v1 js-comp-ver-8.4.1 lastudio-cosy page page-template-default page-title-vhide theme-cosy vc_responsive woocommerce-no-js wp-child-theme-cosy-child wp-singular wp-theme-cosy wpb-js-composer | div div div p br br br br p br br p br br br br p br br br p br br br br br br br br br br p br br br br br br br br",
+    "count": 1,
+    "representative": "/datenschutz/",
+    "paths": [
+      "/datenschutz/"
+    ]
+  }
+]

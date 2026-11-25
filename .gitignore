@@ -1,0 +1,16 @@
+node_modules
+# Astro's build output only: themes and plugins keep built scripts in public/**/dist/
+/dist
+.astro
+.env*
+!.env.example
+.DS_Store
+.vercel
+*.log
+# large or regenerable capture and review output (anchored, so scripts/review/ stays tracked)
+/capture/screens/
+/capture/lighthouse-live/
+/review/
+/media-cache/
+/.conversion/media-cache/
+.conversion/*.tmp

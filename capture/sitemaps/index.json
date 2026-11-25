@@ -1,0 +1,57 @@
+[
+  {
+    "url": "https://bike-one.org/wp-sitemap-posts-la_portfolio-1.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap-posts-la_portfolio-1.xml"
+  },
+  {
+    "url": "https://bike-one.org/wp-sitemap-posts-la_team_member-1.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap-posts-la_team_member-1.xml"
+  },
+  {
+    "url": "https://bike-one.org/wp-sitemap-posts-page-1.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap-posts-page-1.xml"
+  },
+  {
+    "url": "https://bike-one.org/wp-sitemap-posts-post-1.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap-posts-post-1.xml"
+  },
+  {
+    "url": "https://bike-one.org/wp-sitemap-posts-product-1.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap-posts-product-1.xml"
+  },
+  {
+    "url": "https://bike-one.org/wp-sitemap-taxonomies-category-1.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap-taxonomies-category-1.xml"
+  },
+  {
+    "url": "https://bike-one.org/wp-sitemap-taxonomies-la_portfolio_category-1.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap-taxonomies-la_portfolio_category-1.xml"
+  },
+  {
+    "url": "https://bike-one.org/wp-sitemap-taxonomies-product_brand-1.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap-taxonomies-product_brand-1.xml"
+  },
+  {
+    "url": "https://bike-one.org/wp-sitemap-taxonomies-product_cat-1.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap-taxonomies-product_cat-1.xml"
+  },
+  {
+    "url": "https://bike-one.org/wp-sitemap-users-1.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap-users-1.xml"
+  },
+  {
+    "url": "https://bike-one.org/wp-sitemap.xml",
+    "status": 200,
+    "file": "sitemaps/wp-sitemap.xml"
+  }
+]

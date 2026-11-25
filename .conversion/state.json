@@ -1,0 +1,207 @@
+{
+  "version": 1,
+  "site": "https://bike-one.org",
+  "repo": "Swamp3/bike-one-shop (existing repo; website/ merged in at the end)",
+  "hosting": "cloudflare",
+  "startedAt": "2026-11-25T07:17:03.391Z",
+  "phase": "scaffold",
+  "phases": {
+    "capture": {
+      "startedAt": "2026-11-25T07:17:03.563Z",
+      "finishedAt": "2026-11-25T07:48:36.786Z",
+      "result": null
+    },
+    "plan": {
+      "startedAt": "2026-11-25T07:48:36.786Z",
+      "finishedAt": "2026-11-25T07:48:59.359Z",
+      "result": null
+    },
+    "scaffold": {
+      "startedAt": "2026-11-25T07:48:59.359Z",
+      "finishedAt": null,
+      "result": null
+    }
+  },
+  "decisions": [
+    {
+      "id": "d1",
+      "topic": "repository",
+      "choice": "website/ is built as a standalone git repo (kit needs its own main + astro-rebuild), hidden from the parent via .git/info/exclude, then merged into bike-one-shop with history under website/",
+      "default": "new private repo",
+      "reason": "user: use the repo we are in, website and shop combine; init-site always runs git init and commits to main",
+      "costIfWrong": "low: the merge is a read-tree at the end",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d2",
+      "topic": "WooCommerce",
+      "choice": "out of scope: shop, product, category, brand, cart, checkout, account, wishlist paths excluded from capture",
+      "default": "reproduce live",
+      "reason": "user: ignore woocommerce, the new shop is this repo",
+      "costIfWrong": "medium: excluded pages need a link or redirect to the new shop",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d3",
+      "topic": "hosting and staging domain",
+      "choice": "Cloudflare Pages; development on bike-one.dev, always noindex (PUBLIC_INDEXABLE unset)",
+      "default": "Vercel, public noindexed staging",
+      "reason": "user: domain registered at Cloudflare; bike-one.dev must not be indexed",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d4",
+      "topic": "excluded paths",
+      "choice": "woo default and German slugs: /shop/ /product/ /product-category/ /product-brand/ /brand/ /cart/ /checkout/ /my-account/ /wishlist/ /produkt/ /produkt-kategorie/ /warenkorb/ /kasse/ /mein-konto/ /wunschliste/",
+      "default": "none",
+      "reason": "real slugs unknown before capture; adjust with --resume --exclude",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d5",
+      "topic": "URL form",
+      "choice": "trailing slash always (54 of 54 pages)",
+      "default": "majority form",
+      "reason": "capture",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d6",
+      "topic": "media",
+      "choice": "live-temporary: 2009 files, 1156.7 MB, 5 over 25 MB (largest 91.9 MB mp4); R2 mode needed, no R2 credentials; staging serves /wp-content/uploads/ from bike-one.org. 4108 unreferenced WordPress sizes listed, not downloaded",
+      "default": "store (r2)",
+      "reason": "over 300 MB limit; no store credentials",
+      "costIfWrong": "high if forgotten: bike-one.org is replaced at launch, so images break. Must move to R2 before DNS",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d7",
+      "topic": "templates",
+      "choice": "10 templates from 55 pages as clustered (template-1 15 portfolio demo, page 10, archive 9 brands, template-2 7 team demo, single-post 5, page-3 4, archive-3 2, archive-2 1, home 1, page-2 1)",
+      "default": "as clustered",
+      "reason": "capture/templates.json",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d8",
+      "topic": "portfolio and team-member pages",
+      "choice": "reproduce live (theme demo content: portfolio-name-N, member-0N, branding-design)",
+      "default": "reproduce live",
+      "reason": "parity; removal is a proposal",
+      "costIfWrong": "none for launch",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d9",
+      "topic": "missing h1",
+      "choice": "reproduce live: 27 pages have no h1 (home, brands, categories, legal, booking, about)",
+      "default": "reproduce live",
+      "reason": "parity; fix is a proposal",
+      "costIfWrong": "SEO stays as today",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d10",
+      "topic": "forms",
+      "choice": "none to rewire: the only POST forms are WooCommerce add-to-cart on /, GET search on /Marke/*; markup reproduced, cart no longer works",
+      "default": "formspree",
+      "reason": "inventory.json forms",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d11",
+      "topic": "WooCommerce links on kept pages",
+      "choice": "home and category pages still show product markup and links into excluded /produkt/ paths; reproduced as is, add-to-cart stops working",
+      "default": "reproduce live",
+      "reason": "user: ignore woocommerce",
+      "costIfWrong": "medium: dead product links on staging until the new shop takes those paths",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d12",
+      "topic": "embeds",
+      "choice": "keep etermin.net booking iframes (/termin-buchen-oldenburg/, -osnabrueck/) and Google Maps iframes (/termin-buchen/)",
+      "default": "reproduce live",
+      "reason": "third-party embeds",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d13",
+      "topic": "third-party scripts",
+      "choice": "none found in capture/scripts.json",
+      "default": "keep all",
+      "reason": "capture",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d14",
+      "topic": "lighthouse",
+      "choice": "skipped, not installed",
+      "default": "skip",
+      "reason": "never install unasked",
+      "costIfWrong": "suggestions list performance as Not covered",
+      "date": "2026-11-25"
+    }
+  ],
+  "counts": {},
+  "needsYou": [
+    {
+      "item": "gh not logged in: push branch and open PR from .conversion/pr-body.md",
+      "command": "! gh auth login",
+      "before": "pr"
+    },
+    {
+      "item": "Cloudflare login for Pages project and bike-one.dev custom domain",
+      "command": "! npx wrangler login",
+      "before": "prelaunch"
+    },
+    {
+      "item": "Create R2 bucket, upload media, regenerate rewrites; live-temporary must be gone before DNS moves",
+      "command": "set R2_ACCOUNT_ID R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY R2_BUCKET",
+      "before": "DNS"
+    },
+    {
+      "item": "Export Search Console data",
+      "command": "Search Console export",
+      "before": "DNS"
+    }
+  ],
+  "intake": {
+    "forms": {
+      "service": "formspree"
+    },
+    "testAddress": null,
+    "domain": "bike-one.org",
+    "stagingDomain": "bike-one.dev",
+    "vercelScope": null,
+    "publicStaging": true,
+    "consent": [],
+    "keepPages": [],
+    "excludePaths": [
+      "/shop/",
+      "/product/",
+      "/product-category/",
+      "/product-brand/",
+      "/brand/",
+      "/cart/",
+      "/checkout/",
+      "/my-account/",
+      "/wishlist/",
+      "/produkt/",
+      "/produkt-kategorie/",
+      "/warenkorb/",
+      "/kasse/",
+      "/mein-konto/",
+      "/wunschliste/"
+    ],
+    "components": false
+  },
+  "trailingSlash": "always"
+}

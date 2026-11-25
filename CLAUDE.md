@@ -1,0 +1,67 @@
+# Working in this repository
+
+This is a static Astro rebuild of https://bike-one.org (BikeOne), made with astro-conversion-kit.
+The goal is parity: the same URLs, content, head tags and look as the live site. Not a redesign.
+
+## Branch
+- All conversion work happens on `astro-rebuild`. `main` holds only the scaffold until launch.
+- Never commit to `main` directly. Never force-push.
+
+## Source of truth
+- Build only from `capture/`: the saved HTML, CSS, media and URL inventory of the live site.
+- Do not retype content. Copy text, headings, alt text, titles, descriptions and JSON-LD from the
+  captured HTML with a script or by moving the markup; never paraphrase or tidy it.
+- Do not fetch the live site again unless a capture step asks for it. It is read-only.
+- If something is missing from `capture/`, re-run the capture into a fresh folder and diff instead of
+  guessing; the committed capture stays as it was.
+
+## Gates on every commit
+Run before each commit and fix every failure first:
+
+```
+npm run build
+npm run verify
+```
+
+- `npm run verify` checks the build in `dist/` against `baseline/` (URLs, status, titles,
+  descriptions, canonicals, headings, links, media, redirects).
+- `npm run review:shoot`, `review:diff`, `review:styles`, `review:sheet` and `review:check`
+  produce and re-check the visual review under `review/` (not committed). Pixel diff passes at
+  0.5 % or less per page and width; a looser threshold is an entry in the committed
+  `docs/visual-overrides.json` with its decision id, at most 2 %.
+
+## Exceptions and proposals
+- `exceptions.json`: a difference from the live site that is accepted on purpose (a broken embed
+  that cannot work statically, a form that now posts elsewhere). Each entry names the path, the
+  field and the reason. The gates substitute `to` for `from` for that one field on that one
+  path. Add one only when the difference is unavoidable, and say why.
+- `proposals.json`: an improvement over the live site (a fixed typo, a missing alt text). It ships
+  only in a `PROPOSALS=on` build (`npm run verify:proposals`) until a person approves it. A
+  proposal is never applied to the default build. It carries `"approvedBy": "proposed"` and `id`,
+  the decision id from `docs/plan.md` (several entries may share one); code checks it with
+  `proposalOn(id)`. When a person approves it, the entry moves to `exceptions.json` with their
+  name in `approvedBy`.
+- Both files hold the gates' record shape: `{ path, field, from, to, reason, approvedBy, date }`.
+  One record means "no redirect for this path, on purpose" (a broken live href nothing should
+  redirect): `{ kind: "redirect", path, reason, action: "none", approvedBy, date }`, every key
+  required.
+- Never edit `baseline/` to make a gate pass.
+
+## Indexing switch
+- Every build is `noindex, nofollow` with a blocking robots.txt unless `PUBLIC_INDEXABLE=true`.
+- Only the launch build sets it (`npm run verify:release` checks that build). Never set it in a
+  preview deployment or commit it to a config file.
+
+## Hosting
+- Target: cloudflare. Redirects come from `redirects.csv` through `npm run redirects:build`;
+  do not hand-edit the generated redirect rules.
+
+## Files
+- `docs/plan.md`: templates found, counts, decisions. Update it when a decision changes.
+- `docs/third-party.md`: every external script, embed and form endpoint, and what replaces it.
+- `docs/LAUNCH.md`: what a person must do, the closeout, launch day and the 30-day watch.
+
+## Secrets
+- No keys, tokens or real email addresses in the repo. Use `.env` (ignored) and `.env.example`.
+- The one test form submission goes only to the address given at intake, never to one found
+  on the site.

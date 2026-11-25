@@ -1,0 +1,38 @@
+{
+  "name": "bikeone",
+  "version": "0.0.0",
+  "description": "Static Astro rebuild of bike-one.org",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22.23.4 <23 || >=24.22.1"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "node --test \"test/**/*.test.mjs\"",
+    "baseline": "node scripts/build-baseline.mjs --capture capture --out baseline",
+    "assets:copy": "node scripts/copy-assets.mjs --capture capture --site .",
+    "links:exceptions": "node scripts/link-exceptions.mjs --baseline baseline --capture capture --out exceptions.json",
+    "verify": "node scripts/verify/run-all.mjs",
+    "verify:proposals": "PROPOSALS=on node scripts/verify/run-all.mjs",
+    "verify:release": "PUBLIC_INDEXABLE=true node scripts/verify/run-all.mjs",
+    "redirects:build": "node scripts/build-redirects.mjs --csv redirects.csv --host cloudflare --out public/_redirects --trailing-slash always --routes baseline/routes.json",
+    "verify:live": "node scripts/verify-live.mjs",
+    "review:shoot": "node scripts/review/shoot.mjs",
+    "review:diff": "node scripts/review/diff.mjs",
+    "review:styles": "node scripts/review/styles.mjs",
+    "review:sheet": "node scripts/review/sheet.mjs",
+    "review:check": "node scripts/review/check.mjs --review review",
+    "review:serve": "node scripts/review-serve.mjs"
+  },
+  "devDependencies": {
+    "astro": "7.4.13",
+    "parse5": "8.0.1",
+    "playwright": "1.64.1",
+    "pixelmatch": "8.0.0",
+    "pngjs": "7.0.0",
+    "css-tree": "3.2.1"
+  }
+}

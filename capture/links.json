@@ -1,0 +1,1071 @@
+{
+  "internal": {
+    "/": [
+      "/Marke/cervelo/",
+      "/Marke/factor/",
+      "/Marke/pinarello/",
+      "/Marke/ridley/",
+      "/Marke/specialized/",
+      "/Marke/trek/",
+      "/Marke/wilier/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/blog/",
+      "/category/allgemein/",
+      "/datenschutz/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/ebikes/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/gravel-bikes/",
+      "/impressum/",
+      "/main-bike/",
+      "/portfolio-category/branding-design/",
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/",
+      "/racebikes/",
+      "/sale/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/stellenangebote/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/",
+      "/termin-buchen-oldenburg/",
+      "/termin-buchen-osnabrueck/",
+      "/termin-buchen/",
+      "/tt-triathlon/",
+      "/ueber-uns/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/Marke/cervelo/?orderby=date": [
+      "/Marke/cervelo/"
+    ],
+    "/Marke/cervelo/?orderby=menu_order": [
+      "/Marke/cervelo/"
+    ],
+    "/Marke/cervelo/?orderby=popularity": [
+      "/Marke/cervelo/"
+    ],
+    "/Marke/cervelo/?orderby=price": [
+      "/Marke/cervelo/"
+    ],
+    "/Marke/cervelo/?orderby=price-desc": [
+      "/Marke/cervelo/"
+    ],
+    "/Marke/cervelo/?per_page=12": [
+      "/Marke/cervelo/"
+    ],
+    "/Marke/cervelo/?per_page=15": [
+      "/Marke/cervelo/"
+    ],
+    "/Marke/cervelo/?per_page=30": [
+      "/Marke/cervelo/"
+    ],
+    "/Marke/factor/?orderby=date": [
+      "/Marke/factor/"
+    ],
+    "/Marke/factor/?orderby=menu_order": [
+      "/Marke/factor/"
+    ],
+    "/Marke/factor/?orderby=popularity": [
+      "/Marke/factor/"
+    ],
+    "/Marke/factor/?orderby=price": [
+      "/Marke/factor/"
+    ],
+    "/Marke/factor/?orderby=price-desc": [
+      "/Marke/factor/"
+    ],
+    "/Marke/factor/?per_page=12": [
+      "/Marke/factor/"
+    ],
+    "/Marke/factor/?per_page=15": [
+      "/Marke/factor/"
+    ],
+    "/Marke/factor/?per_page=30": [
+      "/Marke/factor/"
+    ],
+    "/Marke/pinarello/?orderby=date": [
+      "/Marke/pinarello/"
+    ],
+    "/Marke/pinarello/?orderby=menu_order": [
+      "/Marke/pinarello/"
+    ],
+    "/Marke/pinarello/?orderby=popularity": [
+      "/Marke/pinarello/"
+    ],
+    "/Marke/pinarello/?orderby=price": [
+      "/Marke/pinarello/"
+    ],
+    "/Marke/pinarello/?orderby=price-desc": [
+      "/Marke/pinarello/"
+    ],
+    "/Marke/pinarello/?per_page=12": [
+      "/Marke/pinarello/"
+    ],
+    "/Marke/pinarello/?per_page=15": [
+      "/Marke/pinarello/"
+    ],
+    "/Marke/pinarello/?per_page=30": [
+      "/Marke/pinarello/"
+    ],
+    "/Marke/ridley/?orderby=date": [
+      "/Marke/ridley/"
+    ],
+    "/Marke/ridley/?orderby=menu_order": [
+      "/Marke/ridley/"
+    ],
+    "/Marke/ridley/?orderby=popularity": [
+      "/Marke/ridley/"
+    ],
+    "/Marke/ridley/?orderby=price": [
+      "/Marke/ridley/"
+    ],
+    "/Marke/ridley/?orderby=price-desc": [
+      "/Marke/ridley/"
+    ],
+    "/Marke/ridley/?per_page=12": [
+      "/Marke/ridley/"
+    ],
+    "/Marke/ridley/?per_page=15": [
+      "/Marke/ridley/"
+    ],
+    "/Marke/ridley/?per_page=30": [
+      "/Marke/ridley/"
+    ],
+    "/Marke/specialized/?orderby=date": [
+      "/Marke/specialized/"
+    ],
+    "/Marke/specialized/?orderby=menu_order": [
+      "/Marke/specialized/"
+    ],
+    "/Marke/specialized/?orderby=popularity": [
+      "/Marke/specialized/"
+    ],
+    "/Marke/specialized/?orderby=price": [
+      "/Marke/specialized/"
+    ],
+    "/Marke/specialized/?orderby=price-desc": [
+      "/Marke/specialized/"
+    ],
+    "/Marke/specialized/?per_page=12": [
+      "/Marke/specialized/"
+    ],
+    "/Marke/specialized/?per_page=15": [
+      "/Marke/specialized/"
+    ],
+    "/Marke/specialized/?per_page=30": [
+      "/Marke/specialized/"
+    ],
+    "/Marke/trek/?orderby=date": [
+      "/Marke/trek/"
+    ],
+    "/Marke/trek/?orderby=menu_order": [
+      "/Marke/trek/"
+    ],
+    "/Marke/trek/?orderby=popularity": [
+      "/Marke/trek/"
+    ],
+    "/Marke/trek/?orderby=price": [
+      "/Marke/trek/"
+    ],
+    "/Marke/trek/?orderby=price-desc": [
+      "/Marke/trek/"
+    ],
+    "/Marke/trek/?per_page=12": [
+      "/Marke/trek/"
+    ],
+    "/Marke/trek/?per_page=15": [
+      "/Marke/trek/"
+    ],
+    "/Marke/trek/?per_page=30": [
+      "/Marke/trek/"
+    ],
+    "/Marke/wilier/?orderby=date": [
+      "/Marke/wilier/"
+    ],
+    "/Marke/wilier/?orderby=menu_order": [
+      "/Marke/wilier/"
+    ],
+    "/Marke/wilier/?orderby=popularity": [
+      "/Marke/wilier/"
+    ],
+    "/Marke/wilier/?orderby=price": [
+      "/Marke/wilier/"
+    ],
+    "/Marke/wilier/?orderby=price-desc": [
+      "/Marke/wilier/"
+    ],
+    "/Marke/wilier/?per_page=12": [
+      "/Marke/wilier/"
+    ],
+    "/Marke/wilier/?per_page=15": [
+      "/Marke/wilier/"
+    ],
+    "/Marke/wilier/?per_page=30": [
+      "/Marke/wilier/"
+    ],
+    "/blog/": [
+      "/",
+      "/Marke/cervelo/",
+      "/Marke/factor/",
+      "/Marke/pinarello/",
+      "/Marke/ridley/",
+      "/Marke/specialized/",
+      "/Marke/trek/",
+      "/Marke/wilier/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/category/allgemein/",
+      "/datenschutz/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/ebikes/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/gravel-bikes/",
+      "/impressum/",
+      "/main-bike/",
+      "/portfolio-category/branding-design/",
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/",
+      "/racebikes/",
+      "/sale/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/stellenangebote/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/",
+      "/termin-buchen-oldenburg/",
+      "/termin-buchen-osnabrueck/",
+      "/termin-buchen/",
+      "/tt-triathlon/",
+      "/ueber-uns/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/category/allgemein/": [
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/datenschutz/": [
+      "/",
+      "/Marke/cervelo/",
+      "/Marke/factor/",
+      "/Marke/pinarello/",
+      "/Marke/ridley/",
+      "/Marke/specialized/",
+      "/Marke/trek/",
+      "/Marke/wilier/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/blog/",
+      "/category/allgemein/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/ebikes/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/gravel-bikes/",
+      "/impressum/",
+      "/main-bike/",
+      "/portfolio-category/branding-design/",
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/",
+      "/racebikes/",
+      "/sale/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/stellenangebote/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/",
+      "/termin-buchen-oldenburg/",
+      "/termin-buchen-osnabrueck/",
+      "/termin-buchen/",
+      "/tt-triathlon/",
+      "/ueber-uns/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/": [
+      "/author/lawrencebennier-com/",
+      "/blog/",
+      "/category/allgemein/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/": [
+      "/author/lawrencebennier-com/",
+      "/blog/",
+      "/category/allgemein/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/"
+    ],
+    "/gravel-bikes/?query-0-page=2": [
+      "/gravel-bikes/"
+    ],
+    "/impressum/": [
+      "/",
+      "/Marke/cervelo/",
+      "/Marke/factor/",
+      "/Marke/pinarello/",
+      "/Marke/ridley/",
+      "/Marke/specialized/",
+      "/Marke/trek/",
+      "/Marke/wilier/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/blog/",
+      "/category/allgemein/",
+      "/datenschutz/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/ebikes/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/gravel-bikes/",
+      "/main-bike/",
+      "/portfolio-category/branding-design/",
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/",
+      "/racebikes/",
+      "/sale/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/stellenangebote/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/",
+      "/termin-buchen-oldenburg/",
+      "/termin-buchen-osnabrueck/",
+      "/termin-buchen/",
+      "/tt-triathlon/",
+      "/ueber-uns/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/portfolio-category/branding-design/": [
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/"
+    ],
+    "/portfolio-category/branding-design/page/2/": [
+      "/portfolio-category/branding-design/"
+    ],
+    "/portfolio/portfolio-name-10/": [
+      "/portfolio-category/branding-design/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-9/"
+    ],
+    "/portfolio/portfolio-name-11/": [
+      "/portfolio-category/branding-design/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-12/"
+    ],
+    "/portfolio/portfolio-name-12/": [
+      "/portfolio-category/branding-design/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-13/"
+    ],
+    "/portfolio/portfolio-name-13/": [
+      "/portfolio-category/branding-design/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-14/"
+    ],
+    "/portfolio/portfolio-name-14/": [
+      "/portfolio-category/branding-design/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-15/"
+    ],
+    "/portfolio/portfolio-name-15/": [
+      "/portfolio-category/branding-design/",
+      "/portfolio/portfolio-name-14/"
+    ],
+    "/portfolio/portfolio-name-2/": [
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name/"
+    ],
+    "/portfolio/portfolio-name-3/": [
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-4/"
+    ],
+    "/portfolio/portfolio-name-4/": [
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-5/"
+    ],
+    "/portfolio/portfolio-name-5/": [
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-6/"
+    ],
+    "/portfolio/portfolio-name-6/": [
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-7/"
+    ],
+    "/portfolio/portfolio-name-7/": [
+      "/portfolio-category/branding-design/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-8/"
+    ],
+    "/portfolio/portfolio-name-8/": [
+      "/portfolio-category/branding-design/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-9/"
+    ],
+    "/portfolio/portfolio-name-9/": [
+      "/portfolio-category/branding-design/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-8/"
+    ],
+    "/portfolio/portfolio-name/": [
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-2/"
+    ],
+    "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/": [
+      "/author/lawrencebennier-com/",
+      "/blog/",
+      "/category/allgemein/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/": [
+      "/author/lawrencebennier-com/",
+      "/blog/",
+      "/category/allgemein/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/"
+    ],
+    "/termin-buchen": [
+      "/"
+    ],
+    "/termin-buchen-oldenburg/": [
+      "/termin-buchen/",
+      "/ueber-uns/"
+    ],
+    "/termin-buchen-osnabrueck/": [
+      "/termin-buchen/",
+      "/ueber-uns/"
+    ],
+    "/termin-buchen/": [
+      "/",
+      "/Marke/cervelo/",
+      "/Marke/factor/",
+      "/Marke/pinarello/",
+      "/Marke/ridley/",
+      "/Marke/specialized/",
+      "/Marke/trek/",
+      "/Marke/wilier/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/blog/",
+      "/category/allgemein/",
+      "/datenschutz/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/ebikes/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/gravel-bikes/",
+      "/impressum/",
+      "/main-bike/",
+      "/portfolio-category/branding-design/",
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/",
+      "/racebikes/",
+      "/sale/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/stellenangebote/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/",
+      "/termin-buchen-oldenburg/",
+      "/termin-buchen-osnabrueck/",
+      "/tt-triathlon/",
+      "/ueber-uns/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/ueber-uns/": [
+      "/",
+      "/Marke/cervelo/",
+      "/Marke/factor/",
+      "/Marke/pinarello/",
+      "/Marke/ridley/",
+      "/Marke/specialized/",
+      "/Marke/trek/",
+      "/Marke/wilier/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/blog/",
+      "/category/allgemein/",
+      "/datenschutz/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/ebikes/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/gravel-bikes/",
+      "/impressum/",
+      "/main-bike/",
+      "/portfolio-category/branding-design/",
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/",
+      "/racebikes/",
+      "/sale/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/stellenangebote/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/",
+      "/termin-buchen-oldenburg/",
+      "/termin-buchen-osnabrueck/",
+      "/termin-buchen/",
+      "/tt-triathlon/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/": [
+      "/author/lawrencebennier-com/",
+      "/blog/",
+      "/category/allgemein/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/"
+    ],
+    "/wp-content/themes/cosy/assets/images/wc-placeholder.png": [
+      "/"
+    ],
+    "/wp-content/uploads/2017/04/pf-1.avif": [
+      "/portfolio/portfolio-name/"
+    ],
+    "/wp-content/uploads/2017/04/pf-10.avif": [
+      "/portfolio/portfolio-name-10/"
+    ],
+    "/wp-content/uploads/2017/04/pf-11.avif": [
+      "/portfolio/portfolio-name-11/"
+    ],
+    "/wp-content/uploads/2017/04/pf-12.avif": [
+      "/portfolio/portfolio-name-12/"
+    ],
+    "/wp-content/uploads/2017/04/pf-13.avif": [
+      "/portfolio/portfolio-name-13/"
+    ],
+    "/wp-content/uploads/2017/04/pf-14.avif": [
+      "/portfolio/portfolio-name-14/"
+    ],
+    "/wp-content/uploads/2017/04/pf-15.avif": [
+      "/portfolio/portfolio-name-15/"
+    ],
+    "/wp-content/uploads/2017/04/pf-2.avif": [
+      "/portfolio/portfolio-name-2/"
+    ],
+    "/wp-content/uploads/2017/04/pf-3.avif": [
+      "/portfolio/portfolio-name-3/"
+    ],
+    "/wp-content/uploads/2017/04/pf-4.avif": [
+      "/portfolio/portfolio-name-4/"
+    ],
+    "/wp-content/uploads/2017/04/pf-5.avif": [
+      "/portfolio/portfolio-name-5/"
+    ],
+    "/wp-content/uploads/2017/04/pf-6.avif": [
+      "/portfolio/portfolio-name-6/"
+    ],
+    "/wp-content/uploads/2017/04/pf-7.avif": [
+      "/portfolio/portfolio-name-7/"
+    ],
+    "/wp-content/uploads/2017/04/pf-8.avif": [
+      "/portfolio/portfolio-name-8/"
+    ],
+    "/wp-content/uploads/2017/04/pf-9.avif": [
+      "/portfolio/portfolio-name-9/"
+    ]
+  },
+  "external": {
+    "https://bikeone.cvires.at/ebikes/": [
+      "/main-bike/"
+    ],
+    "https://bikeone.cvires.at/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/": [
+      "/blog/"
+    ],
+    "https://bikeone.cvires.at/gravel-bikes/": [
+      "/main-bike/"
+    ],
+    "https://bikeone.cvires.at/racebikes/": [
+      "/main-bike/"
+    ],
+    "https://bikeone.cvires.at/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/": [
+      "/blog/"
+    ],
+    "https://bikeone.cvires.at/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/": [
+      "/blog/"
+    ]
+  },
+  "excluded": {
+    "/product-category/gravel-bikes/": [
+      "/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/"
+    ],
+    "/product-category/road-bikes/": [
+      "/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/"
+    ],
+    "/product-category/tt-bikes/": [
+      "/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/"
+    ],
+    "/product/cervelo-aspero-5/": [
+      "/Marke/cervelo/",
+      "/gravel-bikes/"
+    ],
+    "/product/cervelo-aspero/": [
+      "/Marke/cervelo/",
+      "/gravel-bikes/"
+    ],
+    "/product/cervelo-caledonia-5/": [
+      "/Marke/cervelo/"
+    ],
+    "/product/cervelo-caledonia/": [
+      "/Marke/cervelo/"
+    ],
+    "/product/cervelo-p-series/": [
+      "/Marke/cervelo/"
+    ],
+    "/product/cervelo-p5-2/": [
+      "/",
+      "/Marke/cervelo/"
+    ],
+    "/product/cervelo-r5/": [
+      "/Marke/cervelo/"
+    ],
+    "/product/cervelo-s5/": [
+      "/Marke/cervelo/"
+    ],
+    "/product/cervelo-soloist/": [
+      "/Marke/cervelo/"
+    ],
+    "/product/factor-aluto/": [
+      "/Marke/factor/",
+      "/gravel-bikes/"
+    ],
+    "/product/factor-hanzo/": [
+      "/Marke/factor/"
+    ],
+    "/product/factor-monza/": [
+      "/Marke/factor/"
+    ],
+    "/product/factor-one/": [
+      "/Marke/factor/"
+    ],
+    "/product/factor-ostro-vam/": [
+      "/Marke/factor/"
+    ],
+    "/product/factor-slick/": [
+      "/Marke/factor/"
+    ],
+    "/product/pinarello-dogma-f/": [
+      "/Marke/pinarello/"
+    ],
+    "/product/pinarello-f/": [
+      "/",
+      "/Marke/pinarello/"
+    ],
+    "/product/ridley-falcn/": [
+      "/Marke/ridley/"
+    ],
+    "/product/ridley-kanzo-alu-equipped/": [
+      "/Marke/ridley/",
+      "/gravel-bikes/"
+    ],
+    "/product/ridley-kanzo-alu/": [
+      "/Marke/ridley/",
+      "/gravel-bikes/"
+    ],
+    "/product/ridley-kanzo-carbon/": [
+      "/Marke/ridley/",
+      "/gravel-bikes/"
+    ],
+    "/product/ridley-noah/": [
+      "/Marke/ridley/"
+    ],
+    "/product/specialized-crux-dsw/": [
+      "/Marke/specialized/",
+      "/gravel-bikes/"
+    ],
+    "/product/specialized-diverge-al/": [
+      "/Marke/specialized/",
+      "/gravel-bikes/"
+    ],
+    "/product/specialized-diverge-carbon-pro/": [
+      "/Marke/specialized/",
+      "/gravel-bikes/"
+    ],
+    "/product/specialized-diverge-carbon-sport/": [
+      "/Marke/specialized/",
+      "/gravel-bikes/"
+    ],
+    "/product/specialized-diverge-carbon/": [
+      "/Marke/specialized/",
+      "/gravel-bikes/"
+    ],
+    "/product/specialized-tarmac-sl8/": [
+      "/Marke/specialized/"
+    ],
+    "/product/trek-checkpoint-carbon-kopie/": [
+      "/Marke/trek/"
+    ],
+    "/product/trek-checkpoint-carbon-sl7/": [
+      "/Marke/trek/"
+    ],
+    "/product/trek-checkpoint-carbon/": [
+      "/",
+      "/Marke/trek/",
+      "/gravel-bikes/"
+    ],
+    "/product/trek-emonda-alr/": [
+      "/Marke/trek/"
+    ],
+    "/product/trek-madone-domane-sl/": [
+      "/Marke/trek/"
+    ],
+    "/product/trek-madone-sl/": [
+      "/Marke/trek/"
+    ],
+    "/product/trek-madone-slr/": [
+      "/Marke/trek/"
+    ],
+    "/product/wilier-adlar/": [
+      "/Marke/wilier/"
+    ],
+    "/product/wilier-filante-sl/": [
+      "/Marke/wilier/"
+    ],
+    "/product/wilier-filante-slr/": [
+      "/Marke/wilier/"
+    ],
+    "/product/wilier-rapida/": [
+      "/Marke/wilier/"
+    ],
+    "/product/wilier-rave-slr-id2/": [
+      "/Marke/wilier/"
+    ],
+    "/product/wilier-supersonica/": [
+      "/Marke/wilier/"
+    ],
+    "/product/wilier-turbine-sl/": [
+      "/Marke/ridley/"
+    ],
+    "/product/wilier-turbine-slr-kopie/": [
+      "/Marke/wilier/"
+    ],
+    "/product/wilier-turbine-slr/": [
+      "/Marke/wilier/"
+    ],
+    "/shop/?categories=gravel-bikes": [
+      "/",
+      "/Marke/cervelo/",
+      "/Marke/factor/",
+      "/Marke/pinarello/",
+      "/Marke/ridley/",
+      "/Marke/specialized/",
+      "/Marke/trek/",
+      "/Marke/wilier/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/blog/",
+      "/category/allgemein/",
+      "/datenschutz/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/ebikes/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/gravel-bikes/",
+      "/impressum/",
+      "/main-bike/",
+      "/portfolio-category/branding-design/",
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/",
+      "/racebikes/",
+      "/sale/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/stellenangebote/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/",
+      "/termin-buchen-oldenburg/",
+      "/termin-buchen-osnabrueck/",
+      "/termin-buchen/",
+      "/tt-triathlon/",
+      "/ueber-uns/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/shop/?categories=road-bikes": [
+      "/",
+      "/Marke/cervelo/",
+      "/Marke/factor/",
+      "/Marke/pinarello/",
+      "/Marke/ridley/",
+      "/Marke/specialized/",
+      "/Marke/trek/",
+      "/Marke/wilier/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/blog/",
+      "/category/allgemein/",
+      "/datenschutz/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/ebikes/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/gravel-bikes/",
+      "/impressum/",
+      "/main-bike/",
+      "/portfolio-category/branding-design/",
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/",
+      "/racebikes/",
+      "/sale/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/stellenangebote/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/",
+      "/termin-buchen-oldenburg/",
+      "/termin-buchen-osnabrueck/",
+      "/termin-buchen/",
+      "/tt-triathlon/",
+      "/ueber-uns/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ],
+    "/shop/?categories=tt-bikes": [
+      "/",
+      "/Marke/cervelo/",
+      "/Marke/factor/",
+      "/Marke/pinarello/",
+      "/Marke/ridley/",
+      "/Marke/specialized/",
+      "/Marke/trek/",
+      "/Marke/wilier/",
+      "/author/lawrencebennier-com/",
+      "/author/marvin/",
+      "/blog/",
+      "/category/allgemein/",
+      "/datenschutz/",
+      "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+      "/ebikes/",
+      "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+      "/gravel-bikes/",
+      "/impressum/",
+      "/main-bike/",
+      "/portfolio-category/branding-design/",
+      "/portfolio-category/branding-design/page/2/",
+      "/portfolio/portfolio-name-10/",
+      "/portfolio/portfolio-name-11/",
+      "/portfolio/portfolio-name-12/",
+      "/portfolio/portfolio-name-13/",
+      "/portfolio/portfolio-name-14/",
+      "/portfolio/portfolio-name-15/",
+      "/portfolio/portfolio-name-2/",
+      "/portfolio/portfolio-name-3/",
+      "/portfolio/portfolio-name-4/",
+      "/portfolio/portfolio-name-5/",
+      "/portfolio/portfolio-name-6/",
+      "/portfolio/portfolio-name-7/",
+      "/portfolio/portfolio-name-8/",
+      "/portfolio/portfolio-name-9/",
+      "/portfolio/portfolio-name/",
+      "/racebikes/",
+      "/sale/",
+      "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+      "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+      "/stellenangebote/",
+      "/team-member/charlotte-neal/",
+      "/team-member/john-bennett/",
+      "/team-member/member-01/",
+      "/team-member/member-02/",
+      "/team-member/member-03/",
+      "/team-member/victor-peters/",
+      "/team-member/willie-carter/",
+      "/termin-buchen-oldenburg/",
+      "/termin-buchen-osnabrueck/",
+      "/termin-buchen/",
+      "/tt-triathlon/",
+      "/ueber-uns/",
+      "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/"
+    ]
+  }
+}
