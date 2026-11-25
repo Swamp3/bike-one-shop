@@ -3,7 +3,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'parse5';
-import { isLegacyFile, isLegacyPage, LEGACY_PAGES } from '../legacy.mjs';
 import { DEV_ORIGIN } from '../dev-origin.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -23,23 +22,24 @@ export function walk(dir, visit, skip = () => false, base = dir) {
   }
 }
 
-/** Every built HTML page: { url: '/ueber-uns/', file, rel, legacy }. dist/.prerender is a build artefact, not a page. */
+/** Every built HTML page: { url: '/ueber-uns/', file, rel }. dist/.prerender is a build artefact, not a page. */
 export function pages() {
   need(fs.existsSync(DIST), 'dist/ is missing: run npm run build first');
   const out = [];
   walk(DIST, (file, rel) => {
     if (!rel.endsWith('.html')) return;
     const url = rel === 'index.html' ? '/' : rel.endsWith('/index.html') ? `/${rel.slice(0, -'index.html'.length)}` : `/${rel}`;
-    out.push({ url, file, rel, legacy: isLegacyPage(url) });
+    out.push({ url, file, rel });
   }, (rel) => rel === '.prerender' || rel.startsWith('.prerender/'));
   return out.sort((a, b) => a.url.localeCompare(b.url));
 }
-export const nativePages = () => pages().filter((p) => !p.legacy);
+export const nativePages = pages;
 
-/** Allowlist hygiene: every entry must still be built, and nothing built may be missing from it unless it is native. */
-export function staleAllowlist() {
-  const built = new Set(pages().map((p) => p.url));
-  return LEGACY_PAGES.filter((p) => !built.has(p)).map((p) => `allowlist entry ${p} is not built any more: delete it from tools/legacy.mjs`);
+/** The exact 200 rules of dist/_redirects as { from, to }: /feed/ is answered from /feed/index.xml. */
+export function rewrites() {
+  const file = path.join(DIST, '_redirects');
+  if (!fs.existsSync(file)) return [];
+  return fs.readFileSync(file, 'utf8').split('\n').map((l) => l.trim().split(/\s+/)).filter((c) => c.length === 3 && c[2] === '200' && !c[0].includes('*')).map(([from, to]) => ({ from, to }));
 }
 
 /** The built file a URL path resolves to, or null. */
@@ -50,10 +50,9 @@ export function resolveBuilt(urlPath) {
     const f = path.join(DIST, c);
     if (f.startsWith(DIST) && fs.existsSync(f) && fs.statSync(f).isFile()) return f;
   }
-  return null;
+  const rewrite = rewrites().find((r) => r.from === `/${clean}`);
+  return rewrite ? resolveBuilt(rewrite.to) : null;
 }
-
-export const isLegacyBuilt = (rel) => isLegacyFile(rel);
 
 // --- HTML ---
 export const parseHtml = (file) => parse(fs.readFileSync(file, 'utf8'), { sourceCodeLocationInfo: false });

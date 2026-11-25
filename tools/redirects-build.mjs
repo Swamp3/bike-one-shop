@@ -5,13 +5,12 @@
 //   node tools/redirects-build.mjs --dist   writes dist/_redirects for this build: the dev shop, or the production shop
 //                                           when PUBLIC_INDEXABLE=true (npm run build runs it after astro build)
 //
-// A redirect row exists only for a source without a page: the pages still on the old route (tools/legacy.mjs) are
-// skipped until they leave it. Captured rows (shortlink, crawl) are kept and re-pointed at the final destination.
+// One row per known old URL that the map sends elsewhere (a native page has no destination, so it gets no row), plus
+// the prefix rules. Captured rows (shortlink, crawl) are kept and re-pointed at the final destination.
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { isLegacyFile, isLegacyPage, LEGACY_PAGES } from './legacy.mjs';
 import { destination, PREFIXES } from './redirect-map.mjs';
 import { CSV_HEADER, CLOUDFLARE_QUERY_CSV } from '../scripts/lib/redirects-csv.mjs';
 import { parseRedirectsCsv } from '../scripts/lib/redirects-csv.mjs';
@@ -19,9 +18,6 @@ import { parseRedirectsCsv } from '../scripts/lib/redirects-csv.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHOP_DEV = 'https://shop.bike-one.dev/';
 const SHOP_PROD = 'https://shop.bike-one.org/';
-
-/** A page or file that the old route or public/ still serves at this URL path. */
-export const stillBuilt = (p) => isLegacyPage(p) || (isLegacyFile(p.replace(/^\//, '')) && fs.existsSync(path.join(ROOT, 'public', p)));
 
 export function oldUrls() {
   const urls = new Set();
@@ -42,17 +38,14 @@ export function buildRows(captured) {
   const rows = [];
   for (const row of captured) {
     // ?p= shortlinks and the one crawl row: aim at the final destination once the page they name has gone
-    const { path: p } = { path: row.to };
-    const d = row.source === 'decision' ? null : destination(p);
-    rows.push({ ...row, to: d && !stillBuilt(p) ? d : row.to });
+    rows.push({ ...row, to: (row.source === 'decision' ? null : destination(row.to)) ?? row.to });
   }
   const exact = [];
   for (const url of oldUrls().sort()) {
     const d = destination(url);
-    if (d && !stillBuilt(url)) exact.push({ from: url, to: d, status: 301, source: 'decision', note: 'redesign IA' });
+    if (d) exact.push({ from: url, to: d, status: 301, source: 'decision', note: 'redesign IA' });
   }
   const splats = PREFIXES
-    .filter(([prefix]) => !LEGACY_PAGES.some((p) => p.startsWith(prefix)) && !fs.existsSync(path.join(ROOT, 'public', prefix)))
     .map(([prefix, to]) => ({ from: `${prefix}*`, to, status: 301, source: 'decision', note: 'redesign IA, everything below' }));
   return [...rows, ...exact, ...splats];
 }
@@ -68,8 +61,11 @@ function compile(csvText, shop, out, workDir) {
   fs.mkdirSync(workDir, { recursive: true });
   const csv = path.join(workDir, 'redirects.csv');
   fs.writeFileSync(csv, csvText.replaceAll('{SHOP_URL}', shop));
+  // the one feed the site serves: /feed/ answers 200 from /feed/index.xml (neither Pages nor the review server serve a directory's index.xml)
+  const routes = path.join(workDir, 'routes.json');
+  fs.writeFileSync(routes, JSON.stringify([{ path: '/feed/', status: 200, kind: 'feed' }]));
   const r = spawnSync(process.execPath, [path.join(ROOT, 'scripts/build-redirects.mjs'), '--csv', csv, '--host', 'cloudflare', '--out', out,
-    '--trailing-slash', 'always', '--routes', path.join(ROOT, 'baseline/routes.json')], { cwd: ROOT, stdio: ['ignore', 'inherit', 'inherit'] });
+    '--trailing-slash', 'always', '--routes', routes], { cwd: ROOT, stdio: ['ignore', 'inherit', 'inherit'] });
   if (r.status) throw new Error(`build-redirects failed (${r.status})`);
   return workDir;
 }

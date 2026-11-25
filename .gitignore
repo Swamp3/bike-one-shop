@@ -15,7 +15,7 @@ node_modules
 /.conversion/media-cache/
 .conversion/*.tmp
 
-# media: 1.1 GB, copied into public/ by npm run assets:copy from .conversion/media-cache, never committed (decision d21)
-/public/wp-content/uploads/
+# media: 1.1 GB, moved out of public/ into legacy-public/ (not published, decision d52); was copied into public/ by npm run assets:copy from .conversion/media-cache, never committed (decision d21)
+/legacy-public/wp-content/uploads/
 /.conversion/video-download/
 /public/_redirects

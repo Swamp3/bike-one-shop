@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
-import { attr, DIST, find, isLegacyBuilt, isMain, parseHtml, report, walk } from '../lib/dist.mjs';
+import { attr, DIST, find, isMain, parseHtml, report, walk } from '../lib/dist.mjs';
 
 const MAX_FILE = 20 * 1024 * 1024;
 const CSS_BUDGET = 30 * 1024;
@@ -12,10 +12,9 @@ const kb = (n) => `${(n / 1024).toFixed(1)} KB`;
 
 export function run() {
   const problems = [];
-  const warnings = [];
   walk(DIST, (file, rel) => {
     const size = fs.statSync(file).size;
-    if (size > MAX_FILE) (isLegacyBuilt(rel) ? warnings : problems).push(`${rel} is ${(size / 1048576).toFixed(1)} MiB (limit 20 MiB)${isLegacyBuilt(rel) ? ' [old route, allowlisted until Stage 2]' : ''}`);
+    if (size > MAX_FILE) problems.push(`${rel} is ${(size / 1048576).toFixed(1)} MiB (limit 20 MiB)`);
   }, (rel) => rel === '.prerender' || rel.startsWith('.prerender/'));
 
   const home = path.join(DIST, 'index.html');
@@ -31,7 +30,7 @@ export function run() {
   if (cssBytes > CSS_BUDGET) problems.push(`home CSS is ${kb(cssBytes)} (budget ${kb(CSS_BUDGET)})`);
   if (jsBytes > JS_BUDGET) problems.push(`home JS is ${kb(jsBytes)} (budget ${kb(JS_BUDGET)})`);
   const gz = (f) => zlib.gzipSync(fs.readFileSync(f)).length;
-  const note = `home: HTML ${kb(htmlBytes)} (gzip ${kb(zlib.gzipSync(fs.readFileSync(home)).length)}), CSS ${kb(cssBytes)} in ${css.length} file(s) (gzip ${kb(css.reduce((n, f) => n + gz(f), 0))}), JS ${kb(jsBytes)} in ${js.length} file(s)` + (warnings.length ? `; ${warnings.length} old-route file(s) over 20 MiB, allowlisted until Stage 2 (public/wp-content/uploads, VidOne.mp4)` : '');
+  const note = `home: HTML ${kb(htmlBytes)} (gzip ${kb(zlib.gzipSync(fs.readFileSync(home)).length)}), CSS ${kb(cssBytes)} in ${css.length} file(s) (gzip ${kb(css.reduce((n, f) => n + gz(f), 0))}), JS ${kb(jsBytes)} in ${js.length} file(s)`;
   return { problems, note };
 }
 

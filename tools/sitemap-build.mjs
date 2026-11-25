@@ -1,6 +1,6 @@
 // Native sitemap (decision d42): after the build, list exactly the indexable pages of dist/ in sitemap-0.xml and name
 // it in sitemap-index.xml. Only the release build (PUBLIC_INDEXABLE=true) gets one: every other build is noindex
-// and has no sitemap. Pages still on the old route are not listed; they join as they are migrated.
+// and has no sitemap.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,7 +9,7 @@ import { attr, byTag, DIST, ORIGIN, pages, parseHtml, RELEASE } from './lib/dist
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 export function indexableUrls() {
-  return pages().filter((p) => !p.legacy && p.url !== '/404.html').filter((p) => {
+  return pages().filter((p) => p.url !== '/404.html').filter((p) => {
     const robots = byTag(parseHtml(p.file), 'meta').find((m) => attr(m, 'name') === 'robots');
     return !/noindex/i.test(attr(robots ?? { attrs: [] }, 'content') ?? '');
   }).map((p) => p.url);

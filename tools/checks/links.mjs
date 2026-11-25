@@ -4,8 +4,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { attr, DIST, find, isMain, nativePages, ORIGIN, parseHtml, RELEASE, report, resolveBuilt, SHOP } from '../lib/dist.mjs';
 
-// Hosts a page may link to (a href only; nothing is requested from them while rendering).
-const LINK_HOSTS = new Set([new URL(SHOP).host]);
+// Hosts a page may link to (a href only; nothing is requested from them while rendering): the shop, and the two
+// "open in a new page" fallbacks next to the click-to-load embeds.
+const LINK_HOSTS = new Set([new URL(SHOP).host, 'www.etermin.net', 'bike-leasing-calculator.jobrad.org']);
 // Hosts an iframe may point to (click-to-load embeds; the CSP frame-src names the same three).
 const EMBED_HOSTS = new Set(['www.etermin.net', 'www.google.com', 'bike-leasing-calculator.jobrad.org']);
 
