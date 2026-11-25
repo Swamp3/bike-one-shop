@@ -3,7 +3,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import { breadcrumbNode, graph } from '../lib/schema';
+import { breadcrumbNode } from '../lib/schema';
 
 export async function getStaticPaths() {
   return (await getCollection('legal')).map((entry) => ({ params: { legal: entry.id }, props: { entry } }));
@@ -12,7 +12,7 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const crumbs = [{ name: 'Startseite', path: '/' }, { name: entry.data.title, path: Astro.url.pathname }];
 ---
-<Base title={entry.data.seoTitle} description={entry.data.description} jsonLd={[graph([breadcrumbNode(Astro.site!.href, crumbs)])]}>
+<Base title={entry.data.seoTitle} description={entry.data.description} nodes={[breadcrumbNode(Astro.site!.href, crumbs)]}>
   <div class="container doc">
     <Breadcrumbs crumbs={crumbs} />
     <article class="prose"><Content /></article>

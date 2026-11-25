@@ -1,6 +1,6 @@
 ---
 title: "Datenschutzerklärung"
-seoTitle: "Datenschutzerklärung | BikeOne GmbH Oldenburg"
+seoTitle: "Datenschutzerklärung – BikeOne GmbH"
 description: "Datenschutzerklärung der BikeOne GmbH: Verantwortlicher, Zwecke der Datenverarbeitung, Speicherdauer und Ihre Rechte nach der DSGVO."
 ---
 

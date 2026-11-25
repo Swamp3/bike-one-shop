@@ -16,7 +16,9 @@ interface Props {
   type?: 'website' | 'article';
   noindex?: boolean;
   noCanonical?: boolean;
-  jsonLd?: object[];
+  published?: Date;
+  modified?: Date;
+  nodes?: Record<string, unknown>[];
 }
 const props = Astro.props;
 ---

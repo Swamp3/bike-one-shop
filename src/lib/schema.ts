@@ -1,6 +1,6 @@
 // JSON-LD builders. Every value comes from the content collections or the captured footer/Impressum text:
 // no geo coordinates, ratings, price ranges or invented hours (plan: SEO).
-import { INFO_EMAIL, LEGAL_NAME, SITE_NAME, TAGLINE } from './site.mjs';
+import { berlinIso, INFO_EMAIL, LEGAL_NAME, SITE_NAME, TAGLINE } from './site.mjs';
 import type { Store } from './stores';
 
 export type Crumb = { name: string; path: string };
@@ -14,7 +14,7 @@ export function storeNode(origin: string, store: Store): Json {
     '@type': 'BikeStore',
     '@id': abs(origin, `/#store-${store.id}`),
     name: `${LEGAL_NAME} ${d.name}`,
-    url: abs(origin, '/ueber-uns/'),
+    url: abs(origin, d.bookingPath),
     parentOrganization: { '@id': abs(origin, '/#organization') },
     address: {
       '@type': 'PostalAddress',
@@ -34,7 +34,8 @@ export function storeNode(origin: string, store: Store): Json {
   };
 }
 
-export function organizationNode(origin: string, logoUrl: string, brands: string[], stores: Store[]): Json {
+/** `storeIds` are the BikeStore nodes that sit in the same graph: an @id reference must resolve inside its own page. */
+export function organizationNode(origin: string, logoUrl: string, brands: string[], storeIds: string[]): Json {
   return {
     '@type': 'Organization',
     '@id': abs(origin, '/#organization'),
@@ -45,7 +46,7 @@ export function organizationNode(origin: string, logoUrl: string, brands: string
     email: INFO_EMAIL,
     description: TAGLINE,
     brand: brands.map((name) => ({ '@type': 'Brand', name })),
-    department: stores.map((s) => ({ '@id': abs(origin, `/#store-${s.id}`) })),
+    ...(storeIds.length ? { department: storeIds.map((id) => ({ '@id': id })) } : {}),
   };
 }
 
@@ -80,8 +81,8 @@ export const articleNode = (origin: string, a: ArticleInput): Json => ({
   headline: a.headline,
   description: a.description,
   image: a.image,
-  datePublished: a.published.toISOString(),
-  dateModified: a.modified.toISOString(),
+  datePublished: berlinIso(a.published),
+  dateModified: berlinIso(a.modified),
   inLanguage: 'de-DE',
   author: { '@id': abs(origin, '/#organization') },
   publisher: { '@id': abs(origin, '/#organization') },

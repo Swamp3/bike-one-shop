@@ -5,20 +5,24 @@
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ServiceBlock from '../components/ServiceBlock.astro';
+import PostCard from '../components/PostCard.astro';
 import Embed from '../components/Embed.astro';
 import { getPosts, postPath } from '../lib/posts';
-import { breadcrumbNode, graph } from '../lib/schema';
+import { breadcrumbNode } from '../lib/schema';
 import fitting from '../assets/photos/fitting.jpg';
 import leasing from '../assets/photos/leasing.jpg';
 import werkstatt from '../assets/photos/werkstatt.jpg';
 
-const leasingPost = (await getPosts()).find((p) => p.id.startsWith('fahrrad-leasing'));
+const posts = await getPosts();
+const leasingPost = posts.find((p) => p.id.startsWith('fahrrad-leasing'));
+// the posts that belong to the three services: leasing, workshop, fitting
+const related = ['fahrrad-leasing', 'wann-sich-ein-professioneller', 'so-erkennst-du'].map((prefix) => posts.find((p) => p.id.startsWith(prefix))).filter((p) => p !== undefined);
 const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Service', path: '/service/' }];
 ---
 <Base
   title="Service: Bike-Fitting, Dienstradleasing, Werkstatt"
   description="Lasergestütztes Bike-Fitting, Dienstradleasing, Werkstattservice für alle Marken und Canyon Collect & Ride bei BikeOne."
-  jsonLd={[graph([breadcrumbNode(Astro.site!.href, crumbs)])]}
+  nodes={[breadcrumbNode(Astro.site!.href, crumbs)]}
 >
   <section class="intro container">
     <Breadcrumbs crumbs={crumbs} />
@@ -77,6 +81,16 @@ const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Service', path: '/se
       <a class="btn" href="/termin-buchen/">Termin buchen</a>
     </div>
   </section>
+
+  <section class="section alt" aria-labelledby="blog-title">
+    <div class="container">
+      <h2 id="blog-title">Mehr dazu im Blog</h2>
+      <ul class="posts">
+        {related.map((p) => <li><PostCard post={p} level={3} /></li>)}
+      </ul>
+      <p class="where">Alle Standorte mit Adresse und Öffnungszeiten: <a href="/ueber-uns/">Über uns</a>.</p>
+    </div>
+  </section>
 </Base>
 
 <style>
@@ -85,6 +99,8 @@ const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Service', path: '/se
   .lead.strong { font-weight: 700; color: var(--ink); }
   .alt { background: var(--surface); border-block: 1px solid var(--line); }
   .blocks { display: grid; gap: var(--space-7); }
+  .posts { list-style: none; padding: 0; margin: var(--space-4) 0; display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+  .where { margin: 0; }
   .narrow > :global(*) { max-width: 52rem; }
   .narrow :global(.btn) { margin-top: var(--space-2); }
 </style>

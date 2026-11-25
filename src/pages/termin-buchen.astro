@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import StoreCard from '../components/StoreCard.astro';
 import { getStores } from '../lib/stores';
-import { breadcrumbNode, graph, storeNode } from '../lib/schema';
+import { breadcrumbNode, storeNode } from '../lib/schema';
 
 const stores = await getStores();
 const origin = Astro.site!.href;
@@ -13,7 +13,7 @@ const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Termin buchen', path
 <Base
   title="Termin buchen in Oldenburg & Osnabrück – BikeOne"
   description="BikeOne: Termin online buchen, in Oldenburg (Rheinstraße 16) oder Osnabrück (Lengericher Landstraße 30). Standort wählen und freien Termin finden."
-  jsonLd={[graph([...stores.map((s) => storeNode(origin, s)), breadcrumbNode(origin, crumbs)])]}
+  nodes={[...stores.map((s) => storeNode(origin, s)), breadcrumbNode(origin, crumbs)]}
 >
   <div class="container page">
     <Breadcrumbs crumbs={crumbs} />

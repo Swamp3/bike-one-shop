@@ -3,7 +3,7 @@
 // how to apply is not in the capture, so the page links to the location contacts only.
 import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import { breadcrumbNode, graph } from '../lib/schema';
+import { breadcrumbNode } from '../lib/schema';
 
 const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Stellenangebote', path: '/stellenangebote/' }];
 const groups = [
@@ -15,7 +15,7 @@ const groups = [
 <Base
   title="Stellenangebote bei BikeOne in Oldenburg & Osnabrück"
   description="Stellenangebote bei BikeOne: Mitarbeiter im Innendienst in der Zentrale Oldenburg sowie Zweiradmechaniker und Verkäufer in der Filiale Osnabrück."
-  jsonLd={[graph([breadcrumbNode(Astro.site!.href, crumbs)])]}
+  nodes={[breadcrumbNode(Astro.site!.href, crumbs)]}
 >
   <div class="container page">
     <Breadcrumbs crumbs={crumbs} />

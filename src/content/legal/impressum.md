@@ -1,7 +1,7 @@
 ---
 title: "Impressum"
-seoTitle: "Impressum | BikeOne GmbH Oldenburg"
-description: "Impressum der BikeOne GmbH, Rheinstrasse 16, 26135 Oldenburg: Angaben gemäß Informationspflicht, Handelsregister, Kontakt und Haftungshinweise."
+seoTitle: "Impressum – BikeOne GmbH Oldenburg"
+description: "Impressum der BikeOne GmbH, Rheinstraße 16, 26135 Oldenburg: Angaben gemäß Informationspflicht, Handelsregister, Kontakt und Haftungshinweise."
 ---
 
 # Impressum
