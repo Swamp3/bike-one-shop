@@ -5,7 +5,6 @@ import Base from '../layouts/Base.astro';
 import StoreCard from '../components/StoreCard.astro';
 import ServiceBlock from '../components/ServiceBlock.astro';
 import PostCard from '../components/PostCard.astro';
-import HeroVideo from '../components/HeroVideo.astro';
 import { SHOP_URL, TAGLINE } from '../lib/site.mjs';
 import { getStores } from '../lib/stores';
 import { getPosts } from '../lib/posts';
@@ -46,7 +45,6 @@ const services = [
 >
   <section class="hero dark" aria-labelledby="hero-title">
     <Picture class="bg" src={hero} alt="" formats={['avif', 'webp']} widths={HERO.widths} sizes={HERO.sizes} loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'bg-pic' }} />
-    <HeroVideo />
     <div class="container copy">
       <p class="eyebrow-light">BikeOne</p>
       <h1 id="hero-title">{TAGLINE.replace(/\.$/, '')}</h1>

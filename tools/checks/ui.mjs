@@ -4,10 +4,9 @@
 //  - no horizontal overflow at 1440 and 390.
 //  - touch targets at 390: every link and button is at least 44 px high and wide, unless it is a link inside a sentence.
 //  - menu at 390: Enter opens it, the first Tab lands on a menu link, Escape closes it and returns to the button.
-//  - hero pause button (home, 1440): reachable, Space pauses, Enter plays again, label and aria-pressed follow.
-//  - prefers-reduced-motion: smooth scrolling and transitions are off, the video never starts.
-//  - text on photos: the white text of the home hero and the Ueber uns banner keeps 4.5:1 (3:1 for the large h1) against
-//    the lightest part of the photo behind it, for the poster and for five frames of the video.
+//  - prefers-reduced-motion: smooth scrolling and transitions are off.
+//  - text on photos: the white text of the home hero (poster photo only, decision d71) and the Ueber uns banner keeps
+//    4.5:1 (3:1 for the large h1) against the lightest part of the photo behind it, at 1440 and 390.
 import { PNG } from 'pngjs';
 import { isMain, nativePages, report } from '../lib/dist.mjs';
 import { applyHeaders, BASE, launchers, needServer } from '../lib/browser.mjs';
@@ -127,44 +126,19 @@ export async function run() {
     await context.close();
   }
 
-  // hero pause button, 1440
-  {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-    const page = await context.newPage();
-    const at = (msg) => problems.push(`hero pause: ${msg}`);
-    await page.goto(`${BASE}/`, { waitUntil: 'load' });
-    await page.waitForFunction(() => document.querySelector('[data-hero-video]')?.classList.contains('is-playing'), null, { timeout: 8000 }).catch(() => at('the video did not start, so the button never appeared'));
-    const state = () => page.evaluate(() => { const v = document.querySelector('[data-hero-video]'); const b = document.querySelector('[data-hero-toggle]'); return { paused: v.paused, hidden: b.hidden, pressed: b.getAttribute('aria-pressed'), label: b.getAttribute('aria-label') }; });
-    let s = await state();
-    if (s.hidden) at('the button is hidden while the video plays');
-    else {
-      await page.focus('[data-hero-toggle]');
-      await page.keyboard.press('Space');
-      await page.waitForTimeout(200);
-      s = await state();
-      if (!s.paused || s.pressed !== 'true' || !/abspielen/.test(s.label)) at(`Space does not pause (${JSON.stringify(s)})`);
-      await page.keyboard.press('Enter');
-      await page.waitForTimeout(500);
-      s = await state();
-      if (s.paused || s.pressed !== 'false' || !/anhalten/.test(s.label)) at(`Enter does not play again (${JSON.stringify(s)})`);
-    }
-    await context.close();
-  }
-
   // prefers-reduced-motion
   {
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     await page.goto(`${BASE}/`, { waitUntil: 'load' });
     await page.waitForTimeout(1200);
-    const r = await page.evaluate(() => ({ scroll: getComputedStyle(document.documentElement).scrollBehavior, transition: parseFloat(getComputedStyle(document.querySelector('.btn')).transitionDuration), playing: !document.querySelector('[data-hero-video]').paused }));
+    const r = await page.evaluate(() => ({ scroll: getComputedStyle(document.documentElement).scrollBehavior, transition: parseFloat(getComputedStyle(document.querySelector('.btn')).transitionDuration) }));
     if (r.scroll !== 'auto') problems.push(`reduced motion: scroll-behavior is ${r.scroll}`);
     if (r.transition > 0.001) problems.push(`reduced motion: transitions last ${r.transition}s`);
-    if (r.playing) problems.push('reduced motion: the hero video plays');
     await context.close();
   }
 
-  // white text on the photos: poster and video frames
+  // white text on the photos
   let measured = 0;
   for (const [url, label, selectors, widths] of [['/', 'home hero', ['.hero h1', '.hero .eyebrow-light', '.hero .btn--ghost'], [1440, 390]], ['/ueber-uns/', 'Ueber uns banner', ['.banner h1'], [1440, 390]]]) {
     for (const width of widths) {
@@ -172,26 +146,12 @@ export async function run() {
       const page = await context.newPage();
       await page.goto(`${BASE}${url}`, { waitUntil: 'load' });
       await page.waitForLoadState('networkidle');
-      measured += await textOnPhoto(page, (m) => problems.push(`${width} ${m}`), `${label} poster`, selectors);
+      measured += await textOnPhoto(page, (m) => problems.push(`${width} ${m}`), `${label}`, selectors);
       await context.close();
     }
   }
-  {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-    const page = await context.newPage();
-    await page.goto(`${BASE}/`, { waitUntil: 'load' });
-    await page.waitForFunction(() => document.querySelector('[data-hero-video]')?.classList.contains('is-playing'), null, { timeout: 8000 }).catch(() => {});
-    await page.evaluate(() => document.querySelector('[data-hero-video]').pause());
-    const duration = await page.evaluate(() => document.querySelector('[data-hero-video]').duration || 13);
-    for (const frac of [0.05, 0.25, 0.5, 0.75, 0.95]) {
-      await page.evaluate(async (t) => { const v = document.querySelector('[data-hero-video]'); v.currentTime = t; await new Promise((res) => v.addEventListener('seeked', res, { once: true })); }, duration * frac);
-      await page.waitForTimeout(150);
-      measured += await textOnPhoto(page, (m) => problems.push(`1440 ${m}`), `home hero video at ${Math.round(frac * 100)} %`, ['.hero h1', '.hero .eyebrow-light', '.hero .btn--ghost']);
-    }
-    await context.close();
-  }
   await browser.close();
-  return { problems, note: `${pages.length} pages x 1440, 390: ${stops} focus stops; touch targets, menu, hero button, reduced motion; ${measured} text boxes on photos` };
+  return { problems, note: `${pages.length} pages x 1440, 390: ${stops} focus stops; touch targets, menu, reduced motion; ${measured} text boxes on photos` };
 }
 
 if (isMain(import.meta.url)) { const { problems, note } = await run(); process.exit(report('ui', problems, note)); }

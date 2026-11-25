@@ -18,4 +18,6 @@ node_modules
 # media: 1.1 GB, moved out of public/ into legacy-public/ (not published, decision d52); was copied into public/ by npm run assets:copy from .conversion/media-cache, never committed (decision d21)
 /legacy-public/wp-content/uploads/
 /.conversion/video-download/
+# the encoded hero video (H.264, 17.7 MiB), kept out of the site and out of git until it is performance-compatible (docs/TODO.md)
+/.local/
 /public/_redirects

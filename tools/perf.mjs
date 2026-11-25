@@ -1,8 +1,8 @@
 // Measurement tool (not a gate): per page and viewport the LCP element and time, CLS, requests and bytes, from the
 // review server (:4321, serves dist/, no compression: bytes are raw), in system Chrome and optionally WebKit and Firefox.
 //   node tools/perf.mjs [--out file.json] [--pages /,/blog/] [--browsers chrome,webkit] [--throttle none|fast4g|slow4g]
-// "load" = until the load event plus 1.5 s without scrolling (the hero video of the 1440 home page starts after load and
-// is counted separately as `video`); "scrolled" = after scrolling through the page so lazy images are fetched.
+// "load" = until the load event plus 1.5 s without scrolling (any video file is counted separately as `video`: there is
+// none while the home hero is the poster only, decision d71); "scrolled" = after scrolling through the page so lazy images are fetched.
 import fs from 'node:fs';
 import { parseArgs } from 'node:util';
 import { isMain, nativePages } from './lib/dist.mjs';

@@ -2,7 +2,8 @@
 // and JavaScript under 10 KB (uncompressed), nothing inline. Image rules (CLS and LCP): every img has width and height,
 // content images are AVIF and WebP in a picture with a srcset, lazy unless they are the one fetchpriority=high image,
 // which is preloaded with exactly its AVIF srcset. Fonts: one preload (crossorigin, a file a @font-face names), every
-// @font-face swaps. The hero video loads only on demand (preload none, muted, playsinline, no autoplay).
+// @font-face swaps. No video: dist/ holds no video or audio file and no page has a video, audio or source element (the
+// home hero is the poster photo only, decision d71; a video must be performance-measured before it returns, docs/TODO.md).
 // Prints the home page's static transfer budget.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -19,6 +20,7 @@ export function run() {
   walk(DIST, (file, rel) => {
     const size = fs.statSync(file).size;
     if (size > MAX_FILE) problems.push(`${rel} is ${(size / 1048576).toFixed(1)} MiB (limit 20 MiB)`);
+    if (/\.(mp4|m4v|webm|ogv|mov|mp3|ogg|wav)$/i.test(file)) problems.push(`${rel}: dist/ must hold no video or audio file (decision d71)`);
   }, (rel) => rel === '.prerender' || rel.startsWith('.prerender/'));
 
   const home = path.join(DIST, 'index.html');
@@ -78,9 +80,7 @@ export function run() {
       if (attr(f, 'crossorigin') === undefined || attr(f, 'type') !== 'font/woff2') at('font preload without crossorigin or type font/woff2');
       if (!fontFaces.has(attr(f, 'href'))) at(`the preloaded font ${attr(f, 'href')} is in no @font-face`);
     }
-    for (const v of byTag(pdoc, 'video')) {
-      if (attr(v, 'preload') !== 'none' || attr(v, 'autoplay') !== undefined || attr(v, 'muted') === undefined || attr(v, 'playsinline') === undefined || byTag(v, 'source').length) at('the video must be preload=none, muted, playsinline, without autoplay or source elements');
-    }
+    for (const tag of ['video', 'audio', 'source']) for (const n of byTag(pdoc, tag)) if (tag !== 'source' || n.parentNode.tagName !== 'picture') at(`<${tag}> element: pages carry no video or audio (decision d71)`);
   }
   const gz = (f) => zlib.gzipSync(fs.readFileSync(f)).length;
   const note = `home: HTML ${kb(htmlBytes)} (gzip ${kb(zlib.gzipSync(fs.readFileSync(home)).length)}), CSS ${kb(cssBytes)} in ${css.length} file(s) (gzip ${kb(css.reduce((n, f) => n + gz(f), 0))}), JS ${kb(jsBytes)} in ${js.length} file(s)`;
