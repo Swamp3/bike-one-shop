@@ -80,7 +80,7 @@ for (const r of routes) {
   const ser = (n) => (n ? serializeOuter(n) : '');
   // Menu change the owner asked for (decision d23): the GravelBikes, RoadBikes and TT/Triathlon items become one Shop item.
   const shopMenu = (h) => h
-    .replace(/<li([^>]*)><a href="\/shop\/\?categories=gravel-bikes">(<span class="mm-text">)?GravelBikes((?:<\/span>)?)<\/a><\/li>/, '<li$1><a href="/shop/">$2Shop$3</a></li>')
+    .replace(/<li([^>]*)><a href="\/shop\/\?categories=gravel-bikes">(<span class="mm-text">)?GravelBikes((?:<\/span>)?)<\/a><\/li>/, '<li$1><a href="__SHOP_URL__">$2Shop$3</a></li>')
     .replace(/\n?<li[^>]*><a href="\/shop\/\?categories=(?:road|tt)-bikes">[^<]*(?:<span class="mm-text">[^<]*<\/span>)?<\/a><\/li>/g, '');
   parts.header[slug] = shopMenu(ser(header)); parts.mobile[slug] = ser(mobile); parts.footer[slug] = shopMenu(ser(footer));
   data[slug] = { special: !!r.special, title: ((/<title[^>]*>([\s\S]*?)<\/title>/.exec(fs.readFileSync(`capture/${r.snapshot}`, 'utf8')) || [])[1] || '').replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(+n)).replace(/&amp;/g, '&'), blank, path: r.path, template: r.template, sk, bodyAttrs: (body.attrs || []).filter((a) => a.name !== 'class'), bodyClass: at(body, 'class') || '', htmlClass: at(html, 'class') || '', lang: at(html, 'lang') || '' };

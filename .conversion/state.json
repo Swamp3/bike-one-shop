@@ -244,10 +244,10 @@
     {
       "id": "d23",
       "topic": "menu: one Shop item",
-      "choice": "header and footer menus: GravelBikes, RoadBikes and TT/Triathlon replaced by one Shop item linking /shop/ (tools/extract.mjs); the pages /racebikes/, /tt-triathlon/ and /gravel-bikes/ stay built and unlinked",
+      "choice": "header and footer menus: GravelBikes, RoadBikes and TT/Triathlon replaced by one Shop item (tools/extract.mjs) linking to https://shop.bike-one.dev/ in local, dev and staging builds and to https://shop.bike-one.org/ in the release build (PUBLIC_INDEXABLE=true); SHOP_URL in src/lib/site.mjs; the pages /racebikes/, /tt-triathlon/ and /gravel-bikes/ stay built and unlinked",
       "default": "reproduce live",
       "reason": "owner request",
-      "costIfWrong": "low: /shop/ is the WooCommerce path, not built here until the new shop serves it; the three pages could be dropped with redirects to /shop/ if wanted",
+      "costIfWrong": "low: the shop sites must exist before launch; the three pages could be dropped with redirects if wanted",
       "date": "2026-11-25"
     },
     {

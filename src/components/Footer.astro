@@ -1,5 +1,6 @@
 ---
+import { SHOP_URL } from '../lib/site.mjs';
 const { slug, own = [] } = Astro.props;
 const parts = import.meta.glob('../content/parts/*.html', { query: '?raw', import: 'default', eager: true });
 ---
-<Fragment set:html={parts[`../content/parts/${own.includes('footer') ? slug + '.' : ''}footer.html`]} />
+<Fragment set:html={parts[`../content/parts/${own.includes('footer') ? slug + '.' : ''}footer.html`].replaceAll('__SHOP_URL__', SHOP_URL)} />
