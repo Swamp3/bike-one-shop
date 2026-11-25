@@ -3,8 +3,12 @@ import { Picture, getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import StoreCard from '../components/StoreCard.astro';
+import ServiceBlock from '../components/ServiceBlock.astro';
+import PostCard from '../components/PostCard.astro';
+import HeroVideo from '../components/HeroVideo.astro';
 import { SHOP_URL, TAGLINE } from '../lib/site.mjs';
 import { getStores } from '../lib/stores';
+import { getPosts } from '../lib/posts';
 import { breadcrumbNode, graph, organizationNode, storeNode, websiteNode } from '../lib/schema';
 import hero from '../assets/photos/hero.jpg';
 import beratung from '../assets/photos/beratung.jpg';
@@ -16,11 +20,10 @@ import icon from '../assets/brand/icon.png';
 
 const stores = await getStores();
 const brands = (await getCollection('brands')).map((b) => b.data.name);
-const posts = (await getCollection('blog')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, 3);
+const posts = (await getPosts()).slice(0, 3);
 const origin = Astro.site!.href;
 const logo = new URL((await getImage({ src: icon, width: 512, height: 512, format: 'png' })).src, origin).href;
 const jsonLd = [graph([organizationNode(origin, logo, brands, stores), websiteNode(origin), ...stores.map((s) => storeNode(origin, s))])];
-const date = new Intl.DateTimeFormat('de-DE', { dateStyle: 'long', timeZone: 'Europe/Berlin' });
 
 // Service texts: the captured home page, word for word (capture/text/home.txt).
 const services = [
@@ -43,6 +46,7 @@ const services = [
 >
   <section class="hero dark" aria-labelledby="hero-title">
     <Picture class="bg" src={hero} alt="" formats={['avif', 'webp']} widths={[640, 960, 1440, 1920]} sizes="100vw" loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'bg-pic' }} />
+    <HeroVideo />
     <div class="container copy">
       <p class="eyebrow-light">BikeOne</p>
       <h1 id="hero-title">{TAGLINE.replace(/\.$/, '')}</h1>
@@ -68,18 +72,14 @@ const services = [
       <p class="eyebrow">Service</p>
       <h2 id="service-title">Beratung, Fitting, Werkstatt und Leasing</h2>
       <div class="services">
-        {services.map((s) => (
-          <article class="service">
-            <Picture src={s.image} alt={s.alt} formats={['avif', 'webp']} widths={[480, 768, 1024]} sizes="(min-width: 48rem) 34rem, calc(100vw - 2rem)" loading="lazy" decoding="async" pictureAttributes={{ class: 'service-pic' }} />
-            <div class="service-copy">
-              <h3>{s.title}</h3>
-              {s.lead && <p class="lead">{s.lead}</p>}
-              <p>{s.text}</p>
-              {s.cta && <a class="btn" href="/termin-buchen/">{s.cta}</a>}
-            </div>
-          </article>
+        {services.map((s, i) => (
+          <ServiceBlock image={s.image} alt={s.alt} title={s.title} lead={s.lead} flip={i % 2 === 1}>
+            <p>{s.text}</p>
+            {s.cta && <a class="btn" href="/termin-buchen/">{s.cta}</a>}
+          </ServiceBlock>
         ))}
       </div>
+      <p class="more"><a href="/service/">Mehr zu unserem Service</a></p>
     </div>
   </section>
 
@@ -99,15 +99,7 @@ const services = [
       <p class="eyebrow">Blog</p>
       <h2 id="blog-title">Aktuell im Blog</h2>
       <ul class="posts">
-        {posts.map((p) => (
-          <li>
-            <article>
-              <time datetime={p.data.date.toISOString()}>{date.format(p.data.date)}</time>
-              <h3><a href={`/${p.id}/`}>{p.data.title}</a></h3>
-              <p>{p.data.excerpt}</p>
-            </article>
-          </li>
-        ))}
+        {posts.map((p) => <li><PostCard post={p} /></li>)}
       </ul>
       <p><a href="/blog/">Alle Beiträge im Blog</a></p>
     </div>
@@ -128,23 +120,10 @@ const services = [
   .store-grid { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); margin-top: var(--space-5); }
 
   .services { display: grid; gap: var(--space-7); margin-top: var(--space-6); }
-  .service { display: grid; gap: var(--space-5); align-items: center; }
-  .service :global(.service-pic), .service :global(.service-pic img) { width: 100%; border-radius: var(--radius-lg); }
-  .service :global(.service-pic img) { aspect-ratio: 4 / 3; object-fit: cover; height: auto; }
-  .service-copy p { max-width: 62ch; }
-  .lead { font-size: 1.15rem; color: var(--ink-muted); max-width: 62ch; }
-  @media (min-width: 48rem) {
-    .service { grid-template-columns: 1fr 1fr; gap: var(--space-7); }
-    .service:nth-child(even) :global(.service-pic) { order: 2; }
-  }
+  .more { margin: var(--space-6) 0 0; }
 
   .brands { list-style: none; padding: 0; margin: var(--space-5) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-3); }
   .brands li { padding: 0.6rem 1.1rem; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; font: 700 1.1rem/1 var(--font-head); }
 
   .posts { list-style: none; padding: 0; margin: var(--space-5) 0; display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
-  .posts article { height: 100%; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: var(--space-5); }
-  .posts time { font-size: 0.9rem; color: var(--ink-muted); }
-  .posts h3 { margin: var(--space-2) 0 var(--space-3); font-size: 1.25rem; }
-  .posts h3 a { color: var(--ink); text-decoration: none; }
-  .posts h3 a:hover { text-decoration: underline; }
 </style>

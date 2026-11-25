@@ -1,0 +1,27 @@
+---
+// A photo next to a headline and text; `flip` puts the photo on the right from 48rem. Used by the home page and /service/.
+import { Picture } from 'astro:assets';
+
+interface Props { image: ImageMetadata; alt: string; title: string; level?: 2 | 3; lead?: string; flip?: boolean }
+const { image, alt, title, level = 3, lead, flip = false } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+---
+<article class:list={['service', { flip }]}>
+  <Picture class="pic" src={image} alt={alt} formats={['avif', 'webp']} widths={[480, 768, 1024]} sizes="(min-width: 48rem) 34rem, calc(100vw - 2rem)" loading="lazy" decoding="async" pictureAttributes={{ class: 'pic-wrap' }} />
+  <div class="copy">
+    <Heading>{title}</Heading>
+    {lead && <p class="lead">{lead}</p>}
+    <slot />
+  </div>
+</article>
+<style>
+  .service { display: grid; gap: var(--space-5); align-items: center; }
+  .service :global(.pic-wrap), .service :global(.pic) { display: block; width: 100%; }
+  .service :global(.pic) { border-radius: var(--radius-lg); aspect-ratio: 4 / 3; object-fit: cover; height: auto; }
+  .copy :global(p) { max-width: 62ch; }
+  .lead { font-size: 1.15rem; color: var(--ink-muted); max-width: 62ch; }
+  @media (min-width: 48rem) {
+    .service { grid-template-columns: 1fr 1fr; gap: var(--space-7); }
+    .flip :global(.pic-wrap) { order: 2; }
+  }
+</style>

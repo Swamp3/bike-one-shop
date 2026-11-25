@@ -8,6 +8,7 @@
   "phoneTel": "+4944198489483",
   "email": "OL@bike-one.de",
   "bookingPath": "/termin-buchen-oldenburg/",
+  "bookingUrl": "https://www.etermin.net/bike-one",
   "mapQuery": "Rheinstraße 16, 26135 Oldenburg",
   "hours": [
     { "label": "Montag bis Freitag", "short": "Mo–Fr", "days": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "10:00", "closes": "18:00" },
