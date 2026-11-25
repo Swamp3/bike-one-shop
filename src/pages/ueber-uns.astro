@@ -1,0 +1,53 @@
+---
+import { Picture } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import StoreCard from '../components/StoreCard.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getStores } from '../lib/stores';
+import { breadcrumbNode, graph, organizationNode, storeNode, websiteNode } from '../lib/schema';
+import { getImage } from 'astro:assets';
+import banner from '../assets/photos/fitting.jpg';
+import icon from '../assets/brand/icon.png';
+
+const stores = await getStores();
+const brands = (await getCollection('brands')).map((b) => b.data.name);
+const origin = Astro.site!.href;
+const logo = new URL((await getImage({ src: icon, width: 512, height: 512, format: 'png' })).src, origin).href;
+const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Über uns', path: '/ueber-uns/' }];
+const jsonLd = [graph([organizationNode(origin, logo, brands, stores), websiteNode(origin), ...stores.map((s) => storeNode(origin, s)), breadcrumbNode(origin, crumbs)])];
+---
+<Base
+  title="Über uns: Standorte & Öffnungszeiten – BikeOne"
+  description="BikeOne in Oldenburg und Osnabrück: Adressen, Telefon, E-Mail und Öffnungszeiten beider Standorte. Termin online buchen."
+  image={banner}
+  imageAlt="Bike-Fitting bei BikeOne: eine Fahrerin auf dem Rad im Rollentrainer"
+  jsonLd={jsonLd}
+>
+  <section class="banner dark">
+    <Picture class="bg" src={banner} alt="" formats={['avif', 'webp']} widths={[640, 960, 1440, 1920]} sizes="100vw" loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'bg-pic' }} />
+    <div class="container copy">
+      <h1>Herzlich willkommen bei BikeOne!</h1>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="stores-title">
+    <div class="container">
+      <Breadcrumbs crumbs={crumbs} />
+      <h2 id="stores-title">Standorte &amp; Öffnungszeiten</h2>
+      <div class="store-grid">
+        {stores.map((s) => <StoreCard store={s} map />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .banner { position: relative; isolation: isolate; min-height: min(46vh, 28rem); display: grid; align-items: end; background: var(--header-bg); color: #fff; overflow: hidden; }
+  .banner :global(.bg-pic), .banner :global(.bg) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .banner :global(.bg) { object-fit: cover; object-position: 50% 35%; z-index: -2; }
+  .banner::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, #12121266 0%, #121212d9 100%); }
+  .copy { padding-block: var(--space-8) var(--space-6); }
+  .banner h1 { color: #fff; max-width: 16ch; margin: 0; }
+  .store-grid { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); margin-top: var(--space-5); }
+</style>
