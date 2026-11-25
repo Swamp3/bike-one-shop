@@ -1,0 +1,37 @@
+---
+// Blog index: the captured intro and every post of the collection, newest first.
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PostCard from '../components/PostCard.astro';
+import { getPosts } from '../lib/posts';
+import { breadcrumbNode, graph } from '../lib/schema';
+
+const posts = await getPosts();
+const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Blog', path: '/blog/' }];
+---
+<Base
+  title="Blog: Technik, Fitting, E-Bikes und Service – BikeOne"
+  description="Der BikeOne-Blog: Technik-Insights, Bike-Fitting-Tipps, Hintergrundwissen zu E-Bikes und Service-News aus der Welt des Radsports."
+  jsonLd={[graph([breadcrumbNode(Astro.site!.href, crumbs)])]}
+>
+  <div class="container intro">
+    <Breadcrumbs crumbs={crumbs} />
+    <h1>Willkommen im BikeOne-Blog</h1>
+    <p class="lead">Herzlich willkommen auf der Blog-Übersicht von BikeOne in Oldenburg! Hier finden Sie eine kompakte Übersicht unserer neuesten Beiträge aus der Welt des Radsports. Egal ob Technik-Insights, Bike-Fitting-Tipps, Hintergrundwissen zu E-Bikes oder spannende Service-News – in unserem Blog teilen wir regelmäßig spannenden Content, der sowohl Anfänger:innen als auch Experten inspiriert.</p>
+  </div>
+  <section class="container list" aria-labelledby="posts-title">
+    <h2 id="posts-title" class="visually-hidden">Alle Beiträge</h2>
+    <ul class="posts">
+      {posts.map((p, i) => <li><PostCard post={p} image level={3} /></li>)}
+    </ul>
+    <p class="feed"><a href="/feed/">Blog als RSS-Feed abonnieren</a></p>
+  </section>
+</Base>
+
+<style>
+  .intro { padding-block: var(--space-6) var(--space-5); }
+  .lead { font-size: 1.15rem; color: var(--ink-muted); max-width: 62ch; }
+  .list { padding-bottom: var(--space-8); }
+  .posts { list-style: none; padding: 0; margin: 0 0 var(--space-5); display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+  .feed { margin: 0; }
+</style>

@@ -18,6 +18,7 @@ const stores = defineCollection({
     phoneTel: z.string().regex(/^\+\d+$/),
     email: z.string().email(),
     bookingPath: z.string().startsWith('/').endsWith('/'),
+    bookingUrl: z.string().url().startsWith('https://www.etermin.net/'),
     mapQuery: z.string(),
     hours: z.array(z.object({
       label: z.string(),
@@ -41,15 +42,19 @@ const legal = defineCollection({
   schema: z.object({ title: z.string(), seoTitle: z.string(), description: z.string() }),
 });
 
-// The five captured posts. Stage 1 holds the front matter only (title, dates and excerpt copied from the capture);
-// the post bodies and the blog pages follow in Stage 2.
+// The five captured posts: front matter and body copied from capture/pages (body text word for word, the WordPress
+// separators dropped), SEO title and description written from the post's own text, image chosen from the media cache.
 const blog = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/blog' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
+    seoTitle: z.string(),
+    description: z.string(),
     date: z.coerce.date(),
     modified: z.coerce.date(),
     excerpt: z.string(),
+    image: image(),
+    imageAlt: z.string(),
   }),
 });
 

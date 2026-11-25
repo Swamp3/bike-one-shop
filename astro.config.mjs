@@ -13,6 +13,6 @@ export default defineConfig({
   // No inline <style> or <script> and no data: URIs for assets, so the CSP can stay `'self'` (decision d31).
   build: { format: 'directory', inlineStylesheets: 'never' },
   vite: { build: { assetsInlineLimit: 0 } },
-  // legal text is rendered as written: no automatic links in plain text (a URL cut by a manual line break)
-  markdown: { gfm: false },
+  // captured text is rendered as written: no automatic links in plain text (a URL cut by a manual line break), no typographic quotes
+  markdown: { gfm: false, smartypants: false },
 });
