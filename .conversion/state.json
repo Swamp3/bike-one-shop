@@ -267,6 +267,15 @@
       "reason": "owner report: poster shows until a click. Reproduced in WebKit (Safari engine): the slider never calls play() on the first video, a muted play() without gesture succeeds and the slider then fades the video in. Chrome autoplays by itself",
       "costIfWrong": "low: a no-op where autoplay already works; Safari with Low Power Mode can still block autoplay",
       "date": "2026-11-25"
+    },
+    {
+      "id": "d26",
+      "topic": "hero video",
+      "choice": "VidOne.mp4 (27,844,858 bytes, HEVC hvc1, no audio) is served from this site as /VidOne.mp4 (public/VidOne.mp4); tools/extract.mjs rewrites data-mp4/webm/ogv from the live origin to root-relative; the routes gate gets --allow-extra /VidOne.mp4 baked into the verify scripts in package.json. Supersedes the absolute live URL in d25",
+      "default": "reproduce live",
+      "reason": "owner request: the file lives only on the live host; it was downloaded once with the owner's consent. Not in the baseline, so it is an extra built file",
+      "costIfWrong": "high for hosting: the file is 26.55 MiB, over the 25 MiB Cloudflare Pages limit, so wrangler pages deploy fails until it is shrunk or served from R2; HEVC does not play in Firefox or Chromium without HEVC",
+      "date": "2026-11-25"
     }
   ],
   "counts": {},

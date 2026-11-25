@@ -22,6 +22,8 @@ fs.mkdirSync('src/components', { recursive: true });
 // alternate, og and other metadata keep the captured URL.
 const ORIGIN_RE = /(?:https?:)?\/\/(?:(?:www\.)?bike-one\.org|bikeone\.cvires\.at)(?=\/)/gi;
 const FILE_RE = /(?:https?:)?\/\/(?:(?:www\.)?bike-one\.org|bikeone\.cvires\.at)(?=\/wp-(?:content|includes)\/)/gi;
+// Slider background videos (data-mp4/webm/ogv) sit at the site root, outside /wp-content/ (d26): same origin, root-relative.
+const VIDEO_ATTR = /^data-(mp4|webm|ogv)$/;
 const ASSET_LINK_RELS = new Set(['stylesheet', 'icon', 'shortcut icon', 'apple-touch-icon', 'preload', 'modulepreload']);
 const ATTRS = { script: ['src'], img: ['src', 'srcset'], source: ['src', 'srcset'], video: ['src', 'poster'], audio: ['src'], track: ['src'] };
 // Scripts that cannot work on a static site and only raise console errors (decision d22): WooCommerce cart
@@ -35,7 +37,7 @@ function localise(node) {
     if (!c.tagName) continue;
     const names = c.tagName === 'link' && ASSET_LINK_RELS.has((at(c, 'rel') || '').toLowerCase().trim()) ? ['href', 'imagesrcset'] : ATTRS[c.tagName] || [];
     for (const a of c.attrs || []) {
-      if (names.includes(a.name)) a.value = a.value.replace(ORIGIN_RE, '');
+      if (names.includes(a.name) || VIDEO_ATTR.test(a.name)) a.value = a.value.replace(ORIGIN_RE, '');
       // inline background images and the lazy-load data-* sources the theme scripts read (d21): file URLs only
       else if (a.name === 'style' || a.name.startsWith('data-')) a.value = a.value.replace(FILE_RE, '');
     }

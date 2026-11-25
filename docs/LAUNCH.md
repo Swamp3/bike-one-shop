@@ -24,8 +24,8 @@ Things only a person with the accounts can do. Tick each one.
 ## B. Closeout
 
 - [ ] `npm run build`, then
-      `npm run verify -- --endpoint "$FORM_ENDPOINT" --honeypot _gotcha --thank-you /thank-you/ --allow-extra /thank-you/`
-      passes on `astro-rebuild` (drop `--allow-extra /thank-you/` when live already had that page).
+      `npm run verify -- --endpoint "$FORM_ENDPOINT" --honeypot _gotcha --thank-you /thank-you/ --allow-extra /VidOne.mp4,/thank-you/`
+      passes on `astro-rebuild` (drop `,/thank-you/` when live already had that page; keep `/VidOne.mp4`, because a later `--allow-extra` replaces the one in package.json).
 - [ ] Visual review, on the machine that ran the conversion: `capture/screens/` and `review/`
       are not committed, so a fresh clone cannot run it; there, read the `npm run review:check`
       output quoted in the pull request instead. With `npm run review:serve` running in a second terminal,
@@ -49,7 +49,7 @@ Things only a person with the accounts can do. Tick each one.
 
 1. Set `PUBLIC_INDEXABLE=true` for production builds only: set it on the local build that is deployed (`PUBLIC_INDEXABLE=true npm run build`), not in the Pages dashboard; every preview deploy is rebuilt with a plain `npm run build` first.
 2. `PUBLIC_INDEXABLE=true npm run build`, then
-   `npm run verify:release -- --endpoint "$FORM_ENDPOINT" --honeypot _gotcha --thank-you /thank-you/ --allow-extra /thank-you/`
+   `npm run verify:release -- --endpoint "$FORM_ENDPOINT" --honeypot _gotcha --thank-you /thank-you/ --allow-extra /VidOne.mp4,/thank-you/`
    locally; it must exit 0.
 3. Deploy production: `PUBLIC_INDEXABLE=true npm run build && npx wrangler pages deploy dist --branch main`
 4. Point DNS for bike-one.org at cloudflare: add the custom domain in the Pages project and set the records it shows.
