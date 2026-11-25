@@ -1,0 +1,8 @@
+---
+// Header and mobile header as captured; a page whose copy differs (current-menu-item) has its own file.
+import { SHOP_URL } from '../../lib/site.mjs';
+const { slug, own = [] } = Astro.props;
+const parts = import.meta.glob('../../content/parts/*.html', { query: '?raw', import: 'default', eager: true });
+const part = (name) => parts[`../../content/parts/${own.includes(name) ? slug + '.' : ''}${name}.html`].replaceAll('__SHOP_URL__', SHOP_URL);
+---
+<Fragment set:html={part('header')} /><Fragment set:html={parts['../../content/parts/mobile.html']} />

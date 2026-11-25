@@ -2,8 +2,8 @@
 // The theme's one body skeleton (#page > .site-inner > header, mobile header, #main, footer), shared by
 // every template: all 10 templates have the same shell (decision d15), only the body class and #main differ.
 import Base from './Base.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import Header from '../../components/legacy/Header.astro';
+import Footer from '../../components/legacy/Footer.astro';
 const { slug, meta, html, headExtra, bottom, seo } = Astro.props;
 ---
 <Base {...seo} lang={meta.lang} bodyClass={meta.bodyClass} css={meta.css}>
