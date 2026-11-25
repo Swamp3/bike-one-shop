@@ -59,8 +59,8 @@ const stores = await getStores();
   .grid { display: grid; gap: var(--space-6); grid-template-columns: 1fr; }
   @media (min-width: 40rem) { .grid { grid-template-columns: 1fr 1fr; } .stores { grid-column: 1 / -1; order: -1; } }
   @media (min-width: 64rem) { .grid { grid-template-columns: 1.1fr 1.6fr 0.7fr 0.7fr; } .stores { grid-column: auto; order: 0; } }
-  a { color: #fff; }
-  a:hover { color: var(--header-muted); }
+  a:not(.btn) { color: #fff; }
+  a:not(.btn):hover { color: var(--header-muted); }
   .brand-name { font: 700 1.6rem/1.1 var(--font-head); margin: 0 0 var(--space-2); }
   .muted { color: var(--header-muted); }
   .col-title { font: 700 0.9rem/1 var(--font-head); letter-spacing: 0.14em; text-transform: uppercase; color: var(--header-muted); margin: 0 0 var(--space-4); }
@@ -69,7 +69,7 @@ const stores = await getStores();
   address { margin-bottom: var(--space-2); }
   .hours span { display: block; }
   ul { list-style: none; padding: 0; margin: 0; }
-  li + li { margin-top: var(--space-2); }
+  li a { display: flex; align-items: center; min-height: 2.75rem; } /* the whole row is the target */
   .legal-line { margin-top: var(--space-6); padding-block: var(--space-4); border-top: 1px solid var(--header-line); color: var(--header-muted); font-size: 0.9rem; }
   .legal-line p { margin: 0; }
 </style>

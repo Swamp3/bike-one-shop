@@ -24,7 +24,7 @@ const Heading = `h${level}` as 'h2' | 'h3';
       </dl>
     </div>
   </div>
-  {map && <Embed src={`https://www.google.com/maps?q=${encodeURIComponent(d.mapQuery)}&output=embed`} title={`Karte: BikeOne ${d.name}`} provider="Google Maps" label="Karte laden" ratio="wide" />}
+  {map && <Embed src={`https://www.google.com/maps?q=${encodeURIComponent(d.mapQuery)}&output=embed`} title={`Karte: BikeOne ${d.name}`} provider="Google Maps" subject="Die Karte" label="Karte laden" ratio="wide" />}
   <a class="btn" href={d.bookingPath}>Termin buchen in {d.name}</a>
 </article>
 <style>

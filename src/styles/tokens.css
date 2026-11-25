@@ -1,12 +1,14 @@
 /* Design tokens: the shop wireframes' language (wireframes/homepage.html) so site and shop read as one brand.
-   Contrast (WCAG): ink on bg 15:1, ink-muted on bg 7.8:1, accent-strong with white 5.4:1, header-muted on header 5.3:1.
-   --accent (#e63946) is for large type and decoration only; it is 4.2:1 on white. */
+   Contrast (WCAG 2.2, checked by tools/checks/a11y.mjs from these values): text 4.5:1 and more (ink 13.9 to 15.4, ink-muted 7.4 to 8.2,
+   accent-strong 4.9 to 5.4 on the light surfaces, white on accent-strong 5.4, header-muted on the header 9.4 to 10.5); control borders and
+   the focus ring 3:1 and more (--line-strong 3.4 to 3.8, --focus 3.8 to 4.0). --accent (#e63946) is for the focus ring and the current-page
+   bar; as text on white it is only 4.0:1, so text and buttons use --accent-strong. */
 :root {
   --bg: #f8f9fa;
   --surface: #ffffff;
   --surface-2: #f1f3f5;
   --line: #dee2e6;
-  --line-strong: #adb5bd;
+  --line-strong: #7b848c; /* border of a control (ghost button): 3:1 against the light surfaces */
   --ink: #212529;
   --ink-muted: #495057;
   --accent: #e63946;

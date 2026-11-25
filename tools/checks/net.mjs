@@ -6,36 +6,15 @@
 // must not be requested at 390 or with prefers-reduced-motion. Prints requests and bytes of the home page.
 import fs from 'node:fs';
 import path from 'node:path';
-import { DIST, isMain, nativePages, need, report } from '../lib/dist.mjs';
-
-const BASE = (process.env.REVIEW_URL || 'http://localhost:4321').replace(/\/$/, '');
-const PLAYWRIGHT = process.env.PLAYWRIGHT_MODULE || '/Users/timo.alts/dev/astro-conversion-kit/node_modules/playwright/index.mjs';
+import { DIST, isMain, nativePages, report } from '../lib/dist.mjs';
+import { applyHeaders, BASE, needServer, PLAYWRIGHT } from '../lib/browser.mjs';
 // the home page's hero video exists in this build
 const HERO_VIDEO = fs.existsSync(path.join(DIST, 'hero.mp4'));
 const VIEWPORTS = [{ width: 1440, height: 900 }, { width: 390, height: 844 }];
 
-/** dist/_headers -> [{ re, headers }] for the path rules (host rules such as https://bike-one.dev/* are skipped). */
-function headerRules() {
-  const file = path.join(DIST, '_headers');
-  const rules = [];
-  let cur = null;
-  for (const line of fs.readFileSync(file, 'utf8').split('\n')) {
-    if (!line.trim() || line.trim().startsWith('#')) continue;
-    if (!/^\s/.test(line)) { cur = line.startsWith('/') ? { re: new RegExp(`^${line.trim().replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*')}$`), headers: {} } : null; if (cur) rules.push(cur); continue; }
-    const i = line.indexOf(':');
-    if (cur && i > 0) cur.headers[line.slice(0, i).trim().toLowerCase()] = line.slice(i + 1).trim();
-  }
-  return rules;
-}
-
 export async function run() {
-  const up = await fetch(`${BASE}/`).then((r) => r.ok, () => false);
-  need(up, `the review server is not answering on ${BASE}: start it with  node scripts/review-serve.mjs --background`);
-  const served = Buffer.from(await (await fetch(`${BASE}/`)).arrayBuffer());
-  need(served.equals(fs.readFileSync(path.join(DIST, 'index.html'))), `${BASE}/ does not serve this dist/ (home page differs); rebuild or restart the review server`);
-
+  await needServer();
   const { chromium, webkit } = await import(PLAYWRIGHT);
-  const rules = headerRules();
   const problems = [];
   const pages = nativePages();
   let homeNote = '';
@@ -56,15 +35,7 @@ export async function run() {
         if (r.status() >= 400) at(current, `${r.status()} ${r.url()}`);
         if (current === '/' && stats) { stats.count += 1; const len = Number(r.headers()['content-length'] ?? (await r.body().catch(() => Buffer.alloc(0))).length); stats.bytes += len; const t = r.headers()['content-type'] ?? ''; const k = /html/.test(t) ? 'html' : /css/.test(t) ? 'css' : /javascript/.test(t) ? 'js' : /font|woff/.test(t) ? 'font' : /image/.test(t) ? 'image' : 'other'; stats.by[k] = (stats.by[k] ?? 0) + len; }
       });
-      await page.route('**/*', async (route) => {
-        const req = route.request();
-        if (req.resourceType() !== 'document' || !req.url().startsWith(BASE)) return route.continue();
-        const response = await route.fetch();
-        const p = new URL(req.url()).pathname;
-        const headers = { ...response.headers() };
-        for (const rule of rules) if (rule.re.test(p)) Object.assign(headers, rule.headers);
-        await route.fulfill({ response, headers });
-      });
+      await applyHeaders(page);
       for (const p of pages) {
         current = p.url;
         stats = p.url === '/' ? { count: 0, bytes: 0, by: {} } : undefined;

@@ -62,7 +62,7 @@ const services = [
       <div class="store-grid">
         {stores.map((s) => <StoreCard store={s} />)}
       </div>
-      <p class="more"><a href="/ueber-uns/">Standorte, Karte und Öffnungszeiten im Überblick</a></p>
+      <p class="more"><a class="tap" href="/ueber-uns/">Standorte, Karte und Öffnungszeiten im Überblick</a></p>
     </div>
   </section>
 
@@ -78,7 +78,7 @@ const services = [
           </ServiceBlock>
         ))}
       </div>
-      <p class="more"><a href="/service/">Mehr zu unserem Service</a></p>
+      <p class="more"><a class="tap" href="/service/">Mehr zu unserem Service</a></p>
     </div>
   </section>
 
@@ -100,7 +100,7 @@ const services = [
       <ul class="posts">
         {posts.map((p) => <li><PostCard post={p} /></li>)}
       </ul>
-      <p><a href="/blog/">Alle Beiträge im Blog</a></p>
+      <p><a class="tap" href="/blog/">Alle Beiträge im Blog</a></p>
     </div>
   </section>
 </Base>
@@ -109,7 +109,7 @@ const services = [
   .hero { position: relative; isolation: isolate; background: var(--header-bg); color: #fff; min-height: min(78vh, 46rem); display: grid; align-items: end; overflow: hidden; }
   .hero :global(.bg-pic), .hero :global(.bg) { position: absolute; inset: 0; width: 100%; height: 100%; }
   .hero :global(.bg) { object-fit: cover; z-index: -2; }
-  .hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, #12121240 0%, #121212a6 55%, #121212ee 100%); }
+  .hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, #12121250 0%, #121212bb 50%, #121212f0 100%); }
   .copy { padding-block: var(--space-8) var(--space-7); }
   .eyebrow-light { font: 700 0.9rem/1 var(--font-head); letter-spacing: 0.16em; text-transform: uppercase; color: #fff; margin: 0 0 var(--space-3); }
   .hero h1 { max-width: 18ch; color: #fff; margin-bottom: var(--space-5); }

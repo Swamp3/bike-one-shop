@@ -39,11 +39,11 @@ const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Termin buchen', path
         </dl>
       </div>
     </div>
-    <Embed src={d.bookingUrl} title={`Terminbuchung BikeOne ${d.name}`} provider="eTermin" label="Terminbuchung laden" ratio="app" openUrl={d.bookingUrl} openLabel="Terminbuchung bei eTermin öffnen" />
+    <Embed src={d.bookingUrl} title={`Terminbuchung BikeOne ${d.name}`} provider="eTermin" subject="Die Terminbuchung" label="Terminbuchung laden" ratio="app" openUrl={d.bookingUrl} openLabel="Terminbuchung bei eTermin öffnen" />
     <ul class="links">
-      <li><a href={other.data.bookingPath}>Termin buchen in {other.data.name}</a></li>
-      <li><a href="/ueber-uns/">Standorte und Karte</a></li>
-      <li><a href="/service/">Unser Service</a></li>
+      <li><a class="tap" href={other.data.bookingPath}>Termin buchen in {other.data.name}</a></li>
+      <li><a class="tap" href="/ueber-uns/">Standorte und Karte</a></li>
+      <li><a class="tap" href="/service/">Unser Service</a></li>
     </ul>
   </div>
 </Base>

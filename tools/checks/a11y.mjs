@@ -1,12 +1,39 @@
-// Check `a11y` smoke test over the native pages' HTML (no dependency): heading order, alt text, landmarks, skip link,
-// names for links, buttons and iframes, labelled form controls, unique ids, valid popover targets.
+// Check `a11y` over the native pages' HTML and the design tokens (no dependency): heading order, alt text (empty only
+// for decorative images, never a file name), landmarks, skip link, names for links, buttons and iframes, labelled form
+// controls, unique ids, valid popover targets, and the contrast of every colour pair the stylesheets use (text 4.5:1,
+// controls and the focus ring 3:1). What needs a browser (focus rings, touch targets, keyboard use, text on photos) is
+// in `ui`.
 import { attr, byTag, find, isMain, nativePages, parseHtml, report, squash, text } from '../lib/dist.mjs';
+import { ratio, tokens } from '../lib/contrast.mjs';
+
+// [foreground, background, minimum, where it is used]; a name starting with -- is a token of tokens.css
+const PAIRS = [
+  ...['--bg', '--surface', '--surface-2'].flatMap((bg) => [
+    ['--ink', bg, 4.5, 'body text'], ['--ink-muted', bg, 4.5, 'lead text, dates, breadcrumbs'],
+    ['--accent-strong', bg, 4.5, 'links and eyebrows'], ['--accent-strong-hover', bg, 4.5, 'link hover'],
+    ['--focus', bg, 3, 'focus ring on light surfaces'], ['--line-strong', bg, 3, 'ghost button border'],
+  ]),
+  ['--accent-ink', '--accent-strong', 4.5, 'button label'], ['--accent-ink', '--accent-strong-hover', 4.5, 'button label on hover'],
+  ['--header-text', '--header-bg', 4.5, 'header and footer text'], ['--header-text', '--header-surface', 4.5, 'menu panel'],
+  ['--header-muted', '--header-bg', 4.5, 'footer secondary text'], ['--header-muted', '--header-surface', 4.5, 'menu hover'],
+  ['--header-text', '--header-bg', 3, 'focus ring on dark surfaces (white)'], ['--accent', '--header-bg', 3, 'current page bar in the menu'],
+  ['#6b6b6b', '--header-bg', 3, 'menu button border and ghost button border on dark'],
+];
+const DECORATIVE_CLASSES = new Set(['bg', 'thumb']); // hero and banner photos behind text, post thumbnails beside their linked title
+const NOT_A_NAME = /\.(jpe?g|png|webp|avif|gif)\b|^(bild|foto|image|img|photo|picture)\d*$/i;
 
 const VAGUE = /^(hier|mehr|mehr erfahren|klicken sie hier|link|weiter)$/i;
 const name = (n) => squash(text(n)) || attr(n, 'aria-label') || attr(n, 'title') || find(n, (c) => c.tagName === 'img' && attr(c, 'alt')).map((c) => attr(c, 'alt')).join(' ');
 
 export function run() {
   const problems = [];
+  const t = tokens();
+  for (const [fg, bg, min, use] of PAIRS) {
+    const a = t[fg] ?? fg, b = t[bg] ?? bg;
+    if (!/^#/.test(a) || !/^#/.test(b)) { problems.push(`contrast pair ${fg}/${bg}: not a token or colour`); continue; }
+    const r = ratio(a, b);
+    if (r < min) problems.push(`contrast ${fg} ${a} on ${bg} ${b} is ${r.toFixed(2)}:1, need ${min}:1 (${use})`);
+  }
   for (const page of nativePages()) {
     const doc = parseHtml(page.file);
     const at = (msg) => problems.push(`${page.url}: ${msg}`);
@@ -26,7 +53,13 @@ export function run() {
       prev = level;
     }
 
-    for (const img of byTag(doc, 'img')) if (attr(img, 'alt') === undefined) at(`img ${attr(img, 'src')} has no alt attribute`);
+    for (const img of byTag(doc, 'img')) {
+      const alt = attr(img, 'alt');
+      const cls = (attr(img, 'class') ?? '').split(/\s+/);
+      if (alt === undefined) at(`img ${attr(img, 'src')} has no alt attribute`);
+      else if (alt === '' && !cls.some((c) => DECORATIVE_CLASSES.has(c))) at(`img ${attr(img, 'src')} has an empty alt but is not a decorative photo (class ${[...DECORATIVE_CLASSES].join(' or ')})`);
+      else if (alt !== '' && (NOT_A_NAME.test(alt.trim()) || alt.trim().length < 8)) at(`img alt "${alt}" is a file name or too short to describe the image`);
+    }
 
     const count = (tag) => byTag(doc, tag).length;
     if (count('main') !== 1) at(`${count('main')} main landmarks`);
