@@ -303,6 +303,150 @@
       "reason": "owner: the test deployment on bike-one.dev must not reference bike-one.org; canonical, sitemaps and feeds cannot be root-relative",
       "costIfWrong": "low: an npx astro build without npm run build skips the step; set SITE_ORIGIN for another test host",
       "date": "2026-11-25"
+    },
+    {
+      "id": "d30",
+      "topic": "build origin from the environment",
+      "choice": "astro.config.mjs sets `site` to https://bike-one.org in the release build (PUBLIC_INDEXABLE=true), else SITE_ORIGIN or https://bike-one.dev; canonical, Open Graph and JSON-LD URLs come from it; tools/dev-origin.mjs stays as a safety net",
+      "default": "site fixed to bike-one.org and rewritten after the build (d29)",
+      "reason": "native components build absolute URLs; the origin should be right at build time, not patched afterwards",
+      "costIfWrong": "low: a build without PUBLIC_INDEXABLE names bike-one.dev, which is the intended dev behaviour",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d31",
+      "topic": "no inline styles or scripts, no data: assets",
+      "choice": "build.inlineStylesheets never and vite assetsInlineLimit 0: every native page links its CSS and JS as files; no style attributes in native components",
+      "default": "Astro inlines small CSS and scripts",
+      "reason": "lets the CSP stay default-src self without unsafe-inline",
+      "costIfWrong": "low: one more request per page, cached immutable under /_astro/",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d32",
+      "topic": "explicit shrinking allowlist of pages still on the old route",
+      "choice": "tools/legacy.mjs lists the 51 paths (plus /404.html) that src/pages/[...path].astro still builds from captured markup, the dist prefixes and src paths only they use; the new checks skip exactly these; migrated pages leave the list; Stage 2 empties it. Layouts and components of the old route moved to src/layouts/legacy and src/components/legacy",
+      "default": "all pages stay on the old route until every page is migrated",
+      "reason": "the build must not break between stages and the checks must not hide new problems",
+      "costIfWrong": "low: an entry that is still listed after its page is native is reported as stale by the checks",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d33",
+      "topic": "native home, Ueber uns, Impressum, Datenschutz",
+      "choice": "src/pages/index.astro, ueber-uns.astro and [legal].astro build the four pages from tokens, Base/Header/Footer/SEO and the content collections; home has a poster-only hero (no video, no slider), the two stores, the five service texts from the captured home page, the seven brand names as text, the three newest posts; product tiles, partner logos and the WooCommerce markup are dropped",
+      "default": "IA table of the plan (hero, stores, services teaser, brands, latest posts)",
+      "reason": "vertical slice that proves the pipeline; text is copied from capture/text/home.txt and ueber-uns.txt",
+      "costIfWrong": "low: Stage 2 adds the video helper and the service page; partner logos need confirmed alt texts and are not on the new home page",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d34",
+      "topic": "content collections",
+      "choice": "src/content.config.ts defines stores (json, two entries with address, phone, e-mail, hours), brands (json, seven names), legal (Markdown, Impressum and Datenschutz text from the capture) and blog (front matter only for the five posts: title, dates, excerpt from capture/wp-rest/posts.json; bodies and pages follow in Stage 2)",
+      "default": "collections for blog, stores, brands",
+      "reason": "one typed source for the footer, the home page, the store cards and the JSON-LD",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d35",
+      "topic": "design basis: shop wireframe tokens",
+      "choice": "src/styles/tokens.css takes the shop wireframes language (accent #e63946, header #121212, surfaces #f8f9fa, ink #212529, line #dee2e6), mobile first, light surfaces with dark header, footer and hero; --accent-strong #c92a37 for buttons and text because #e63946 is 4.2:1 on white; no dark colour scheme yet",
+      "default": "plan assumption: reuse the shop wireframe tokens",
+      "reason": "site and shop look like one brand; WCAG AA text contrast",
+      "costIfWrong": "medium: a different direction means new tokens and component CSS, the markup stays",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d36",
+      "topic": "fonts via @fontsource",
+      "choice": "owner decision: @fontsource/roboto 5.3.0 (400, 700) and @fontsource/roboto-condensed 5.3.0 (700), dev dependencies pinned exactly; hand-written @font-face in src/styles/fonts.css points at the packages woff2 files (latin and latin-ext with unicode-range, font-display swap) so Vite emits them under /_astro/; the Roboto Condensed 700 latin file is the one preload; no request to googleapis or gstatic",
+      "default": "hand-extract woff2 from capture/assets (plan)",
+      "reason": "owner: install the fonts locally with npm; per-weight CSS of the packages adds a woff fallback and has no unicode-range",
+      "costIfWrong": "low: three small packages, only the woff2 files end up in dist",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d37",
+      "topic": "store address spelling on new pages",
+      "choice": "Rheinstraße 16 and Lengericher Landstraße 30 in the footer, store cards and JSON-LD (the capture mixes Rheinstr./Rheinstrasse and Landstr./Landstraße); the legal texts keep their own spelling word for word",
+      "default": "as captured",
+      "reason": "seo-review M10: one NAP spelling",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d38",
+      "topic": "legal pages rendered from Markdown, text unchanged",
+      "choice": "src/content/legal/impressum.md and datenschutz.md hold the captured words; only structure changed: title as h1, section titles as h2, bullets as lists, manual line wraps inside sentences joined with a space, address blocks keep their line breaks; the private-use bullet glyph is dropped; known text defects (TMG, ZugriƯ, IPAdresse, URL cut by a line break) are not touched and are listed in notes-stage1.md",
+      "default": "WordPress markup moved as captured",
+      "reason": "plan: legal text verbatim; native Astro without set:html of captured markup",
+      "costIfWrong": "low: test/legal-verbatim.test.mjs compares the rendered words with capture/text",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d39",
+      "topic": "menu without JavaScript",
+      "choice": "the header menu is a popover (button with popovertarget on narrow screens, always visible from 48rem by author CSS), Shop item links to SHOP_URL (d23)",
+      "default": "details or a script",
+      "reason": "plan: prefer native features; keyboard operable, closes on Escape and outside click",
+      "costIfWrong": "low: popover is baseline since 2024, older browsers show no menu button action",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d40",
+      "topic": "click-to-load embeds",
+      "choice": "src/components/Embed.astro: the iframe sits in a template and is inserted on a click (about 15 lines of script, delegated listener); text names the provider and the IP transfer; the map on Ueber uns uses the key-free https://www.google.com/maps?q=...&output=embed form instead of the captured keyed URL",
+      "default": "keyed Google embed as captured",
+      "reason": "no third-party request before consent by click; the captured API key does not belong in the repository",
+      "costIfWrong": "medium: the key-free embed URL could not be tested offline; the German consent wording is for legal review",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d41",
+      "topic": "checks replace the parity gates",
+      "choice": "npm run verify runs tools/checks/{redirects,links,seo,wp,size,a11y,net}.mjs on dist/ (tools/verify.mjs); native pages are checked in full, pages and files on the tools/legacy.mjs allowlist are skipped, a stale allowlist entry fails; the kit gates under scripts/verify stay as npm run verify:legacy until Stage 4; net runs Chrome and WebKit at 1440 and 390 against the review server and applies the CSP from dist/_headers",
+      "default": "kit parity gates against baseline/",
+      "reason": "owner: redesign, not parity; the gates compare against the live site and fail by design",
+      "costIfWrong": "low: each check is a small script over dist/, no dependency added",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d42",
+      "topic": "redirect map and generator",
+      "choice": "tools/redirect-map.mjs holds the IA redirect rows as data, tools/redirects-build.mjs writes redirects.csv (token {SHOP_URL}) and cloudflare-query-redirects.csv (production shop) and, after astro build, dist/_redirects for the dev or production shop; a row exists only for a URL without a page (pages on tools/legacy.mjs wait), shortlink rows are re-pointed at their final destination; public/_redirects is no longer committed; in Stage 1 the rows cover the shop prefixes (46 known product, category and shop URLs, 15 prefix rules) and the old WordPress sitemap names",
+      "default": "hand-kept redirects.csv through scripts/build-redirects.mjs",
+      "reason": "the shop target differs between dev and production builds and the map must apply itself as pages leave the old route",
+      "costIfWrong": "low: Stage 2 shrinks the allowlist and reruns npm run redirects:build",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d43",
+      "topic": "native robots.txt and sitemap",
+      "choice": "robots.txt: dev Disallow all, release Allow plus a Sitemap line; tools/sitemap-build.mjs (postbuild) lists exactly the indexable native pages in sitemap-0.xml and sitemap-index.xml, release build only (a dev build is noindex and has no sitemap); the old wp-sitemap files stay until Stage 2 redirects them",
+      "default": "captured robots.txt and WordPress sitemaps",
+      "reason": "plan: native sitemap and robots, dev Disallow all, release Allow plus sitemap",
+      "costIfWrong": "low: pages on the old route are not in the sitemap until they are migrated",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d44",
+      "topic": "Content-Security-Policy for the native pages",
+      "choice": "public/_headers: Permissions-Policy (camera, microphone, geolocation off) for every path; a CSP with default-src self, script-src self, style-src self, img-src self data:, font-src self, media-src self, frame-src only the three embed hosts (etermin.net, google.com/maps, bike-leasing-calculator.jobrad.org), object-src none, form-action self, frame-ancestors self, for the four native paths only",
+      "default": "no CSP",
+      "reason": "plan: CSP without third parties; the pages still on the old route use inline scripts and would break, so the rule is per native path until Stage 2 turns it into /*",
+      "costIfWrong": "low: the net check applies the same header in Playwright and fails on any violation",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d45",
+      "topic": "head texts of the four pages",
+      "choice": "titles 30 to 60 characters and descriptions 70 to 160, unique, written from each page own captured text, German; home h1 is the captured footer tagline without its full stop; no E-Bike or Rennrad claim in the home title (seo-review H1 asks the client to confirm the assortment); JSON-LD graph (Organization, WebSite, two BikeStore nodes) on home and Ueber uns, BreadcrumbList with a visible breadcrumb on inner pages, no geo, rating, price range or sameAs",
+      "default": "seo-review proposals",
+      "reason": "plan: SEO section; facts only from the capture",
+      "costIfWrong": "low: copy to be reviewed in Stage 3",
+      "date": "2026-11-25"
     }
   ],
   "counts": {},
