@@ -8,6 +8,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import PostCard from '../components/PostCard.astro';
 import { formatDate, getPosts, postPath } from '../lib/posts';
 import { articleNode, breadcrumbNode } from '../lib/schema';
+import { POST, preloadAvif } from '../lib/preload';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -21,14 +22,14 @@ const cover = await getImage({ src: d.image, width: 1200, height: 630, fit: 'cov
 const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Blog', path: '/blog/' }, { name: d.seoTitle, path: postPath(post) }];
 const nodes = [articleNode(origin, { path: postPath(post), headline: d.title, description: d.description, published: d.date, modified: d.modified, image: new URL(cover.src, origin).href }), breadcrumbNode(origin, crumbs)];
 ---
-<Base title={d.seoTitle} description={d.description} image={d.image} imageAlt={d.imageAlt} type="article" published={d.date} modified={d.modified} nodes={nodes}>
+<Base title={d.seoTitle} description={d.description} image={d.image} imageAlt={d.imageAlt} type="article" published={d.date} modified={d.modified} nodes={nodes} preload={await preloadAvif(d.image, POST)}>
   <article class="container post">
     <Breadcrumbs crumbs={crumbs} />
     <header>
       <h1>{d.title}</h1>
       <p class="meta"><time datetime={d.date.toISOString()}>{formatDate(d.date)}</time></p>
     </header>
-    <Picture class="cover" src={d.image} alt={d.imageAlt} formats={['avif', 'webp']} widths={[480, 768, 1024, 1440]} sizes="(min-width: 64rem) 72rem, 100vw" loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'cover-pic' }} />
+    <Picture class="cover" src={d.image} alt={d.imageAlt} formats={['avif', 'webp']} widths={POST.widths} sizes={POST.sizes} loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'cover-pic' }} />
     <div class="prose"><Content /></div>
     <aside class="next" aria-labelledby="next-title">
       <h2 id="next-title">Persönlich beraten lassen</h2>

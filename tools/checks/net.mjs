@@ -30,7 +30,8 @@ export async function run() {
       page.on('pageerror', (e) => at(current, `page error: ${e.message}`));
       page.on('console', (m) => { if (m.type() === 'error') at(current, `console error: ${m.text()}`); });
       page.on('requestfailed', (r) => at(current, `request failed: ${r.url()} ${r.failure()?.errorText ?? ''}`));
-      page.on('request', (r) => { if (!r.url().startsWith(BASE)) at(current, `request to ${r.url()}`); });
+      let counts = new Map();
+      page.on('request', (r) => { if (!r.url().startsWith(BASE)) at(current, `request to ${r.url()}`); else if (r.url().includes('/_astro/')) counts.set(r.url(), (counts.get(r.url()) ?? 0) + 1); });
       page.on('response', async (r) => {
         if (r.status() >= 400) at(current, `${r.status()} ${r.url()}`);
         if (current === '/' && stats) { stats.count += 1; const len = Number(r.headers()['content-length'] ?? (await r.body().catch(() => Buffer.alloc(0))).length); stats.bytes += len; const t = r.headers()['content-type'] ?? ''; const k = /html/.test(t) ? 'html' : /css/.test(t) ? 'css' : /javascript/.test(t) ? 'js' : /font|woff/.test(t) ? 'font' : /image/.test(t) ? 'image' : 'other'; stats.by[k] = (stats.by[k] ?? 0) + len; }
@@ -38,10 +39,12 @@ export async function run() {
       await applyHeaders(page);
       for (const p of pages) {
         current = p.url;
+        counts = new Map();
         stats = p.url === '/' ? { count: 0, bytes: 0, by: {} } : undefined;
         await page.goto(`${BASE}${p.url}`, { waitUntil: 'load' });
         await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); } window.scrollTo(0, 0); });
         await page.waitForLoadState('networkidle');
+        for (const [url, n] of counts) if (n > 1) at(p.url, `${url.replace(BASE, '')} was fetched ${n} times (a preload that does not match its image, or a font fetched twice)`);
         if (viewport.width < 768) {
           const button = page.locator('.menu-btn');
           if (!(await button.isVisible())) at(p.url, 'menu button not visible on a narrow screen');
@@ -86,6 +89,23 @@ export async function run() {
       await page.waitForTimeout(1500);
       if (requested) problems.push(`${bname} reduced motion: the hero video was requested`);
       await context.close();
+    }
+    // data-conscious policy (Network Information API, Chrome only): a metered or slow connection never downloads the video
+    if (HERO_VIDEO && bname === 'chrome') {
+      for (const [label, conn] of [['saveData', { saveData: true, effectiveType: '4g' }], ['cellular', { type: 'cellular', effectiveType: '4g' }], ['3g', { effectiveType: '3g' }], ['2g', { effectiveType: '2g' }], ['wifi 4g', { type: 'wifi', effectiveType: '4g', saveData: false }]]) {
+        const context = await browser.newContext({ viewport: VIEWPORTS[0] });
+        const page = await context.newPage();
+        await page.addInitScript((c) => { const t = new EventTarget(); Object.assign(t, c); Object.defineProperty(navigator, 'connection', { get: () => t, configurable: true }); }, conn);
+        let requested = false;
+        page.on('request', (r) => { if (r.url().endsWith('/hero.mp4')) requested = true; });
+        await page.goto(`${BASE}/`, { waitUntil: 'load' });
+        await page.waitForTimeout(2500);
+        const playing = await page.evaluate(() => !document.querySelector('[data-hero-video]').paused);
+        const metered = label !== 'wifi 4g';
+        if (metered && (requested || playing)) problems.push(`connection ${label}: the hero video was ${requested ? 'requested' : 'played'}`);
+        if (!metered && !(requested && playing)) problems.push(`connection ${label}: the hero video did not start on a good connection`);
+        await context.close();
+      }
     }
     await browser.close();
   }

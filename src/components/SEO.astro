@@ -21,7 +21,7 @@ interface Props {
   /** Page-specific schema.org nodes (stores, article, breadcrumbs); Organization and WebSite are added here on every page. */
   nodes?: Record<string, unknown>[];
 }
-const { title, description, image = ogDefault, imageAlt = 'BikeOne: Radfahrer vor einem Bergpanorama', type = 'website', noindex = false, noCanonical = false, published, modified, nodes = [] } = Astro.props;
+const { title, description, image = ogDefault, imageAlt = 'Radfahrer auf einer Bergstraße vor schneebedeckten Gipfeln', type = 'website', noindex = false, noCanonical = false, published, modified, nodes = [] } = Astro.props;
 const origin = Astro.site!;
 const canonical = new URL(Astro.url.pathname, origin).href;
 const og = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' });

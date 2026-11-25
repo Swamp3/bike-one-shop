@@ -1,8 +1,10 @@
 ---
 // Background video of the home hero, laid over the poster photo (decision d51). The file is H.264, no audio, faststart
 // (public/hero.mp4, see tools/mp4-info.mjs). `preload="none"` means the browser requests nothing until the script calls
-// play(), which it does only when motion is welcome: not with prefers-reduced-motion, not with Save-Data, not on narrow
-// screens (17 MiB), and only after the page has loaded so the poster stays the LCP element.
+// play(), which it does only when motion is welcome: not with prefers-reduced-motion, not on narrow screens (17 MiB),
+// not when the connection is metered or slow (Network Information API: Save-Data, a cellular connection, effective type
+// 3g or slower; browsers without the API, Safari and Firefox, keep the plain behaviour and play), and only after the page
+// has loaded so the poster stays the LCP element. The connection is looked at again when it changes.
 // Safari needs the muted and playsinline PROPERTIES and an explicit play() to start without a click (d25/d26).
 ---
 <video class="hero-video" src="/hero.mp4" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-hero-video></video>
@@ -26,9 +28,11 @@
   if (video && toggle) {
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
     const wide = matchMedia('(min-width: 48rem)');
-    const saveData = Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+    type Connection = EventTarget & { saveData?: boolean; type?: string; effectiveType?: string };
+    const connection = (navigator as Navigator & { connection?: Connection }).connection;
+    const metered = () => Boolean(connection && (connection.saveData || connection.type === 'cellular' || ['slow-2g', '2g', '3g'].includes(connection.effectiveType ?? '')));
     let userPaused = false;
-    const allowed = () => !reduced.matches && wide.matches && !saveData;
+    const allowed = () => !reduced.matches && wide.matches && !metered();
 
     // A browser that refuses autoplay (WebKit without a user gesture, iOS Low Power Mode) rejects play(): the poster stays
     // and the first tap, click or key press starts the video instead.
@@ -49,12 +53,14 @@
       if (userPaused) { video.pause(); video.classList.replace('is-playing', 'is-paused'); toggle.setAttribute('aria-pressed', 'true'); toggle.setAttribute('aria-label', 'Hintergrundvideo abspielen'); }
       else play();
     });
-    const recheck = () => (allowed() ? play() : stop());
+    let loaded = document.readyState === 'complete';
+    const recheck = () => (allowed() ? (loaded && play()) : stop());
     reduced.addEventListener('change', recheck);
     wide.addEventListener('change', recheck);
+    connection?.addEventListener('change', recheck);
     document.addEventListener('visibilitychange', () => { if (!document.hidden && video.paused && video.classList.contains('is-playing')) play(); });
 
     // the page, its poster and styles first; then the video
-    if (document.readyState === 'complete') play(); else addEventListener('load', play, { once: true });
+    if (loaded) play(); else addEventListener('load', () => { loaded = true; play(); }, { once: true });
   }
 </script>

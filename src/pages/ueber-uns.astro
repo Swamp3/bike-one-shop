@@ -5,6 +5,7 @@ import StoreCard from '../components/StoreCard.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getStores } from '../lib/stores';
 import { breadcrumbNode, storeNode } from '../lib/schema';
+import { HERO, preloadAvif } from '../lib/preload';
 import banner from '../assets/photos/fitting.jpg';
 
 const stores = await getStores();
@@ -18,9 +19,10 @@ const nodes = [...stores.map((s) => storeNode(origin, s)), breadcrumbNode(origin
   image={banner}
   imageAlt="Bike-Fitting bei BikeOne: eine Fahrerin auf dem Rad im Rollentrainer"
   nodes={nodes}
+  preload={await preloadAvif(banner, HERO)}
 >
   <section class="banner dark">
-    <Picture class="bg" src={banner} alt="" formats={['avif', 'webp']} widths={[640, 960, 1440, 1920]} sizes="100vw" loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'bg-pic' }} />
+    <Picture class="bg" src={banner} alt="" formats={['avif', 'webp']} widths={HERO.widths} sizes={HERO.sizes} loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'bg-pic' }} />
     <div class="container copy">
       <h1>Herzlich willkommen bei BikeOne!</h1>
     </div>

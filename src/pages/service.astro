@@ -9,6 +9,7 @@ import PostCard from '../components/PostCard.astro';
 import Embed from '../components/Embed.astro';
 import { getPosts, postPath } from '../lib/posts';
 import { breadcrumbNode } from '../lib/schema';
+import { preloadAvif, SERVICE } from '../lib/preload';
 import fitting from '../assets/photos/fitting.jpg';
 import leasing from '../assets/photos/leasing.jpg';
 import werkstatt from '../assets/photos/werkstatt.jpg';
@@ -23,6 +24,7 @@ const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Service', path: '/se
   title="Service: Bike-Fitting, Dienstradleasing, Werkstatt"
   description="Lasergestütztes Bike-Fitting, Dienstradleasing, Werkstattservice für alle Marken und Canyon Collect & Ride bei BikeOne."
   nodes={[breadcrumbNode(Astro.site!.href, crumbs)]}
+  preload={await preloadAvif(fitting, SERVICE)}
 >
   <section class="intro container">
     <Breadcrumbs crumbs={crumbs} />
@@ -34,7 +36,7 @@ const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Service', path: '/se
     <div class="container">
       <h2 id="leistungen" class="visually-hidden">Fitting, Leasing und Werkstatt</h2>
       <div class="blocks">
-        <ServiceBlock level={3} image={fitting} alt="Bike-Fitting: eine Fahrerin auf dem Rad im Rollentrainer, daneben ein Mann, der zusieht" title="Smarte Körpervermessung">
+        <ServiceBlock level={3} priority image={fitting} alt="Bike-Fitting: eine Fahrerin auf dem Rad im Rollentrainer, daneben ein Mann, der zusieht" title="Smarte Körpervermessung">
           <p>Nutze unseren Bike-Fitting Service für neue, aber auch vorhandene Fahrräder, um die ideale Sitzposition für deine Bedürfnisse zu ermitteln. Mithilfe lasergestützter Körpervermessung finden wir das optimale Bike in der richtigen Größe für dich. Für eine ergonomische Sitzposition, die für ideale Kraftübertragung und reduzierte Beschwerden sorgt – für Freizeitradler &amp; Profis</p>
           <a class="btn" href="/termin-buchen/">Termin buchen</a>
         </ServiceBlock>

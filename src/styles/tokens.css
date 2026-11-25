@@ -26,8 +26,8 @@
   --header-text: #ffffff;
   --header-muted: #c2c2c2;
 
-  --font-body: 'Roboto', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
-  --font-head: 'Roboto Condensed', 'Arial Narrow', Arial, sans-serif;
+  --font-body: 'Roboto', 'Roboto Fallback', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --font-head: 'Roboto Condensed', 'Roboto Condensed Fallback', 'Arial Narrow', Arial, sans-serif;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;

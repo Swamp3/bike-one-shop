@@ -10,6 +10,7 @@ import { SHOP_URL, TAGLINE } from '../lib/site.mjs';
 import { getStores } from '../lib/stores';
 import { getPosts } from '../lib/posts';
 import { storeNode } from '../lib/schema';
+import { HERO, preloadAvif } from '../lib/preload';
 import hero from '../assets/photos/hero.jpg';
 import beratung from '../assets/photos/beratung.jpg';
 import fitting from '../assets/photos/fitting.jpg';
@@ -41,9 +42,10 @@ const services = [
   title="BikeOne: Bikes, Beratung & Service in Oldenburg & Osnabrück"
   description="Beratung, Bike-Fitting, individuelle Konfiguration, Werkstatt und Dienstradleasing bei BikeOne in Oldenburg und Osnabrück. Jetzt Termin buchen."
   nodes={nodes}
+  preload={await preloadAvif(hero, HERO)}
 >
   <section class="hero dark" aria-labelledby="hero-title">
-    <Picture class="bg" src={hero} alt="" formats={['avif', 'webp']} widths={[640, 960, 1440, 1920]} sizes="100vw" loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'bg-pic' }} />
+    <Picture class="bg" src={hero} alt="" formats={['avif', 'webp']} widths={HERO.widths} sizes={HERO.sizes} loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'bg-pic' }} />
     <HeroVideo />
     <div class="container copy">
       <p class="eyebrow-light">BikeOne</p>
