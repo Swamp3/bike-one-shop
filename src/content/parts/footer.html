@@ -1,0 +1,103 @@
+<footer id="colophon" class="site-footer la-footer-bikeone">
+<div class="footer-wrap">
+    <div class="container">
+        <style>
+            /* --- Design tokens (scoped to .bo2 only) --- */
+            .bo2{--bo2-text:#1f2937;--bo2-muted:#6b7280;--bo2-link:#0ea5e9;--bo2-cta:#22c55e;--bo2-cta-text:#0b1220;--bo2-border:#e5e7eb;}
+            .bo2{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--bo2-text)}
+            .bo2 a{color:inherit;text-decoration:none}
+            .bo2 a:hover{text-decoration:underline}
+            .bo2 a:focus-visible{outline:3px solid var(--bo2-link);outline-offset:2px;border-radius:.25rem}
+
+            .bo2-footer{max-width:1200px;margin:0 auto;padding:8px 8px 0}
+            .bo2-grid{display:grid;gap:40px;grid-template-columns:1.2fr 1.2fr 1fr 1fr;align-items:start}
+            @media (max-width:1024px){.bo2-grid{grid-template-columns:1fr 1fr}}
+            @media (max-width:640px){.bo2-grid{grid-template-columns:1fr}}
+
+            .bo2-title{font:700 2.1rem/1.15 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;margin:0 0 .75rem;letter-spacing:.01em}
+            .bo2-subtitle{font:700 2rem/1.15 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;margin:0 0 .75rem}
+            .bo2-list{list-style:none;margin:0;padding:0}
+            .bo2-list li{margin:.45rem 0}
+            .bo2-muted{color:var(--bo2-muted)}
+            .bo2-address{font-style:normal}
+            
+            .bo2-locations{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.75rem}
+            @media (max-width:640px){.bo2-locations{grid-template-columns:1fr}}
+            .bo2-location{font-size:.9rem}
+            .bo2-location h3{font:700 1.1rem/1.2 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;margin:0 0 .4rem;color:var(--bo2-text)}
+            .bo2-location p{margin:.3rem 0;line-height:1.5}
+
+            .bo2-brand{padding:12px 16px;border:1px solid var(--bo2-border);border-radius:16px;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+            .bo2-logo{display:inline-flex;align-items:center;gap:.55rem;font:800 1.35rem/1.1 ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial;letter-spacing:.02em}
+            .bo2-logo-badge{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:9px;background:#111;color:#fff;font-weight:800;font-size:.9rem;line-height:1}
+            .bo2-tagline{margin:.35rem 0 1rem;color:var(--bo2-muted)}
+            .bo2-cta{display:inline-block;padding:12px 18px;border-radius:999px;font-weight:800;background:var(--bo2-cta);color:var(--bo2-cta-text);text-decoration:none;box-shadow:0 1px 0 rgba(0,0,0,.06)}
+        </style>
+
+        <div class="bo2">
+            <div class="bo2-footer">
+                <div class="bo2-grid">
+                    <!-- 1) Kontakt -->
+                    <section aria-label="Kontakt">
+                        <h2 class="bo2-title">Kontakt</h2>
+                        <div class="bo2-locations">
+                            <!-- Oldenburg -->
+                            <div class="bo2-location">
+                                <h3>Oldenburg</h3>
+                                <address class="bo2-address bo2-muted">
+                                    Rheinstr. 16<br>26135 Oldenburg<br>
+                                    <a href="tel:+4944198489483">0441 984 894 83</a><br>
+                                    <a href="mailto:OL@bike-one.de">OL@bike-one.de</a><br>
+                                </address><br>
+                                <p class="bo2-muted">Mo–Fr 10:00–18:00<br>Sa 10:00–14:00</p>
+                            </div>
+                            <!-- Osnabrück -->
+                            <div class="bo2-location">
+                                <h3>Osnabrück</h3>
+                                <address class="bo2-address bo2-muted">
+                                    Lengericher Landstraße 30<br>49078 Osnabrück<br>
+                                    <a href="tel:+4954144095284">0541 440 952 84</a><br>
+                                    <a href="mailto:OS@bike-one.de">OS@bike-one.de</a>
+                                </address>
+                                <p class="bo2-muted">Di-Fr 10:00–18:00<br>Sa 10:00–14:00</p>
+                                </div>
+                        </div>
+                    </section>
+
+                    <!-- 2) BikeOne brand -->
+                    <section aria-label="BikeOne" class="bo2-brand">
+                        <div class="bo2-logo" aria-label="BikeOne GmbH">
+                            <span class="bo2-logo-badge">B1</span>
+                            <span>BikeOne&nbsp;GmbH</span>
+                        </div>
+                        <p class="bo2-tagline">Erstklassige Bikes, Beratung &amp; Service in Oldenburg &amp; Osnabrück.</p>
+                        <a class="bo2-cta" href="https://bike-one.org/termin-buchen/" aria-label="Termin buchen">Termin buchen</a>
+                    </section>
+
+                    <!-- 3) Shop -->
+                    <nav aria-label="Shop">
+                        <h2 class="bo2-subtitle">Shop</h2>
+                        <ul id="menu-footer-menu" class="bo2-list bo2-muted"><li id="menu-item-3205" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3205"><a href="/shop/?categories=gravel-bikes">GravelBikes</a></li>
+<li id="menu-item-3206" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3206"><a href="/shop/?categories=road-bikes">RoadBikes</a></li>
+<li id="menu-item-3207" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3207"><a href="/shop/?categories=tt-bikes">TT/Triathlon</a></li>
+<li id="menu-item-1281" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1281"><a href="https://bike-one.org/termin-buchen/">Termin Buchen</a></li>
+<li id="menu-item-2038" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2038"><a href="https://bike-one.org/blog/">Blog</a></li>
+</ul>                    </nav>
+
+                    <!-- 4) Rechtliches -->
+                    <nav aria-label="Rechtliches">
+                        <h2 class="bo2-subtitle">Rechtliches</h2>
+                        <ul class="bo2-list bo2-muted">
+                            <li><a href="https://bike-one.org/datenschutz/">Datenschutz</a></li>
+                            <li><a href="https://bike-one.org/impressum/">Impressum</a></li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+</footer>

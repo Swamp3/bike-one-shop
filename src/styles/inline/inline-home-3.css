@@ -1,0 +1,12 @@
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}
+@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}
+.wp-element-button{cursor:pointer}
+:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}
+:root .has-text-align-center{text-align:center}
+.aligncenter{clear:both}
+.screen-reader-text{word-wrap:normal!important;border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-break:normal!important}
+.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}
+html :where([style^=border-color],[style*=";border-color"],[style*="; border-color"]){border-style:solid}
+html :where([style^=border-width],[style*=";border-width"],[style*="; border-width"]){border-style:solid}
+html :where(img[class*=wp-image-]){height:auto;max-width:100%}
+:where(figure){margin:0 0 1em}

@@ -10,3 +10,7 @@
 # host has no such rule, and the build adds a meta robots noindex unless PUBLIC_INDEXABLE=true.
 https://*.pages.dev/*
   X-Robots-Tag: noindex
+
+# Development domain: never indexed
+https://bike-one.dev/*
+  X-Robots-Tag: noindex

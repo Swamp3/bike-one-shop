@@ -2554,5 +2554,509 @@
     "reason": "WordPress API link kept as captured",
     "approvedBy": "kit",
     "date": "2026-11-25"
+  },
+  {
+    "path": "/404.html",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/cervelo/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/factor/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/pinarello/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/ridley/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/specialized/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/trek/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/wilier/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/alle-fahrrader/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/author/lawrencebennier-com/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/author/marvin/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/blog/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/category/allgemein/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/datenschutz/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/gravel-bikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/impressum/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/main-bike/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio-category/branding-design/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio-category/branding-design/page/2/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-10/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-11/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-12/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-13/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-14/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-15/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-2/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-3/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-4/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-5/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-6/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-7/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-8/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-9/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/racebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sale/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/stellenangebote/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/charlotte-neal/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/john-bennett/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-01/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-02/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-03/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/victor-peters/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/willie-carter/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-oldenburg/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-osnabrueck/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/tt-triathlon/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ueber-uns/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "to": "https://bike-one.org/wp-content/themes/cosy-child/favicon.png",
+    "reason": "broken on live: the theme favicon link answers 404",
+    "approvedBy": "default, d19",
+    "date": "2026-11-25"
   }
 ]

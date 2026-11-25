@@ -4,7 +4,7 @@
   "repo": "Swamp3/bike-one-shop (existing repo; website/ merged in at the end)",
   "hosting": "cloudflare",
   "startedAt": "2026-11-25T07:17:03.391Z",
-  "phase": "baseline",
+  "phase": "build",
   "phases": {
     "capture": {
       "startedAt": "2026-11-25T07:17:03.563Z",
@@ -23,6 +23,11 @@
     },
     "baseline": {
       "startedAt": "2026-11-25T07:49:43.192Z",
+      "finishedAt": "2026-11-25T07:49:55.160Z",
+      "result": null
+    },
+    "build": {
+      "startedAt": "2026-11-25T07:49:55.160Z",
       "finishedAt": null,
       "result": null
     }
@@ -152,6 +157,60 @@
       "default": "skip",
       "reason": "never install unasked",
       "costIfWrong": "suggestions list performance as Not covered",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d15",
+      "topic": "WooCommerce add-to-cart forms",
+      "choice": "3 POST forms on / switched off: action=# and listed in inert-forms.json; no form endpoint, no Formspree",
+      "default": "rewire to endpoint",
+      "reason": "cart forms must never post to a form service; shop is out of scope",
+      "costIfWrong": "low: buttons do nothing until the new shop takes over",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d16",
+      "topic": "one shared layout",
+      "choice": "src/layouts/Page.astro (plus Blank.astro for /alle-fahrrader/) for all 10 templates instead of one layout per template; header, mobile header and footer are components from home, pages with a current-menu-item copy use their own file",
+      "default": "one layout per template",
+      "reason": "all templates share the identical #page > .site-inner > header, mobile header, #main, footer skeleton; content moved by tools/extract.mjs",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d17",
+      "topic": "Google Fonts",
+      "choice": "reproduce live: fonts.googleapis.com stylesheet stays linked, the 20 fonts the capture saved under /fonts/ are not shipped",
+      "default": "reproduce live",
+      "reason": "parity; self-hosting is a proposal (German courts treat Google Fonts from Google servers as a GDPR issue)",
+      "costIfWrong": "medium: GDPR exposure until proposed change is approved",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d18",
+      "topic": "dev domain indexing",
+      "choice": "public/_headers adds X-Robots-Tag noindex for https://bike-one.dev/*; builds are noindex and robots Disallow all unless PUBLIC_INDEXABLE=true",
+      "default": "pages.dev rule only",
+      "reason": "user: bike-one.dev must not be indexed",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d19",
+      "topic": "missing favicon link",
+      "choice": "reproduce live: every page links /wp-content/themes/cosy-child/favicon.png, which live answers 404; link kept, links exception per page",
+      "default": "reproduce live",
+      "reason": "parity; the root /favicon.ico is served",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d20",
+      "topic": "sitemaps",
+      "choice": "the live wp-sitemap files are served from tools/sitemaps.mjs: URLs under the excluded WooCommerce prefixes (53) are dropped, the two sitemaps left empty (products, product categories) are dropped from the index, and /portfolio-category/branding-design/page/2/ is added because the sitemaps gate requires every indexable page and live omits it",
+      "default": "reproduce live",
+      "reason": "the sitemaps gate has no exception field; forced difference from live",
+      "costIfWrong": "low: the new shop adds its own sitemap entries",
       "date": "2026-11-25"
     }
   ],

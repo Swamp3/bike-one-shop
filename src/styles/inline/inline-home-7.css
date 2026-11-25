@@ -1,0 +1,3 @@
+.has-drop-cap:not(:focus):first-letter{float:left;font-size:8.4em;font-style:normal;font-weight:100;line-height:.68;margin:.05em .1em 0 0;text-transform:uppercase}
+body.rtl .has-drop-cap:not(:focus):first-letter{float:none;margin-left:.1em}
+:where(p.has-text-color:not(.has-link-color)) a{color:inherit}

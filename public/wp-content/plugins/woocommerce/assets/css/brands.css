@@ -1,0 +1,13 @@
+:where(.brand-thumbnails-description)::before,ul.brand-thumbnails::before{clear:both;content:"";display:table}
+:where(.brand-thumbnails-description)::after,ul.brand-thumbnails::after{clear:both;content:"";display:table}
+:where(.brand-thumbnails-description li.first),ul.brand-thumbnails:not(.fluid-columns) li.first{clear:both}
+ul.brand-thumbnails:not(.fluid-columns) li.last{margin-right:0}
+@media screen and (max-width:768px){
+  ul.brand-thumbnails:not(.fluid-columns) li{width:48%!important}
+  ul.brand-thumbnails:not(.fluid-columns) li.first{clear:none}
+  ul.brand-thumbnails:not(.fluid-columns) li.last{margin-right:3.8%}
+  ul.brand-thumbnails:not(.fluid-columns) li:nth-of-type(odd){clear:both}
+  ul.brand-thumbnails:not(.fluid-columns) li:nth-of-type(2n){margin-right:0}
+}
+#brands_a_z h3:target{text-decoration:underline}
+ul.brands_index li a:hover{border-width:2px;padding:5px;text-decoration:none}
