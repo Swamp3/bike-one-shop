@@ -1,0 +1,73 @@
+---
+import { SHOP_URL, TAGLINE, LEGAL_NAME } from '../lib/site.mjs';
+import { getStores, shortHours } from '../lib/stores';
+
+const stores = await getStores();
+---
+<footer class="site-footer dark">
+  <div class="container grid">
+    <section class="intro" aria-labelledby="f-brand">
+      <p id="f-brand" class="brand-name">{LEGAL_NAME}</p>
+      <p class="muted">{TAGLINE}</p>
+      <a class="btn" href="/termin-buchen/">Termin buchen</a>
+    </section>
+
+    <section class="stores" aria-labelledby="f-contact">
+      <h2 id="f-contact" class="col-title">Kontakt</h2>
+      <div class="store-list">
+        {stores.map((s) => (
+          <div>
+            <h3>{s.data.name}</h3>
+            <address>
+              {s.data.street}<br />{s.data.postalCode} {s.data.city}<br />
+              <a href={`tel:${s.data.phoneTel}`}>{s.data.phone}</a><br />
+              <a href={`mailto:${s.data.email}`}>{s.data.email}</a>
+            </address>
+            <p class="muted hours">{shortHours(s).map((line) => <span>{line}</span>)}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <nav aria-labelledby="f-nav">
+      <h2 id="f-nav" class="col-title">Seiten</h2>
+      <ul>
+        <li><a href={SHOP_URL}>Shop</a></li>
+        <li><a href="/termin-buchen/">Termin buchen</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/ueber-uns/">Über uns</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-labelledby="f-legal">
+      <h2 id="f-legal" class="col-title">Rechtliches</h2>
+      <ul>
+        <li><a href="/datenschutz/">Datenschutz</a></li>
+        <li><a href="/impressum/">Impressum</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="container legal-line">
+    <p>© {new Date().getFullYear()} {LEGAL_NAME}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--header-bg); color: var(--header-text); padding-top: var(--space-7); margin-top: 0; }
+  .grid { display: grid; gap: var(--space-6); grid-template-columns: 1fr; }
+  @media (min-width: 40rem) { .grid { grid-template-columns: 1fr 1fr; } .stores { grid-column: 1 / -1; order: -1; } }
+  @media (min-width: 64rem) { .grid { grid-template-columns: 1.1fr 1.6fr 0.7fr 0.7fr; } .stores { grid-column: auto; order: 0; } }
+  a { color: #fff; }
+  a:hover { color: var(--header-muted); }
+  .brand-name { font: 700 1.6rem/1.1 var(--font-head); margin: 0 0 var(--space-2); }
+  .muted { color: var(--header-muted); }
+  .col-title { font: 700 0.9rem/1 var(--font-head); letter-spacing: 0.14em; text-transform: uppercase; color: var(--header-muted); margin: 0 0 var(--space-4); }
+  .store-list { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+  h3 { font-size: 1.15rem; margin-bottom: var(--space-2); }
+  address { margin-bottom: var(--space-2); }
+  .hours span { display: block; }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li + li { margin-top: var(--space-2); }
+  .legal-line { margin-top: var(--space-6); padding-block: var(--space-4); border-top: 1px solid var(--header-line); color: var(--header-muted); font-size: 0.9rem; }
+  .legal-line p { margin: 0; }
+</style>

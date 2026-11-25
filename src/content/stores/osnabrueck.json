@@ -1,0 +1,17 @@
+{
+  "order": 2,
+  "name": "Osnabrück",
+  "street": "Lengericher Landstraße 30",
+  "postalCode": "49078",
+  "city": "Osnabrück",
+  "phone": "0541 440 952 84",
+  "phoneTel": "+4954144095284",
+  "email": "OS@bike-one.de",
+  "bookingPath": "/termin-buchen-osnabrueck/",
+  "mapQuery": "Lengericher Landstraße 30, 49078 Osnabrück",
+  "hours": [
+    { "label": "Dienstag bis Freitag", "short": "Di–Fr", "days": ["Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "10:00", "closes": "18:00" },
+    { "label": "Samstag", "short": "Sa", "days": ["Saturday"], "opens": "10:00", "closes": "14:00" }
+  ],
+  "closed": "Sonntag"
+}

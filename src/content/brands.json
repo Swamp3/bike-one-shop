@@ -1,0 +1,9 @@
+[
+  { "id": "trek", "name": "Trek" },
+  { "id": "specialized", "name": "Specialized" },
+  { "id": "cervelo", "name": "Cervelo" },
+  { "id": "pinarello", "name": "Pinarello" },
+  { "id": "ridley", "name": "Ridley" },
+  { "id": "wilier", "name": "Wilier" },
+  { "id": "factor", "name": "Factor" }
+]

@@ -1,0 +1,40 @@
+---
+import type { Store } from '../lib/stores';
+import Embed from './Embed.astro';
+interface Props { store: Store; map?: boolean; level?: 2 | 3 }
+const { store, map = false, level = 3 } = Astro.props;
+const d = store.data;
+const Heading = `h${level}` as 'h2' | 'h3';
+---
+<article class="card">
+  <Heading class="name">{d.name}</Heading>
+  <div class="cols">
+    <div>
+      <address>
+        {d.street}<br />{d.postalCode} {d.city}<br />
+        <a href={`tel:${d.phoneTel}`}>{d.phone}</a><br />
+        <a href={`mailto:${d.email}`}>{d.email}</a>
+      </address>
+    </div>
+    <div>
+      <p class="label">Öffnungszeiten</p>
+      <dl class="hours">
+        {d.hours.map((h) => (<><dt>{h.label}</dt><dd>{h.opens}–{h.closes} Uhr</dd></>))}
+        <dt>{d.closed}</dt><dd>geschlossen</dd>
+      </dl>
+    </div>
+  </div>
+  {map && <Embed src={`https://www.google.com/maps?q=${encodeURIComponent(d.mapQuery)}&output=embed`} title={`Karte: BikeOne ${d.name}`} provider="Google Maps" label="Karte laden" ratio="wide" />}
+  <a class="btn" href={d.bookingPath}>Termin buchen in {d.name}</a>
+</article>
+<style>
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4); }
+  .name { margin: 0; }
+  .cols { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+  .label { font: 700 0.85rem/1 var(--font-head); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: var(--space-2); }
+  address { line-height: 1.7; }
+  .hours { margin: 0; }
+  .hours dt { font-weight: 700; }
+  .hours dd { margin: 0 0 var(--space-2); }
+  .btn { align-self: flex-start; }
+</style>

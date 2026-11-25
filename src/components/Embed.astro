@@ -1,0 +1,33 @@
+---
+// Third-party embed behind a click: nothing loads from the provider until the visitor asks for it.
+// The iframe sits in a <template>, the script moves it into the page on click (decision d34).
+interface Props { src: string; title: string; provider: string; label: string; ratio?: 'wide' | 'tall' }
+const { src, title, provider, label, ratio = 'tall' } = Astro.props;
+---
+<div class="embed" data-embed data-ratio={ratio}>
+  <div class="gate">
+    <p>Dieser Inhalt wird von {provider} bereitgestellt. Beim Laden wird eine Verbindung zu {provider} aufgebaut und Ihre IP-Adresse übertragen.</p>
+    <button type="button" class="btn btn--ghost" data-embed-load>{label}</button>
+  </div>
+  <template><iframe src={src} title={title} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></template>
+</div>
+<style>
+  .embed { position: relative; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .embed[data-ratio='wide'] { aspect-ratio: 16 / 9; }
+  .embed[data-ratio='tall'] { aspect-ratio: 4 / 3; }
+  .gate { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3); padding: var(--space-4); text-align: center; }
+  .gate p { margin: 0; max-width: 32rem; font-size: 0.95rem; color: var(--ink-muted); }
+  .embed :global(iframe) { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+</style>
+<script>
+  // One delegated listener for every embed on the page.
+  document.addEventListener('click', (event) => {
+    const button = (event.target as Element | null)?.closest('[data-embed-load]');
+    const box = button?.closest<HTMLElement>('[data-embed]');
+    const tpl = box?.querySelector('template');
+    if (!box || !tpl) return;
+    box.querySelector('.gate')?.remove();
+    box.append(tpl.content.cloneNode(true));
+    tpl.remove();
+  });
+</script>
