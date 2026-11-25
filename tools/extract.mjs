@@ -20,14 +20,25 @@ fs.mkdirSync('src/components', { recursive: true });
 // Same-origin asset URLs become root-relative (build-rules, decision d21), so the build loads every
 // script, stylesheet, icon and image from its own copy and never from the live site. Links (<a>), canonical,
 // alternate, og and other metadata keep the captured URL.
-const ORIGIN_RE = /(?:https?:)?\/\/(?:www\.)?bike-one\.org(?=\/)/gi;
+const ORIGIN_RE = /(?:https?:)?\/\/(?:(?:www\.)?bike-one\.org|bikeone\.cvires\.at)(?=\/)/gi;
+const FILE_RE = /(?:https?:)?\/\/(?:(?:www\.)?bike-one\.org|bikeone\.cvires\.at)(?=\/wp-(?:content|includes)\/)/gi;
 const ASSET_LINK_RELS = new Set(['stylesheet', 'icon', 'shortcut icon', 'apple-touch-icon', 'preload', 'modulepreload']);
 const ATTRS = { script: ['src'], img: ['src', 'srcset'], source: ['src', 'srcset'], video: ['src', 'poster'], audio: ['src'], track: ['src'] };
+// Scripts that cannot work on a static site and only raise console errors (decision d22): WooCommerce cart
+// fragments (POST ?wc-ajax=get_refreshed_fragments), the YITH wishlist add-to-wishlist component (REST call
+// to wp-json) and WordPress's emoji loader (fetches wp-emoji-release.min.js from the live origin).
+const DROP_ID = /^(wc-cart-fragments-js(-extra)?|yith-wcwl-add-to-wishlist-js(-extra|-translations)?|wp-emoji-settings)$/;
+const dropScript = (c) => c.tagName === 'script' && (DROP_ID.test(at(c, 'id') || '') || (at(c, 'type') === 'module' && (c.childNodes || []).some((t) => /script#wp-emoji-settings/.test(t.value || ''))));
 function localise(node) {
+  node.childNodes = (node.childNodes || []).filter((c) => !dropScript(c));
   for (const c of node.childNodes || []) {
     if (!c.tagName) continue;
     const names = c.tagName === 'link' && ASSET_LINK_RELS.has((at(c, 'rel') || '').toLowerCase().trim()) ? ['href', 'imagesrcset'] : ATTRS[c.tagName] || [];
-    for (const a of c.attrs || []) if (names.includes(a.name)) a.value = a.value.replace(ORIGIN_RE, '');
+    for (const a of c.attrs || []) {
+      if (names.includes(a.name)) a.value = a.value.replace(ORIGIN_RE, '');
+      // inline background images and the lazy-load data-* sources the theme scripts read (d21): file URLs only
+      else if (a.name === 'style' || a.name.startsWith('data-')) a.value = a.value.replace(FILE_RE, '');
+    }
     // an import map's targets are the same kind of asset URL
     if (c.tagName === 'script' && at(c, 'type') === 'importmap') for (const t of c.childNodes || []) if (t.value) t.value = t.value.replace(ORIGIN_RE, '');
     localise(c);
