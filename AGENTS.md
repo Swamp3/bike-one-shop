@@ -29,9 +29,17 @@ npm run build
 npm run verify        # dev build; needs the review server on :4321 (node scripts/review-serve.mjs --background)
 npm test
 ```
-- `npm run verify` runs `redirects`, `links`, `seo`, `wp`, `size`, `a11y`, `net` (`tools/checks/`, each also runs alone:
-  `npm run seo`), all with no allowlist. `net` loads every page in Chrome and WebKit at 1440 and 390 wide against the review
-  server, applies the CSP of `dist/_headers`, fails on any non-local request, and checks the hero video. Never request `//` from the review server (it crashes).
+- `npm run verify` runs `redirects`, `links`, `seo`, `wp`, `headers`, `size`, `a11y`, `ui`, `net`, `embeds` (`tools/checks/`, each also runs
+  alone: `npm run seo`), all with no allowlist, about 3 minutes. `seo`: titles, descriptions, claims, JSON-LD types and facts, breadcrumbs,
+  Open Graph, link text, inbound links, sitemap, RSS. `a11y`: HTML rules and the contrast of every colour pair of the tokens. `ui` (Chrome):
+  focus rings, 44 px targets at 390, menu and hero button with the keyboard, reduced motion, white text on the photos, no horizontal scrolling.
+  `size`: budgets and image, preload and font rules on every page. `headers`: `_headers`, `_redirects` limits, mixed content. `net` loads every
+  page in Chrome and WebKit at 1440 and 390 wide against the review server, applies the CSP of `dist/_headers`, fails on any non-local request,
+  any static file fetched twice, and checks the hero video and its connection policy. `embeds` clicks, Enter-presses and Space-presses every
+  click-to-load embed under the CSP with every foreign request aborted (never register a route after `abortForeign`: Playwright asks the newest
+  route first). Never request `//` from the review server (it crashes).
+- Measuring, not gating: `npm run perf` (LCP element and time, CLS, requests, bytes; `--throttle fast4g|slow4g`, `--browsers chrome,webkit`) and
+  `npm run screens` (full-page screenshots at 390, 768, 1440 into `review/`, git-ignored).
 - The release build is `PUBLIC_INDEXABLE=true npm run build` followed by `PUBLIC_INDEXABLE=true npm run verify` (`npm run verify:release`).
 - `npm run verify:legacy` is the old parity pipeline against `baseline/`; it fails by design now and goes in Stage 4.
 - `baseline/` and `capture/` are not edited.
