@@ -16,11 +16,12 @@ const { src, title, provider, subject, label, ratio = 'tall', openUrl, openLabel
 </div>
 <style>
   .embed { position: relative; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
-  .embed[data-ratio='wide'] { aspect-ratio: 16 / 9; }
-  .embed[data-ratio='tall'] { aspect-ratio: 4 / 3; }
+  .embed[data-ratio='wide'] { aspect-ratio: 16 / 9; min-height: 14rem; } /* the consent text and the button always fit */
+  .embed[data-ratio='tall'] { aspect-ratio: 4 / 3; min-height: 14rem; }
   .embed[data-ratio='app'] { height: 18rem; }
   .embed[data-ratio='app'][data-loaded] { height: min(88vh, 62rem); min-height: 36rem; }
-  .gate .open { font-size: 0.95rem; display: inline-flex; align-items: center; min-height: 2.75rem; }
+  .gate .open { font-size: 0.95rem; }
+  @media (max-width: 47.99rem), (pointer: coarse) { .gate .open { display: inline-flex; align-items: center; min-height: 2.75rem; } }
   .gate { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-3); padding: var(--space-4); text-align: center; }
   .gate p { margin: 0; max-width: 32rem; font-size: 0.95rem; color: var(--ink-muted); }
   .embed :global(iframe) { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }

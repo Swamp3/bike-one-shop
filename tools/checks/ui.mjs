@@ -1,6 +1,7 @@
 // Check `ui`: what the HTML cannot show, in system Chrome against the review server (dist/_headers applied).
 //  - focus: Tab through every page at 1440 and 390; the skip link comes first and is visible when focused; every
 //    focused element has a visible ring (outline of at least 2 px); the sequence ends (no trap).
+//  - no horizontal overflow at 1440 and 390.
 //  - touch targets at 390: every link and button is at least 44 px high and wide, unless it is a link inside a sentence.
 //  - menu at 390: Enter opens it, the first Tab lands on a menu link, Escape closes it and returns to the button.
 //  - hero pause button (home, 1440): reachable, Space pauses, Enter plays again, label and aria-pressed follow.
@@ -87,6 +88,8 @@ export async function run() {
       await page.goto(`${BASE}${p.url}`, { waitUntil: 'load' });
       await page.waitForLoadState('networkidle');
       stops += (await tabThrough(page, at)).length;
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      if (overflow > 0) at(`the page is ${overflow} px wider than the screen (horizontal scrolling)`);
 
       if (width === 390) {
         // touch targets: links inside a sentence are exempt (WCAG 2.5.8 inline exception); everything else is at least 44 px

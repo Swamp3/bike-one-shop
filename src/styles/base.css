@@ -26,7 +26,8 @@ address { font-style: normal; }
 .section { padding-block: var(--space-7); }
 @media (min-width: 48rem) { .section { padding-block: var(--space-8); } }
 .eyebrow { font: 700 0.85rem/1 var(--font-head); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-strong); margin: 0 0 var(--space-3); }
-.tap, address a { display: inline-flex; align-items: center; min-height: 2.75rem; } /* a link on its own line is a 44 px target */
+/* a link on its own line is a 44 px target on a phone or any touch screen; on a wide screen with a mouse it keeps the text's own height */
+@media (max-width: 47.99rem), (pointer: coarse) { .tap, address a { display: inline-flex; align-items: center; min-height: 2.75rem; } }
 .visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 .skip-link { position: absolute; left: var(--space-3); top: -4rem; z-index: 100; background: var(--surface); color: var(--ink); padding: var(--space-3) var(--space-4); border-radius: var(--radius); font-weight: 700; }
