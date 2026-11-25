@@ -206,7 +206,14 @@ export function handler({ dir }) {
       res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
       return res.end(`review-serve: ${err.message}\n`);
     }
-    const url = new URL(req.url, 'http://localhost');
+    let url;
+    try {
+      url = new URL(req.url, 'http://localhost');
+    } catch {
+      // a request line like "//" is an invalid URL; answer 400 instead of crashing the server
+      res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+      return res.end('review-serve: bad request URL\n');
+    }
     const { pathname: path, search } = url;
     if (req.method !== 'GET' && req.method !== 'HEAD') {
       res.writeHead(405, { Allow: 'GET, HEAD', 'Content-Type': 'text/plain; charset=utf-8' });
