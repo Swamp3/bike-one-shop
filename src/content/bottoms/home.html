@@ -243,3 +243,4 @@ var gutslider_swiper = {"placeholder":"https://bike-one.org/wp-content/plugins/s
   });
 });
  }catch (ex){}</script>
+<script id="hero-video-autoplay">(function(){setInterval(function(){if(document.hidden)return;document.querySelectorAll('rs-slide').forEach(function(s){if(getComputedStyle(s).visibility!=='visible')return;var v=s.querySelector('rs-bgvideo video');if(v&&v.paused&&!v.ended&&v.currentTime===0&&v.readyState>=2){v.muted=true;var p=v.play();if(p&&p.catch)p.catch(function(){});}});},500);})();</script>

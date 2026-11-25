@@ -90,7 +90,11 @@ for (const r of routes) {
   const inertMain = (h) => { let i = 0; return h.replace(/<form\b[^>]*>/g, (tag) => { const idx = i++; if (!/method="post"/i.test(tag)) return tag; inert.push({ path: r.path, form: idx, reason: 'WooCommerce add-to-cart: the shop is out of scope, the form is switched off' }); return tag.replace(/action="[^"]*"/, 'action="#"'); }); };
   fs.writeFileSync(`src/content/pages/${slug}.html`, inertMain(blank ? ser(main) : ik.slice(mi, fi).map(serializeOuter).join('')));
   fs.writeFileSync(`src/content/heads/${slug}.html`, keep.join('\n'));
-  fs.writeFileSync(`src/content/bottoms/${slug}.html`, rest.map(serializeOuter).join('\n'));
+  // Hero background video (decision d26): Safari/WebKit does not start Revolution Slider's muted autoplay video
+// until a click, so a small script plays a bg video of the active slide that has not started yet.
+  const HERO_AUTOPLAY = `<script id="hero-video-autoplay">(function(){setInterval(function(){if(document.hidden)return;document.querySelectorAll('rs-slide').forEach(function(s){if(getComputedStyle(s).visibility!=='visible')return;var v=s.querySelector('rs-bgvideo video');if(v&&v.paused&&!v.ended&&v.currentTime===0&&v.readyState>=2){v.muted=true;var p=v.play();if(p&&p.catch)p.catch(function(){});}});},500);})();</script>`;
+  const hasHero = ik.slice(mi, fi).some((n) => serializeOuter(n).includes('<rs-bgvideo'));
+  fs.writeFileSync(`src/content/bottoms/${slug}.html`, rest.map(serializeOuter).join('\n') + (hasHero ? '\n' + HERO_AUTOPLAY : ''));
   data[slug].css = report.heads[r.path] || null;
 }
 const variance = (m) => { const h = {}; for (const [s, v] of Object.entries(m)) (h[hash(v)] ??= []).push(s); return h; };

@@ -258,6 +258,15 @@
       "reason": "the .map files were never captured, DevTools logs a source map error on every page",
       "costIfWrong": "none",
       "date": "2026-11-25"
+    },
+    {
+      "id": "d25",
+      "topic": "hero video autoplay",
+      "choice": "inline script hero-video-autoplay added to / and /main-bike/: every 500 ms it plays the unstarted bg video of the visible Revolution Slider slide (muted); VidOne.mp4 stays at the absolute live URL because the file is not in the capture or the export",
+      "default": "reproduce live",
+      "reason": "owner report: poster shows until a click. Reproduced in WebKit (Safari engine): the slider never calls play() on the first video, a muted play() without gesture succeeds and the slider then fades the video in. Chrome autoplays by itself",
+      "costIfWrong": "low: a no-op where autoplay already works; Safari with Low Power Mode can still block autoplay",
+      "date": "2026-11-25"
     }
   ],
   "counts": {},
