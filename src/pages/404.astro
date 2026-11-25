@@ -1,11 +1,23 @@
 ---
-// The live site's own 404 page (capture/pages/404.html), in the shared layout.
-import Page from '../layouts/legacy/Page.astro';
-import index from '../content/index.json';
-const mains = import.meta.glob('../content/pages/404.html', { query: '?raw', import: 'default', eager: true });
-const heads = import.meta.glob('../content/heads/404.html', { query: '?raw', import: 'default', eager: true });
-const bottoms = import.meta.glob('../content/bottoms/404.html', { query: '?raw', import: 'default', eager: true });
-const meta = index['404'];
-const props = { slug: '404', meta, seo: { title: meta.title, robots: 'noindex' }, html: mains['../content/pages/404.html'], headExtra: heads['../content/heads/404.html'], bottom: bottoms['../content/bottoms/404.html'] };
+// Native 404 page: written to dist/404.html, which Cloudflare Pages serves for every unknown URL. noindex, no canonical.
+import Base from '../layouts/Base.astro';
+import { SHOP_URL } from '../lib/site.mjs';
 ---
-<Page {...props} />
+<Base title="Seite nicht gefunden – BikeOne" description="Diese Seite gibt es nicht (mehr). Weiter zur Startseite, zum Termin buchen, zum Blog oder zum Shop von BikeOne." noindex noCanonical>
+  <div class="container page">
+    <p class="eyebrow">Fehler 404</p>
+    <h1>Seite nicht gefunden</h1>
+    <p>Diese Seite gibt es nicht (mehr). Vielleicht hilft dir einer dieser Wege weiter:</p>
+    <div class="cta-row">
+      <a class="btn" href="/">Zur Startseite</a>
+      <a class="btn btn--ghost" href="/termin-buchen/">Termin buchen</a>
+      <a class="btn btn--ghost" href="/blog/">Blog</a>
+      <a class="btn btn--ghost" href={SHOP_URL}>Zum Shop</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page { padding-block: var(--space-8); min-height: 50vh; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
+</style>

@@ -1,7 +1,7 @@
 // Check `seo`: the rules of the plan's SEO section, on the native pages of dist/. Title 30 to 60 characters and
 // description 70 to 160, both unique; one h1; lang de; canonical on the build origin; Open Graph and Twitter cards with
 // a 1200x630 image; JSON-LD that parses and holds only captured facts; robots.txt and sitemap by build mode; a dev
-// build is noindex everywhere and has no sitemap.
+// build is noindex everywhere and has no sitemap. The 404 page is noindex in every build and has no canonical.
 import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -34,17 +34,19 @@ export async function run() {
     const h1 = byTag(doc, 'h1');
     if (h1.length !== 1) at(`${h1.length} h1 elements (exactly one)`); else if (!squash(text(h1[0]))) at('h1 is empty');
 
+    const notFound = page.url === '/404.html';
     const canonical = find(doc, (n) => n.tagName === 'link' && attr(n, 'rel') === 'canonical').map((n) => attr(n, 'href'));
     const want = `${ORIGIN}${page.url}`;
-    if (canonical.length !== 1 || canonical[0] !== want) at(`canonical is ${JSON.stringify(canonical)}, want ${want}`);
+    if (notFound) { if (canonical.length) at('the 404 page must not have a canonical'); }
+    else if (canonical.length !== 1 || canonical[0] !== want) at(`canonical is ${JSON.stringify(canonical)}, want ${want}`);
 
     const robots = meta(doc, 'robots') ?? '';
     const noindex = /noindex/i.test(robots);
-    if (!RELEASE && !noindex) at('dev build page is not noindex');
+    if ((!RELEASE || notFound) && !noindex) at('dev build page (and the 404 page in every build) is not noindex');
     if (!noindex) indexable.push(page.url);
 
-    for (const k of ['og:title', 'og:description', 'og:url', 'og:image', 'og:type', 'og:locale', 'twitter:card', 'twitter:image']) if (!meta(doc, k)) at(`missing ${k}`);
-    if (meta(doc, 'og:url') !== want) at(`og:url is ${meta(doc, 'og:url')}`);
+    for (const k of ['og:title', 'og:description', ...(notFound ? [] : ['og:url']), 'og:image', 'og:type', 'og:locale', 'twitter:card', 'twitter:image']) if (!meta(doc, k)) at(`missing ${k}`);
+    if (!notFound && meta(doc, 'og:url') !== want) at(`og:url is ${meta(doc, 'og:url')}`);
     if (meta(doc, 'twitter:card') !== 'summary_large_image') at('twitter:card is not summary_large_image');
     const image = meta(doc, 'og:image');
     if (image) {
@@ -73,7 +75,7 @@ export async function run() {
       }
     }
     if (page.url === '/') for (const t of ['Organization', 'WebSite', 'BikeStore']) if (!types.includes(t)) at(`home JSON-LD lacks ${t}`);
-    if (page.url !== '/' && !types.includes('BreadcrumbList')) at('no BreadcrumbList JSON-LD');
+    if (page.url !== '/' && !notFound && !types.includes('BreadcrumbList')) at('no BreadcrumbList JSON-LD');
   }
 
   // robots.txt and sitemap
