@@ -73,7 +73,7 @@ export const graph = (nodes: Json[]): Json => ({ '@context': 'https://schema.org
 
 export type ArticleInput = { path: string; headline: string; description: string; published: Date; modified: Date; image: string };
 
-/** Article of a blog post. The WordPress author had no name, so the organisation is author and publisher (owner to confirm). */
+/** Article of a blog post. The old site's author had no name, so the organisation is author and publisher (owner to confirm). */
 export const articleNode = (origin: string, a: ArticleInput): Json => ({
   '@type': 'Article',
   '@id': abs(origin, `${a.path}#article`),

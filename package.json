@@ -1,7 +1,7 @@
 {
   "name": "bikeone",
   "version": "0.0.0",
-  "description": "Static Astro rebuild of bike-one.org",
+  "description": "Static native Astro site of BikeOne (bike-one.org)",
   "type": "module",
   "private": true,
   "engines": {
@@ -27,28 +27,14 @@
     "perf": "node tools/perf.mjs",
     "screens": "node tools/screens.mjs",
     "a11y": "node tools/checks/a11y.mjs",
-    "baseline": "node scripts/build-baseline.mjs --capture capture --out baseline",
-    "assets:copy": "node scripts/copy-assets.mjs --capture capture --site .",
-    "links:exceptions": "node scripts/link-exceptions.mjs --baseline baseline --capture capture --out exceptions.json --skip-api",
     "redirects:build": "node tools/redirects-build.mjs",
-    "verify:live": "node scripts/verify-live.mjs",
-    "review:shoot": "node scripts/review/shoot.mjs",
-    "review:diff": "node scripts/review/diff.mjs",
-    "review:styles": "node scripts/review/styles.mjs",
-    "review:sheet": "node scripts/review/sheet.mjs",
-    "review:check": "node scripts/review/check.mjs --review review",
-    "review:serve": "node scripts/review-serve.mjs",
-    "verify:legacy": "node tools/verify-legacy.mjs",
-    "verify:legacy:release": "PUBLIC_INDEXABLE=true node tools/verify-legacy.mjs"
+    "review:serve": "node scripts/review-serve.mjs"
   },
   "devDependencies": {
     "@fontsource/roboto": "5.3.0",
     "@fontsource/roboto-condensed": "5.3.0",
     "astro": "7.4.13",
-    "css-tree": "3.2.1",
     "parse5": "8.0.1",
-    "pixelmatch": "8.0.0",
-    "playwright": "1.64.1",
     "pngjs": "7.0.0"
   }
 }

@@ -1,5 +1,4 @@
-// Content collections of the native site (decision d33). The legacy WordPress dumps in src/content/{pages,heads,
-// bottoms,parts} are not collections; they leave with the old route.
+// Content collections of the native site (decision d33): stores, brands, legal, blog.
 import { defineCollection } from 'astro:content';
 import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
@@ -42,8 +41,8 @@ const legal = defineCollection({
   schema: z.object({ title: z.string(), seoTitle: z.string(), description: z.string() }),
 });
 
-// The five captured posts: front matter and body copied from capture/pages (body text word for word, the WordPress
-// separators dropped), SEO title and description written from the post's own text, image chosen from the media cache.
+// The five blog posts: body text word for word from the old site, SEO title and description written from the post's
+// own text, image chosen from src/assets/photos.
 const blog = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/blog' }),
   schema: ({ image }) => z.object({

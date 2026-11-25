@@ -12,7 +12,6 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { assertNodeVersion } from './lib/node-version.mjs';
 import { cloudflareRoutes, routes } from './lib/review-routes.mjs';
-import { contentTypeFor } from './media-upload.mjs';
 
 const HELP = `Usage: node review-serve.mjs [--dir <site>] [--port 4321] [--background | --stop]
 
@@ -54,6 +53,22 @@ const TYPES = {
   '.otf': 'font/otf',
   '.eot': 'application/vnd.ms-fontobject',
   '.wasm': 'application/wasm',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.gif': 'image/gif',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.pdf': 'application/pdf',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.woff2': 'font/woff2',
+  '.woff': 'font/woff',
+  '.txt': 'text/plain; charset=utf-8',
+  '.csv': 'text/csv; charset=utf-8',
+  '.json': 'application/json',
 };
 // Response headers a proxied answer keeps. Set-Cookie is never among them.
 const PASS_HEADERS = ['content-type', 'content-length', 'cache-control', 'etag', 'last-modified', 'expires', 'content-range', 'accept-ranges'];
@@ -64,7 +79,7 @@ const LOG_FILE = join('.conversion', 'review-serve.log');
 
 class UsageError extends Error {}
 
-const typeOf = (file) => TYPES[extname(file).toLowerCase()] ?? contentTypeFor(file);
+const typeOf = (file) => TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream';
 
 function options(argv) {
   let values;

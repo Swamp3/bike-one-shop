@@ -57,7 +57,7 @@ query-string row cannot be matched by _redirects: it is written to ${CLOUDFLARE_
 (from,to,status) beside the csv, to be created as a Cloudflare Single Redirect. Pages accepts
 2,000 static and 100 dynamic rules; more than that warns.
 
---routes <file> (baseline/routes.json) also serves every feed route at 200 from its built file:
+--routes <file> (a JSON list of { path, status, kind }) also serves every feed route at 200 from its built file:
 a rewrite /feed/ -> /feed/index.xml, since neither host serves index.xml for a directory path.
 vercel: a "rewrites" entry, merged by source with the rewrites already there (and counted toward
 the route limit); cloudflare: a "/feed/ /feed/index.xml 200" line. redirects.csv stays
@@ -102,7 +102,7 @@ export const FILE_EXTENSIONS = [
   // documents, media and archives a CMS upload folder routinely holds
   'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'csv', 'rtf', 'odt', 'ods', 'odp', 'mov', 'm4a', 'm4v', 'wav', 'ogg',
   'ogv', 'oga', 'tif', 'tiff', 'bmp', 'heic', 'eps', 'ai', 'psd', 'ics', 'vcf', 'epub', 'gz', 'tgz', 'rar', 'kml', 'kmz',
-  // server scripts a WordPress site answers at (admin-ajax.php, served from captured answers)
+  // server scripts the old site answered at (admin-ajax.php)
   'php',
 ];
 

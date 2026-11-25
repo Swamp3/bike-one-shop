@@ -1,4 +1,4 @@
-// Static output only, no adapter. trailingSlash follows the majority of live URLs in capture/.
+// Static output only, no adapter. trailingSlash 'always': the old site's URLs ended in a slash.
 // `site` is the build origin (decision d30): bike-one.org in the release build (PUBLIC_INDEXABLE=true),
 // else SITE_ORIGIN or https://bike-one.dev. tools/dev-origin.mjs stays as a post-build safety net.
 import { defineConfig } from 'astro/config';

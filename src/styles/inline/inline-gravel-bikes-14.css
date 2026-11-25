@@ -1,8 +1,0 @@
-@keyframes wc-skeleton-shimmer{to{transform:translateX(100%)}}
-input[type=checkbox].wc-block-product-filter-checkbox-list__input:focus{outline-color:var(--wc-product-filter-checkbox-list-option-element-border,currentColor);outline-width:1px}
-input[type=checkbox].wc-block-product-filter-checkbox-list__input:disabled{cursor:not-allowed;opacity:.5}
-input[type=checkbox].wc-block-product-filter-checkbox-list__input:disabled+.wc-block-product-filter-checkbox-list__mark{opacity:.5}
-.wc-block-product-filter-checkbox-list__label:has(input.wc-block-product-filter-checkbox-list__input:disabled){cursor:not-allowed;opacity:.5}
-input[type=checkbox].wc-block-product-filter-checkbox-list__input:checked:after,input[type=checkbox].wc-block-product-filter-checkbox-list__input:checked:before{content:none}
-input[type=checkbox].wc-block-product-filter-checkbox-list__input:checked+.wc-block-product-filter-checkbox-list__mark{display:block;pointer-events:none}
-.wc-block-product-filter-checkbox-list__show-more-button:focus,.wc-block-product-filter-checkbox-list__show-more-button:hover{text-decoration:none}

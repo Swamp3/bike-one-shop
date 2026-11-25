@@ -16,11 +16,11 @@ export const EXACT = new Map([
   ['/wp-sitemap.xml', '/sitemap-index.xml'],
   ...['posts-la_portfolio-1', 'posts-la_team_member-1', 'posts-page-1', 'posts-post-1', 'taxonomies-category-1', 'posts-product-1', 'taxonomies-product_cat-1',
     'taxonomies-la_portfolio_category-1', 'taxonomies-product_brand-1', 'users-1'].map((n) => [`/wp-sitemap-${n}.xml`, '/sitemap-index.xml']),
-  // WooCommerce shells and category pages: the shop is a separate site
+  // the old shop shells and category pages: the shop is a separate site
   ...['/alle-fahrrader/', '/ebikes/', '/gravel-bikes/', '/racebikes/', '/tt-triathlon/', '/sale/'].map((p) => [p, SHOP]),
 ]);
 
-// The seven brand pages (decision d50): the capture holds only product listings for them (prices, manufacturer copy,
+// The seven brand pages (decision d50): the old pages held only product listings for them (prices, manufacturer copy,
 // leasing rates), no copy of the shop's own, so every brand goes to the shop. The lower-case form is a typo guard:
 // Cloudflare Pages paths are case sensitive.
 

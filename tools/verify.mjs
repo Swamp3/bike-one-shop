@@ -1,6 +1,5 @@
 // npm run verify: the checks that replace the parity gates (decision d41). Run after npm run build; the release build
 // is checked with PUBLIC_INDEXABLE=true npm run verify:release. `net` needs the review server (:4321, serves dist/).
-// The old gates against baseline/ stay available as npm run verify:legacy until Stage 4.
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

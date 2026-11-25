@@ -1,5 +1,0 @@
-@keyframes wc-skeleton-shimmer{to{transform:translateX(100%)}}
-.wc-block-components-product-price{display:block}
-.wc-block-components-product-price .woocommerce-Price-amount{white-space:nowrap}
-@keyframes loading__animation{to{transform:translateX(100%)}}
-@media screen and (prefers-reduced-motion:reduce){.is-loading .wc-block-components-product-price:before{animation:none}}
