@@ -1,10 +1,18 @@
-// Runs the gates (scripts/verify/run-all.mjs). A dev build names SITE_ORIGIN (default https://bike-one.dev, see
-// tools/dev-origin.mjs), so the gates get --origin for it; the release build (PUBLIC_INDEXABLE=true) is checked against
-// the baseline's canonical origin. Extra arguments are passed through. Decision d27.
+// npm run verify: the checks that replace the parity gates (decision d41). Run after npm run build; the release build
+// is checked with PUBLIC_INDEXABLE=true npm run verify:release. `net` needs the review server (:4321, serves dist/).
+// The old gates against baseline/ stay available as npm run verify:legacy until Stage 4.
 import { spawnSync } from 'node:child_process';
-import { DEV_ORIGIN } from './dev-origin.mjs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const release = process.env.PUBLIC_INDEXABLE === 'true';
-const origin = (process.env.SITE_ORIGIN || DEV_ORIGIN).replace(/\/+$/, '');
-const args = ['scripts/verify/run-all.mjs', '--allow-extra', '/VidOne.mp4', ...(release ? [] : ['--origin', origin]), ...process.argv.slice(2)];
-process.exit(spawnSync(process.execPath, args, { stdio: 'inherit' }).status ?? 2);
+const here = path.dirname(fileURLToPath(import.meta.url));
+const only = process.argv.slice(2);
+const names = ['redirects', 'links', 'seo', 'wp', 'size', 'a11y', 'net'].filter((n) => !only.length || only.includes(n));
+const failed = [];
+console.log(`verify: ${process.env.PUBLIC_INDEXABLE === 'true' ? 'release' : 'dev'} build`);
+for (const name of names) {
+  const r = spawnSync(process.execPath, [path.join(here, 'checks', `${name}.mjs`)], { stdio: 'inherit' });
+  if (r.status !== 0) failed.push(name);
+}
+console.log(failed.length ? `verify: FAILED ${failed.join(', ')}` : `verify: all ${names.length} checks passed`);
+process.exit(failed.length ? 1 : 0);

@@ -1,0 +1,89 @@
+// Check `net`: load every native page in system Chrome and in WebKit, at 1440 and 390 wide, from the review server
+// (default http://localhost:4321, it serves dist/), scroll, open the menu, and fail on any request to a non-local host,
+// any 4xx/5xx, any console error or page error. The page's Content-Security-Policy from dist/_headers is applied, so a
+// violation shows up as a console error. Embeds stay unclicked. Prints requests and bytes of the home page.
+import fs from 'node:fs';
+import path from 'node:path';
+import { DIST, isMain, nativePages, need, report } from '../lib/dist.mjs';
+
+const BASE = (process.env.REVIEW_URL || 'http://localhost:4321').replace(/\/$/, '');
+const PLAYWRIGHT = process.env.PLAYWRIGHT_MODULE || '/Users/timo.alts/dev/astro-conversion-kit/node_modules/playwright/index.mjs';
+const VIEWPORTS = [{ width: 1440, height: 900 }, { width: 390, height: 844 }];
+
+/** dist/_headers -> [{ re, headers }] for the path rules (host rules such as https://bike-one.dev/* are skipped). */
+function headerRules() {
+  const file = path.join(DIST, '_headers');
+  const rules = [];
+  let cur = null;
+  for (const line of fs.readFileSync(file, 'utf8').split('\n')) {
+    if (!line.trim() || line.trim().startsWith('#')) continue;
+    if (!/^\s/.test(line)) { cur = line.startsWith('/') ? { re: new RegExp(`^${line.trim().replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*')}$`), headers: {} } : null; if (cur) rules.push(cur); continue; }
+    const i = line.indexOf(':');
+    if (cur && i > 0) cur.headers[line.slice(0, i).trim().toLowerCase()] = line.slice(i + 1).trim();
+  }
+  return rules;
+}
+
+export async function run() {
+  const up = await fetch(`${BASE}/`).then((r) => r.ok, () => false);
+  need(up, `the review server is not answering on ${BASE}: start it with  node scripts/review-serve.mjs --background`);
+  const served = Buffer.from(await (await fetch(`${BASE}/`)).arrayBuffer());
+  need(served.equals(fs.readFileSync(path.join(DIST, 'index.html'))), `${BASE}/ does not serve this dist/ (home page differs); rebuild or restart the review server`);
+
+  const { chromium, webkit } = await import(PLAYWRIGHT);
+  const rules = headerRules();
+  const problems = [];
+  const pages = nativePages();
+  let homeNote = '';
+  const browsers = [['chrome', () => chromium.launch({ channel: 'chrome' })], ['webkit', () => webkit.launch()]];
+  for (const [bname, launch] of browsers) {
+    const browser = await launch();
+    for (const viewport of VIEWPORTS) {
+      const context = await browser.newContext({ viewport });
+      const page = await context.newPage();
+      let stats;
+      const at = (url, msg) => problems.push(`${bname} ${viewport.width} ${url}: ${msg}`);
+      let current = '';
+      page.on('pageerror', (e) => at(current, `page error: ${e.message}`));
+      page.on('console', (m) => { if (m.type() === 'error') at(current, `console error: ${m.text()}`); });
+      page.on('requestfailed', (r) => at(current, `request failed: ${r.url()} ${r.failure()?.errorText ?? ''}`));
+      page.on('request', (r) => { if (!r.url().startsWith(BASE)) at(current, `request to ${r.url()}`); });
+      page.on('response', async (r) => {
+        if (r.status() >= 400) at(current, `${r.status()} ${r.url()}`);
+        if (current === '/' && stats) { stats.count += 1; const len = Number(r.headers()['content-length'] ?? (await r.body().catch(() => Buffer.alloc(0))).length); stats.bytes += len; const t = r.headers()['content-type'] ?? ''; const k = /html/.test(t) ? 'html' : /css/.test(t) ? 'css' : /javascript/.test(t) ? 'js' : /font|woff/.test(t) ? 'font' : /image/.test(t) ? 'image' : 'other'; stats.by[k] = (stats.by[k] ?? 0) + len; }
+      });
+      await page.route('**/*', async (route) => {
+        const req = route.request();
+        if (req.resourceType() !== 'document' || !req.url().startsWith(BASE)) return route.continue();
+        const response = await route.fetch();
+        const p = new URL(req.url()).pathname;
+        const headers = { ...response.headers() };
+        for (const rule of rules) if (rule.re.test(p)) Object.assign(headers, rule.headers);
+        await route.fulfill({ response, headers });
+      });
+      for (const p of pages) {
+        current = p.url;
+        stats = p.url === '/' ? { count: 0, bytes: 0, by: {} } : undefined;
+        await page.goto(`${BASE}${p.url}`, { waitUntil: 'load' });
+        await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); } window.scrollTo(0, 0); });
+        await page.waitForLoadState('networkidle');
+        if (viewport.width < 768) {
+          const button = page.locator('.menu-btn');
+          if (!(await button.isVisible())) at(p.url, 'menu button not visible on a narrow screen');
+          else {
+            await button.click();
+            if (!(await page.locator('#site-nav a').first().isVisible())) at(p.url, 'menu did not open');
+            await page.keyboard.press('Escape');
+            if (await page.locator('#site-nav a').first().isVisible()) at(p.url, 'menu did not close on Escape');
+          }
+        } else if (!(await page.locator('#site-nav a').first().isVisible())) at(p.url, 'menu is not visible on a wide screen');
+        if (p.url === '/' && bname === 'chrome') homeNote += `${viewport.width}px: ${stats.count} requests, ${(stats.bytes / 1024).toFixed(0)} KB (${Object.entries(stats.by).map(([k, v]) => `${k} ${(v / 1024).toFixed(0)} KB`).join(', ')}); `;
+      }
+      await context.close();
+    }
+    await browser.close();
+  }
+  return { problems, note: `${pages.length} native pages x chrome, webkit x 1440, 390; home ${homeNote.trim()}` };
+}
+
+if (isMain(import.meta.url)) { const { problems, note } = await run(); process.exit(report('net', problems, note)); }

@@ -1,7 +1,7 @@
 # BikeOne
 
-This site was converted with astro-conversion-kit: a static Astro rebuild of https://bike-one.org.
-Scaffolded on 2026-11-25; hosted on cloudflare.
+Static Astro site of BikeOne, being rebuilt as native Astro (no WordPress markup, no third-party requests); see `AGENTS.md`.
+Scaffolded with astro-conversion-kit on 2026-11-25; hosted on Cloudflare Pages.
 
 Requires Node 22.23.4 or newer (`nvm use`), then `npm install`.
 
@@ -14,10 +14,10 @@ Requires Node 22.23.4 or newer (`nvm use`), then `npm install`.
 | `npm run baseline` | Build `baseline/` from `capture/` |
 | `npm run links:exceptions` | Add the broken-on-live link exceptions (no WordPress API records, d28) to `exceptions.json` |
 | `npm run assets:copy` | Copy captured scripts, fonts, icons and media outside the media prefix to `public/` |
-| `npm run verify` | Run every parity gate against `dist/` |
-| `npm run verify:proposals` | Gates with approved-pending proposals switched on |
-| `npm run verify:release` | Gates for the indexable launch build |
-| `npm run redirects:build` | Generate host redirect rules from `redirects.csv` |
+| `npm run verify` | The checks `redirects`, `links`, `seo`, `wp`, `size`, `a11y`, `net` on `dist/` (needs the review server on :4321); each runs alone as `npm run <name>` |
+| `npm run verify:release` | The same checks for the indexable launch build (`PUBLIC_INDEXABLE=true`) |
+| `npm run verify:legacy` | The old parity gates against `baseline/` (fail by design, removed in Stage 4) |
+| `npm run redirects:build` | Regenerate `redirects.csv` and `cloudflare-query-redirects.csv` from `tools/redirect-map.mjs` (`npm run build` writes `dist/_redirects`) |
 | `npm run verify:live` | Check the live host after launch |
 | `npm run review:shoot` | Screenshot live and local pages at 390, 768 and 1440 px |
 | `npm run review:diff` | Pixel diff of the screenshots |
