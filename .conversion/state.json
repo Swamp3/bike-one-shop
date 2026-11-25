@@ -240,6 +240,24 @@
       "reason": "user: fix console errors; each script only called endpoints that do not exist on a static host (405 on ?wc-ajax, wp-json/yith, wp-emoji-release.min.js on the live origin); the dev host leaked into live content",
       "costIfWrong": "low: browsers without flag-emoji support show country letters instead of flags; wishlist and cart widgets were already dead",
       "date": "2026-11-25"
+    },
+    {
+      "id": "d23",
+      "topic": "menu: one Shop item",
+      "choice": "header and footer menus: GravelBikes, RoadBikes and TT/Triathlon replaced by one Shop item linking /shop/ (tools/extract.mjs); the pages /racebikes/, /tt-triathlon/ and /gravel-bikes/ stay built and unlinked",
+      "default": "reproduce live",
+      "reason": "owner request",
+      "costIfWrong": "low: /shop/ is the WooCommerce path, not built here until the new shop serves it; the three pages could be dropped with redirects to /shop/ if wanted",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d24",
+      "topic": "source maps",
+      "choice": "tools/strip-sourcemaps.mjs removes sourceMappingURL comments from 3 served JS files (lightbox, swiper, yith add-to-wishlist); run it after npm run assets:copy",
+      "default": "copy scripts byte for byte",
+      "reason": "the .map files were never captured, DevTools logs a source map error on every page",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
     }
   ],
   "counts": {},

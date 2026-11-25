@@ -1,67 +1,179 @@
 {
  "/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
   "requestfailed: http://bike-one.org/VidOne.mp4 net::ERR_ABORTED",
   "requestfailed: http://bike-one.org/VidOne.mp4 net::ERR_ADDRESS_UNREACHABLE",
-  "error: Failed to load resource: net::ERR_ADDRESS_UNREACHABLE @ http://bike-one.org/VidOne.mp4"
+  "CONSOLE error: Failed to load resource: net::ERR_ADDRESS_UNREACHABLE @ http://bike-one.org/VidOne.mp4"
  ],
- "/Marke/cervelo/": [],
- "/Marke/factor/": [],
- "/Marke/pinarello/": [],
- "/Marke/ridley/": [],
- "/Marke/specialized/": [],
- "/Marke/trek/": [],
- "/Marke/wilier/": [],
- "/alle-fahrrader/": [],
- "/author/lawrencebennier-com/": [],
- "/author/marvin/": [],
- "/blog/": [],
- "/category/allgemein/": [],
- "/datenschutz/": [],
- "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/": [],
- "/ebikes/": [],
- "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/": [],
- "/gravel-bikes/": [],
- "/impressum/": [],
+ "/Marke/cervelo/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/Marke/factor/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/Marke/pinarello/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/Marke/ridley/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/Marke/specialized/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/Marke/trek/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/Marke/wilier/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/alle-fahrrader/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/author/lawrencebennier-com/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/author/marvin/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/blog/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/category/allgemein/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/datenschutz/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/ebikes/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/gravel-bikes/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/impressum/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
  "/main-bike/": [
-  "requestfailed: http://bike-one.org/VidOne.mp4 net::ERR_ABORTED",
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
   "requestfailed: https://www.jobrad.org/fachhandel/jobrad-bewerben/werkzeugkasten/iframe1 net::ERR_BLOCKED_BY_RESPONSE",
-  "error: Framing 'https://www.jobrad.org/' violates the following Content Security Policy directive: \"frame-ancestors 'self' https:\". The request has been blocked.\n @ ",
+  "CONSOLE error: Framing 'https://www.jobrad.org/' violates the following Content Security Policy directive: \"frame-ancestors 'self' https:\". The request has been blocked.\n @ ",
+  "requestfailed: http://bike-one.org/VidOne.mp4 net::ERR_ABORTED",
   "requestfailed: http://bike-one.org/VidOne.mp4 net::ERR_ADDRESS_UNREACHABLE",
-  "error: Failed to load resource: net::ERR_ADDRESS_UNREACHABLE @ http://bike-one.org/VidOne.mp4"
+  "CONSOLE error: Failed to load resource: net::ERR_ADDRESS_UNREACHABLE @ http://bike-one.org/VidOne.mp4"
  ],
- "/portfolio-category/branding-design/": [],
- "/portfolio-category/branding-design/page/2/": [],
- "/portfolio/portfolio-name-10/": [],
- "/portfolio/portfolio-name-11/": [],
- "/portfolio/portfolio-name-12/": [],
- "/portfolio/portfolio-name-13/": [],
- "/portfolio/portfolio-name-14/": [],
- "/portfolio/portfolio-name-15/": [],
- "/portfolio/portfolio-name-2/": [],
- "/portfolio/portfolio-name-3/": [],
- "/portfolio/portfolio-name-4/": [],
- "/portfolio/portfolio-name-5/": [],
- "/portfolio/portfolio-name-6/": [],
- "/portfolio/portfolio-name-7/": [],
- "/portfolio/portfolio-name-8/": [],
- "/portfolio/portfolio-name-9/": [],
- "/portfolio/portfolio-name/": [],
- "/racebikes/": [],
- "/sale/": [],
- "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/": [],
- "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/": [],
- "/stellenangebote/": [],
- "/team-member/charlotte-neal/": [],
- "/team-member/john-bennett/": [],
- "/team-member/member-01/": [],
- "/team-member/member-02/": [],
- "/team-member/member-03/": [],
- "/team-member/victor-peters/": [],
- "/team-member/willie-carter/": [],
- "/termin-buchen-oldenburg/": [],
- "/termin-buchen-osnabrueck/": [],
- "/termin-buchen/": [],
- "/tt-triathlon/": [],
- "/ueber-uns/": [],
- "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/": []
+ "/portfolio-category/branding-design/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio-category/branding-design/page/2/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-10/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-11/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-12/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-13/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-14/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-15/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-2/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-3/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-4/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-5/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-6/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-7/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-8/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name-9/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/portfolio/portfolio-name/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/racebikes/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/sale/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/stellenangebote/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/team-member/charlotte-neal/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/team-member/john-bennett/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/team-member/member-01/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/team-member/member-02/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/team-member/member-03/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/team-member/victor-peters/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/team-member/willie-carter/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/termin-buchen-oldenburg/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/termin-buchen-osnabrueck/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/termin-buchen/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
+  "CONSOLE debug: Search endpoint requested! @ https://maps.gstatic.com/maps-api-v3/embed/js/67/1d/init_embed.js",
+  "CONSOLE debug: Search endpoint requested! @ https://maps.gstatic.com/maps-api-v3/embed/js/67/1d/init_embed.js"
+ ],
+ "/tt-triathlon/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ],
+ "/ueber-uns/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1",
+  "CONSOLE debug: Search endpoint requested! @ https://maps.gstatic.com/maps-api-v3/embed/js/67/1d/init_embed.js",
+  "CONSOLE debug: Search endpoint requested! @ https://maps.gstatic.com/maps-api-v3/embed/js/67/1d/init_embed.js"
+ ],
+ "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/": [
+  "CONSOLE log: JQMIGRATE: Migrate is installed, version 3.4.1 @ /wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.1"
+ ]
 }
