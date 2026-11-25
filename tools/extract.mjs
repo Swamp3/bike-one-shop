@@ -16,6 +16,24 @@ fs.mkdirSync('src/content/heads', { recursive: true });
 fs.mkdirSync('src/content/bottoms', { recursive: true });
 fs.mkdirSync('src/components', { recursive: true });
 
+
+// Same-origin asset URLs become root-relative (build-rules, decision d21), so the build loads every
+// script, stylesheet, icon and image from its own copy and never from the live site. Links (<a>), canonical,
+// alternate, og and other metadata keep the captured URL.
+const ORIGIN_RE = /(?:https?:)?\/\/(?:www\.)?bike-one\.org(?=\/)/gi;
+const ASSET_LINK_RELS = new Set(['stylesheet', 'icon', 'shortcut icon', 'apple-touch-icon', 'preload', 'modulepreload']);
+const ATTRS = { script: ['src'], img: ['src', 'srcset'], source: ['src', 'srcset'], video: ['src', 'poster'], audio: ['src'], track: ['src'] };
+function localise(node) {
+  for (const c of node.childNodes || []) {
+    if (!c.tagName) continue;
+    const names = c.tagName === 'link' && ASSET_LINK_RELS.has((at(c, 'rel') || '').toLowerCase().trim()) ? ['href', 'imagesrcset'] : ATTRS[c.tagName] || [];
+    for (const a of c.attrs || []) if (names.includes(a.name)) a.value = a.value.replace(ORIGIN_RE, '');
+    // an import map's targets are the same kind of asset URL
+    if (c.tagName === 'script' && at(c, 'type') === 'importmap') for (const t of c.childNodes || []) if (t.value) t.value = t.value.replace(ORIGIN_RE, '');
+    localise(c);
+  }
+}
+
 const parts = { header: {}, mobile: {}, footer: {} };
 const data = {};
 const inert = [];
@@ -24,6 +42,7 @@ for (const r of routes) {
   const html = doc.childNodes.find((n) => n.nodeName === 'html');
   const head = html.childNodes.find((n) => n.nodeName === 'head');
   const body = html.childNodes.find((n) => n.nodeName === 'body');
+  localise(head); localise(body);
   const slug = slugOf(r.snapshot);
   const page = kids(body).find((c) => at(c, 'id') === 'page');
   const blank = !page; // a page with no theme shell (/alle-fahrrader/): first element is the content, the rest is bottom

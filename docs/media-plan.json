@@ -1,7 +1,5 @@
 {
-  "mode": "live-temporary",
-  "store": "r2",
-  "warning": "staging only: media is proxied from the live site; create the store and upload before DNS moves, then regenerate this config",
+  "mode": "repo",
   "totals": {
     "count": 2009,
     "bytes": 1212908580,
@@ -11,7 +9,7 @@
     "total media size 1156.7 MB is not under --max-total 300.0 MB",
     "5 file(s) not under --max-file 25.0 MB; largest is /wp-content/uploads/2025/10/Unbenanntes-Video.mp4 at 91.9 MB",
     "77 file(s) outside the prefix /wp-content/uploads/ are not covered by the rewrite: /wp-content/plugins/js_composer/assets/fonts/vc_grid/vc_grid_v1.eot, /wp-content/plugins/js_composer/assets/fonts/vc_grid/vc_grid_v1.svg, /wp-content/plugins/js_composer/assets/fonts/vc_grid/vc_grid_v1.ttf, /wp-content/plugins/js_composer/assets/fonts/vc_grid/vc_grid_v1.woff, /wp-content/plugins/js_composer/assets/fonts/vc_icons_v4/fonts/vcpb-plugin-icons.eot, /wp-content/plugins/js_composer/assets/fonts/vc_icons_v4/fonts/vcpb-plugin-icons.svg, /wp-content/plugins/js_composer/assets/fonts/vc_icons_v4/fonts/vcpb-plugin-icons.ttf, /wp-content/plugins/js_composer/assets/fonts/vc_icons_v4/fonts/vcpb-plugin-icons.woff, /wp-content/plugins/js_composer/assets/images/flickr.png, /wp-content/plugins/js_composer/assets/images/icons/address-book.png, ...",
-    "no store credentials"
+    "d21: served from local copies in public/wp-content/uploads (gitignored, copied from .conversion/media-cache); R2 upload still needed for production deploy because 5 files exceed the 25 MiB Cloudflare Pages limit"
   ],
   "prefix": "/wp-content/uploads/",
   "thresholds": {

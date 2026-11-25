@@ -14,3 +14,6 @@ node_modules
 /media-cache/
 /.conversion/media-cache/
 .conversion/*.tmp
+
+# media: 1.1 GB, copied into public/ by npm run assets:copy from .conversion/media-cache, never committed (decision d21)
+/public/wp-content/uploads/
