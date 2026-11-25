@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const only = process.argv.slice(2);
-const names = ['redirects', 'links', 'seo', 'wp', 'size', 'a11y', 'net'].filter((n) => !only.length || only.includes(n));
+const names = ['redirects', 'links', 'seo', 'wp', 'headers', 'size', 'a11y', 'ui', 'net', 'embeds'].filter((n) => !only.length || only.includes(n));
 const failed = [];
 console.log(`verify: ${process.env.PUBLIC_INDEXABLE === 'true' ? 'release' : 'dev'} build`);
 for (const name of names) {
