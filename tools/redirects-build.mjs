@@ -19,17 +19,11 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SHOP_DEV = 'https://shop.bike-one.dev/';
 const SHOP_PROD = 'https://shop.bike-one.org/';
 
-export function oldUrls() {
-  const urls = new Set();
-  for (const r of JSON.parse(fs.readFileSync(path.join(ROOT, 'baseline/routes.json'), 'utf8'))) {
-    if (!r.path.startsWith('/wp-content/')) urls.add(r.path); // uploads and theme files were never content URLs
-  }
-  const dir = path.join(ROOT, 'capture/sitemaps');
-  for (const f of fs.readdirSync(dir).filter((n) => n.endsWith('.xml'))) {
-    for (const m of fs.readFileSync(path.join(dir, f), 'utf8').matchAll(/<loc>https?:\/\/[^/]+(\/[^<]*)<\/loc>/g)) urls.add(m[1]);
-  }
-  return [...urls];
+/** Every old URL, from the list frozen in docs/old-urls.json (decision d72). */
+export function oldUrlEntries() {
+  return JSON.parse(fs.readFileSync(path.join(ROOT, 'docs/old-urls.json'), 'utf8')).urls;
 }
+export const oldUrls = () => oldUrlEntries().map((u) => u.path);
 
 const csvLine = (cells) => cells.map((c) => (/[",\n]/.test(c) ? `"${c.replace(/"/g, '""')}"` : c)).join(',');
 

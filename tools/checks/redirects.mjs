@@ -1,11 +1,12 @@
 // Check `redirects`: every old URL resolves in at most one hop to a built page or the shop, no built page sits at a
-// redirect source, and redirects.csv is exactly what the generator writes. Old URLs: baseline/routes.json, the captured
-// sitemaps and redirects.csv. Old upload and theme files (/wp-content/...) were never content URLs and need none.
+// redirect source, and redirects.csv is exactly what the generator writes. Old URLs: the frozen list docs/old-urls.json
+// and redirects.csv. Old upload and theme files were never content URLs and need none.
 import fs from 'node:fs';
 import path from 'node:path';
-import { buildRows, oldUrls, readCaptured, toCsv } from '../redirects-build.mjs';
+import { buildRows, oldUrlEntries, oldUrls, readCaptured, toCsv } from '../redirects-build.mjs';
 import { DIST, isMain, need, pages, report, resolveBuilt, ROOT, SHOP, RELEASE } from '../lib/dist.mjs';
 import { parseRedirectsCsv } from '../../scripts/lib/redirects-csv.mjs';
+import { destination } from '../redirect-map.mjs';
 
 const RELEASE_ONLY = new Set(['/sitemap-index.xml', '/sitemap-0.xml']); // only the release build has a sitemap
 
@@ -53,6 +54,12 @@ export function run() {
     if (r.splat) for (const p of pages()) if (r.re.test(p.url)) problems.push(`${p.url}: a built page sits under the redirect source ${r.from}`);
   }
   for (const r of rewrites) if (!builtAt(r.to)) problems.push(`rewrite ${r.from} -> ${r.to}: no such built file`);
+
+  // the frozen list agrees with the redirect map (fate, target, hops)
+  for (const u of oldUrlEntries()) {
+    const to = destination(u.path);
+    if (u.fate !== (to ? 'redirect' : 'built') || u.to !== to || u.hop !== (to ? 1 : 0)) problems.push(`docs/old-urls.json: ${u.path} says ${u.fate} -> ${u.to}, the redirect map says ${to ?? 'a built page'}`);
+  }
 
   // old URLs
   const sources = new Set([...oldUrls(), ...rows.filter((r) => !r.from.includes('?') && !r.from.includes('*')).map((r) => r.from)]);
