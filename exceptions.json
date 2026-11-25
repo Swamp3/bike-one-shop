@@ -1,1 +1,2558 @@
-[]
+[
+  {
+    "path": "/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/1709",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/1709",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/cervelo/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/cervelo/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/cervelo/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/product_brand/80",
+    "to": "https://bike-one.org/wp-json/wp/v2/product_brand/80",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/cervelo/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/factor/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/factor/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/factor/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/product_brand/82",
+    "to": "https://bike-one.org/wp-json/wp/v2/product_brand/82",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/factor/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/pinarello/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/pinarello/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/pinarello/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/product_brand/81",
+    "to": "https://bike-one.org/wp-json/wp/v2/product_brand/81",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/pinarello/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/ridley/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/ridley/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/ridley/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/product_brand/87",
+    "to": "https://bike-one.org/wp-json/wp/v2/product_brand/87",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/ridley/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/specialized/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/specialized/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/specialized/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/product_brand/84",
+    "to": "https://bike-one.org/wp-json/wp/v2/product_brand/84",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/specialized/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/trek/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/trek/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/trek/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/product_brand/85",
+    "to": "https://bike-one.org/wp-json/wp/v2/product_brand/85",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/trek/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/wilier/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/wilier/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/wilier/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/product_brand/83",
+    "to": "https://bike-one.org/wp-json/wp/v2/product_brand/83",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/Marke/wilier/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/alle-fahrrader/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Falle-fahrrader%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Falle-fahrrader%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/alle-fahrrader/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Falle-fahrrader%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Falle-fahrrader%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/alle-fahrrader/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/alle-fahrrader/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/1111",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/1111",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/alle-fahrrader/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/author/lawrencebennier-com/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/author/lawrencebennier-com/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/author/lawrencebennier-com/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/users/3",
+    "to": "https://bike-one.org/wp-json/wp/v2/users/3",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/author/lawrencebennier-com/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/author/marvin/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/author/marvin/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/author/marvin/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/users/5",
+    "to": "https://bike-one.org/wp-json/wp/v2/users/5",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/author/marvin/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/blog/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/blog/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fblog%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fblog%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/blog/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fblog%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fblog%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/blog/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/blog/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/1856",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/1856",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/blog/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/category/allgemein/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/category/allgemein/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/category/allgemein/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/categories/1",
+    "to": "https://bike-one.org/wp-json/wp/v2/categories/1",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/category/allgemein/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/datenschutz/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/datenschutz/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fdatenschutz%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fdatenschutz%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/datenschutz/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fdatenschutz%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fdatenschutz%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/datenschutz/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/datenschutz/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/1359",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/1359",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/datenschutz/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fe-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fe-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fe-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fe-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/posts/1866",
+    "to": "https://bike-one.org/wp-json/wp/v2/posts/1866",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Febikes%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Febikes%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Febikes%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Febikes%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/1252",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/1252",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ffahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ffahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ffahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ffahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/posts/1881",
+    "to": "https://bike-one.org/wp-json/wp/v2/posts/1881",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/gravel-bikes/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/gravel-bikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fgravel-bikes%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fgravel-bikes%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/gravel-bikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fgravel-bikes%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fgravel-bikes%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/gravel-bikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/gravel-bikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/1257",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/1257",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/gravel-bikes/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/impressum/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/impressum/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fimpressum%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fimpressum%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/impressum/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fimpressum%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fimpressum%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/impressum/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/impressum/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/1317",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/1317",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/impressum/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/main-bike/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/main-bike/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fmain-bike%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fmain-bike%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/main-bike/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fmain-bike%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fmain-bike%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/main-bike/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/main-bike/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/322",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/322",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/main-bike/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio-category/branding-design/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio-category/branding-design/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio-category/branding-design/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio-category/branding-design/page/2/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio-category/branding-design/page/2/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio-category/branding-design/page/2/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-10/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-10/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-10%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-10%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-10/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-10%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-10%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-10/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-10/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-11/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-11/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-11%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-11%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-11/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-11%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-11%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-11/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-11/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-12/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-12/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-12%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-12%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-12/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-12%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-12%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-12/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-12/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-13/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-13/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-13%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-13%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-13/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-13%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-13%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-13/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-13/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-14/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-14/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-14%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-14%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-14/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-14%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-14%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-14/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-14/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-15/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-15/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-15%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-15%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-15/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-15%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-15%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-15/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-15/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-2/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-2/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-2%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-2%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-2/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-2%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-2%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-2/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-2/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-3/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-3/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-3%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-3%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-3/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-3%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-3%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-3/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-3/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-4/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-4/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-4%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-4%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-4/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-4%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-4%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-4/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-4/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-5/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-5/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-5%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-5%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-5/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-5%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-5%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-5/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-5/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-6/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-6/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-6%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-6%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-6/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-6%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-6%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-6/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-6/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-7/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-7/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-7%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-7%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-7/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-7%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-7%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-7/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-7/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-8/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-8/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-8%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-8%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-8/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-8%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-8%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-8/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-8/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-9/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-9/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-9%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-9%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-9/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-9%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name-9%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-9/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name-9/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fportfolio%2Fportfolio-name%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/portfolio/portfolio-name/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/racebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/racebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fracebikes%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fracebikes%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/racebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fracebikes%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fracebikes%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/racebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/racebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/1269",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/1269",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/racebikes/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sale/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sale/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fsale%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fsale%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sale/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fsale%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fsale%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sale/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sale/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/2328",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/2328",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sale/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fsicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fsicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fsicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fsicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/posts/1879",
+    "to": "https://bike-one.org/wp-json/wp/v2/posts/1879",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fso-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fso-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fso-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fso-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/posts/1864",
+    "to": "https://bike-one.org/wp-json/wp/v2/posts/1864",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/stellenangebote/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/stellenangebote/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fstellenangebote%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fstellenangebote%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/stellenangebote/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fstellenangebote%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fstellenangebote%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/stellenangebote/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/stellenangebote/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/3600",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/3600",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/stellenangebote/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/charlotte-neal/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/charlotte-neal/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fcharlotte-neal%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fcharlotte-neal%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/charlotte-neal/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fcharlotte-neal%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fcharlotte-neal%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/charlotte-neal/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/charlotte-neal/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/john-bennett/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/john-bennett/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fjohn-bennett%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fjohn-bennett%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/john-bennett/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fjohn-bennett%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fjohn-bennett%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/john-bennett/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/john-bennett/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-01/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-01/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-01%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-01%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-01/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-01%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-01%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-01/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-01/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-02/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-02/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-02%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-02%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-02/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-02%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-02%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-02/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-02/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-03/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-03/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-03%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-03%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-03/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-03%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fmember-03%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-03/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/member-03/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/victor-peters/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/victor-peters/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fvictor-peters%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fvictor-peters%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/victor-peters/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fvictor-peters%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fvictor-peters%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/victor-peters/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/victor-peters/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/willie-carter/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/willie-carter/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fwillie-carter%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fwillie-carter%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/willie-carter/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fwillie-carter%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fteam-member%2Fwillie-carter%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/willie-carter/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/team-member/willie-carter/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-oldenburg/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-oldenburg/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen-oldenburg%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen-oldenburg%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-oldenburg/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen-oldenburg%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen-oldenburg%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-oldenburg/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-oldenburg/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/3159",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/3159",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-oldenburg/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-osnabrueck/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-osnabrueck/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen-osnabrueck%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen-osnabrueck%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-osnabrueck/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen-osnabrueck%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen-osnabrueck%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-osnabrueck/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-osnabrueck/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/3161",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/3161",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen-osnabrueck/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftermin-buchen%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/779",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/779",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/termin-buchen/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/tt-triathlon/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/tt-triathlon/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftt-triathlon%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftt-triathlon%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/tt-triathlon/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftt-triathlon%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Ftt-triathlon%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/tt-triathlon/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/tt-triathlon/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/2326",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/2326",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/tt-triathlon/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ueber-uns/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ueber-uns/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fueber-uns%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fueber-uns%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ueber-uns/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fueber-uns%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fueber-uns%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ueber-uns/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ueber-uns/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/pages/1839",
+    "to": "https://bike-one.org/wp-json/wp/v2/pages/1839",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/ueber-uns/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fwann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst%2F",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fwann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst%2F",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fwann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst%2F&format=xml",
+    "to": "https://bike-one.org/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fbike-one.org%2Fwann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst%2F&format=xml",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/wp/v2/posts/1871",
+    "to": "https://bike-one.org/wp-json/wp/v2/posts/1871",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/404.html",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php",
+    "to": "https://bike-one.org/xmlrpc.php",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/404.html",
+    "field": "link",
+    "from": "https://bike-one.org/wp-json/",
+    "to": "https://bike-one.org/wp-json/",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  },
+  {
+    "path": "/404.html",
+    "field": "link",
+    "from": "https://bike-one.org/xmlrpc.php?rsd",
+    "to": "https://bike-one.org/xmlrpc.php?rsd",
+    "reason": "WordPress API link kept as captured",
+    "approvedBy": "kit",
+    "date": "2026-11-25"
+  }
+]

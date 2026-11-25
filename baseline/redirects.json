@@ -1,0 +1,302 @@
+[
+  {
+    "from": "/?p=1111",
+    "to": "/alle-fahrrader/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1252",
+    "to": "/ebikes/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1257",
+    "to": "/gravel-bikes/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1269",
+    "to": "/racebikes/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1317",
+    "to": "/impressum/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1359",
+    "to": "/datenschutz/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1839",
+    "to": "/ueber-uns/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1856",
+    "to": "/blog/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1864",
+    "to": "/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1866",
+    "to": "/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1871",
+    "to": "/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1879",
+    "to": "/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=1881",
+    "to": "/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=2326",
+    "to": "/tt-triathlon/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=2328",
+    "to": "/sale/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=3159",
+    "to": "/termin-buchen-oldenburg/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=3161",
+    "to": "/termin-buchen-osnabrueck/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=322",
+    "to": "/main-bike/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=3600",
+    "to": "/stellenangebote/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=529",
+    "to": "/team-member/john-bennett/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=534",
+    "to": "/team-member/willie-carter/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=535",
+    "to": "/team-member/charlotte-neal/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=536",
+    "to": "/team-member/victor-peters/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=767",
+    "to": "/team-member/member-01/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=768",
+    "to": "/team-member/member-02/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=769",
+    "to": "/team-member/member-03/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=779",
+    "to": "/termin-buchen/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=803",
+    "to": "/portfolio/portfolio-name/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=805",
+    "to": "/portfolio/portfolio-name-2/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=807",
+    "to": "/portfolio/portfolio-name-3/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=809",
+    "to": "/portfolio/portfolio-name-4/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=811",
+    "to": "/portfolio/portfolio-name-5/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=813",
+    "to": "/portfolio/portfolio-name-6/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=815",
+    "to": "/portfolio/portfolio-name-7/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=817",
+    "to": "/portfolio/portfolio-name-8/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=819",
+    "to": "/portfolio/portfolio-name-9/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=821",
+    "to": "/portfolio/portfolio-name-10/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=823",
+    "to": "/portfolio/portfolio-name-11/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=825",
+    "to": "/portfolio/portfolio-name-12/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=827",
+    "to": "/portfolio/portfolio-name-13/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=829",
+    "to": "/portfolio/portfolio-name-14/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/?p=831",
+    "to": "/portfolio/portfolio-name-15/",
+    "status": 301,
+    "source": "shortlink",
+    "verified": false
+  },
+  {
+    "from": "/termin-buchen",
+    "to": "/termin-buchen/",
+    "status": 301,
+    "source": "crawl"
+  }
+]

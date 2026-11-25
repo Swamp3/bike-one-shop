@@ -1,0 +1,27 @@
+{
+  "routes": 84,
+  "byStatus": {
+    "200": 84
+  },
+  "byTemplate": {
+    "archive": 9,
+    "archive-2": 1,
+    "archive-3": 2,
+    "home": 1,
+    "other": 29,
+    "page": 10,
+    "page-2": 1,
+    "page-3": 4,
+    "single-post": 5,
+    "template-1": 15,
+    "template-2": 7
+  },
+  "redirects": {
+    "crawl": 1,
+    "shortlink": 42
+  },
+  "media": 2009,
+  "unreferencedSizes": 4108,
+  "forms": 10,
+  "scripts": 0
+}
