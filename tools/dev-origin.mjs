@@ -1,7 +1,7 @@
 // Post-build safety net (decision d27): a dev or staging build must not name the production domain.
 // Unless PUBLIC_INDEXABLE=true it rewrites every form of https://bike-one.org in the text files of dist/
 // (canonical, sitemaps, feeds, robots.txt, inline script config) to SITE_ORIGIN (default https://bike-one.dev).
-// The release build is left alone. The rewriting in tools/extract.mjs (root-relative URLs) stays the primary fix.
+// The release build is left alone. The build origin in astro.config.mjs is the primary fix; this only catches what slipped through.
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

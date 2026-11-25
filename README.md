@@ -1,31 +1,22 @@
 # BikeOne
 
-Static Astro site of BikeOne, being rebuilt as native Astro (no WordPress markup, no third-party requests); see `AGENTS.md`.
-Scaffolded with astro-conversion-kit on 2026-11-25; hosted on Cloudflare Pages.
+The static Astro site of BikeOne (bike retailer with stores in Oldenburg and Osnabrück). Native Astro, self-hosted fonts, no request to a
+third party while a page renders; hosted on Cloudflare Pages. Working rules: `AGENTS.md`. What is open: [`docs/TODO.md`](docs/TODO.md).
 
 Requires Node 22.23.4 or newer (`nvm use`), then `npm install`.
 
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Local dev server |
-| `npm run build` | Static build into `dist/`; unless `PUBLIC_INDEXABLE=true` the postbuild step names `SITE_ORIGIN` (default `https://bike-one.dev`) instead of `https://bike-one.org` in `dist/` (d29) |
-| `npm run preview` | Serve `dist/` locally |
-| `npm test` | Unit tests under `test/` |
-| `npm run baseline` | Build `baseline/` from `capture/` |
-| `npm run links:exceptions` | Add the broken-on-live link exceptions (no WordPress API records, d28) to `exceptions.json` |
-| `npm run assets:copy` | Old pipeline (writes WordPress files into `public/`, which is no longer published from there; do not run, removed in Stage 4) |
-| `npm run verify` | The checks `redirects`, `links`, `seo`, `wp`, `headers`, `size`, `a11y`, `ui`, `net`, `embeds` on `dist/` (needs the review server on :4321, about 3 minutes); each runs alone as `npm run <name>` |
+| `npm run build` | Static build into `dist/`, with `dist/_redirects` and, in the release build, the sitemap. Unless `PUBLIC_INDEXABLE=true` it is a `noindex` build for `SITE_ORIGIN` (default `https://bike-one.dev`) |
+| `npm run preview` | Serve `dist/` with Astro's preview server |
+| `npm run review:serve` | Serve `dist/` on :4321 with `_redirects` applied (the browser checks need it: `node scripts/review-serve.mjs --background`) |
+| `npm test` | Unit tests under `test/` (needs a build for the page tests) |
+| `npm run verify` | The ten checks `redirects`, `links`, `seo`, `wp`, `headers`, `size`, `a11y`, `ui`, `net`, `embeds` on `dist/` (about 3 minutes); each runs alone as `npm run <name>` |
+| `npm run verify:release` | The same checks for the indexable launch build (`PUBLIC_INDEXABLE=true npm run build` first) |
 | `npm run perf` | LCP, CLS, requests and bytes per page from the review server (`--throttle fast4g\|slow4g`, `--browsers chrome,webkit`) |
-| `npm run screens` | Full-page screenshots of every page at 390, 768 and 1440 px into `review/` |
-| `npm run verify:release` | The same checks for the indexable launch build (`PUBLIC_INDEXABLE=true`) |
-| `npm run verify:legacy` | The old parity gates against `baseline/` (fail by design, removed in Stage 4) |
-| `npm run redirects:build` | Regenerate `redirects.csv` and `cloudflare-query-redirects.csv` from `tools/redirect-map.mjs` (`npm run build` writes `dist/_redirects`) |
-| `npm run verify:live` | Check the live host after launch |
-| `npm run review:shoot` | Screenshot live and local pages at 390, 768 and 1440 px |
-| `npm run review:diff` | Pixel diff of the screenshots |
-| `npm run review:styles` | Computed-style comparison |
-| `npm run review:sheet` | Contact sheet of the review |
-| `npm run review:check` | Re-reads every diff and style result; exits 1 if any row fails |
-| `npm run review:serve` | Serve `dist/` with vercel.json applied, for the visual review |
+| `npm run screens` | Full-page screenshots of every page at 390, 768 and 1440 px into `review/` (git-ignored) |
+| `npm run redirects:build` | Regenerate `redirects.csv` and `cloudflare-query-redirects.csv` from `tools/redirect-map.mjs` and `docs/old-urls.json` |
 
-See `AGENTS.md` for the working rules and `docs/LAUNCH.md` for launch steps.
+Docs: [`docs/redesign.md`](docs/redesign.md) (IA, design, structure), [`docs/plan.md`](docs/plan.md) (how it is built, decision ledger),
+[`docs/third-party.md`](docs/third-party.md), [`docs/LAUNCH.md`](docs/LAUNCH.md), [`docs/TODO.md`](docs/TODO.md).

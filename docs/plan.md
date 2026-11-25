@@ -1,62 +1,33 @@
-# Conversion plan: BikeOne
+# How the site is built: BikeOne
 
-Live site: https://bike-one.org. Host: cloudflare. Started 2026-11-25.
+Static native Astro site, https://bike-one.dev in development and https://bike-one.org in production, hosted on Cloudflare Pages. The shop is a
+separate site (`SHOP_URL`). Why it looks as it does: `docs/redesign.md`. What is open: `docs/TODO.md`. How to launch: `docs/LAUNCH.md`.
 
-## Templates found
+## Build
 
-| Template | Body class or marker | Example URL | Pages |
-| --- | --- | --- | --- |
-| template-1 |  | /portfolio/portfolio-name-3/ | 15 |
-| page |  | /ebikes/ | 10 |
-| archive |  | /Marke/factor/ | 9 |
-| template-2 |  | /team-member/charlotte-neal/ | 7 |
-| single-post |  | /fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/ | 5 |
-| page-3 |  | /termin-buchen/ | 4 |
-| archive-3 |  | /portfolio-category/branding-design/ | 2 |
-| archive-2 |  | /author/marvin/ | 1 |
-| home |  | / | 1 |
-| page-2 |  | /datenschutz/ | 1 |
+- `npm run build`: `astro build` (static output, trailing slashes, no inline CSS or JS), then `tools/redirects-build.mjs --dist` (`dist/_redirects`
+  for the dev or the production shop), `tools/sitemap-build.mjs` (sitemap, release build only) and `tools/dev-origin.mjs` (safety net: a dev
+  build names no `bike-one.org` URL).
+- Two kinds of build. Dev (default): `noindex, nofollow`, `robots.txt` disallows everything, no sitemap, origin `SITE_ORIGIN` or
+  `https://bike-one.dev`, shop `https://shop.bike-one.dev`. Release (`PUBLIC_INDEXABLE=true`, launch only): indexable, sitemap, origin
+  `https://bike-one.org`, shop `https://shop.bike-one.org`.
+- Pages: `src/pages/` on `src/layouts/Base.astro`; content in the collections `stores`, `brands`, `legal`, `blog` (`src/content/`); photos in
+  `src/assets/photos/`; styles in `src/styles/` and scoped in components. No client JavaScript on the home page; the embeds use one small script.
+- Redirects: `docs/old-urls.json` (the frozen old URLs) and `tools/redirect-map.mjs` (the rules) produce `redirects.csv` and
+  `cloudflare-query-redirects.csv`; `scripts/build-redirects.mjs` compiles them to `_redirects`.
+- Headers and CSP: `public/_headers`. No third party except the three click-to-load embeds (`docs/third-party.md`).
 
-## Counts
+## Verification
 
-| What | Count |
-| --- | --- |
-| URLs in the inventory | 55 |
-| Indexable pages | 55 |
-| Noindex pages | 0 |
-| Media files (total size) | 2009 (1156.7 MB) |
-| Unreferenced sizes (listed, not downloaded) | 4108 |
-| Redirects | 43 |
+`npm run build`, `npm run verify` (ten checks on `dist/`, no allowlist), `npm test`; before launch also `PUBLIC_INDEXABLE=true npm run build` and
+`npm run verify:release`. What each check proves: `AGENTS.md`. The review server (`node scripts/review-serve.mjs --background`, :4321) serves
+`dist/` for the browser checks.
 
-## Media decision
+## History
 
-live-temporary: 2009 files, 1156.7 MB (limit 300 MB), 5 files over 25 MB. R2 is the target store; no credentials yet, so staging serves /wp-content/uploads/ from bike-one.org. Must be moved to R2 before DNS moves. 4108 unreferenced sizes listed, not downloaded; pass --sizes all to the capture if old links may use them.
-
-## Redirects source
-
-The crawl (43 redirects) plus the Wayback pass (0 archived paths). No server export.
-
-## Forms plan
-
-Forms: none to rewire. The only POST forms are WooCommerce add-to-cart on `/`; they stay as captured and stop working.
-
-| Form | Page | Fields | New endpoint | Tested |
-| --- | --- | --- | --- | --- |
-
-Forms kept as is (POST forms that already post to another site, left exactly as captured):
-
-| Page | Action host |
-| --- | --- |
-
-## Analytics carry-over
-
-None found in capture/scripts.json.
-
-## Out of scope
-
-- WooCommerce (shop, cart, checkout, account, wishlist, product and brand pages): the new shop in this repository replaces it. Kept pages that show product markup keep it as captured.
-- etermin.net booking iframes and Google Maps iframes are third-party embeds, kept as is.
-- Lighthouse not installed: performance checks are Not covered.
+The site began as a conversion of a WordPress copy (capture, baseline, parity gates, markup moved by an extractor). Stage 4 of the redesign
+deleted all of that from the tree (commit `b53bc71`); git history keeps it and `docs/LAUNCH.md` says how to restore it. The rows below are
+the decision ledger in the order taken, including those about the removed pipeline (d1 to d32, d41); they are history, not instructions.
 
 ## Decisions
 
@@ -124,3 +95,9 @@ is always "reproduce live".
 | d68 | 2026-11-25 | fallback fonts with the metrics of the web fonts | src/styles/fonts.css: Roboto Fallback (400, 700) and Roboto Condensed Fallback (700) on local Arial with size-adjust 99.1, 93.5 and 83.3 percent (measured width ratios on German copy) and ascent, descent and gap overrides from the fonts hhea table; tokens.css puts them behind the web fonts; with the font files delayed by 1.8 s the layout shift of the blog page went from 0.0089 to 0 | Arial Narrow and Arial as the fallback | plan: no layout shift from fonts | low: where Arial is missing the next family of the stack is used |
 | d69 | 2026-11-25 | hero video on a metered or slow connection | HeroVideo.astro: after the load event and from 48 rem up the video starts only when navigator.connection is absent (Safari, Firefox: unchanged behaviour) or not saveData, not type cellular and effectiveType not slow-2g, 2g or 3g; the connection is read again on its change event; net tests the five cases with a mocked connection. Real Chrome desktop does not expose type and reports effectiveType 4g also at 1.6 Mbit/s, so the policy protects Android Chrome and Save-Data users, not a slow desktop line. The encode is unchanged (17.67 MiB) | play after load, not with Save-Data | owner: data-conscious loading if safe | low: an iPad on cellular still loads 17.7 MiB (no API); a pointer: fine condition would cover it, owner to decide |
 | d70 | 2026-11-25 | measuring tools | tools/perf.mjs (LCP element and time, CLS, requests and bytes per page and viewport, Chrome, WebKit, optional CDP throttling) and tools/screens.mjs (full-page screenshots at 390, 768 and 1440 into review/) with npm run perf and npm run screens; not gates | ad hoc scripts | Stage 3 measurements must be repeatable | none |
+| d71 | 2026-11-25 | hero video | The home hero is the poster photo only (owner): no <video>, no pause button, no request for a video. HeroVideo.astro and public/hero.mp4 are removed from the tree (history: 7858e4c, 5103883; removal 9ad7292); the encoded file stays untracked in .local/hero.mp4 (git-ignored). size asserts that dist/ holds no video or audio file and no page has a video, audio or source-in-media element; net fails on any video or audio request; ui keeps the pixel measurement of the poster (h1 9.0:1, eyebrow 5.47:1, ghost button 17.7:1 at 1440; 12.5, 10.2, 17.1 at 390). Supersedes d51, d69 and the video parts of d63 and d65 | H.264 hero video, 720p, from 48 rem up (d51) | owner: best performance; the video was 17.7 MiB and 18 MB of the 18.3 MB home transfer at 1440 (now 246 KB) | low: the poster is the first frame; restoring the component is a git show away |
+| d72 | 2026-11-25 | old-URL list frozen | docs/old-urls.json lists every old URL (131 paths: path, old status, kind, where found, new fate built or redirect, target, hops) generated once from baseline/routes.json and the captured sitemaps; tools/redirects-build.mjs and the redirects check read it; the check also fails when a row disagrees with tools/redirect-map.mjs. redirects.csv, cloudflare-query-redirects.csv and dist/_redirects (dev and release) are byte-identical before and after | read baseline/routes.json and capture/sitemaps | plan Stage 4: delete capture and baseline, keep the list of old URLs | low: uploads and theme files were never content URLs and are not listed |
+| d73 | 2026-11-25 | brand spelling | The brand is spelled Cervélo (with é) in the brands collection, so in the home brand list and the Organization JSON-LD; slugs, URLs and file names stay ASCII (/Marke/cervelo/). No captured body text spelled it without the accent. test/seo-data.test.mjs expects the é | Cervelo as captured | owner: Cervélo is the correct spelling | none |
+| d74 | 2026-11-25 | WordPress sources, capture and parity pipeline deleted | Commit b53bc71 removes legacy-public/, src/content/{pages,heads,bottoms,parts,index.json}, src/styles/{inline,site.css}, tools/{extract,strip-sourcemaps,sitemaps,verify-legacy}.mjs, baseline/, capture/, the kit parity scripts and scripts/lib files, exceptions.json, proposals.json, inert-forms.json, docs/media-plan.json and the npm scripts that served them; kept: scripts/review-serve.mjs (contentTypeFor inlined), scripts/state.mjs, scripts/build-redirects.mjs and scripts/lib/{node-version,redirects-csv,review-routes}.mjs. The wp check has no allowlist. css-tree, pixelmatch and playwright leave devDependencies (the checks load Playwright from the kit). The page-text and seo-data tests compare pages with their content files (legal and blog Markdown, the Ueber uns text), not with the capture; the verbatim-from-old-site guard ends with the capture, git history keeps it. .conversion/media-cache and video-download stay on disk, git-ignored. Supersedes d52 (STAGE4_SOURCES) | keep capture/ and baseline/ until the migration is signed off | plan Stage 4; owner: no WordPress anywhere in the repository | low: git checkout 4cd6d4c -- <path> restores any of it (docs/LAUNCH.md) |
+| d75 | 2026-11-25 | hero video may return only if performance-compatible | A video returns to the hero only after LCP and transfer are measured (npm run perf, slow4g) and it passes: consider 540p, (pointer: fine), Save-Data, a lazy start after load; written into docs/TODO.md with the commit hashes to restore it | poster only for good | owner: future TODO | none |
+| d76 | 2026-11-25 | docs/TODO.md is the owner list | docs/TODO.md (tracked) groups every open item: Legal, Content and claims, Hero video, Product and IA, Hosting and launch, Testing gaps, Repository; one line each with who acts and what blocks it; linked from README.md and AGENTS.md/CLAUDE.md. README, AGENTS.md, CLAUDE.md, docs/plan.md (how the site is built now, ledger kept), docs/third-party.md, docs/LAUNCH.md and docs/redesign.md are rewritten for the native site | notes in the stage files only | owner: one place for what is open | none |
