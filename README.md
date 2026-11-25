@@ -8,11 +8,11 @@ Requires Node 22.23.4 or newer (`nvm use`), then `npm install`.
 | Script | What it does |
 | --- | --- |
 | `npm run dev` | Local dev server |
-| `npm run build` | Static build into `dist/` |
+| `npm run build` | Static build into `dist/`; unless `PUBLIC_INDEXABLE=true` the postbuild step names `SITE_ORIGIN` (default `https://bike-one.dev`) instead of `https://bike-one.org` in `dist/` (d29) |
 | `npm run preview` | Serve `dist/` locally |
 | `npm test` | Unit tests under `test/` |
 | `npm run baseline` | Build `baseline/` from `capture/` |
-| `npm run links:exceptions` | Add the WordPress API and broken-on-live link exceptions to `exceptions.json` |
+| `npm run links:exceptions` | Add the broken-on-live link exceptions (no WordPress API records, d28) to `exceptions.json` |
 | `npm run assets:copy` | Copy captured scripts, fonts, icons and media outside the media prefix to `public/` |
 | `npm run verify` | Run every parity gate against `dist/` |
 | `npm run verify:proposals` | Gates with approved-pending proposals switched on |

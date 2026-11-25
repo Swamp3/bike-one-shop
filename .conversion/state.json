@@ -276,6 +276,33 @@
       "reason": "owner request: the file lives only on the live host; it was downloaded once with the owner's consent. Not in the baseline, so it is an extra built file",
       "costIfWrong": "high for hosting: the file is 26.55 MiB, over the 25 MiB Cloudflare Pages limit, so wrangler pages deploy fails until it is shrunk or served from R2; HEVC does not play in Firefox or Chromium without HEVC",
       "date": "2026-11-25"
+    },
+    {
+      "id": "d27",
+      "topic": "no links to the live site",
+      "choice": "tools/extract.mjs makes same-origin URLs root-relative in a/area href, form action, link rel=alternate (feeds), data-* attributes (also WooCommerce variation JSON), inline script config (plain, JSON-escaped and URL-encoded) and <template> contents (the extractor did not enter template.content, which is why the wc-placeholder img stayed absolute); links to WooCommerce paths (/product/, /product-category/, /shop/, /cart/, /checkout/, /my-account/, /wishlist/) stay as paths, no shop URL invented; the redirect map for shop.bike-one.org is in .working-files/bike-one-links/notes.md",
+      "default": "reproduce live (absolute links)",
+      "reason": "owner report: the rebuild still links to bike-one.org; the links gate counts both forms as internal",
+      "costIfWrong": "low: a script that compared an absolute origin would break; the console probe on 5 pages at 2 widths shows no new message",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d28",
+      "topic": "WordPress head links dropped",
+      "choice": "tools/extract.mjs removes link rel=https://api.w.org/, EditURI, pingback, shortlink and rel=alternate links to wp-json (oEmbed, REST) from every page; the 284 WordPress API link records are gone from exceptions.json and npm run links:exceptions passes --skip-api so it does not add them back",
+      "default": "keep the captured head links (d19 exceptions)",
+      "reason": "owner report; a static site has no xmlrpc.php, wp-json or short URL endpoints",
+      "costIfWrong": "low: no oEmbed discovery, no pingbacks; shortlink ?p= URLs still redirect through redirects.csv",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d29",
+      "topic": "dev builds name the dev origin",
+      "choice": "postbuild step tools/dev-origin.mjs: unless PUBLIC_INDEXABLE=true it rewrites every form of https://bike-one.org (http, //, www, JSON-escaped, URL-encoded) in the text files of dist (html xml txt json xsl js css, _redirects, _headers; not wp-content/uploads) to SITE_ORIGIN, default https://bike-one.dev; the release build is untouched; npm run verify goes through tools/verify.mjs, which gives the gates --origin SITE_ORIGIN on a dev build and nothing on the release build",
+      "default": "every build names https://bike-one.org",
+      "reason": "owner: the test deployment on bike-one.dev must not reference bike-one.org; canonical, sitemaps and feeds cannot be root-relative",
+      "costIfWrong": "low: an npx astro build without npm run build skips the step; set SITE_ORIGIN for another test host",
+      "date": "2026-11-25"
     }
   ],
   "counts": {},

@@ -35,6 +35,7 @@ The pages are the baseline routes that answered 200 with an HTML snapshot, plus 
   --capture <dir>    the capture folder holding the page snapshots (default: capture)
   --redirects <file> redirects.csv (default: redirects.csv beside the baseline folder)
   --date <date>      the date on new records (default: today)
+  --skip-api         write no WordPress API head link records: the build drops those links (decision d27)
   --help             show this help
 
 Exit codes: 0 written, 2 usage error or unreadable input.`;
@@ -74,7 +75,7 @@ const originOf = (value) => {
   }
 };
 
-export function linkExceptions({ baseline, capture, redirects, existing, date }) {
+export function linkExceptions({ baseline, capture, redirects, existing, date, skipApi = false }) {
   const routes = readJson(join(baseline, 'routes.json'));
   const meta = readJson(join(baseline, 'meta.json'), {});
   const captureMeta = readJson(join(capture, 'meta.json'), {});
@@ -97,6 +98,7 @@ export function linkExceptions({ baseline, capture, redirects, existing, date })
     if (!existsSync(file)) throw new UsageError(`${file} not found (the snapshot of ${page.path}; pass --capture)`);
     const pageUrl = new URL(page.path === '/404.html' ? '/' : page.path, origin).href;
     for (const { href, kind } of linkRecords(readFileSync(file, 'utf8'), { pageUrl, internal, brokenPaths, resolves })) {
+      if (skipApi && kind === 'api') continue; // the build drops these head links (d27)
       const key = `${page.path}\u0000${href}`;
       if (seen.has(key)) continue;
       seen.add(key);
@@ -117,6 +119,7 @@ function options(argv) {
         capture: { type: 'string', default: 'capture' },
         redirects: { type: 'string' },
         date: { type: 'string' },
+        'skip-api': { type: 'boolean', default: false },
         help: { type: 'boolean', short: 'h', default: false },
       },
     }));
@@ -133,6 +136,7 @@ function options(argv) {
     capture: resolve(values.capture),
     redirects: resolve(values.redirects ?? join(dirname(baseline), 'redirects.csv')),
     date: values.date ?? new Date().toISOString().slice(0, 10),
+    skipApi: values['skip-api'],
   };
 }
 

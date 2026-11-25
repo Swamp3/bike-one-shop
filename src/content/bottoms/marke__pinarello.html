@@ -37,7 +37,7 @@ wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
 <script id="contact-form-7-js-before">
 var wpcf7 = {
     "api": {
-        "root": "https:\/\/bike-one.org\/wp-json\/",
+        "root": "\/wp-json\/",
         "namespace": "contact-form-7\/v1"
     }
 };
@@ -45,7 +45,7 @@ var wpcf7 = {
 </script>
 <script id="contact-form-7-js" src="/wp-content/plugins/contact-form-7/includes/js/index.js?ver=6.2.6"></script>
 <script id="la-swatches-js-extra">
-var la_swatches = {"ajax_url":"https://bike-one.org/wp-admin/admin-ajax.php"};
+var la_swatches = {"ajax_url":"/wp-admin/admin-ajax.php"};
 //# sourceURL=la-swatches-js-extra
 </script>
 <script id="la-swatches-js" src="/wp-content/plugins/lastudio-core/assets/js/swatches.js" async=""></script>
@@ -91,16 +91,16 @@ lapilliUI.date.setLocale( {"options":{"weekStartsOn":1}} );
 </script>
 <script id="wp-api-fetch-js" src="/wp-includes/js/dist/api-fetch.min.js?ver=6f2a4faeee3c722b1e57"></script>
 <script id="wp-api-fetch-js-after">
-wp.apiFetch.use( wp.apiFetch.createRootURLMiddleware( "https://bike-one.org/wp-json/" ) );
+wp.apiFetch.use( wp.apiFetch.createRootURLMiddleware( "/wp-json/" ) );
 wp.apiFetch.nonceMiddleware = wp.apiFetch.createNonceMiddleware( "879aabc88f" );
 wp.apiFetch.use( wp.apiFetch.nonceMiddleware );
 wp.apiFetch.use( wp.apiFetch.mediaUploadMiddleware );
-wp.apiFetch.nonceEndpoint = "https://bike-one.org/wp-admin/admin-ajax.php?action=rest-nonce";
+wp.apiFetch.nonceEndpoint = "/wp-admin/admin-ajax.php?action=rest-nonce";
 //# sourceURL=wp-api-fetch-js-after
 </script>
 <script id="sourcebuster-js-js" src="/wp-content/plugins/woocommerce/assets/js/sourcebuster/sourcebuster.min.js?ver=11.3.1"></script>
 <script id="wc-order-attribution-js-extra">
-var wc_order_attribution = {"params":{"lifetime":1.0e-5,"session":30,"base64":false,"ajaxurl":"https://bike-one.org/wp-admin/admin-ajax.php","prefix":"wc_order_attribution_","allowTracking":true},"fields":{"source_type":"current.typ","referrer":"current_add.rf","utm_campaign":"current.cmp","utm_source":"current.src","utm_medium":"current.mdm","utm_content":"current.cnt","utm_id":"current.id","utm_term":"current.trm","utm_source_platform":"current.plt","utm_creative_format":"current.fmt","utm_marketing_tactic":"current.tct","session_entry":"current_add.ep","session_start_time":"current_add.fd","session_pages":"session.pgs","session_count":"udata.vst","user_agent":"udata.uag"}};
+var wc_order_attribution = {"params":{"lifetime":1.0e-5,"session":30,"base64":false,"ajaxurl":"/wp-admin/admin-ajax.php","prefix":"wc_order_attribution_","allowTracking":true},"fields":{"source_type":"current.typ","referrer":"current_add.rf","utm_campaign":"current.cmp","utm_source":"current.src","utm_medium":"current.mdm","utm_content":"current.cnt","utm_id":"current.id","utm_term":"current.trm","utm_source_platform":"current.plt","utm_creative_format":"current.fmt","utm_marketing_tactic":"current.tct","session_entry":"current_add.ep","session_start_time":"current_add.fd","session_pages":"session.pgs","session_count":"udata.vst","user_agent":"udata.uag"}};
 //# sourceURL=wc-order-attribution-js-extra
 </script>
 <script id="wc-order-attribution-js" src="/wp-content/plugins/woocommerce/assets/js/frontend/order-attribution.min.js?ver=11.3.1"></script>
@@ -161,7 +161,7 @@ var wc_order_attribution = {"params":{"lifetime":1.0e-5,"session":30,"base64":fa
 </script>
 <script id="cosy-libs-js" src="/wp-content/themes/cosy/assets/js/plugins.js"></script>
 <script id="cosy-theme-js-extra">
-var cosy_configs = {"compare":{"view":"View List Compare","success":"has been added to comparison list.","error":"An error occurred ,Please try again !"},"wishlist":{"view":"View List Wishlist","success":"has been added to your wishlist.","error":"An error occurred ,Please try again !"},"addcart":{"view":"View Cart","success":"has been added to your cart","error":"An error occurred ,Please try again !"},"global":{"error":"An error occurred ,Please try again !","comment_author":"Please enter Name !","comment_email":"Please enter Email Address !","comment_rating":"Please select a rating !","comment_content":"Please enter Comment !","continue_shopping":"Continue Shopping"},"text":{"backtext":"Back"},"fullpage":[],"popup":{"max_width":"790","max_height":"430"},"ajax_url":"https://bike-one.org/wp-admin/admin-ajax.php"};
+var cosy_configs = {"compare":{"view":"View List Compare","success":"has been added to comparison list.","error":"An error occurred ,Please try again !"},"wishlist":{"view":"View List Wishlist","success":"has been added to your wishlist.","error":"An error occurred ,Please try again !"},"addcart":{"view":"View Cart","success":"has been added to your cart","error":"An error occurred ,Please try again !"},"global":{"error":"An error occurred ,Please try again !","comment_author":"Please enter Name !","comment_email":"Please enter Email Address !","comment_rating":"Please select a rating !","comment_content":"Please enter Comment !","continue_shopping":"Continue Shopping"},"text":{"backtext":"Back"},"fullpage":[],"popup":{"max_width":"790","max_height":"430"},"ajax_url":"/wp-admin/admin-ajax.php"};
 //# sourceURL=cosy-theme-js-extra
 </script>
 <script id="cosy-theme-js" src="/wp-content/themes/cosy/assets/js/theme.js" async=""></script>

@@ -18,11 +18,20 @@ fs.mkdirSync('src/components', { recursive: true });
 
 
 // Same-origin asset URLs become root-relative (build-rules, decision d21), so the build loads every
-// script, stylesheet, icon and image from its own copy and never from the live site. Links (<a>), canonical,
-// alternate, og and other metadata keep the captured URL.
+// script, stylesheet, icon and image from its own copy and never from the live site. Since d27 links (<a>,
+// <area>, form actions), data-* attributes and inline script config are root-relative too; canonical, og and the
+// sitemap/feed files keep the production origin (tools/dev-origin.mjs swaps it for dev builds).
 const ORIGIN_RE = /(?:https?:)?\/\/(?:(?:www\.)?bike-one\.org|bikeone\.cvires\.at)(?=\/)/gi;
 const FILE_RE = /(?:https?:)?\/\/(?:(?:www\.)?bike-one\.org|bikeone\.cvires\.at)(?=\/wp-(?:content|includes)\/)/gi;
 // Slider background videos (data-mp4/webm/ogv) sit at the site root, outside /wp-content/ (d26): same origin, root-relative.
+// The same origin inside inline scripts and data-* attributes, plain or JSON-escaped (https:\/\/host\/path).
+// Not after = ? &: a share URL such as ?u=https://host/ must stay whole.
+const INLINE_RE = /(?<![=?&])(?:https?:)?(?:\\?\/){2}(?:(?:www\.)?bike-one\.org|bikeone\.cvires\.at)(?=\\?\/)/gi;
+// A whole href or action on the origin: root-relative, and the bare origin becomes "/".
+// The same origin URL-encoded inside a script (WooCommerce wcSettings: https%3A%5C%2F%5C%2Fhost%5C%2Fpath).
+const ENCODED_RE = /https?%3A(?:%5C)?%2F(?:%5C)?%2F(?:(?:www\.)?bike-one\.org|bikeone\.cvires\.at)(?=(?:%5C)?%2F)/gi;
+const ANCHORED = /^(?:https?:)?\/\/(?:(?:www\.)?bike-one\.org|bikeone\.cvires\.at)(?=[/?#]|$)/i;
+const rootRel = (v) => { const r = v.trim().replace(ANCHORED, ''); return r === v.trim() ? v : r === '' || /^[?#]/.test(r) ? '/' + r : r; };
 const VIDEO_ATTR = /^data-(mp4|webm|ogv)$/;
 const ASSET_LINK_RELS = new Set(['stylesheet', 'icon', 'shortcut icon', 'apple-touch-icon', 'preload', 'modulepreload']);
 const ATTRS = { script: ['src'], img: ['src', 'srcset'], source: ['src', 'srcset'], video: ['src', 'poster'], audio: ['src'], track: ['src'] };
@@ -30,20 +39,30 @@ const ATTRS = { script: ['src'], img: ['src', 'srcset'], source: ['src', 'srcset
 // fragments (POST ?wc-ajax=get_refreshed_fragments), the YITH wishlist add-to-wishlist component (REST call
 // to wp-json) and WordPress's emoji loader (fetches wp-emoji-release.min.js from the live origin).
 const DROP_ID = /^(wc-cart-fragments-js(-extra)?|yith-wcwl-add-to-wishlist-js(-extra|-translations)?|wp-emoji-settings)$/;
+// WordPress head links a static site has no endpoint for (d27): REST root, RSD, pingback, shortlink, oEmbed and REST alternates.
+const WP_HEAD_REL = new Set(['https://api.w.org/', 'edituri', 'pingback', 'shortlink']);
+const dropHeadLink = (c) => c.tagName === 'link' && (WP_HEAD_REL.has((at(c, 'rel') || '').toLowerCase().trim()) || (at(c, 'rel') === 'alternate' && /\/wp-json\//.test(at(c, 'href') || '')));
 const dropScript = (c) => c.tagName === 'script' && (DROP_ID.test(at(c, 'id') || '') || (at(c, 'type') === 'module' && (c.childNodes || []).some((t) => /script#wp-emoji-settings/.test(t.value || ''))));
 function localise(node) {
-  node.childNodes = (node.childNodes || []).filter((c) => !dropScript(c));
+  node.childNodes = (node.childNodes || []).filter((c) => !dropScript(c) && !dropHeadLink(c));
   for (const c of node.childNodes || []) {
     if (!c.tagName) continue;
     const names = c.tagName === 'link' && ASSET_LINK_RELS.has((at(c, 'rel') || '').toLowerCase().trim()) ? ['href', 'imagesrcset'] : ATTRS[c.tagName] || [];
     for (const a of c.attrs || []) {
       if (names.includes(a.name) || VIDEO_ATTR.test(a.name)) a.value = a.value.replace(ORIGIN_RE, '');
-      // inline background images and the lazy-load data-* sources the theme scripts read (d21): file URLs only
-      else if (a.name === 'style' || a.name.startsWith('data-')) a.value = a.value.replace(FILE_RE, '');
+      // links and form actions (d27)
+      else if ((a.name === 'href' && (c.tagName === 'a' || c.tagName === 'area' || (c.tagName === 'link' && (at(c, 'rel') || '') === 'alternate'))) || (a.name === 'action' && c.tagName === 'form')) a.value = rootRel(a.value);
+      // inline background images (d21): file URLs only
+      else if (a.name === 'style') a.value = a.value.replace(FILE_RE, '');
+      // lazy-load sources and WooCommerce variation JSON (d21, d27)
+      else if (a.name.startsWith('data-')) a.value = a.value.replace(INLINE_RE, '');
     }
+    // inline script config (ajax_url, REST root, permalinks, srcset in module data): d27
+    if (c.tagName === 'script') for (const t of c.childNodes || []) if (t.value) t.value = t.value.replace(INLINE_RE, '').replace(ENCODED_RE, '');
     // an import map's targets are the same kind of asset URL
     if (c.tagName === 'script' && at(c, 'type') === 'importmap') for (const t of c.childNodes || []) if (t.value) t.value = t.value.replace(ORIGIN_RE, '');
     localise(c);
+    if (c.content) localise(c.content); // <template> children (WooCommerce gallery placeholder) live in .content, not childNodes
   }
 }
 
