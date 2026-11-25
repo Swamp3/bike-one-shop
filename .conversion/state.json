@@ -4,7 +4,7 @@
   "repo": "Swamp3/bike-one-shop (existing repo; website/ merged in at the end)",
   "hosting": "cloudflare",
   "startedAt": "2026-11-25T07:17:03.391Z",
-  "phase": "build",
+  "phase": "visual",
   "phases": {
     "capture": {
       "startedAt": "2026-11-25T07:17:03.563Z",
@@ -28,6 +28,16 @@
     },
     "build": {
       "startedAt": "2026-11-25T07:49:55.160Z",
+      "finishedAt": "2026-11-25T07:54:39.392Z",
+      "result": null
+    },
+    "gates": {
+      "startedAt": "2026-11-25T07:54:39.392Z",
+      "finishedAt": "2026-11-25T07:55:03.413Z",
+      "result": null
+    },
+    "visual": {
+      "startedAt": "2026-11-25T07:55:03.413Z",
       "finishedAt": null,
       "result": null
     }
@@ -216,6 +226,11 @@
   ],
   "counts": {},
   "needsYou": [
+    {
+      "item": "bike-one.org unreachable from this machine (IPv6 only, ping6 100% loss, net::ERR_ADDRESS_UNREACHABLE): the all-pages visual review and phases 10-12 wait for it",
+      "command": "fix network, then: npm run review:serve -- --background --port 4321, shoot live-all and new-all, review:diff, review:sheet, review:check",
+      "before": "visual"
+    },
     {
       "item": "gh not logged in: push branch and open PR from .conversion/pr-body.md",
       "command": "! gh auth login",
