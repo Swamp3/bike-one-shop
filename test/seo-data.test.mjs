@@ -45,8 +45,12 @@ test('BikeStore nodes equal the captured Ueber uns facts', { skip: !built && 'di
 test('Organization: brands and e-mail are the captured ones, no invented profile data', { skip: !built && 'dist/ is not built' }, () => {
   const org = graphOf('')?.find((n) => n['@type'] === 'Organization');
   // every brand has a captured brand page of its own (capture/text/marke__<brand>.txt)
-  for (const b of org.brand) assert.ok(fs.existsSync(path.join(ROOT, 'capture/text', `marke__${b.name.toLowerCase()}.txt`)), `${b.name} is not a captured brand`);
+  // the file names are ASCII: Cervélo is marke__cervelo.txt (decision d73)
+  const ascii = (name) => name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  for (const b of org.brand) assert.ok(fs.existsSync(path.join(ROOT, 'capture/text', `marke__${ascii(b.name)}.txt`)), `${b.name} is not a captured brand`);
   assert.equal(org.brand.length, 7);
+  assert.ok(org.brand.some((b) => b.name === 'Cervélo'), 'the brand is spelled Cervélo');
+  assert.ok(fs.readFileSync(file(''), 'utf8').includes('>Cervélo</li>'), 'the home brand list spells Cervélo');
   assert.ok(cap('impressum').includes(org.email));
   for (const k of ['sameAs', 'aggregateRating', 'geo', 'telephone', 'address']) assert.ok(!(k in org), `Organization has ${k}`);
 });

@@ -1,7 +1,7 @@
 [
   { "id": "trek", "name": "Trek" },
   { "id": "specialized", "name": "Specialized" },
-  { "id": "cervelo", "name": "Cervelo" },
+  { "id": "cervelo", "name": "Cervélo" },
   { "id": "pinarello", "name": "Pinarello" },
   { "id": "ridley", "name": "Ridley" },
   { "id": "wilier", "name": "Wilier" },
