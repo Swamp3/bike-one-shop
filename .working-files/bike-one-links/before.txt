@@ -1,0 +1,13 @@
+  899  55 files a[href] | https://bike-one.org/  ,  https://bike-one.org/termin-buchen/
+  342  56 files inline <script> | https://bike-one.org/cart/  ,  https:\/\/bike-one.org
+  241  56 files link[rel=alternate] | https://bike-one.org/feed/  ,  https://bike-one.org/comments/feed/
+   56  56 files link[rel=https://api.w.org/] | https://bike-one.org/wp-json/
+   56  56 files link[rel=EditURI] | https://bike-one.org/xmlrpc.php?rsd
+   55  55 files link[rel=pingback] | https://bike-one.org/xmlrpc.php
+   43  43 files link[rel=canonical] | https://bike-one.org/alle-fahrrader/  ,  https://bike-one.org/blog/
+   43  43 files link[rel=shortlink] | https://bike-one.org/?p=1111  ,  https://bike-one.org/?p=1856
+   22  22 files .xml file | https://bike-one.org/Marke/cervelo/feed/  ,  https://bike-one.org/Marke/factor/feed/
+    7   7 files form[action] | https://bike-one.org/Marke/cervelo/  ,  https://bike-one.org/Marke/factor/
+    3   1 files img[src] | https://bike-one.org/wp-content/themes/cosy/assets/images/wc-placeholder.png
+    2   1 files form[data-product_variations] | [{&quot;attributes&quot;:{&quot;attribute_pa_schaltung&quot;:&quot;sram-apex-axs&quot;,&quot;attribute_pa_farb  ,  [{&quot;attributes&quot;:{&quot;attribute_pa_schaltung&quot;:&quot;sramforce&quot;,&quot;attribute_pa_farbe&qu
+    1   1 files visible text | https:\/\/bike-one.org
