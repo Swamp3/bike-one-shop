@@ -1,0 +1,44 @@
+/* Design tokens: the shop wireframes' language (wireframes/homepage.html) so site and shop read as one brand.
+   Contrast (WCAG 2.2, checked by tools/checks/a11y.mjs from these values): text 4.5:1 and more (ink 13.9 to 15.4, ink-muted 7.4 to 8.2,
+   accent-strong 4.9 to 5.4 on the light surfaces, white on accent-strong 5.4, header-muted on the header 9.4 to 10.5); control borders and
+   the focus ring 3:1 and more (--line-strong 3.4 to 3.8, --focus 3.8 to 4.0). --accent (#e63946) is for the focus ring and the current-page
+   bar; as text on white it is only 4.0:1, so text and buttons use --accent-strong. */
+:root {
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --surface-2: #f1f3f5;
+  --line: #dee2e6;
+  --line-strong: #7b848c; /* border of a control (ghost button): 3:1 against the light surfaces */
+  --ink: #212529;
+  --ink-muted: #495057;
+  --accent: #e63946;
+  --accent-strong: #c92a37;
+  --accent-strong-hover: #a8222d;
+  --accent-ink: #ffffff;
+  --ok: #2b8a3e;
+  --ok-bg: #ebfbee;
+  --wait: #e67700;
+  --wait-bg: #fff3bf;
+  --focus: #e63946;
+  --header-bg: #121212;
+  --header-surface: #1e1e1e;
+  --header-line: #333333;
+  --header-text: #ffffff;
+  --header-muted: #c2c2c2;
+
+  --font-body: 'Roboto', 'Roboto Fallback', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  --font-head: 'Roboto Condensed', 'Roboto Condensed Fallback', 'Arial Narrow', Arial, sans-serif;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --radius: 0.5rem;
+  --radius-lg: 1rem;
+  --container: 72rem;
+  --header-h: 4rem;
+}

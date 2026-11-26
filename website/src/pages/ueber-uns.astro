@@ -1,0 +1,63 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import StoreCard from '../components/StoreCard.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getStores } from '../lib/stores';
+import { breadcrumbNode, storeNode } from '../lib/schema';
+import { HERO, preloadAvif } from '../lib/preload';
+import banner from '../assets/photos/fitting.jpg';
+
+const stores = await getStores();
+const origin = Astro.site!.href;
+const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Über uns', path: '/ueber-uns/' }];
+const nodes = [...stores.map((s) => storeNode(origin, s)), breadcrumbNode(origin, crumbs)];
+---
+<Base
+  title="Über uns: Standorte & Öffnungszeiten – BikeOne"
+  description="BikeOne in Oldenburg und Osnabrück: Adressen, Telefon, E-Mail und Öffnungszeiten beider Standorte. Termin online buchen."
+  image={banner}
+  imageAlt="Bike-Fitting bei BikeOne: eine Fahrerin auf dem Rad im Rollentrainer"
+  nodes={nodes}
+  preload={await preloadAvif(banner, HERO)}
+>
+  <section class="banner dark">
+    <Picture class="bg" src={banner} alt="" formats={['avif', 'webp']} widths={HERO.widths} sizes={HERO.sizes} loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'bg-pic' }} />
+    <div class="container copy">
+      <h1>Herzlich willkommen bei BikeOne!</h1>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="stores-title">
+    <div class="container">
+      <Breadcrumbs crumbs={crumbs} />
+      <h2 id="stores-title">Standorte &amp; Öffnungszeiten</h2>
+      <div class="store-grid">
+        {stores.map((s) => <StoreCard store={s} map />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" aria-labelledby="more-title">
+    <div class="container">
+      <h2 id="more-title">Mehr über BikeOne</h2>
+      <ul class="links">
+        <li><a class="tap" href="/service/">Service: Bike-Fitting, Dienstradleasing und Werkstatt</a></li>
+        <li><a class="tap" href="/blog/">Der BikeOne-Blog</a></li>
+        <li><a class="tap" href="/stellenangebote/">Stellenangebote bei BikeOne</a></li>
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .banner { position: relative; isolation: isolate; min-height: min(46vh, 28rem); display: grid; align-items: end; background: var(--header-bg); color: #fff; overflow: hidden; }
+  .banner :global(.bg-pic), .banner :global(.bg) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .banner :global(.bg) { object-fit: cover; object-position: 50% 20%; z-index: -2; }
+  .banner::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, #12121266 0%, #121212d9 100%); }
+  .copy { padding-block: var(--space-8) var(--space-6); }
+  .banner h1 { color: #fff; max-width: 16ch; margin: 0; }
+  .alt { background: var(--surface); border-block: 1px solid var(--line); }
+  .links { list-style: none; padding: 0; margin: var(--space-4) 0 0; display: grid; gap: var(--space-3); }
+  .store-grid { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); margin-top: var(--space-5); }
+</style>

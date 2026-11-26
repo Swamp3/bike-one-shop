@@ -1,0 +1,18 @@
+node_modules
+# Astro's build output only: themes and plugins keep built scripts in public/**/dist/
+/dist
+.astro
+.env*
+!.env.example
+.DS_Store
+.vercel
+*.log
+# review screenshots and measurements (npm run screens, review/stage4)
+/review/
+# local-only files: the dev server's pid and log, and what the old conversion left on this machine
+/.conversion/review-serve.*
+/.conversion/media-cache/
+/.conversion/video-download/
+# the encoded hero video (H.264, 17.7 MiB), kept out of the site and out of git until it is performance-compatible (docs/TODO.md)
+/.local/
+/public/_redirects

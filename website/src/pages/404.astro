@@ -1,0 +1,23 @@
+---
+// Native 404 page: written to dist/404.html, which Cloudflare Pages serves for every unknown URL. noindex, no canonical.
+import Base from '../layouts/Base.astro';
+import { SHOP_URL } from '../lib/site.mjs';
+---
+<Base title="Seite nicht gefunden – BikeOne" description="Diese Seite gibt es nicht (mehr). Weiter zur Startseite, zum Termin buchen, zum Blog oder zum Shop von BikeOne." noindex noCanonical>
+  <div class="container page">
+    <p class="eyebrow">Fehler 404</p>
+    <h1>Seite nicht gefunden</h1>
+    <p>Diese Seite gibt es nicht (mehr). Vielleicht hilft dir einer dieser Wege weiter:</p>
+    <div class="cta-row">
+      <a class="btn" href="/">Zur Startseite</a>
+      <a class="btn btn--ghost" href="/termin-buchen/">Termin buchen</a>
+      <a class="btn btn--ghost" href="/blog/">Zum Blog</a>
+      <a class="btn btn--ghost" href={SHOP_URL}>Zum Shop</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page { padding-block: var(--space-8); min-height: 50vh; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
+</style>

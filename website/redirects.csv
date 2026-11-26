@@ -1,0 +1,183 @@
+from,to,status,source,note
+/?p=1111,{SHOP_URL},301,shortlink,unverified shortlink
+/?p=1252,{SHOP_URL},301,shortlink,unverified shortlink
+/?p=1257,{SHOP_URL},301,shortlink,unverified shortlink
+/?p=1269,{SHOP_URL},301,shortlink,unverified shortlink
+/?p=1317,/impressum/,301,shortlink,unverified shortlink
+/?p=1359,/datenschutz/,301,shortlink,unverified shortlink
+/?p=1839,/ueber-uns/,301,shortlink,unverified shortlink
+/?p=1856,/blog/,301,shortlink,unverified shortlink
+/?p=1864,/so-erkennst-du-fruehzeitig-fahrrad-ermuedungserscheinungen-und-wie-bikeone-vorbeugt/,301,shortlink,unverified shortlink
+/?p=1866,/e-bike-oder-klassisches-rad-welche-entscheidung-fuer-deine-mobilitaet-zaehlt-und-wie-bikeone-dich-optimal-begleitet/,301,shortlink,unverified shortlink
+/?p=1871,/wann-sich-ein-professioneller-fahrradservice-wirklich-lohnt-und-woran-du-ihn-erkennst/,301,shortlink,unverified shortlink
+/?p=1879,/sicherheit-auf-zwei-raedern-so-faehrst-du-entspannt-und-geschuetzt-durch-den-stadtverkehr/,301,shortlink,unverified shortlink
+/?p=1881,/fahrrad-leasing-die-smarte-alternative-zum-autopendeln-und-warum-es-sich-jetzt-mehr-denn-je-lohnt/,301,shortlink,unverified shortlink
+/?p=2326,{SHOP_URL},301,shortlink,unverified shortlink
+/?p=2328,{SHOP_URL},301,shortlink,unverified shortlink
+/?p=3159,/termin-buchen-oldenburg/,301,shortlink,unverified shortlink
+/?p=3161,/termin-buchen-osnabrueck/,301,shortlink,unverified shortlink
+/?p=322,/service/,301,shortlink,unverified shortlink
+/?p=3600,/stellenangebote/,301,shortlink,unverified shortlink
+/?p=529,/,301,shortlink,unverified shortlink
+/?p=534,/,301,shortlink,unverified shortlink
+/?p=535,/,301,shortlink,unverified shortlink
+/?p=536,/,301,shortlink,unverified shortlink
+/?p=767,/,301,shortlink,unverified shortlink
+/?p=768,/,301,shortlink,unverified shortlink
+/?p=769,/,301,shortlink,unverified shortlink
+/?p=779,/termin-buchen/,301,shortlink,unverified shortlink
+/?p=803,/,301,shortlink,unverified shortlink
+/?p=805,/,301,shortlink,unverified shortlink
+/?p=807,/,301,shortlink,unverified shortlink
+/?p=809,/,301,shortlink,unverified shortlink
+/?p=811,/,301,shortlink,unverified shortlink
+/?p=813,/,301,shortlink,unverified shortlink
+/?p=815,/,301,shortlink,unverified shortlink
+/?p=817,/,301,shortlink,unverified shortlink
+/?p=819,/,301,shortlink,unverified shortlink
+/?p=821,/,301,shortlink,unverified shortlink
+/?p=823,/,301,shortlink,unverified shortlink
+/?p=825,/,301,shortlink,unverified shortlink
+/?p=827,/,301,shortlink,unverified shortlink
+/?p=829,/,301,shortlink,unverified shortlink
+/?p=831,/,301,shortlink,unverified shortlink
+/termin-buchen,/termin-buchen/,301,crawl,
+/Marke/cervelo/,{SHOP_URL},301,decision,redesign IA
+/Marke/cervelo/feed/,/feed/,301,decision,redesign IA
+/Marke/factor/,{SHOP_URL},301,decision,redesign IA
+/Marke/factor/feed/,/feed/,301,decision,redesign IA
+/Marke/pinarello/,{SHOP_URL},301,decision,redesign IA
+/Marke/pinarello/feed/,/feed/,301,decision,redesign IA
+/Marke/ridley/,{SHOP_URL},301,decision,redesign IA
+/Marke/ridley/feed/,/feed/,301,decision,redesign IA
+/Marke/specialized/,{SHOP_URL},301,decision,redesign IA
+/Marke/specialized/feed/,/feed/,301,decision,redesign IA
+/Marke/trek/,{SHOP_URL},301,decision,redesign IA
+/Marke/trek/feed/,/feed/,301,decision,redesign IA
+/Marke/wilier/,{SHOP_URL},301,decision,redesign IA
+/Marke/wilier/feed/,/feed/,301,decision,redesign IA
+/alle-fahrrader/,{SHOP_URL},301,decision,redesign IA
+/author/lawrencebennier-com/,/blog/,301,decision,redesign IA
+/author/lawrencebennier-com/feed/,/blog/,301,decision,redesign IA
+/author/marvin/,/blog/,301,decision,redesign IA
+/author/marvin/feed/,/blog/,301,decision,redesign IA
+/cart/,{SHOP_URL},301,decision,redesign IA
+/category/allgemein/,/blog/,301,decision,redesign IA
+/category/allgemein/feed/,/blog/,301,decision,redesign IA
+/checkout-2/,{SHOP_URL},301,decision,redesign IA
+/checkout/,{SHOP_URL},301,decision,redesign IA
+/comments/feed/,/feed/,301,decision,redesign IA
+/ebikes/,{SHOP_URL},301,decision,redesign IA
+/gravel-bikes/,{SHOP_URL},301,decision,redesign IA
+/main-bike/,/service/,301,decision,redesign IA
+/my-account-2/,{SHOP_URL},301,decision,redesign IA
+/my-account/,{SHOP_URL},301,decision,redesign IA
+/portfolio-category/branding-design/,/,301,decision,redesign IA
+/portfolio-category/branding-design/feed/,/,301,decision,redesign IA
+/portfolio-category/branding-design/page/2/,/,301,decision,redesign IA
+/portfolio/portfolio-name-10/,/,301,decision,redesign IA
+/portfolio/portfolio-name-11/,/,301,decision,redesign IA
+/portfolio/portfolio-name-12/,/,301,decision,redesign IA
+/portfolio/portfolio-name-13/,/,301,decision,redesign IA
+/portfolio/portfolio-name-14/,/,301,decision,redesign IA
+/portfolio/portfolio-name-15/,/,301,decision,redesign IA
+/portfolio/portfolio-name-2/,/,301,decision,redesign IA
+/portfolio/portfolio-name-3/,/,301,decision,redesign IA
+/portfolio/portfolio-name-4/,/,301,decision,redesign IA
+/portfolio/portfolio-name-5/,/,301,decision,redesign IA
+/portfolio/portfolio-name-6/,/,301,decision,redesign IA
+/portfolio/portfolio-name-7/,/,301,decision,redesign IA
+/portfolio/portfolio-name-8/,/,301,decision,redesign IA
+/portfolio/portfolio-name-9/,/,301,decision,redesign IA
+/portfolio/portfolio-name/,/,301,decision,redesign IA
+/product-category/gravel-bikes/,{SHOP_URL},301,decision,redesign IA
+/product-category/road-bikes/,{SHOP_URL},301,decision,redesign IA
+/product-category/tt-bikes/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-aspero-5/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-aspero/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-caledonia-5/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-caledonia/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-p-series/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-p5-2/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-r5/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-s5/,{SHOP_URL},301,decision,redesign IA
+/product/cervelo-soloist/,{SHOP_URL},301,decision,redesign IA
+/product/factor-aluto/,{SHOP_URL},301,decision,redesign IA
+/product/factor-hanzo/,{SHOP_URL},301,decision,redesign IA
+/product/factor-monza/,{SHOP_URL},301,decision,redesign IA
+/product/factor-one/,{SHOP_URL},301,decision,redesign IA
+/product/factor-ostro-vam/,{SHOP_URL},301,decision,redesign IA
+/product/factor-slick/,{SHOP_URL},301,decision,redesign IA
+/product/pinarello-dogma-f/,{SHOP_URL},301,decision,redesign IA
+/product/pinarello-f/,{SHOP_URL},301,decision,redesign IA
+/product/ridley-falcn/,{SHOP_URL},301,decision,redesign IA
+/product/ridley-kanzo-alu-equipped/,{SHOP_URL},301,decision,redesign IA
+/product/ridley-kanzo-alu/,{SHOP_URL},301,decision,redesign IA
+/product/ridley-kanzo-carbon/,{SHOP_URL},301,decision,redesign IA
+/product/ridley-noah/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-crux-dsw/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-diverge-al/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-diverge-carbon-pro/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-diverge-carbon-sport/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-diverge-carbon/,{SHOP_URL},301,decision,redesign IA
+/product/specialized-tarmac-sl8/,{SHOP_URL},301,decision,redesign IA
+/product/trek-checkpoint-carbon-kopie/,{SHOP_URL},301,decision,redesign IA
+/product/trek-checkpoint-carbon-sl7/,{SHOP_URL},301,decision,redesign IA
+/product/trek-checkpoint-carbon/,{SHOP_URL},301,decision,redesign IA
+/product/trek-emonda-alr/,{SHOP_URL},301,decision,redesign IA
+/product/trek-madone-domane-sl/,{SHOP_URL},301,decision,redesign IA
+/product/trek-madone-sl/,{SHOP_URL},301,decision,redesign IA
+/product/trek-madone-slr/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-adlar/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-filante-sl/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-filante-slr/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-rapida/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-rave-slr-id2/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-supersonica/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-turbine-sl/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-turbine-slr-kopie/,{SHOP_URL},301,decision,redesign IA
+/product/wilier-turbine-slr/,{SHOP_URL},301,decision,redesign IA
+/racebikes/,{SHOP_URL},301,decision,redesign IA
+/sale/,{SHOP_URL},301,decision,redesign IA
+/shop/,{SHOP_URL},301,decision,redesign IA
+/team-member/charlotte-neal/,/,301,decision,redesign IA
+/team-member/john-bennett/,/,301,decision,redesign IA
+/team-member/member-01/,/,301,decision,redesign IA
+/team-member/member-02/,/,301,decision,redesign IA
+/team-member/member-03/,/,301,decision,redesign IA
+/team-member/victor-peters/,/,301,decision,redesign IA
+/team-member/willie-carter/,/,301,decision,redesign IA
+/tt-triathlon/,{SHOP_URL},301,decision,redesign IA
+/wp-sitemap-posts-la_portfolio-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/wp-sitemap-posts-la_team_member-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/wp-sitemap-posts-page-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/wp-sitemap-posts-post-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/wp-sitemap-posts-product-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/wp-sitemap-taxonomies-category-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/wp-sitemap-taxonomies-la_portfolio_category-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/wp-sitemap-taxonomies-product_brand-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/wp-sitemap-taxonomies-product_cat-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/wp-sitemap-users-1.xml,/sitemap-index.xml,301,decision,redesign IA
+/Marke/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/marke/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/portfolio/*,/,301,decision,"redesign IA, everything below"
+/portfolio-category/*,/,301,decision,"redesign IA, everything below"
+/team-member/*,/,301,decision,"redesign IA, everything below"
+/author/*,/blog/,301,decision,"redesign IA, everything below"
+/shop/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/product/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/product-category/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/product-brand/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/brand/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/cart/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/checkout/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/my-account/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/wishlist/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/checkout-2/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/my-account-2/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/produkt/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/produkt-kategorie/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/warenkorb/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/kasse/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/mein-konto/*,{SHOP_URL},301,decision,"redesign IA, everything below"
+/wunschliste/*,{SHOP_URL},301,decision,"redesign IA, everything below"

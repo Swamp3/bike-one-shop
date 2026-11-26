@@ -1,0 +1,40 @@
+{
+  "name": "bikeone",
+  "version": "0.0.0",
+  "description": "Static native Astro site of BikeOne (bike-one.org)",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22.23.4 <23 || >=24.22.1"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "postbuild": "node tools/redirects-build.mjs --dist && node tools/sitemap-build.mjs && node tools/dev-origin.mjs",
+    "preview": "astro preview",
+    "test": "node --test \"test/**/*.test.mjs\"",
+    "verify": "node tools/verify.mjs",
+    "verify:release": "PUBLIC_INDEXABLE=true node tools/verify.mjs",
+    "redirects": "node tools/checks/redirects.mjs",
+    "links": "node tools/checks/links.mjs",
+    "seo": "node tools/checks/seo.mjs",
+    "wp": "node tools/checks/wp.mjs",
+    "net": "node tools/checks/net.mjs",
+    "size": "node tools/checks/size.mjs",
+    "headers": "node tools/checks/headers.mjs",
+    "ui": "node tools/checks/ui.mjs",
+    "embeds": "node tools/checks/embeds.mjs",
+    "perf": "node tools/perf.mjs",
+    "screens": "node tools/screens.mjs",
+    "a11y": "node tools/checks/a11y.mjs",
+    "redirects:build": "node tools/redirects-build.mjs",
+    "review:serve": "node scripts/review-serve.mjs"
+  },
+  "devDependencies": {
+    "@fontsource/roboto": "5.3.0",
+    "@fontsource/roboto-condensed": "5.3.0",
+    "astro": "7.4.13",
+    "parse5": "8.0.1",
+    "pngjs": "7.0.0"
+  }
+}
