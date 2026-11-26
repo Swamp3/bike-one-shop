@@ -676,7 +676,7 @@
     {
       "id": "d71",
       "topic": "hero video",
-      "choice": "The home hero is the poster photo only (owner): no <video>, no pause button, no request for a video. HeroVideo.astro and public/hero.mp4 are removed from the tree (history: 7858e4c, 5103883; removal 9ad7292); the encoded file stays untracked in .local/hero.mp4 (git-ignored). size asserts that dist/ holds no video or audio file and no page has a video, audio or source-in-media element; net fails on any video or audio request; ui keeps the pixel measurement of the poster (h1 9.0:1, eyebrow 5.47:1, ghost button 17.7:1 at 1440; 12.5, 10.2, 17.1 at 390). Supersedes d51, d69 and the video parts of d63 and d65",
+      "choice": "The home hero is the poster photo only (owner): no <video>, no pause button, no request for a video. HeroVideo.astro and public/hero.mp4 are removed from the tree (history: b85347b, 8ac7df1; removal ea77c8a); the encoded file stays untracked in .local/hero.mp4 (git-ignored). size asserts that dist/ holds no video or audio file and no page has a video, audio or source-in-media element; net fails on any video or audio request; ui keeps the pixel measurement of the poster (h1 9.0:1, eyebrow 5.47:1, ghost button 17.7:1 at 1440; 12.5, 10.2, 17.1 at 390). Supersedes d51, d69 and the video parts of d63 and d65",
       "default": "H.264 hero video, 720p, from 48 rem up (d51)",
       "reason": "owner: best performance; the video was 17.7 MiB and 18 MB of the 18.3 MB home transfer at 1440 (now 246 KB)",
       "costIfWrong": "low: the poster is the first frame; restoring the component is a git show away",
@@ -703,10 +703,10 @@
     {
       "id": "d74",
       "topic": "WordPress sources, capture and parity pipeline deleted",
-      "choice": "Commit b53bc71 removes legacy-public/, src/content/{pages,heads,bottoms,parts,index.json}, src/styles/{inline,site.css}, tools/{extract,strip-sourcemaps,sitemaps,verify-legacy}.mjs, baseline/, capture/, the kit parity scripts and scripts/lib files, exceptions.json, proposals.json, inert-forms.json, docs/media-plan.json and the npm scripts that served them; kept: scripts/review-serve.mjs (contentTypeFor inlined), scripts/state.mjs, scripts/build-redirects.mjs and scripts/lib/{node-version,redirects-csv,review-routes}.mjs. The wp check has no allowlist. css-tree, pixelmatch and playwright leave devDependencies (the checks load Playwright from the kit). The page-text and seo-data tests compare pages with their content files (legal and blog Markdown, the Ueber uns text), not with the capture; the verbatim-from-old-site guard ends with the capture, git history keeps it. .conversion/media-cache and video-download stay on disk, git-ignored. Supersedes d52 (STAGE4_SOURCES)",
+      "choice": "Commit 923ee48 removes legacy-public/, src/content/{pages,heads,bottoms,parts,index.json}, src/styles/{inline,site.css}, tools/{extract,strip-sourcemaps,sitemaps,verify-legacy}.mjs, baseline/, capture/, the kit parity scripts and scripts/lib files, exceptions.json, proposals.json, inert-forms.json, docs/media-plan.json and the npm scripts that served them; kept: scripts/review-serve.mjs (contentTypeFor inlined), scripts/state.mjs, scripts/build-redirects.mjs and scripts/lib/{node-version,redirects-csv,review-routes}.mjs. The wp check has no allowlist. css-tree, pixelmatch and playwright leave devDependencies (the checks load Playwright from the kit). The page-text and seo-data tests compare pages with their content files (legal and blog Markdown, the Ueber uns text), not with the capture; the verbatim-from-old-site guard ends with the capture, git history keeps it. .conversion/media-cache and video-download stay on disk, git-ignored. Supersedes d52 (STAGE4_SOURCES)",
       "default": "keep capture/ and baseline/ until the migration is signed off",
       "reason": "plan Stage 4; owner: no WordPress anywhere in the repository",
-      "costIfWrong": "low: git checkout 4cd6d4c -- <path> restores any of it (docs/LAUNCH.md)",
+      "costIfWrong": "low: git checkout 3b4f544 -- <path> restores any of it (docs/LAUNCH.md)",
       "date": "2026-11-25"
     },
     {

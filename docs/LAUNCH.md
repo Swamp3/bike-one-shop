@@ -58,11 +58,11 @@ open before launch (accounts, legal sign-off, DNS) is listed in [`TODO.md`](TODO
 ## Restoring the old pages, the capture and the baseline
 
 The old site's markup, the crawl (`capture/`), the parity baseline (`baseline/`), the old scripts and the media plan were deleted from the tree in
-commit `b53bc71` ("refactor: delete the WordPress sources, the capture and the parity pipeline"); the commit before it, `4cd6d4c`, still has them.
+commit `923ee48` ("refactor: delete the WordPress sources, the capture and the parity pipeline"); the commit before it, `3b4f544`, still has them.
 Restore a folder without touching the rest:
 
-    git checkout 4cd6d4c -- capture baseline        # or: scripts src/content/pages tools/extract.mjs ...
+    git checkout 3b4f544 -- capture baseline        # or: scripts src/content/pages tools/extract.mjs ...
     git rm -r --cached capture baseline             # when it should stay untracked
 
-The hero video component is in `7858e4c` and `5103883` (see `TODO.md`). The 1.1 GB of
+The hero video component is in `b85347b` and `8ac7df1` (see `TODO.md`). The 1.1 GB of
 original uploads were never committed; on the machine of the conversion they are in `.conversion/media-cache/` (git-ignored).

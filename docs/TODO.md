@@ -34,7 +34,7 @@ The home hero is the poster photo only (decision d71): best performance, no requ
 
 - [ ] Bring the video back only if it is performance-compatible: measure LCP and transfer with `npm run perf` (also `--throttle slow4g`) before and after, and consider a 540p encode (11.4 MiB at the time), `(pointer: fine)` so tablets and phones never load it, Save-Data and slow-connection checks, and a start only after the load event with `preload="none"`; engineer, blocked by the owner's wish and by those measurements.
 - The encoded file is kept, untracked, in `website/.local/hero.mp4` (H.264 `avc1`, 1280x720, 13.4 s, no audio, faststart, 17.67 MiB; `.local/` is git-ignored, so it exists only on this machine: copy it somewhere safe). The HEVC original is `website/.conversion/video-download/VidOne.mp4` (27.8 MB, also untracked and git-ignored).
-- To restore the component and its checks: `HeroVideo.astro` and `public/hero.mp4` came in with `7858e4c` and the data-conscious play policy with `5103883`; the poster-only change is `9ad7292` (`git show 9ad7292` shows exactly what to put back, including the `net`, `ui` and `size` assertions that now say "no video"). Check the size and net rules and the CSP `media-src 'self'` (still in `public/_headers`) when it returns.
+- To restore the component and its checks: `HeroVideo.astro` came in with `b85347b` (the file `public/hero.mp4` is no longer in history: copy it back from `.local/hero.mp4`) and the data-conscious play policy with `8ac7df1`; the poster-only change is `ea77c8a` (`git show ea77c8a` shows exactly what to put back, including the `net`, `ui` and `size` assertions that now say "no video"). Check the size and net rules and the CSP `media-src 'self'` (still in `public/_headers`) when it returns.
 
 ## Product and information architecture
 
@@ -61,5 +61,5 @@ The home hero is the poster photo only (decision d71): best performance, no requ
 
 ## Repository
 
-- [ ] Squash the 26.5 MiB HEVC `public/VidOne.mp4` out of history before any push (it came in with `6e06eac` and left with `b1cb7ab`; it is over the 25 MiB Cloudflare Pages file limit); the 17.7 MiB `hero.mp4` (`7858e4c` to `9ad7292`) should go with it unless the owner wants it in history. Engineer, with the owner's go-ahead for a history rewrite (nothing is pushed yet).
-- [ ] Merge `website/` into the bike-one-shop repository with its history (`.working-files/astro-native-redesign/` in the parent repository holds the plan and the stage notes); engineer, after the squash above.
+- [x] The 26.5 MiB HEVC `public/VidOne.mp4` and the 17.7 MiB `public/hero.mp4` were removed from the whole history (2026-11-26, `git filter-repo`; the commit hashes changed). The only copies are `.local/hero.mp4` and `.conversion/video-download/VidOne.mp4`. A backup of the history as it was is the bundle `bike-one-shop-website-before-filter.bundle` next to the repository (outside it).
+- [x] `website/` merged into the bike-one-shop repository with its history (see the merge commit on the import branch).
