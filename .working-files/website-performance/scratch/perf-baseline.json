@@ -1,0 +1,368 @@
+[
+ {
+  "width": 1440,
+  "url": "/",
+  "th": "none",
+  "lcp": 64,
+  "lcpEl": "img hero.BFUzEHrc_ZLOOS6.avif",
+  "fcp": 64,
+  "load": 27,
+  "cls": 0,
+  "n": 14,
+  "kb": 218,
+  "by": {
+   "html": 25,
+   "font": 64,
+   "image": 114,
+   "css": 15
+  },
+  "foreign": 0,
+  "lcps": "80/56/64"
+ },
+ {
+  "width": 1440,
+  "url": "/",
+  "th": "fast4g",
+  "lcp": 260,
+  "lcpEl": "img hero.BFUzEHrc_ZLOOS6.avif",
+  "fcp": 244,
+  "load": 390,
+  "cls": 0,
+  "n": 14,
+  "kb": 218,
+  "by": {
+   "html": 25,
+   "image": 114,
+   "css": 15,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "260/260/260"
+ },
+ {
+  "width": 1440,
+  "url": "/",
+  "th": "slow4g",
+  "lcp": 804,
+  "lcpEl": "img hero.BFUzEHrc_ZLOOS6.avif",
+  "fcp": 680,
+  "load": 1358,
+  "cls": 0,
+  "n": 14,
+  "kb": 218,
+  "by": {
+   "html": 25,
+   "image": 114,
+   "css": 15,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "804/796/804"
+ },
+ {
+  "width": 1440,
+  "url": "/service/",
+  "th": "none",
+  "lcp": 56,
+  "lcpEl": "img fitting.DzWJ8953_Z2h0cmo.avif",
+  "fcp": 56,
+  "load": 34,
+  "cls": 0,
+  "n": 15,
+  "kb": 175,
+  "by": {
+   "html": 19,
+   "font": 64,
+   "image": 77,
+   "css": 15,
+   "js": 0
+  },
+  "foreign": 0,
+  "lcps": "56/56/72"
+ },
+ {
+  "width": 1440,
+  "url": "/service/",
+  "th": "fast4g",
+  "lcp": 272,
+  "lcpEl": "img fitting.DzWJ8953_Z2h0cmo.avif",
+  "fcp": 244,
+  "load": 366,
+  "cls": 0,
+  "n": 15,
+  "kb": 175,
+  "by": {
+   "html": 19,
+   "css": 15,
+   "font": 64,
+   "image": 77,
+   "js": 0
+  },
+  "foreign": 0,
+  "lcps": "272/272/276"
+ },
+ {
+  "width": 1440,
+  "url": "/service/",
+  "th": "slow4g",
+  "lcp": 712,
+  "lcpEl": "img fitting.DzWJ8953_Z2h0cmo.avif",
+  "fcp": 632,
+  "load": 1208,
+  "cls": 0,
+  "n": 15,
+  "kb": 175,
+  "by": {
+   "html": 19,
+   "image": 77,
+   "css": 15,
+   "js": 0,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "712/680/916"
+ },
+ {
+  "width": 1440,
+  "url": "/fahrrad-leasing-die-smarte-al",
+  "th": "none",
+  "lcp": 64,
+  "lcpEl": "img leasing.qyeOZ6iI_Z1i8ET5.avif",
+  "fcp": 64,
+  "load": 24,
+  "cls": 0,
+  "n": 10,
+  "kb": 167,
+  "by": {
+   "html": 22,
+   "css": 14,
+   "image": 68,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "64/64/48"
+ },
+ {
+  "width": 1440,
+  "url": "/fahrrad-leasing-die-smarte-al",
+  "th": "fast4g",
+  "lcp": 264,
+  "lcpEl": "img leasing.qyeOZ6iI_Z1i8ET5.avif",
+  "fcp": 216,
+  "load": 319,
+  "cls": 0,
+  "n": 10,
+  "kb": 167,
+  "by": {
+   "html": 22,
+   "css": 14,
+   "image": 68,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "260/276/264"
+ },
+ {
+  "width": 1440,
+  "url": "/fahrrad-leasing-die-smarte-al",
+  "th": "slow4g",
+  "lcp": 948,
+  "lcpEl": "img leasing.qyeOZ6iI_Z1i8ET5.avif",
+  "fcp": 664,
+  "load": 1068,
+  "cls": 0,
+  "n": 10,
+  "kb": 167,
+  "by": {
+   "html": 22,
+   "image": 68,
+   "css": 14,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "960/948/948"
+ },
+ {
+  "width": 390,
+  "url": "/",
+  "th": "none",
+  "lcp": 56,
+  "lcpEl": "img hero.BFUzEHrc_1Jmbuz.avif",
+  "fcp": 56,
+  "load": 25,
+  "cls": 0,
+  "n": 12,
+  "kb": 119,
+  "by": {
+   "html": 25,
+   "font": 64,
+   "image": 15,
+   "css": 15
+  },
+  "foreign": 0,
+  "lcps": "56/64/48"
+ },
+ {
+  "width": 390,
+  "url": "/",
+  "th": "fast4g",
+  "lcp": 260,
+  "lcpEl": "img hero.BFUzEHrc_1Jmbuz.avif",
+  "fcp": 244,
+  "load": 344,
+  "cls": 0,
+  "n": 12,
+  "kb": 119,
+  "by": {
+   "html": 25,
+   "css": 15,
+   "font": 64,
+   "image": 15
+  },
+  "foreign": 0,
+  "lcps": "260/236/264"
+ },
+ {
+  "width": 390,
+  "url": "/",
+  "th": "slow4g",
+  "lcp": 636,
+  "lcpEl": "img hero.BFUzEHrc_1Jmbuz.avif",
+  "fcp": 636,
+  "load": 1005,
+  "cls": 0,
+  "n": 12,
+  "kb": 119,
+  "by": {
+   "html": 25,
+   "image": 15,
+   "css": 15,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "644/636/636"
+ },
+ {
+  "width": 390,
+  "url": "/service/",
+  "th": "none",
+  "lcp": 60,
+  "lcpEl": "img fitting.DzWJ8953_kG8RP.avif",
+  "fcp": 60,
+  "load": 35,
+  "cls": 0,
+  "n": 15,
+  "kb": 140,
+  "by": {
+   "html": 19,
+   "css": 15,
+   "image": 42,
+   "js": 0,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "44/60/64"
+ },
+ {
+  "width": 390,
+  "url": "/service/",
+  "th": "fast4g",
+  "lcp": 248,
+  "lcpEl": "img fitting.DzWJ8953_kG8RP.avif",
+  "fcp": 236,
+  "load": 349,
+  "cls": 0,
+  "n": 15,
+  "kb": 140,
+  "by": {
+   "html": 19,
+   "css": 15,
+   "font": 64,
+   "image": 42,
+   "js": 0
+  },
+  "foreign": 0,
+  "lcps": "248/276/248"
+ },
+ {
+  "width": 390,
+  "url": "/service/",
+  "th": "slow4g",
+  "lcp": 628,
+  "lcpEl": "img fitting.DzWJ8953_kG8RP.avif",
+  "fcp": 628,
+  "load": 1102,
+  "cls": 0,
+  "n": 15,
+  "kb": 140,
+  "by": {
+   "html": 19,
+   "image": 42,
+   "css": 15,
+   "js": 0,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "620/640/628"
+ },
+ {
+  "width": 390,
+  "url": "/fahrrad-leasing-die-smarte-al",
+  "th": "none",
+  "lcp": 60,
+  "lcpEl": "img leasing.qyeOZ6iI_kswJ1.avif",
+  "fcp": 60,
+  "load": 24,
+  "cls": 0,
+  "n": 10,
+  "kb": 115,
+  "by": {
+   "html": 22,
+   "css": 14,
+   "image": 16,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "48/60/64"
+ },
+ {
+  "width": 390,
+  "url": "/fahrrad-leasing-die-smarte-al",
+  "th": "fast4g",
+  "lcp": 216,
+  "lcpEl": "img leasing.qyeOZ6iI_kswJ1.avif",
+  "fcp": 216,
+  "load": 315,
+  "cls": 0,
+  "n": 10,
+  "kb": 115,
+  "by": {
+   "html": 22,
+   "css": 14,
+   "image": 16,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "224/216/216"
+ },
+ {
+  "width": 390,
+  "url": "/fahrrad-leasing-die-smarte-al",
+  "th": "slow4g",
+  "lcp": 620,
+  "lcpEl": "img leasing.qyeOZ6iI_kswJ1.avif",
+  "fcp": 620,
+  "load": 564,
+  "cls": 0,
+  "n": 10,
+  "kb": 115,
+  "by": {
+   "html": 22,
+   "image": 16,
+   "css": 14,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "616/620/624"
+ }
+]

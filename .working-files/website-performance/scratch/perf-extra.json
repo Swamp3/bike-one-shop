@@ -1,0 +1,166 @@
+[
+ {
+  "width": 1440,
+  "url": "/blog/",
+  "th": "none",
+  "lcp": 52,
+  "lcpEl": "p ",
+  "fcp": 52,
+  "load": 49,
+  "cls": 0,
+  "n": 14,
+  "kb": 135,
+  "by": {
+   "html": 17,
+   "font": 64,
+   "css": 13,
+   "image": 42
+  },
+  "foreign": 0,
+  "lcps": "52/48/64"
+ },
+ {
+  "width": 1440,
+  "url": "/blog/",
+  "th": "slow4g",
+  "lcp": 540,
+  "lcpEl": "p ",
+  "fcp": 540,
+  "load": 464,
+  "cls": 0,
+  "n": 14,
+  "kb": 135,
+  "by": {
+   "html": 17,
+   "css": 13,
+   "image": 42,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "532/540/544"
+ },
+ {
+  "width": 1440,
+  "url": "/ueber-uns/",
+  "th": "none",
+  "lcp": 64,
+  "lcpEl": "img fitting.DzWJ8953_Z1cA7rS.avif",
+  "fcp": 64,
+  "load": 31,
+  "cls": 0,
+  "n": 12,
+  "kb": 168,
+  "by": {
+   "html": 15,
+   "font": 64,
+   "image": 74,
+   "css": 14,
+   "js": 0
+  },
+  "foreign": 0,
+  "lcps": "68/64/60"
+ },
+ {
+  "width": 1440,
+  "url": "/ueber-uns/",
+  "th": "slow4g",
+  "lcp": 1144,
+  "lcpEl": "img fitting.DzWJ8953_Z1cA7rS.avif",
+  "fcp": 660,
+  "load": 1108,
+  "cls": 0,
+  "n": 12,
+  "kb": 168,
+  "by": {
+   "html": 15,
+   "image": 74,
+   "css": 14,
+   "js": 0,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "1152/1140/1144"
+ },
+ {
+  "width": 390,
+  "url": "/blog/",
+  "th": "none",
+  "lcp": 60,
+  "lcpEl": "p ",
+  "fcp": 60,
+  "load": 28,
+  "cls": 0,
+  "n": 12,
+  "kb": 114,
+  "by": {
+   "html": 17,
+   "css": 13,
+   "image": 20,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "68/60/44"
+ },
+ {
+  "width": 390,
+  "url": "/blog/",
+  "th": "slow4g",
+  "lcp": 536,
+  "lcpEl": "p ",
+  "fcp": 536,
+  "load": 463,
+  "cls": 0,
+  "n": 12,
+  "kb": 114,
+  "by": {
+   "html": 17,
+   "css": 13,
+   "image": 20,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "532/536/544"
+ },
+ {
+  "width": 390,
+  "url": "/ueber-uns/",
+  "th": "none",
+  "lcp": 64,
+  "lcpEl": "img fitting.DzWJ8953_S63o3.avif",
+  "fcp": 64,
+  "load": 31,
+  "cls": 0,
+  "n": 12,
+  "kb": 118,
+  "by": {
+   "html": 15,
+   "css": 14,
+   "js": 0,
+   "image": 24,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "64/40/64"
+ },
+ {
+  "width": 390,
+  "url": "/ueber-uns/",
+  "th": "slow4g",
+  "lcp": 688,
+  "lcpEl": "img fitting.DzWJ8953_S63o3.avif",
+  "fcp": 664,
+  "load": 937,
+  "cls": 0,
+  "n": 12,
+  "kb": 118,
+  "by": {
+   "html": 15,
+   "image": 24,
+   "css": 14,
+   "js": 0,
+   "font": 64
+  },
+  "foreign": 0,
+  "lcps": "688/692/676"
+ }
+]
