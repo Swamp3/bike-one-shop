@@ -753,6 +753,15 @@
       "reason": "owner asked for eager where in the first view; the measurement shows the text LCP gets slower, so the owner decision is not applied (acceptance: other pages unchanged or better)",
       "costIfWrong": "none: the thumbnails load a moment after the layout",
       "date": "2026-11-27"
+    },
+    {
+      "id": "d80",
+      "topic": "AVIF quality 45",
+      "choice": "astro.config.mjs image.service.config.avif.quality 45 (sharp default 50; WebP and JPEG stay at 80). All AVIF files of dist/ 1312 KB to 1073 KB (-18 %); the eight photos at the widths the site delivers 942 KB to 765 KB (-18.8 %), PSNR about 1 dB lower; crops of beratung, konfiguration, leasing, fitting looked at 1:1 and magnified 2x next to q50 and the original: only fine spokes are slightly softer at 2x magnification, nothing visible at display size. Astro caches encoded images in node_modules/.astro/assets keyed without the quality, so after a quality change that folder must be deleted once",
+      "default": "quality 50 (sharp default)",
+      "reason": "owner: apply q45 if no visible damage on the photos",
+      "costIfWrong": "a little softness in fine detail; set the value back to 50 and delete node_modules/.astro/assets",
+      "date": "2026-11-27"
     }
   ],
   "counts": {},
