@@ -771,6 +771,15 @@
       "reason": "owner: drop unused subsets and glyphs, measure the saving",
       "costIfWrong": "a character outside the subset falls back to Arial for that glyph; the size check catches it before release",
       "date": "2026-11-27"
+    },
+    {
+      "id": "d82",
+      "topic": "speculation rules: prefetch of internal pages",
+      "choice": "public/speculation-rules.json (prefetch only, eagerness conservative = on pointer down, where href_matches /* and not /feed/*, so the shop and every other host never match) delivered by a Speculation-Rules header in the /* rule of public/_headers, because the CSP script-src self blocks inline rules; the file has Content-Type application/speculationrules+json and a one-day cache. Chrome 158: HTMLScriptElement.supports true, Preload.ruleSetUpdated without error, candidates all same-origin, pointer down on a menu link gives prefetch status Ready, 0 foreign requests; WebKit (Playwright) also fetches the file and logs no error. headers check asserts header, MIME type and the rule content; net asserts the Chrome behaviour (CDP Preload domain); both proved red. The review server applies the Content-Type rule of _headers. Costs one 166 byte request per page",
+      "default": "no speculation rules",
+      "reason": "owner: prefetch the main internal navigation links with conservative eagerness, never the shop",
+      "costIfWrong": "a wasted prefetch of a 20 KB page on pointer down; remove the header line to switch it off",
+      "date": "2026-11-27"
     }
   ],
   "counts": {},

@@ -6,10 +6,18 @@
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Speculation-Rules: "/speculation-rules.json"
   Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; media-src 'self'; frame-src https://www.etermin.net https://www.google.com/maps https://www.google.com/maps/ https://bike-leasing-calculator.jobrad.org; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Prefetch rules for Chromium: delivered as a file named by the Speculation-Rules header, because the CSP (script-src 'self')
+# blocks inline <script type=speculationrules>. Prefetch only, same-origin pages, on pointer down (eagerness conservative);
+# the shop and every other host never match (decision d82). The Content-Type is required, Chrome ignores the file otherwise.
+/speculation-rules.json
+  Content-Type: application/speculationrules+json
+  Cache-Control: public, max-age=86400
 
 # Icons are not hashed: one day instead of a conditional request on every visit (decision d78)
 /favicon.ico

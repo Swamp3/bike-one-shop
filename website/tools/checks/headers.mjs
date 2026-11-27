@@ -3,6 +3,8 @@
 //  - the CSP: everything 'self', no unsafe-inline, unsafe-eval, wildcard or http: source, frame-src exactly the three embed
 //    hosts, object-src 'none', base-uri, form-action and frame-ancestors set
 //  - X-Robots-Tag: noindex for https://bike-one.dev/* and https://*.pages.dev/*
+//  - speculation rules: the /* rule names /speculation-rules.json (Speculation-Rules header), the file is typed
+//    application/speculationrules+json and holds prefetch rules only: conservative, same-origin paths, no host, no prerender
 //  - caching: /_astro/* immutable for a year (hashed files), the two unhashed icons one day
 //  - Cloudflare limits: _headers 100 rules, _redirects 2000 static and 100 dynamic rules, lines under 1000 characters
 //  - no http:// URL in any text file of dist/ (other than XML namespaces): no mixed content
@@ -46,6 +48,15 @@ export function run() {
     const frames = csp['frame-src'] ?? [];
     if ([...frames].sort().join(' ') !== [...FRAME_HOSTS].sort().join(' ')) problems.push(`CSP frame-src is ${frames.join(' ')}, want exactly ${FRAME_HOSTS.join(' ')}`);
   }
+  if (all?.['speculation-rules'] !== '"/speculation-rules.json"') problems.push(`Speculation-Rules is ${all?.['speculation-rules']}, want "/speculation-rules.json" (the CSP blocks inline rules)`);
+  if (rules.find((r) => r.path === '/speculation-rules.json')?.headers['content-type'] !== 'application/speculationrules+json') problems.push('/speculation-rules.json has no Content-Type: application/speculationrules+json');
+  try {
+    const raw = fs.readFileSync(path.join(DIST, 'speculation-rules.json'), 'utf8');
+    const spec = JSON.parse(raw);
+    if (Object.keys(spec).join() !== 'prefetch') problems.push(`speculation-rules.json has ${Object.keys(spec).join(', ')}, want prefetch only`);
+    for (const rule of spec.prefetch ?? []) if (rule.eagerness !== 'conservative') problems.push(`a prefetch rule has eagerness ${rule.eagerness}, want conservative`);
+    if (/https?:|\/\//.test(raw.replace(/"\/\*"/g, ''))) problems.push('speculation-rules.json names a host: rules must match same-origin paths only');
+  } catch (error) { problems.push(`speculation-rules.json: ${error.message}`); }
   for (const host of ['https://bike-one.dev/*', 'https://*.pages.dev/*']) if (rules.find((r) => r.path === host)?.headers['x-robots-tag'] !== 'noindex') problems.push(`${host} has no X-Robots-Tag: noindex`);
   if (rules.find((r) => r.path === '/_astro/*')?.headers['cache-control'] !== 'public, max-age=31536000, immutable') problems.push('/_astro/* is not immutable');
   for (const icon of ['/favicon.ico', '/apple-touch-icon.png']) if (rules.find((r) => r.path === icon)?.headers['cache-control'] !== 'public, max-age=86400') problems.push(`${icon} is not cached for one day`);
