@@ -1,8 +1,9 @@
 // Check `net`: load every native page in system Chrome and in WebKit, at 1440 and 390 wide, from the review server
 // (default http://localhost:4321, it serves dist/), scroll, open the menu, and fail on any request to a non-local host,
 // any 4xx/5xx, any console error or page error. The page's Content-Security-Policy from dist/_headers is applied, so a
-// violation shows up as a console error. Embeds stay unclicked. No page requests a video or audio file (the home hero is
-// the poster photo only, decision d71). Chrome also parses the speculation rules of the Speculation-Rules header (prefetch of
+// violation shows up as a console error. Embeds stay unclicked. Only the home page at 1440 may request a video, and Chrome's
+// requests for it are counted exactly (decision d83): none before the load event, none at 390, with reduced motion, with a touch
+// screen, with Save-Data, cellular, 3g or 2g; exactly one, at most 1 MiB, on a good connection. No page requests audio. Chrome also parses the speculation rules of the Speculation-Rules header (prefetch of
 // same-origin pages on pointer down, nothing foreign; decision d82). Prints requests and bytes of the home page.
 import { isMain, nativePages, report } from '../lib/dist.mjs';
 import { abortForeign, applyHeaders, BASE, needServer, PLAYWRIGHT } from '../lib/browser.mjs';
@@ -28,7 +29,7 @@ export async function run() {
       page.on('console', (m) => { if (m.type() === 'error') at(current, `console error: ${m.text()}`); });
       page.on('requestfailed', (r) => at(current, `request failed: ${r.url()} ${r.failure()?.errorText ?? ''}`));
       let counts = new Map();
-      page.on('request', (r) => { if (!r.url().startsWith(BASE)) at(current, `request to ${r.url()}`); else if (MEDIA_FILE.test(r.url()) || r.resourceType() === 'media') at(current, `video or audio requested: ${r.url()}`); else if (r.url().includes('/_astro/')) counts.set(r.url(), (counts.get(r.url()) ?? 0) + 1); });
+      page.on('request', (r) => { if (!r.url().startsWith(BASE)) at(current, `request to ${r.url()}`); else if ((MEDIA_FILE.test(r.url()) || r.resourceType() === 'media') && !(current === '/' && viewport.width >= 768)) at(current, `video or audio requested: ${r.url()}`); else if (r.url().includes('/_astro/')) counts.set(r.url(), (counts.get(r.url()) ?? 0) + 1); });
       page.on('response', async (r) => {
         if (r.status() >= 400) at(current, `${r.status()} ${r.url()}`);
         if (current === '/' && stats) { stats.count += 1; const len = Number(r.headers()['content-length'] ?? (await r.body().catch(() => Buffer.alloc(0))).length); stats.bytes += len; const t = r.headers()['content-type'] ?? ''; const k = /html/.test(t) ? 'html' : /css/.test(t) ? 'css' : /javascript/.test(t) ? 'js' : /font|woff/.test(t) ? 'font' : /image/.test(t) ? 'image' : 'other'; stats.by[k] = (stats.by[k] ?? 0) + len; }
@@ -55,6 +56,57 @@ export async function run() {
         if (p.url === '/' && bname === 'chrome') homeNote += `${viewport.width}px: ${stats.count} requests, ${(stats.bytes / 1024).toFixed(0)} KB (${Object.entries(stats.by).map(([k, v]) => `${k} ${(v / 1024).toFixed(0)} KB`).join(', ')}); `;
       }
       await context.close();
+    }
+    // the hero film in Chrome: when it may be requested, and that it is requested once
+    if (bname === 'chrome') {
+      const cases = [
+        { label: '1440 wide, mouse, good connection', film: true, long: true, slowLoad: true },
+        { label: 'wifi 4g reported by the Network Information API', film: true, connection: { type: 'wifi', effectiveType: '4g', saveData: false } },
+        { label: '390 wide', viewport: { width: 390, height: 844 } },
+        { label: 'prefers-reduced-motion', reducedMotion: 'reduce' },
+        { label: 'touch screen (pointer: coarse) at 1440', hasTouch: true, isMobile: true },
+        { label: 'Save-Data', connection: { saveData: true, effectiveType: '4g' } },
+        { label: 'cellular', connection: { type: 'cellular', effectiveType: '4g' } },
+        { label: '3g', connection: { effectiveType: '3g' } },
+        { label: '2g', connection: { effectiveType: '2g' } },
+      ];
+      for (const c of cases) {
+        const at = (msg) => problems.push(`chrome hero film (${c.label}): ${msg}`);
+        const context = await browser.newContext({ viewport: c.viewport ?? VIEWPORTS[0], reducedMotion: c.reducedMotion, hasTouch: c.hasTouch, isMobile: c.isMobile });
+        const page = await context.newPage();
+        if (c.connection) await page.addInitScript((conn) => { const t = new EventTarget(); Object.assign(t, conn); Object.defineProperty(navigator, 'connection', { get: () => t, configurable: true }); }, c.connection);
+        const files = [];
+        page.on('response', (r) => { if (MEDIA_FILE.test(r.url())) files.push({ url: r.url(), status: r.status(), bytes: Number(r.headers()['content-length'] ?? 0) }); });
+        await applyHeaders(page);
+        await abortForeign(page);
+        // a slow line until the load event, so a film that starts too early has its request in before the load event
+        const cdp = c.slowLoad ? await context.newCDPSession(page) : null;
+        const line = (latency, kbit) => cdp.send('Network.emulateNetworkConditions', { offline: false, latency, downloadThroughput: kbit < 0 ? -1 : (kbit * 1024) / 8, uploadThroughput: kbit < 0 ? -1 : (750 * 1024) / 8 });
+        if (cdp) { await cdp.send('Network.enable'); await line(150, 1600); }
+        await page.goto(`${BASE}/`, { waitUntil: 'load' });
+        if (cdp) await line(0, -1);
+        await page.waitForTimeout(c.film ? 3500 : 2500);
+        const state = await page.evaluate(() => {
+          const v = document.querySelector('.hero-video');
+          const nav = performance.getEntriesByType('navigation')[0];
+          return { src: v.getAttribute('src'), paused: v.paused, t: v.currentTime, playing: v.classList.contains('is-playing'), early: performance.getEntriesByType('resource').filter((r) => r.initiatorType === 'video' && r.startTime < nav.loadEventStart).length, button: !document.querySelector('.hero-toggle').hidden };
+        });
+        if (state.early) at('a video request started before the load event');
+        if (!c.film) {
+          if (files.length || state.src || !state.paused || state.playing || state.button) at(`no film expected, but ${JSON.stringify({ files: files.length, src: state.src, paused: state.paused, button: state.button })}`);
+        } else {
+          if (!state.playing || state.paused || state.t < 0.5 || !state.button) at(`the film did not start (${JSON.stringify(state)})`);
+          if (c.long) {
+            // wait through one loop restart: the film must not be requested again
+            await page.waitForTimeout(6500);
+            const t = await page.evaluate(() => document.querySelector('.hero-video').currentTime);
+            if (t > 6) at(`the film did not loop (t ${t.toFixed(1)} s after 10 s)`);
+          }
+          if (files.length !== 1) at(`${files.length} video requests (exactly one): ${files.map((f) => `${f.url.replace(BASE, '')} ${f.status}`).join(', ')}`);
+          for (const f of files) if (f.bytes > 1048576) at(`${f.url} is ${f.bytes} bytes (at most 1 MiB)`);
+        }
+        await context.close();
+      }
     }
     // speculation rules (Chromium only; Safari and Firefox ignore them): the header's file is parsed without error, every attempt
     // is a same-origin page that is not the feed, a pointer down on a menu link prefetches that page, nothing foreign is asked for

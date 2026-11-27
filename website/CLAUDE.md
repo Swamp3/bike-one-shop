@@ -19,7 +19,10 @@ Start with `README.md` (commands), `docs/redesign.md` (why the site is built thi
   (`astro:assets`, AVIF and WebP).
 - Content collections (`src/content.config.ts`): `stores`, `brands`, `legal` (Impressum and Datenschutz, the old site's text unchanged), `blog` (five posts).
 - Third-party content (etermin.net booking, Google Maps, the JobRad calculator) only loads behind the click-to-load `components/Embed.astro`.
-- The home hero is the poster photo only: no video, no pause button, no request for a video (decision d71; how to bring it back: `docs/TODO.md`).
+- The home hero plays a short silent film (decision d83, `docs/hero-video.md`): its poster is the film's first frame (`HeroPoster.astro`, a portrait crop
+  below 48rem), `HeroVideo.astro` sets the `src` and plays only after the load event and an idle moment, with the hero in view, on a screen of at least
+  48rem with a mouse, without reduced motion, Save-Data or a metered or slow connection; a pause button stays. Files: `public/hero.webm` (AV1) and
+  `public/hero.mp4` (H.264), each at most 1.0 MiB.
 - Text is never retyped or paraphrased. Legal text is not rewritten without the lawyer's text (`docs/TODO.md`, Legal).
 - Fonts come from `@fontsource` (pinned), Roboto and Roboto Condensed, woff2 via Vite. Nothing loads from googleapis or gstatic.
 - Shell scripts that stay: `scripts/review-serve.mjs` (serves `dist/` on :4321 with `dist/_redirects` applied; the checks `net`, `ui`, `embeds`,
@@ -38,13 +41,17 @@ npm test
     source, `redirects.csv` is what the generator writes, the frozen list agrees with `tools/redirect-map.mjs`.
   - `links`: every internal link and asset reference resolves to a built file. `seo`: titles, descriptions, claims, JSON-LD types and facts,
     breadcrumbs, Open Graph, link text, inbound links, sitemap, RSS. `a11y`: HTML rules and the contrast of every colour pair of the tokens.
-  - `ui` (Chrome): focus rings, 44 px targets at 390, menu with the keyboard, reduced motion, white text on the photos (pixel measurement of the
-    hero poster and the Ueber uns banner), no horizontal scrolling.
-  - `size`: budgets, image, preload and font rules on every page, no video or audio file in `dist/` and none on a page.
+  - `ui` (Chrome): focus rings, 44 px targets at 390, menu with the keyboard, reduced motion, the hero film's pause button with the keyboard, the
+    poster against the film's first frame (at most 6 of 255), white text on the photos (pixel measurement of the hero poster, frames of the film
+    and the Ueber uns banner), no horizontal scrolling.
+  - `size`: budgets, image, preload (one per AVIF `<source>`) and font rules (and that no page character falls back from the German font subset) on
+    every page; video: only the home hero's, each file at most 1.0 MiB, the mp4 H.264 faststart without audio, no audio anywhere.
   - `headers`: `_headers`, `_redirects` limits, mixed content. `wp`: no trace of the old site's platform in `dist/` or `src/` (no allowlist; redirect
     sources and `docs/` are not scanned).
   - `net` loads every page in Chrome and WebKit at 1440 and 390 wide against the review server, applies the CSP of `dist/_headers`, fails on any
-    non-local request, any video or audio request, any static file fetched twice, any console or page error.
+    non-local request, any static file fetched twice, any console or page error, any video request outside the home hero's rules (none before
+    the load event, none at 390, with reduced motion, a touch screen, Save-Data, cellular, 3g or 2g; exactly one, at most 1 MiB, otherwise), and that
+    Chrome parses the speculation rules and prefetches a menu link on pointer down.
   - `embeds` clicks, Enter-presses and Space-presses every click-to-load embed under the CSP with every foreign request aborted (never register a
     route after `abortForeign`: Playwright asks the newest route first). Never contact an embed host or the old site from a script or a browser.
 - Playwright is not an npm dependency: the checks import it from `PLAYWRIGHT_MODULE` or `/Users/timo.alts/dev/astro-conversion-kit/node_modules/playwright`
@@ -66,8 +73,9 @@ npm test
 - Canonical, Open Graph, JSON-LD and sitemap URLs use the build origin: `https://bike-one.dev` (or `SITE_ORIGIN`), `https://bike-one.org` in the release build.
 
 ## Hosting
-- Target: Cloudflare Pages, static output. Headers in `public/_headers` (one `/*` rule: security headers and a CSP without third parties;
-  `frame-src` only the three embed hosts). Launch steps: `docs/LAUNCH.md`.
+- Target: Cloudflare Pages, static output. Headers in `public/_headers` (one `/*` rule: security headers, a CSP without third parties, `frame-src`
+  only the three embed hosts, and the `Speculation-Rules` header that names `/speculation-rules.json`; cache rules for `/_astro/*`, the icons and the rules
+  file). Launch steps: `docs/LAUNCH.md`.
 
 ## Files
 - `docs/plan.md`: how the site is built and the decision ledger (one row per behaviour change; also in `.conversion/state.json`, added with

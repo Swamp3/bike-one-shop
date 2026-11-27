@@ -64,5 +64,5 @@ Restore a folder without touching the rest:
     git checkout 3b4f544 -- capture baseline        # or: scripts src/content/pages tools/extract.mjs ...
     git rm -r --cached capture baseline             # when it should stay untracked
 
-The hero video component is in `b85347b` and `8ac7df1` (see `TODO.md`). The 1.1 GB of
+The hero film is back in the tree since decision d83 (`docs/hero-video.md`); to take it out again, revert the commit named there. The 1.1 GB of
 original uploads were never committed; on the machine of the conversion they are in `.conversion/media-cache/` (git-ignored).

@@ -8,6 +8,7 @@ import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
+type Preload = { srcset: string; sizes: string; media?: string };
 interface Props {
   title: string;
   description: string;
@@ -16,8 +17,9 @@ interface Props {
   type?: 'website' | 'article';
   noindex?: boolean;
   noCanonical?: boolean;
-  /** The LCP image of the page as an AVIF srcset: preloaded with high priority before the stylesheets are parsed. */
-  preload?: { srcset: string; sizes: string };
+  /** The LCP image of the page as an AVIF srcset: preloaded with high priority before the stylesheets are parsed. An art-directed
+   *  image (the home hero) passes one entry per <source media>, each with that media query. */
+  preload?: Preload | Preload[];
   published?: Date;
   modified?: Date;
   nodes?: Record<string, unknown>[];
@@ -35,7 +37,7 @@ const { preload, ...props } = Astro.props;
     <link rel="alternate" type="application/rss+xml" title="BikeOne Blog" href="/feed/" />
     <!-- the one above-the-fold font file (headline); everything else swaps in -->
     <link rel="preload" href={condensed700} as="font" type="font/woff2" crossorigin />
-    {preload && <link rel="preload" as="image" type="image/avif" imagesrcset={preload.srcset} imagesizes={preload.sizes} fetchpriority="high" />}
+    {[preload ?? []].flat().map((p) => <link rel="preload" as="image" type="image/avif" imagesrcset={p.srcset} imagesizes={p.sizes} media={p.media} fetchpriority="high" />)}
     <SEO {...props} />
   </head>
   <body>

@@ -4,15 +4,19 @@
 //  - no horizontal overflow at 1440 and 390.
 //  - touch targets at 390: every link and button is at least 44 px high and wide, unless it is a link inside a sentence.
 //  - menu at 390: Enter opens it, the first Tab lands on a menu link, Escape closes it and returns to the button.
-//  - prefers-reduced-motion: smooth scrolling and transitions are off.
-//  - text on photos: the white text of the home hero (poster photo only, decision d71) and the Ueber uns banner keeps
-//    4.5:1 (3:1 for the large h1) against the lightest part of the photo behind it, at 1440 and 390.
+//  - prefers-reduced-motion: smooth scrolling and transitions are off, the hero film never starts, no button.
+//  - hero film (home, 1440, decision d83): it starts by itself, its pause button is reachable, Space pauses, Enter plays again, the
+//    label follows; the first frame of the film differs from the poster by at most 6 of 255 per colour value on average (the swap is invisible).
+//  - text on photos: the white text of the home hero and the Ueber uns banner keeps 4.5:1 (3:1 for the large h1) against the
+//    lightest part of the photo behind it: the home poster at 1440 and 390 (the phone crop), the Ueber uns banner, and frames of
+//    the hero film at 5, 25, 50, 75 and 95 % of its length.
 import { PNG } from 'pngjs';
 import { isMain, nativePages, report } from '../lib/dist.mjs';
-import { applyHeaders, BASE, launchers, needServer } from '../lib/browser.mjs';
+import { abortForeign, applyHeaders, BASE, launchers, needServer } from '../lib/browser.mjs';
 import { luminance } from '../lib/contrast.mjs';
 
 const MIN_TARGET = 44;
+const MAX_SWAP_DIFF = 6; // mean absolute difference, poster against the film's first frame, of 255
 
 async function tabThrough(page, at) {
   await page.evaluate(() => { document.activeElement?.blur?.(); window.scrollTo(0, 0); });
@@ -50,6 +54,22 @@ function lightest(png, box) {
   }
   values.sort((a, b) => a - b);
   return values[Math.floor(values.length * 0.98)] ?? 0;
+}
+
+/** Show the film at time t, paused: seek, play until the first frame is presented, pause (a paused video would show a stale frame). */
+const presentAt = (page, t) => page.evaluate(async (time) => {
+  const v = document.querySelector('.hero-video');
+  v.pause(); v.currentTime = time;
+  await new Promise((r) => v.addEventListener('seeked', r, { once: true }));
+  await v.play();
+  await new Promise((r) => v.requestVideoFrameCallback(() => { v.pause(); r(); }));
+}, t);
+
+/** Mean absolute difference (per colour value, 0 to 255) of two same-size screenshots. */
+function meanDiff(a, b) {
+  let sum = 0;
+  for (let i = 0; i < a.data.length; i += 4) for (let c = 0; c < 3; c += 1) sum += Math.abs(a.data[i + c] - b.data[i + c]);
+  return sum / ((a.data.length / 4) * 3);
 }
 
 async function textOnPhoto(page, at, label, selectors) {
@@ -138,8 +158,69 @@ export async function run() {
     await context.close();
   }
 
-  // white text on the photos
+  // reduced motion: the film never starts and has no button
+  {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await abortForeign(page);
+    await page.goto(`${BASE}/`, { waitUntil: 'load' });
+    await page.waitForTimeout(3000);
+    const r = await page.evaluate(() => { const v = document.querySelector('.hero-video'); return { src: v.getAttribute('src'), paused: v.paused, button: !document.querySelector('.hero-toggle').hidden }; });
+    if (r.src || !r.paused || r.button) problems.push(`reduced motion: the hero film started or shows a button (${JSON.stringify(r)})`);
+    await context.close();
+  }
+
+  // the hero film at 1440: button, keyboard, swap, text on its frames
   let measured = 0;
+  {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const page = await context.newPage();
+    await abortForeign(page);
+    const at = (msg) => problems.push(`hero film: ${msg}`);
+    await page.goto(`${BASE}/`, { waitUntil: 'load' });
+    await page.waitForFunction(() => document.querySelector('.hero-video')?.classList.contains('is-playing'), null, { timeout: 15000 }).catch(() => at('the film did not start, so the button never appeared'));
+    const state = () => page.evaluate(() => { const v = document.querySelector('.hero-video'); const b = document.querySelector('.hero-toggle'); return { paused: v.paused, hidden: b.hidden, label: b.getAttribute('aria-label') }; });
+    let s = await state();
+    if (s.hidden) at('the pause button is hidden while the film plays');
+    else {
+      await page.focus('.hero-toggle');
+      await page.keyboard.press('Space');
+      await page.waitForTimeout(300);
+      s = await state();
+      if (!s.paused || !/abspielen/.test(s.label)) at(`Space does not pause (${JSON.stringify(s)})`);
+      await page.waitForTimeout(500);
+      if (!(await state()).paused) at('the film resumed by itself after the visitor paused it');
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(600);
+      s = await state();
+      if (s.paused || !/anhalten/.test(s.label)) at(`Enter does not play again (${JSON.stringify(s)})`);
+      await page.click('.hero-toggle'); // paused for the pixel measurements below; the page's own button, so its script does not resume the film
+      await page.waitForTimeout(300);
+      // the swap: poster (film hidden) against the film's first frame, same crop, copy and shade hidden
+      const duration = await page.evaluate(() => document.querySelector('.hero-video').duration || 8);
+      await page.addStyleTag({ content: '.hero .copy, .hero-toggle { visibility: hidden !important; } .hero::after { display: none !important; } html { scroll-behavior: auto !important; }' });
+      await presentAt(page, 0);
+      const hero = await page.locator('.hero').boundingBox();
+      const clip = { x: 0, y: hero.y, width: hero.width, height: hero.height };
+      const withFilm = PNG.sync.read(await page.screenshot({ clip }));
+      await page.evaluate(() => { document.querySelector('.hero-video').style.visibility = 'hidden'; });
+      await page.waitForTimeout(300);
+      const poster = PNG.sync.read(await page.screenshot({ clip }));
+      await page.evaluate(() => { document.querySelector('.hero-video').style.visibility = ''; });
+      const diff = meanDiff(withFilm, poster);
+      if (process.env.UI_VERBOSE) console.log(`hero film first frame against poster: mean difference ${diff.toFixed(2)} of 255`);
+      if (diff > MAX_SWAP_DIFF) at(`the first frame of the film differs from the poster by ${diff.toFixed(2)} of 255 (at most ${MAX_SWAP_DIFF}): the swap would be visible`);
+      // white text on frames of the film (the copy is visible again)
+      await page.addStyleTag({ content: '.hero .copy, .hero-toggle { visibility: visible !important; } .hero::after { display: block !important; }' });
+      for (const frac of [0.05, 0.25, 0.5, 0.75, 0.95]) {
+        await presentAt(page, duration * frac);
+        measured += await textOnPhoto(page, (m) => problems.push(`1440 ${m}`), `home hero film at ${Math.round(frac * 100)} %`, ['.hero h1', '.hero .eyebrow-light', '.hero .btn--ghost']);
+      }
+    }
+    await context.close();
+  }
+
+  // white text on the photos
   for (const [url, label, selectors, widths] of [['/', 'home hero', ['.hero h1', '.hero .eyebrow-light', '.hero .btn--ghost'], [1440, 390]], ['/ueber-uns/', 'Ueber uns banner', ['.banner h1'], [1440, 390]]]) {
     for (const width of widths) {
       const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
@@ -151,7 +232,7 @@ export async function run() {
     }
   }
   await browser.close();
-  return { problems, note: `${pages.length} pages x 1440, 390: ${stops} focus stops; touch targets, menu, reduced motion; ${measured} text boxes on photos` };
+  return { problems, note: `${pages.length} pages x 1440, 390: ${stops} focus stops; touch targets, menu, hero button and film, reduced motion; ${measured} text boxes on photos` };
 }
 
 if (isMain(import.meta.url)) { const { problems, note } = await run(); process.exit(report('ui', problems, note)); }

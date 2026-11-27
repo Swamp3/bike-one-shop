@@ -13,6 +13,6 @@ node_modules
 /.conversion/review-serve.*
 /.conversion/media-cache/
 /.conversion/video-download/
-# the encoded hero video (H.264, 17.7 MiB), kept out of the site and out of git until it is performance-compatible (docs/TODO.md)
+# the old 17.7 MiB encode of the whole film; the hero now ships public/hero.webm and hero.mp4 (docs/hero-video.md)
 /.local/
 /public/_redirects

@@ -30,11 +30,14 @@ All are verbatim from the old site; the owner decides what stays. Engineer chang
 
 ## Hero video
 
-The home hero is the poster photo only (decision d71): best performance, no request for a video.
+The home hero plays an 8 s showroom loop behind the headline; its first frame is the poster (decision d83, how it is made: `docs/hero-video.md`).
 
-- [ ] Bring the video back only if it is performance-compatible: measure LCP and transfer with `npm run perf` (also `--throttle slow4g`) before and after, and consider a 540p encode (11.4 MiB at the time), `(pointer: fine)` so tablets and phones never load it, Save-Data and slow-connection checks, and a start only after the load event with `preload="none"`; engineer, blocked by the owner's wish and by those measurements.
-- The encoded file is kept, untracked, in `website/.local/hero.mp4` (H.264 `avc1`, 1280x720, 13.4 s, no audio, faststart, 17.67 MiB; `.local/` is git-ignored, so it exists only on this machine: copy it somewhere safe). The HEVC original is `website/.conversion/video-download/VidOne.mp4` (27.8 MB, also untracked and git-ignored).
-- To restore the component and its checks: `HeroVideo.astro` came in with `b85347b` (the file `public/hero.mp4` is no longer in history: copy it back from `.local/hero.mp4`) and the data-conscious play policy with `8ac7df1`; the poster-only change is `ea77c8a` (`git show ea77c8a` shows exactly what to put back, including the `net`, `ui` and `size` assertions that now say "no video"). Check the size and net rules and the CSP `media-src 'self'` (still in `public/_headers`) when it returns.
+- [ ] The visible SCOTT lettering on the bike in the trainer shot (Scott is not one of the seven brands on the site) is accepted for now; owner decides whether a different shot or a re-cut should replace it (brand consistency); engineer re-cuts with `docs/hero-video.md`.
+- [ ] Cloudflare's terms for serving video from Pages (about 1.2 MiB for the two files, 0.5 MiB per visit): owner confirms it is permitted on the plan in use.
+- [x] Image rights and consent of the people in the film: the owner confirmed they are cleared (2026-11-27).
+- [ ] Real Safari (macOS, iOS, Low Power Mode) and Android Chrome: does the film start, does the poster stay when autoplay is refused, does the H.264 fallback look right; owner or engineer with the devices. In Chrome on macOS the H.264 fallback (hardware decode) shows the first frame about 7.7 of 255 brighter than the poster (AV1 2.8); only browsers without AV1 use it.
+- The original film is `website/.conversion/video-download/VidOne.mp4` (HEVC, 27.8 MB, untracked and git-ignored, only on this machine: keep a copy). `website/.local/hero.mp4` (the old 17.67 MiB encode) is no longer needed.
+- Rollback: `git revert` of the hero commit (hash in `.working-files/website-performance/notes-implementation.md`) restores the photo-only hero and the "no video" assertions.
 
 ## Product and information architecture
 
@@ -45,7 +48,8 @@ The home hero is the poster photo only (decision d71): best performance, no requ
 ## Hosting and launch
 
 - [ ] `Strict-Transport-Security` is a Cloudflare zone setting (Edge Certificates), not a `_headers` rule, and `includeSubDomains` also covers `shop.bike-one.org`; owner decides jointly for site and shop.
-- [ ] The `public/_headers` rules (CSP, nosniff, Referrer-Policy, Permissions-Policy, noindex on `bike-one.dev` and `*.pages.dev`) are checked locally only; engineer verifies the live response headers after the first Cloudflare Pages deployment.
+- [ ] The `public/_headers` rules (CSP, nosniff, Referrer-Policy, Permissions-Policy, `Speculation-Rules`, the `Content-Type: application/speculationrules+json` rule for `/speculation-rules.json`, the one-day icon cache, noindex on `bike-one.dev` and `*.pages.dev`) are checked locally only; engineer verifies the live response headers after the first Cloudflare Pages deployment (and that Pages lets a `_headers` rule set the `Content-Type` of that file).
+- [ ] Only checkable after the first Cloudflare Pages deployment (`curl -sI`, then a run of `npm run perf` against the preview URL): brotli on HTML and CSS, HTTP/2 and HTTP/3, Early Hints (whether the `<link rel=preload>` tags are used), `Accept-Ranges` and edge caching of `/hero.webm` and `/hero.mp4` (the local review server answers ranges, Pages is unverified), the 25 MiB file limit (the largest file is 0.69 MiB, `dist/` about 14 MB), and that serving the film is within Cloudflare's terms (see Hero video); engineer, owner for the terms.
 - [ ] Create the 20 Cloudflare Single Redirects of the `?p=` shortlinks from `cloudflare-query-redirects.csv` (a `_redirects` file cannot match a query string); owner or engineer with dashboard access, blocked by the zone.
 - [ ] Search Console export (queries, pages, indexed URLs) to check that no old URL with traffic is missing from `docs/old-urls.json`; owner, blocked by Search Console access.
 - [ ] Custom domain `bike-one.dev` on the Cloudflare Pages project for development, `bike-one.org` at launch (see `docs/LAUNCH.md`); owner, blocked by the Pages project.
@@ -53,7 +57,7 @@ The home hero is the poster photo only (decision d71): best performance, no requ
 
 ## Testing gaps
 
-- [ ] Real Safari and iOS autoplay: not needed now that the hero has no video; only if the video returns.
+- [ ] Real Safari and iOS autoplay of the hero film: see Hero video.
 - [ ] Firefox: Playwright's Firefox does not start on this machine (`Could not find profile folder`); run the site once in real Firefox on macOS or Windows; engineer.
 - [ ] Android Chrome (Save-Data, cellular behaviour, touch targets on a real device); engineer or owner with a phone.
 - [ ] The menu button's `aria-expanded` in Safari (native for popover invokers in Chrome, unverified in Safari); a three-line script would set it everywhere if wanted; engineer.

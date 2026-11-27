@@ -1,0 +1,24 @@
+---
+// The poster of the home hero: the exact first frame of the hero film (decision d83), so the swap to the video is invisible.
+// Art-directed: below 48rem a portrait crop of that frame (phones never play the film), from 48rem the full 16:9 frame.
+// Both go through astro:assets (AVIF, WebP, JPEG fallback, srcset). Sources: src/assets/photos/hero-poster*.jpg, how they
+// are made: docs/hero-video.md. The page preloads the AVIF srcset of each source with its media query (see index.astro).
+import { getImage } from 'astro:assets';
+import wide from '../assets/photos/hero-poster.jpg';
+import portrait from '../assets/photos/hero-poster-portrait.jpg';
+import { HERO, HERO_NARROW, HERO_PORTRAIT, HERO_WIDE } from '../lib/preload';
+
+const FORMATS = ['avif', 'webp', 'jpeg'] as const;
+const sources = async (src: ImageMetadata, { widths, sizes }: { widths: number[]; sizes: string }, media: string) =>
+  Promise.all(FORMATS.map(async (format) => {
+    const image = await getImage({ src, format, widths, sizes });
+    return { media, type: `image/${format}`, srcset: image.srcSet.attribute, sizes, width: src.width, height: src.height };
+  }));
+const all = [...(await sources(portrait, HERO_PORTRAIT, HERO_NARROW)), ...(await sources(wide, HERO, HERO_WIDE))];
+const fallback = all.at(-1)!; // the wide JPEG: the <img> for a browser that reads none of the <source> types
+const img = await getImage({ src: wide, format: 'jpeg', width: 1440 });
+---
+<picture class="bg-pic">
+  {all.map((s) => <source media={s.media} type={s.type} srcset={s.srcset} sizes={s.sizes} width={s.width} height={s.height} />)}
+  <img class="bg" src={img.src} srcset={fallback.srcset} sizes={fallback.sizes} alt="" width={wide.width} height={wide.height} loading="eager" fetchpriority="high" decoding="async" />
+</picture>

@@ -780,6 +780,24 @@
       "reason": "owner: prefetch the main internal navigation links with conservative eagerness, never the shop",
       "costIfWrong": "a wasted prefetch of a 20 KB page on pointer down; remove the header line to switch it off",
       "date": "2026-11-27"
+    },
+    {
+      "id": "d83",
+      "topic": "hero film, first frame as poster, phone crop (supersedes d71, completes d75)",
+      "choice": "The home hero plays an 8 s silent loop cut from the HEVC original (in 3.5 s, out 11.5 s, the last 0.5 s dissolves into the 0.5 s before the start, so the loop restarts without a cut). public/hero.webm AV1 1280x720 24 fps 0.49 MiB (listed first) and public/hero.mp4 H.264 High avc1 faststart 0.67 MiB (fallback), BT.709 limited range, no audio; encodes in docs/hero-video.md. The poster is the clip frame 0 from the 1080p source (src/assets/photos/hero-poster.jpg, and a 864x1080 portrait crop for phones below 48rem, art-directed in HeroPoster.astro with one preload per AVIF source and media query); the mountain photo is not shown in the hero any more (hero.jpg stays as the default Open Graph image). HeroVideo.astro (muted, loop, playsinline, preload none, no src until start) sets the src and plays only after the load event and an idle moment, with the hero in view, at 48rem and wider with a fine pointer, not under reduced motion, Save-Data, cellular, 2g or 3g; fades in on the first presented frame (requestVideoFrameCallback); pauses when the tab is hidden or the hero leaves the view; the pause button (accessible German labels Hintergrundvideo anhalten and abspielen, no aria-pressed) works with the keyboard; a refused autoplay (NotAllowedError) leaves the poster, drops the src and logs nothing. Measured (Chrome 158, local server): home 1440 before the load event 170 KB and no video request, LCP 252 ms fast 4G and 660 ms slow 4G (796 before), CLS 0, one 206 request of 0.49 MiB after load, 0 video bytes at 390; poster against the first video frame mean difference 2.8 of 255 (AV1; the H.264 fallback shows 7.7 in Chrome on macOS with hardware decode). Checks: size (each video at most 1.0 MiB and named by the home page, mp4 H.264 faststart without audio, one video element on / only, preload per AVIF source), net (no video request before load, none at 390, reduced motion, touch, Save-Data, cellular, 3g, 2g; exactly one on a good connection, at most 1 MiB, none again over a loop), ui (button with the keyboard, reduced motion, swap difference at most 6, text contrast on the poster and on frames at 5, 25, 50, 75, 95 %), each proved red by hand. Rollback: git revert of the hero commit",
+      "default": "poster photo only (d71), mountain photo",
+      "reason": "owner: option C of docs in .working-files/website-performance/plan.md, the poster is the first frame of the film, a portrait crop for phones, rights for the people in the film are cleared, the SCOTT lettering is accepted for now",
+      "costIfWrong": "about 0.5 MiB more per desktop visit and a moving background; revert the commit; the SCOTT lettering is a brand-consistency point in docs/TODO.md",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d84",
+      "topic": "hero shade retuned for the film",
+      "choice": "src/pages/index.astro: the vertical gradient of the wide-screen shade keeps 12 % (1f) at 35 % instead of 0 (the horizontal gradient is unchanged). Worst white-text contrast over 32 frames of the film (every 0.25 s) at 1440: h1 13.5:1, eyebrow 5.6:1 (4.7:1 before the change, a thin margin), ghost button 17.2:1; at 800 px: 11.5, 6.4, 17.1",
+      "default": "gradient 00 at 35 % (the mountain photo shade)",
+      "reason": "owner: re-tune the shade if needed; the eyebrow came within 0.2 of the 4.5:1 limit on a bright window frame",
+      "costIfWrong": "the picture is slightly darker in the upper middle",
+      "date": "2026-11-27"
     }
   ],
   "counts": {},
