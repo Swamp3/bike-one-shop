@@ -67,3 +67,13 @@ The home hero plays an 8 s showroom loop behind the headline; its first frame is
 
 - [x] The 26.5 MiB HEVC `public/VidOne.mp4` and the 17.7 MiB `public/hero.mp4` were removed from the whole history (2026-11-26, `git filter-repo`; the commit hashes changed). The only copies are `.local/hero.mp4` and `.conversion/video-download/VidOne.mp4`. A backup of the history as it was is the bundle `bike-one-shop-website-before-filter.bundle` next to the repository (outside it).
 - [x] `website/` merged into the bike-one-shop repository with its history (see the merge commit on the import branch).
+
+## Reviewer notes (legal-security-reviewer, 2026-11-27; verdict: merge pass, dev deploy pass with conditions, launch blocked by the legal items above)
+
+- [ ] Embed iframe: add `sandbox="allow-scripts allow-same-origin allow-forms allow-popups"` and `referrerpolicy="strict-origin-when-cross-origin"` in `src/components/Embed.astro`, then test eTermin and the JobRad calculator (needs the live hosts, so after the first deploy); engineer.
+- [ ] Review server: reject a non-localhost `Host` header and compare `realpathSync` with `dist/` (local tool, optional); engineer.
+- [ ] Run `npm audit` in `website/`; engineer.
+- [ ] Check that the commit author address in the history is the intended one before the repository becomes public; owner.
+- [ ] Datenschutz: also name Cloudflare Pages (server logs, IP, third-country transfer, processing agreement) and the data typed into the eTermin form; Impressum: second quick contact (phone), VAT ID instead of the tax number, drop the discontinued ODR text (all with the lawyer); owner.
+- [ ] Claims: also "bis zu 70 %" (helmet post); PAngV/financing notes for leasing; written consent of the people in the film kept on file (§ 26 BDSG); owner.
+- [ ] Confirm the German accessibility statement (BFSG) is not required; owner.

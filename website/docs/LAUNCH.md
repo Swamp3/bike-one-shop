@@ -1,17 +1,18 @@
 # Launch: BikeOne
 
-The site is static: `npm run build` writes `dist/`, Cloudflare Pages serves it. Every command runs from the repository root. What is still
+The site is static: `npm run build` writes `dist/`, Cloudflare Pages serves it. The site lives in the `website/` folder of the bike-one-shop repository; every `npm` command runs from `website/`. What is still
 open before launch (accounts, legal sign-off, DNS) is listed in [`TODO.md`](TODO.md); this file is the procedure.
 
 ## Cloudflare Pages project
 
 | Setting | Value |
 | --- | --- |
+| Root directory | `website` (the repository also holds the Medusa backend and storefront; set build watch paths to `website/*` so their changes do not start a build) |
 | Framework preset | none (Astro, static output) |
 | Build command | `npm run build` |
 | Build output directory | `dist` |
 | Node version | 22 (`NODE_VERSION=22.23.4`, same as `.nvmrc`) |
-| Production branch | `main` (the redesign is on `astro-rebuild` until the owner merges it) |
+| Production branch | `dev` while the site is developed on `bike-one.dev` (the branch the website PRs merge into); the owner decides when `main` takes over |
 | Environment variables | `SITE_ORIGIN` (optional, default `https://bike-one.dev`); `PUBLIC_INDEXABLE=true` only for the launch build, see below |
 
 - `npm run build` runs `astro build` and then writes `dist/_redirects`, the sitemap (release build only) and the origin safety net.
@@ -61,8 +62,8 @@ The old site's markup, the crawl (`capture/`), the parity baseline (`baseline/`)
 commit `923ee48` ("refactor: delete the WordPress sources, the capture and the parity pipeline"); the commit before it, `3b4f544`, still has them.
 Restore a folder without touching the rest:
 
-    git checkout 3b4f544 -- capture baseline        # or: scripts src/content/pages tools/extract.mjs ...
-    git rm -r --cached capture baseline             # when it should stay untracked
+    git archive 3b4f544 capture baseline | tar -x -C website    # into website/; or name other paths: scripts src/content/pages tools/extract.mjs ...
+    # 3b4f544 is a commit of the imported history, whose tree has the site at its root, hence git archive and not git checkout
 
 The hero film is back in the tree since decision d83 (`docs/hero-video.md`); to take it out again, revert the commit named there. The 1.1 GB of
 original uploads were never committed; on the machine of the conversion they are in `.conversion/media-cache/` (git-ignored).
