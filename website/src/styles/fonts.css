@@ -1,13 +1,15 @@
-/* Self-hosted woff2 from @fontsource (latin and latin-ext only; the browser fetches latin-ext when a character needs it).
-   Written by hand instead of importing the packages' weight CSS: those add a second woff file per weight and have no
-   unicode-range. Nothing here loads from a third party. */
+/* Self-hosted woff2. The three main faces are German-only subsets of @fontsource's latin files (Basic Latin, the umlauts and
+   ss, e-acute, section and copyright signs, guillemets, dashes, quotes, bullet, ellipsis, the breadcrumb arrow, euro, trademark, minus: 14 KB each
+   instead of 22; made with docs/fonts.md, decision d81). The latin-ext files of @fontsource stay as they are: the browser fetches
+   one only when a character needs it (today only the Datenschutz typos do). Written by hand instead of importing the packages' weight CSS:
+   those add a second woff file per weight and have no unicode-range. Nothing here loads from a third party. */
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('../../node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url('../assets/fonts/roboto-de-400.woff2') format('woff2');
+  unicode-range: U+0020-007E, U+00A0, U+00A7, U+00A9, U+00AB, U+00B0, U+00B7, U+00BB, U+00C4, U+00D6, U+00DC, U+00DF, U+00E4, U+00F6, U+00FC, U+00E9, U+2013-2014, U+2018-201E, U+2022, U+2026, U+203A, U+20AC, U+2122, U+2212;
 }
 @font-face {
   font-family: 'Roboto';
@@ -22,8 +24,8 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('../../node_modules/@fontsource/roboto/files/roboto-latin-700-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url('../assets/fonts/roboto-de-700.woff2') format('woff2');
+  unicode-range: U+0020-007E, U+00A0, U+00A7, U+00A9, U+00AB, U+00B0, U+00B7, U+00BB, U+00C4, U+00D6, U+00DC, U+00DF, U+00E4, U+00F6, U+00FC, U+00E9, U+2013-2014, U+2018-201E, U+2022, U+2026, U+203A, U+20AC, U+2122, U+2212;
 }
 @font-face {
   font-family: 'Roboto';
@@ -38,8 +40,8 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('../../node_modules/@fontsource/roboto-condensed/files/roboto-condensed-latin-700-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: url('../assets/fonts/roboto-condensed-de-700.woff2') format('woff2');
+  unicode-range: U+0020-007E, U+00A0, U+00A7, U+00A9, U+00AB, U+00B0, U+00B7, U+00BB, U+00C4, U+00D6, U+00DC, U+00DF, U+00E4, U+00F6, U+00FC, U+00E9, U+2013-2014, U+2018-201E, U+2022, U+2026, U+203A, U+20AC, U+2122, U+2212;
 }
 @font-face {
   font-family: 'Roboto Condensed';

@@ -762,6 +762,15 @@
       "reason": "owner: apply q45 if no visible damage on the photos",
       "costIfWrong": "a little softness in fine detail; set the value back to 50 and delete node_modules/.astro/assets",
       "date": "2026-11-27"
+    },
+    {
+      "id": "d81",
+      "topic": "German-only font subset",
+      "choice": "src/assets/fonts/{roboto-de-400,roboto-de-700,roboto-condensed-de-700}.woff2: subsets of the @fontsource latin files (U+0020-007E, no-break space, section and copyright signs, guillemets, degree, middle dot, the umlauts, ss, e-acute, en and em dash, typographic quotes, bullet, ellipsis, breadcrumb guillemet, euro, trademark, minus) made with fontTools pyftsubset (a one-off tool in a throwaway venv, not a dependency; docs/fonts.md). Font bytes 64 KB to 43 KB (14.0, 14.3, 14.3 KB instead of 21.9, 22.2, 21.1 KB), kerning kept. fonts.css names exactly those ranges; the latin-ext files stay on demand. size now fails when a page text or a CSS content string shows a character the old latin file covered and the subset does not (proved red by removing U+DF and U+203A). Full-page screenshots of 16 pages at 1440 and 390 are pixel identical to before",
+      "default": "the @fontsource latin files (64 KB)",
+      "reason": "owner: drop unused subsets and glyphs, measure the saving",
+      "costIfWrong": "a character outside the subset falls back to Arial for that glyph; the size check catches it before release",
+      "date": "2026-11-27"
     }
   ],
   "counts": {},

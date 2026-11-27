@@ -2,17 +2,23 @@
 // and JavaScript under 10 KB (uncompressed), nothing inline. Image rules (CLS and LCP): every img has width and height,
 // content images are AVIF and WebP in a picture with a srcset, lazy unless they are the one fetchpriority=high image,
 // which is preloaded with exactly its AVIF srcset. Fonts: one preload (crossorigin, a file a @font-face names), every
-// @font-face swaps. No video: dist/ holds no video or audio file and no page has a video, audio or source element (the
+// @font-face swaps, and every character a page shows that the old latin font covered is covered by the German subset. No video: dist/ holds no video or audio file and no page has a video, audio or source element (the
 // home hero is the poster photo only, decision d71; a video must be performance-measured before it returns, docs/TODO.md).
 // Prints the home page's static transfer budget.
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
-import { attr, byTag, DIST, find, isMain, nativePages, parseHtml, report, walk } from '../lib/dist.mjs';
+import { attr, byTag, DIST, find, isMain, nativePages, nodes, parseHtml, report, walk } from '../lib/dist.mjs';
 
 const MAX_FILE = 20 * 1024 * 1024;
 const CSS_BUDGET = 30 * 1024;
 const JS_BUDGET = 10 * 1024;
+// The `latin` font files of @fontsource covered this range; src/assets/fonts/*-de-*.woff2 are German-only subsets of them (docs/fonts.md).
+// No character the old file covered may fall back to a system font now.
+const OLD_LATIN = 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD';
+const ranges = (list) => list.split(',').map((r) => r.trim().replace(/^U\+/i, '').split('-').map((h) => parseInt(h, 16))).map(([a, b]) => [a, b ?? a]);
+const OLD = ranges(OLD_LATIN);
+const covered = (rs, c) => rs.some(([a, b]) => c >= a && c <= b);
 const kb = (n) => `${(n / 1024).toFixed(1)} KB`;
 
 export function run() {
@@ -37,13 +43,20 @@ export function run() {
   if (jsBytes > JS_BUDGET) problems.push(`home JS is ${kb(jsBytes)} (budget ${kb(JS_BUDGET)})`);
   const local2 = (v) => (v?.startsWith('/') && !v.startsWith('//') ? path.join(DIST, v.split(/[?#]/)[0]) : null);
   const fontFaces = new Set();
+  const subset = [];
+  const cssChars = new Set(); // characters a stylesheet draws with `content` (the breadcrumb arrow)
   for (const f of fs.readdirSync(path.join(DIST, '_astro')).filter((n) => n.endsWith('.css')).map((n) => path.join(DIST, '_astro', n))) {
     const css = fs.readFileSync(f, 'utf8');
+    for (const m of css.matchAll(/content:\s*(["'])(.*?)\1/g)) for (const ch of m[2].replace(/\\([0-9a-f]{1,6}) ?/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))) cssChars.add(ch);
     for (const m of css.matchAll(/@font-face\s*\{([^}]*)\}/g)) {
       if (/url\(/.test(m[1]) && !/font-display:\s*swap/.test(m[1])) problems.push(`${path.basename(f)}: an @font-face without font-display: swap`);
       for (const u of m[1].matchAll(/url\(([^)]+)\)/g)) fontFaces.add(u[1].replace(/["']/g, '').replace(/^.*\/_astro\//, '/_astro/'));
+      const range = /unicode-range:\s*([^;}]+)/.exec(m[1])?.[1];
+      if (range && /-de-\d+\.[\w-]*\.?woff2/.test(m[1])) subset.push(...ranges(range));
     }
   }
+  const cssMissing = [...cssChars].filter((ch) => covered(OLD, ch.codePointAt(0)) && !covered(subset, ch.codePointAt(0)) && ch.codePointAt(0) > 32);
+  if (cssMissing.length) problems.push(`CSS content characters the German subset fonts do not cover: ${cssMissing.join(' ')}`);
   for (const page of nativePages()) {
     const pdoc = parseHtml(page.file);
     const at = (msg) => problems.push(`${page.url}: ${msg}`);
@@ -80,6 +93,12 @@ export function run() {
       if (attr(f, 'crossorigin') === undefined || attr(f, 'type') !== 'font/woff2') at('font preload without crossorigin or type font/woff2');
       if (!fontFaces.has(attr(f, 'href'))) at(`the preloaded font ${attr(f, 'href')} is in no @font-face`);
     }
+    const missing = new Set();
+    for (const n of nodes(pdoc)) {
+      if (n.nodeName !== '#text' || ['script', 'style'].includes(n.parentNode?.tagName)) continue;
+      for (const ch of n.value) { const c = ch.codePointAt(0); if (covered(OLD, c) && !covered(subset, c) && c > 32) missing.add(`${ch} (U+${c.toString(16).toUpperCase().padStart(4, '0')})`); }
+    }
+    if (missing.size) at(`text characters the German subset fonts do not cover (they fall back to a system font): ${[...missing].join(', ')}`);
     for (const tag of ['video', 'audio', 'source']) for (const n of byTag(pdoc, tag)) if (tag !== 'source' || n.parentNode.tagName !== 'picture') at(`<${tag}> element: pages carry no video or audio (decision d71)`);
   }
   const gz = (f) => zlib.gzipSync(fs.readFileSync(f)).length;
