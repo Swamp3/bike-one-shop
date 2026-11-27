@@ -726,6 +726,33 @@
       "reason": "owner: one place for what is open",
       "costIfWrong": "none",
       "date": "2026-11-25"
+    },
+    {
+      "id": "d77",
+      "topic": "image sizes match the rendered width",
+      "choice": "src/lib/preload.ts: SERVICE sizes are (min-width: 74rem) 34.5rem, (min-width: 48rem) calc((100vw - 5rem) / 2), calc(100vw - 2rem) (two columns from 48rem, container 72rem); POST sizes are (min-width: 74rem) 72rem, calc(100vw - 2rem). The preload tags use the same constants. Measured over 216 image renders (390, 768, 1440 at 1x and 2x) and at 12 widths from 600 to 1700: every chosen candidate is the smallest that covers the rendered width; wasted AVIF bytes 54 KB (390 at 2x), 99 KB (768 at 1x and 2x) before, 0 after",
+      "default": "sizes of d67 (34rem from 48rem, 72rem from 64rem, 100vw on phones)",
+      "reason": "owner: apply the plan ranked list; tablets fetched the 768 px file where 480 px suffices, phones the 1024 px post cover where 768 px suffices",
+      "costIfWrong": "none: a too small value would only pick a smaller file; the size check keeps the preload identical to the picture",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d78",
+      "topic": "icons cached for one day",
+      "choice": "public/_headers: /favicon.ico and /apple-touch-icon.png get Cache-Control: public, max-age=86400 (they are not hashed, so not immutable); /_astro/* stays immutable for a year, HTML keeps the Pages default (revalidate). The headers check asserts the two rules",
+      "default": "icons on the Pages default (a conditional request per visit)",
+      "reason": "owner: plan option O9",
+      "costIfWrong": "a changed icon takes up to a day to reach a returning visitor",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d79",
+      "topic": "first-row blog thumbnails stay lazy",
+      "choice": "Tried eager (and eager with fetchpriority low) for the first three thumbnails of /blog/: measured LCP at slow 4G 544 to 596 ms (1440) and 540 to 588 ms (390), 572 ms with fetchpriority low, and at 390 an extra 82 KB before the load event for pictures below the fold. Reverted; all thumbnails remain lazy",
+      "default": "lazy (unchanged)",
+      "reason": "owner asked for eager where in the first view; the measurement shows the text LCP gets slower, so the owner decision is not applied (acceptance: other pages unchanged or better)",
+      "costIfWrong": "none: the thumbnails load a moment after the layout",
+      "date": "2026-11-27"
     }
   ],
   "counts": {},

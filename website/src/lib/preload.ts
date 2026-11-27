@@ -4,8 +4,9 @@
 import { getImage } from 'astro:assets';
 
 export const HERO = { widths: [640, 960, 1440, 1920], sizes: '100vw' };
-export const POST = { widths: [480, 768, 1024, 1440], sizes: '(min-width: 64rem) 72rem, 100vw' };
-export const SERVICE = { widths: [480, 768, 1024], sizes: '(min-width: 48rem) 34rem, calc(100vw - 2rem)' };
+export const POST = { widths: [480, 768, 1024, 1440], sizes: '(min-width: 74rem) 72rem, calc(100vw - 2rem)' };
+// two columns from 48rem: (viewport - 2rem margins - 3rem gap) / 2, and the container stops at 72rem (34.5rem per column)
+export const SERVICE = { widths: [480, 768, 1024], sizes: '(min-width: 74rem) 34.5rem, (min-width: 48rem) calc((100vw - 5rem) / 2), calc(100vw - 2rem)' };
 
 export async function preloadAvif(src: ImageMetadata, { widths, sizes }: { widths: number[]; sizes: string }) {
   const image = await getImage({ src, format: 'avif', widths, sizes });

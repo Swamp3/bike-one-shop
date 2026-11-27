@@ -1,0 +1,475 @@
+[
+ {
+  "width": 1440,
+  "url": "/",
+  "th": "none",
+  "lcp": 904,
+  "lcpEl": "img hero.BFUzEHrc_ZLOOS6.avif",
+  "fcp": 904,
+  "cls": 0,
+  "preReq": 14,
+  "preKB": 218,
+  "preBy": {
+   "html": 25,
+   "font": 64,
+   "image": 114,
+   "css": 15
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "904/1504/76"
+ },
+ {
+  "width": 1440,
+  "url": "/",
+  "th": "fast4g",
+  "lcp": 276,
+  "lcpEl": "img hero.BFUzEHrc_ZLOOS6.avif",
+  "fcp": 244,
+  "cls": 0,
+  "preReq": 14,
+  "preKB": 218,
+  "preBy": {
+   "html": 25,
+   "font": 64,
+   "image": 114,
+   "css": 15
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "276/276/272"
+ },
+ {
+  "width": 1440,
+  "url": "/",
+  "th": "slow4g",
+  "lcp": 796,
+  "lcpEl": "img hero.BFUzEHrc_ZLOOS6.avif",
+  "fcp": 672,
+  "cls": 0,
+  "preReq": 14,
+  "preKB": 218,
+  "preBy": {
+   "html": 25,
+   "font": 64,
+   "image": 114,
+   "css": 15
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "804/792/796"
+ },
+ {
+  "width": 1440,
+  "url": "/fahrrad-leasing-die-smarte-altern",
+  "th": "none",
+  "lcp": 60,
+  "lcpEl": "img leasing.qyeOZ6iI_Z1i8ET5.avif",
+  "fcp": 60,
+  "cls": 0,
+  "preReq": 8,
+  "preKB": 124,
+  "preBy": {
+   "html": 22,
+   "font": 21,
+   "image": 68,
+   "css": 14
+  },
+  "postReq": 3,
+  "postKB": 43,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "56/64/60"
+ },
+ {
+  "width": 1440,
+  "url": "/fahrrad-leasing-die-smarte-altern",
+  "th": "fast4g",
+  "lcp": 256,
+  "lcpEl": "img leasing.qyeOZ6iI_Z1i8ET5.avif",
+  "fcp": 220,
+  "cls": 0,
+  "preReq": 10,
+  "preKB": 167,
+  "preBy": {
+   "html": 22,
+   "font": 64,
+   "image": 68,
+   "css": 14
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "252/256/260"
+ },
+ {
+  "width": 1440,
+  "url": "/fahrrad-leasing-die-smarte-altern",
+  "th": "slow4g",
+  "lcp": 952,
+  "lcpEl": "img leasing.qyeOZ6iI_Z1i8ET5.avif",
+  "fcp": 660,
+  "cls": 0,
+  "preReq": 10,
+  "preKB": 167,
+  "preBy": {
+   "html": 22,
+   "font": 64,
+   "image": 68,
+   "css": 14
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "976/952/952"
+ },
+ {
+  "width": 1440,
+  "url": "/service/",
+  "th": "none",
+  "lcp": 56,
+  "lcpEl": "img fitting.DzWJ8953_Z2h0cmo.avif",
+  "fcp": 56,
+  "cls": 0,
+  "preReq": 13,
+  "preKB": 129,
+  "preBy": {
+   "html": 19,
+   "font": 64,
+   "image": 31,
+   "css": 15,
+   "js": 0
+  },
+  "postReq": 3,
+  "postKB": 46,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "64/56/48"
+ },
+ {
+  "width": 1440,
+  "url": "/service/",
+  "th": "fast4g",
+  "lcp": 280,
+  "lcpEl": "img fitting.DzWJ8953_Z2h0cmo.avif",
+  "fcp": 248,
+  "cls": 0,
+  "preReq": 15,
+  "preKB": 175,
+  "preBy": {
+   "html": 19,
+   "font": 64,
+   "css": 15,
+   "image": 77,
+   "js": 0
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "236/280/280"
+ },
+ {
+  "width": 1440,
+  "url": "/service/",
+  "th": "slow4g",
+  "lcp": 708,
+  "lcpEl": "img fitting.DzWJ8953_Z2h0cmo.avif",
+  "fcp": 648,
+  "cls": 0,
+  "preReq": 15,
+  "preKB": 175,
+  "preBy": {
+   "html": 19,
+   "font": 64,
+   "image": 77,
+   "css": 15,
+   "js": 0
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "688/708/712"
+ },
+ {
+  "width": 390,
+  "url": "/",
+  "th": "none",
+  "lcp": 64,
+  "lcpEl": "img hero.BFUzEHrc_1Jmbuz.avif",
+  "fcp": 64,
+  "cls": 0,
+  "preReq": 10,
+  "preKB": 76,
+  "preBy": {
+   "html": 25,
+   "font": 21,
+   "image": 15,
+   "css": 15
+  },
+  "postReq": 3,
+  "postKB": 43,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "64/64/56"
+ },
+ {
+  "width": 390,
+  "url": "/",
+  "th": "fast4g",
+  "lcp": 248,
+  "lcpEl": "img hero.BFUzEHrc_1Jmbuz.avif",
+  "fcp": 244,
+  "cls": 0,
+  "preReq": 12,
+  "preKB": 119,
+  "preBy": {
+   "html": 25,
+   "font": 64,
+   "image": 15,
+   "css": 15
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "248/244/252"
+ },
+ {
+  "width": 390,
+  "url": "/",
+  "th": "slow4g",
+  "lcp": 636,
+  "lcpEl": "img hero.BFUzEHrc_1Jmbuz.avif",
+  "fcp": 636,
+  "cls": 0,
+  "preReq": 12,
+  "preKB": 119,
+  "preBy": {
+   "html": 25,
+   "font": 64,
+   "image": 15,
+   "css": 15
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "636/640/628"
+ },
+ {
+  "width": 390,
+  "url": "/fahrrad-leasing-die-smarte-altern",
+  "th": "none",
+  "lcp": 64,
+  "lcpEl": "img leasing.qyeOZ6iI_kswJ1.avif",
+  "fcp": 64,
+  "cls": 0,
+  "preReq": 8,
+  "preKB": 72,
+  "preBy": {
+   "html": 22,
+   "font": 21,
+   "css": 14,
+   "image": 16
+  },
+  "postReq": 3,
+  "postKB": 43,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "64/56/64"
+ },
+ {
+  "width": 390,
+  "url": "/fahrrad-leasing-die-smarte-altern",
+  "th": "fast4g",
+  "lcp": 224,
+  "lcpEl": "img leasing.qyeOZ6iI_kswJ1.avif",
+  "fcp": 224,
+  "cls": 0,
+  "preReq": 10,
+  "preKB": 115,
+  "preBy": {
+   "html": 22,
+   "font": 64,
+   "image": 16,
+   "css": 14
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "216/224/228"
+ },
+ {
+  "width": 390,
+  "url": "/fahrrad-leasing-die-smarte-altern",
+  "th": "slow4g",
+  "lcp": 616,
+  "lcpEl": "img leasing.qyeOZ6iI_kswJ1.avif",
+  "fcp": 616,
+  "cls": 0,
+  "preReq": 7,
+  "preKB": 51,
+  "preBy": {
+   "html": 22,
+   "image": 16,
+   "css": 14
+  },
+  "postReq": 4,
+  "postKB": 64,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "612/616/616"
+ },
+ {
+  "width": 390,
+  "url": "/service/",
+  "th": "none",
+  "lcp": 64,
+  "lcpEl": "img fitting.DzWJ8953_kG8RP.avif",
+  "fcp": 64,
+  "cls": 0,
+  "preReq": 13,
+  "preKB": 115,
+  "preBy": {
+   "html": 19,
+   "font": 64,
+   "image": 18,
+   "css": 15,
+   "js": 0
+  },
+  "postReq": 3,
+  "postKB": 25,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "64/60/64"
+ },
+ {
+  "width": 390,
+  "url": "/service/",
+  "th": "fast4g",
+  "lcp": 264,
+  "lcpEl": "img fitting.DzWJ8953_kG8RP.avif",
+  "fcp": 248,
+  "cls": 0,
+  "preReq": 15,
+  "preKB": 140,
+  "preBy": {
+   "html": 19,
+   "font": 64,
+   "image": 42,
+   "css": 15,
+   "js": 0
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "280/260/264"
+ },
+ {
+  "width": 390,
+  "url": "/service/",
+  "th": "slow4g",
+  "lcp": 636,
+  "lcpEl": "img fitting.DzWJ8953_kG8RP.avif",
+  "fcp": 636,
+  "cls": 0,
+  "preReq": 15,
+  "preKB": 140,
+  "preBy": {
+   "html": 19,
+   "font": 64,
+   "image": 42,
+   "css": 15,
+   "js": 0
+  },
+  "postReq": 1,
+  "postKB": 0,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "632/636/640"
+ }
+]

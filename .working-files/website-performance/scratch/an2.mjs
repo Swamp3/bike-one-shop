@@ -1,6 +1,6 @@
 import fs from 'node:fs'; import path from 'node:path';
 const DIST = '/Users/timo.alts/dev/bike-one-shop/website/dist';
-const { rows } = JSON.parse(fs.readFileSync('images.json', 'utf8'));
+const { rows } = JSON.parse(fs.readFileSync(process.argv[2] ?? 'images.json', 'utf8'));
 const size = (u) => { try { return fs.statSync(path.join(DIST, new URL(u, 'http://x').pathname)).size; } catch { return 0; } };
 const parse = (ss) => ss.split(',').map((s) => s.trim().split(/\s+/)).filter((c) => c[1]).map(([u, w]) => ({ u, w: parseInt(w) }));
 const out = [];

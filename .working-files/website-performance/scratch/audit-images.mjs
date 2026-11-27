@@ -29,5 +29,5 @@ for (const p of pages()) {
   }
 }
 await browser.close();
-fs.writeFileSync('images.json', JSON.stringify({ rows, foreign }, null, 1));
+fs.writeFileSync(process.argv[2] ?? 'images.json', JSON.stringify({ rows, foreign }, null, 1));
 console.log('rows', rows.length, 'foreign requests attempted', foreign.length, foreign.slice(0, 5));

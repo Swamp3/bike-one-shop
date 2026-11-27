@@ -137,11 +137,34 @@ export function distFile(dist, path, { cleanUrls = false } = {}) {
   return null;
 }
 
-function sendFile(req, res, file, status = 200) {
+// A `Content-Type` rule of dist/_headers for this path wins over the file extension, as on Cloudflare Pages (the speculation
+// rules file is .json but must be application/speculationrules+json). Only exact paths and a trailing * are understood.
+function headersFileType(dist, path) {
+  let text;
+  try { text = readFileSync(join(dist, '_headers'), 'utf8'); } catch { return null; }
+  let match = false;
+  for (const line of text.split('\n')) {
+    if (!line.trim() || line.trim().startsWith('#')) continue;
+    if (!/^\s/.test(line)) { const rule = line.trim(); match = rule.endsWith('*') ? path.startsWith(rule.slice(0, -1)) : rule === path; continue; }
+    const i = line.indexOf(':');
+    if (match && i > 0 && line.slice(0, i).trim().toLowerCase() === 'content-type') return line.slice(i + 1).trim();
+  }
+  return null;
+}
+
+// Answers a single `Range: bytes=a-b` with 206, like Cloudflare Pages does (video needs it to seek and loop).
+function sendFile(req, res, file, status = 200, type = typeOf(file)) {
   const size = statSync(file).size;
-  res.writeHead(status, { 'Content-Type': typeOf(file), 'Content-Length': size });
+  const range = status === 200 ? /^bytes=(\d*)-(\d*)$/.exec(req.headers.range ?? '') : null;
+  let start = 0;
+  let end = size - 1;
+  if (range && (range[1] || range[2])) {
+    if (range[1]) { start = Number(range[1]); if (range[2]) end = Math.min(Number(range[2]), size - 1); } else { start = Math.max(0, size - Number(range[2])); }
+    if (start > end) { res.writeHead(416, { 'Content-Range': `bytes */${size}` }); return res.end(); }
+    res.writeHead(206, { 'Content-Type': type, 'Content-Length': end - start + 1, 'Content-Range': `bytes ${start}-${end}/${size}`, 'Accept-Ranges': 'bytes' });
+  } else res.writeHead(status, { 'Content-Type': type, 'Content-Length': size, 'Accept-Ranges': 'bytes' });
   if (req.method === 'HEAD') return res.end();
-  createReadStream(file).pipe(res);
+  createReadStream(file, { start, end }).pipe(res);
 }
 
 function notFound(req, res, dist) {
@@ -240,7 +263,7 @@ export function handler({ dir }) {
       return res.end();
     }
     const file = distFile(dist, path, { cleanUrls });
-    if (file) return sendFile(req, res, file);
+    if (file) return sendFile(req, res, file, 200, headersFileType(dist, path) ?? typeOf(file));
     const rewrite = table.rewrite(path, search);
     if (rewrite?.external) return proxy(req, res, rewrite.destination);
     if (rewrite) {
