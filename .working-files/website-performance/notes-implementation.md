@@ -8,7 +8,7 @@ All KB are KiB (bytes / 1024), raw bytes (the local server does not compress).
 
 No browser run and no script of the site or of the measurements contacted bike-one.org, an embed host or any other third party: every browser
 context registered the abort route for non-local requests last (or used `route.fallback()` for header routes), and `perf3.mjs` counted foreign
-requests attempted: 0 in all 270 runs.
+requests attempted: 0 in all 162 saved runs (and in the 216-render image audit). The two or three small throwaway probes (canvas colour read of local test videos) loaded only pages of the review server and had no route to count.
 One download for tooling, not by a browser or a site script: `pip install fonttools brotli` into a throwaway virtualenv in the session scratch
 folder (PyPI) to subset the fonts. It is not a repository dependency (nothing in `package.json`, no committed venv); the exact commands are in
 `website/docs/fonts.md`. ffmpeg was already installed.
@@ -22,8 +22,9 @@ folder (PyPI) to subset the fonts. It is not a repository dependency (nothing in
 | 5827a15 | perf: German-only subsets of the three main font files |
 | 202ca3f | perf: prefetch internal pages on pointer down with speculation rules |
 | b2d1b48 | feat: the home hero plays a short film, its first frame is the poster |
-| (next) | perf: one-day cache for the hero film files |
-| (last) | docs: implementation notes of the performance work |
+| c698168 | perf: one-day cache for the hero film files |
+| f85a07c | docs: implementation notes of the performance work |
+| (last) | docs: gate output and corrections in the implementation notes |
 
 Gates (`npm run build`, `npm run verify`, `npm test`) ran fully on 5232d3c, 3948dae, 5827a15, 202ca3f and on the hero commit, and again on the final head
 (dev and release, logs below). Rollback of the hero: one `git revert b2d1b48` (restores the photo hero and the "no video" assertions; the speculation rules, fonts,
@@ -56,10 +57,9 @@ Raw rows: `scratch/perf-before.json`, `scratch/perf-before-blog.json`, `scratch/
 | `/ueber-uns/` | 1440 | fast / slow 4G | (plan: 1144 at slow) | 260 / 932 | n/a / 0 | n/a / 12 | n/a / 130 | none |
 
 Notes on the table: the extra request per page after d82 is the 166-byte speculation rules file (counted before load on pages where it arrives in time). The post row at
-390 px slow 4G reads 51 / 63 KB only because the load event came earlier than the font in the "before" run (the total after scrolling is lower after). Unthrottled
+390 px slow 4G (51 / 63 KB, 7 / 8 requests) differs only in whether the font arrived before the load event in that run (run-to-run variance; the total after scrolling is lower after). Unthrottled
 runs are not in the table (the first unthrottled "before" run was a cold-start outlier at 904 ms; the other unthrottled medians are 56 to 64 ms before and after).
-`/ueber-uns/` has no "before" run in this session; the plan measured 1144 ms at slow 4G and 688 ms at 390 with the older method. No page got slower beyond
-the 4 to 24 ms of measurement noise, many got faster (smaller poster, AVIF q45, subset fonts).
+`/ueber-uns/` has no "before" run in this session; the plan measured 1144 ms at slow 4G and 688 ms at 390 with the older method. No page got slower by more than 8 ms (only unthrottled runs, noise), many got faster (smaller poster, AVIF q45, subset fonts).
 WebKit (Playwright, home): 1440 LCP 152 ms, CLS 0, 146 KB before load, 18 requests after scrolling, no video request, the film does not start (autoplay refused, see below),
 the poster stays; 390: LCP 52 ms, CLS 0, 105 KB, portrait poster.
 
@@ -74,7 +74,7 @@ Acceptance numbers of the task (home 1440):
 | one video request of at most 1.0 MiB after load | 1 request, `Range: bytes=0-` answered 206 `0-509199/509200` (0.49 MiB), no second request over a loop restart |
 | 0 video bytes at 390, reduced motion, touch screen, Save-Data, cellular, 3g, 2g | 0 requests in all seven cases (`net`) |
 | poster to video swap: no layout shift, no jump | CLS 0; mean pixel difference 2.81 of 255 at 1440 (3.69 at 800, 2.91 at 1920), 0.56 % of the values off by more than 24 |
-| all other pages unchanged or better | yes, see table; no page slower beyond noise |
+| all other pages unchanged or better | yes, see table; the largest slowdown is 8 ms (unthrottled, noise) |
 
 Screenshot pairs (committed): `screens/hero-390-before-after.jpg` (left today's mountain hero at 390, right the new portrait crop: the subject is visible),
 `screens/hero-1440-before-after.jpg`, `screens/swap-1440-poster-over-video-frame0.jpg` (top: poster, bottom: first presented video frame, same crop and shade off).
@@ -132,14 +132,14 @@ Source: `.conversion/video-download/VidOne.mp4` (HEVC, 1920x1080, 60 fps, full r
 - `public/hero.webm`: AV1 (SVT-AV1 preset 2 crf 40), 1280x720, 24 fps, BT.709 limited range, no audio, cues to front: **509,200 B (0.486 MiB)**. Listed first (chosen by `canPlayType('video/webm; codecs="av01.0.05M.08"')`).
 - `public/hero.mp4`: H.264 High, `avc1`, level 5.0 as written by x264, 1280x720, 24 fps, `yuv420p`, BT.709 limited range (colr nclx 1/1/1, full 0), faststart, no audio, crf 28 veryslow: **706,946 B (0.674 MiB)**.
 - Why 720p and not 540p: 720p stays under 1.0 MiB in both codecs and 1440 px screens upscale 1.125x instead of 1.5x. Measured candidates (PSNR against the lossless 720p master): H.264 crf 26 0.83 MiB 44.0 dB, crf 28 0.67 MiB 42.9 dB,
-  crf 30 0.56 MiB 41.8 dB; AV1 crf 40 0.46 MiB 44.8 dB, preset 2 crf 40 0.49 MiB 45.4 dB, crf 34 0.63 MiB 45.7 dB; VP9 crf 36 0.73 MiB 44.5 dB, crf 40 0.55 MiB 43.3 dB; H.264 540p crf 26 0.55 MiB.
+  crf 30 0.56 MiB 41.8 dB; AV1 preset 4 crf 40 0.46 MiB 44.5 dB, preset 3 crf 40 0.45 MiB 44.8 dB, preset 2 crf 40 0.49 MiB 45.4 dB (shipped), preset 4 crf 34 0.63 MiB 45.7 dB; VP9 crf 36 0.73 MiB 44.5 dB, crf 40 0.55 MiB 43.3 dB; H.264 540p crf 26 0.55 MiB.
   AV1 at equal quality is 45 % smaller than H.264 crf 26 (above the 40 % bar), VP9 only 12 %, so only AV1 + H.264 ship. Both play in the system Chrome (AV1 by software decode, H.264 by hardware); both were play-tested (`swap.mjs`, `net`).
 - First presented frame colour: see swap measurement. Poster JPEG sources: `src/assets/photos/hero-poster.jpg` (1920x1080, 185 KB) and `hero-poster-portrait.jpg` (864x1080, 134 KB).
 - Encoding commands: `website/docs/hero-video.md`. The 17.67 MiB encode and the HEVC original stay outside the repository (`.local/`, `.conversion/`, git-ignored).
 - Phone crop (design change agreed by the owner): below 48rem the picture is the 864x1080 crop (x 566 to 1430 of the frame), so the woman on the trainer is in the middle of a 390 px screen (before: sky and a ridge, the cyclist cropped out). A phone gets 15 to 31 KB of AVIF instead of 13 to 27 KB, sharper
   (864 px for a 390 css px box at 2x instead of 640 px). The film never plays below 48rem, so the crop and the film do not have to match.
 - Hero shade: the wide-screen vertical gradient keeps 12 % at 35 % instead of 0 (d84). Worst white-text contrast over 32 frames (every 0.25 s) at 1440: h1 13.5:1 (need 3), eyebrow 5.58:1 (need 4.5; it was 4.69 before the change),
-  ghost button 17.2:1; at 800 px 11.5 / 6.38 / 17.07. `ui` samples the poster at 1440 and 390 (h1 13.4 / 13.9, eyebrow 5.9 / 12.6, ghost 18.4 / 16.9) and frames at 5, 25, 50, 75, 95 % of the film.
+  ghost button 17.2:1; at 800 px 11.5 / 6.38 / 17.07. `ui` (final run) samples the poster at 1440 and 390 (h1 14.0 / 13.9, eyebrow 6.8 / 12.6, ghost 18.4 / 16.9) and frames at 5, 25, 50, 75, 95 % of the film (eyebrow 5.75 at 25 %, 6.9 / 11.3 / 14.3 / 10.5 at the others).
 - Start rules (`HeroVideo.astro`, 1.4 KB of JS): `preload="none"`, no `src` until start; after the window load event, in `requestIdleCallback` (timeout 2 s; `setTimeout` where missing, as in Safari), hero in view (IntersectionObserver), `(min-width: 48rem) and (pointer: fine)`,
   not `prefers-reduced-motion`, not Save-Data, not cellular, not `slow-2g`/`2g`/`3g`; re-evaluated when any of them changes. Fade-in on the first presented frame (`requestVideoFrameCallback`, fallback `timeupdate`). Pauses with the tab and when the hero leaves the view.
   Pause button: keyboard operable (native button), labels "Hintergrundvideo anhalten" / "Hintergrundvideo abspielen" (label changes; the old `aria-pressed` is dropped because a changing label plus a pressed state is announced twice).
@@ -182,3 +182,85 @@ None new. The pause button reuses the two labels of the old `HeroVideo.astro` ("
 - Contrast margin: the eyebrow is 5.58:1 on the worst of 32 sampled frames at 1440 (limit 4.5); a different film or a H.264 hardware path that lifts blacks lowers it.
 - Home HTML grew 25 to 28 KB (six poster `<source>` elements), CSS 15.5 to 16.3 KB, JS 0 to 1.4 KB.
 - `dist/` is the dev build and the review server (:4321, pid below) is running.
+
+## Gate output (verbatim)
+
+One thing to know: the first chained attempt of the final gates (`build`, `verify:release`, `build`, `verify`, `test` in one background shell) failed `ui`, `net` and
+`embeds` with "http://localhost:4321/ does not serve this dist/ (home page differs)" in both the release and the dev run, while `a11y` and the file checks passed. I could not
+reproduce it: the same server then served the same dist (`needServer` ok), and `npm run verify` and `npm run verify:release` were green on a rerun with identical sources.
+Cause unknown (the server and `dist/` were not touched in between); the logs below are the green reruns.
+
+`npm run verify` (dev build, sources of c698168):
+
+```
+
+> bikeone@0.0.0 verify
+> node tools/verify.mjs
+
+verify: dev build
+redirects: ok (132 old URLs: 15 built, 117 redirected; 140 redirect rules, 42 ?p rows)
+links: ok (16 native pages, 16 stylesheets)
+seo: ok (16 native pages, dev build)
+wp: ok (80 files scanned)
+headers: ok (9 header rules, 141 redirect rules (23 dynamic), 39 files scanned for http://)
+size: ok (home: HTML 27.9 KB (gzip 6.5 KB), CSS 16.3 KB in 6 file(s) (gzip 4.9 KB), JS 1.4 KB in 1 file(s))
+a11y: ok (16 native pages)
+ui: ok (16 pages x 1440, 390: 332 focus stops; touch targets, menu, hero button and film, reduced motion; 23 text boxes on photos)
+net: ok (16 native pages x chrome, webkit x 1440, 390; home 1440px: 18 requests, 691 KB (html 28 KB, other 497 KB, css 16 KB, image 106 KB, font 42 KB, js 1 KB); 390px: 15 requests, 119 KB (html 28 KB, other 0 KB, css 16 KB, image 32 KB, js 1 KB, font 42 KB);)
+embeds: ok (30 activations (click, Enter, Space) in chrome and webkit, hosts bike-leasing-calculator.jobrad.org, www.etermin.net, www.google.com)
+verify: all 10 checks passed
+```
+
+`PUBLIC_INDEXABLE=true npm run build` then `npm run verify:release` (same sources):
+
+```
+
+> bikeone@0.0.0 verify:release
+> PUBLIC_INDEXABLE=true node tools/verify.mjs
+
+verify: release build
+redirects: ok (132 old URLs: 15 built, 117 redirected; 140 redirect rules, 42 ?p rows)
+links: ok (16 native pages, 16 stylesheets)
+seo: ok (16 native pages, release build)
+wp: ok (82 files scanned)
+headers: ok (9 header rules, 141 redirect rules (23 dynamic), 41 files scanned for http://)
+size: ok (home: HTML 27.8 KB (gzip 6.5 KB), CSS 16.3 KB in 6 file(s) (gzip 4.9 KB), JS 1.4 KB in 1 file(s))
+a11y: ok (16 native pages)
+ui: ok (16 pages x 1440, 390: 332 focus stops; touch targets, menu, hero button and film, reduced motion; 23 text boxes on photos)
+net: ok (16 native pages x chrome, webkit x 1440, 390; home 1440px: 18 requests, 691 KB (html 28 KB, other 497 KB, css 16 KB, image 106 KB, js 1 KB, font 42 KB); 390px: 15 requests, 119 KB (html 28 KB, other 0 KB, css 16 KB, image 32 KB, js 1 KB, font 42 KB);)
+embeds: ok (30 activations (click, Enter, Space) in chrome and webkit, hosts bike-leasing-calculator.jobrad.org, www.etermin.net, www.google.com)
+verify: all 10 checks passed
+```
+
+`npm test` (after the dev rebuild):
+
+```
+# Subtest: rewrites every origin form, leaves other hosts alone
+# Subtest: impressum: the rendered words are the words of src/content/legal/impressum.md
+# Subtest: datenschutz: the rendered words are the words of src/content/legal/datenschutz.md
+# Subtest: home: five service blocks, each with a title and a text
+# Subtest: Ueber uns: phone numbers, e-mail addresses and hours are on the page
+# Subtest: blog excerpts are the beginning of their posts
+# Subtest: blog posts: the rendered body is the Markdown body, word for word
+# Subtest: service: the four service blocks and the booking link are there
+# Subtest: stellenangebote: the job list, nothing added
+# Subtest: booking pages: etermin.net is not requested before a click (no iframe in the page, only in a template)
+# Subtest: destination follows the IA table
+# Subtest: rows for the old URLs that moved, none for a native page
+# Subtest: brand pages and shop shells go to the shop, demo pages to the home page, feeds to the blog feed
+# Subtest: the generator is stable: captured rows in, same rows out
+# Subtest: review server answers ranges and applies a Content-Type rule of _headers
+# Subtest: berlinIso writes the Berlin day and offset, winter and summer
+# Subtest: BikeStore nodes equal the Ueber uns facts
+# Subtest: Organization: brands and e-mail come from the content files, no invented profile data
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 127.847208
+```
+
+`dist/` is the dev build again (`noindex`), and the review server on :4321 (pid 45359, started from the updated `scripts/review-serve.mjs`) is running.
