@@ -1,0 +1,12 @@
+
+> bikeone@0.0.0 verify
+> node tools/verify.mjs
+
+headers: 4 checked, 0 failed
+links: 56 checked, 0 failed
+routes: 68 checked, 0 failed
+scripts: 56 checked, 0 failed
+seo: 55 checked, 0 failed
+sitemaps: 68 checked, 0 failed
+text: 55 checked, 0 failed
+All 10 gates passed

@@ -1,0 +1,871 @@
+{
+  "version": 1,
+  "site": "https://bike-one.org",
+  "repo": "Swamp3/bike-one-shop (existing repo; website/ merged in at the end)",
+  "hosting": "cloudflare",
+  "startedAt": "2026-11-25T07:17:03.391Z",
+  "phase": "visual",
+  "phases": {
+    "capture": {
+      "startedAt": "2026-11-25T07:17:03.563Z",
+      "finishedAt": "2026-11-25T07:48:36.786Z",
+      "result": null
+    },
+    "plan": {
+      "startedAt": "2026-11-25T07:48:36.786Z",
+      "finishedAt": "2026-11-25T07:48:59.359Z",
+      "result": null
+    },
+    "scaffold": {
+      "startedAt": "2026-11-25T07:48:59.359Z",
+      "finishedAt": "2026-11-25T07:49:43.192Z",
+      "result": null
+    },
+    "baseline": {
+      "startedAt": "2026-11-25T07:49:43.192Z",
+      "finishedAt": "2026-11-25T07:49:55.160Z",
+      "result": null
+    },
+    "build": {
+      "startedAt": "2026-11-25T07:49:55.160Z",
+      "finishedAt": "2026-11-25T07:54:39.392Z",
+      "result": null
+    },
+    "gates": {
+      "startedAt": "2026-11-25T07:54:39.392Z",
+      "finishedAt": "2026-11-25T07:55:03.413Z",
+      "result": null
+    },
+    "visual": {
+      "startedAt": "2026-11-25T07:55:03.413Z",
+      "finishedAt": null,
+      "result": null
+    }
+  },
+  "decisions": [
+    {
+      "id": "d1",
+      "topic": "repository",
+      "choice": "website/ is built as a standalone git repo (kit needs its own main + astro-rebuild), hidden from the parent via .git/info/exclude, then merged into bike-one-shop with history under website/",
+      "default": "new private repo",
+      "reason": "user: use the repo we are in, website and shop combine; init-site always runs git init and commits to main",
+      "costIfWrong": "low: the merge is a read-tree at the end",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d2",
+      "topic": "WooCommerce",
+      "choice": "out of scope: shop, product, category, brand, cart, checkout, account, wishlist paths excluded from capture",
+      "default": "reproduce live",
+      "reason": "user: ignore woocommerce, the new shop is this repo",
+      "costIfWrong": "medium: excluded pages need a link or redirect to the new shop",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d3",
+      "topic": "hosting and staging domain",
+      "choice": "Cloudflare Pages; development on bike-one.dev, always noindex (PUBLIC_INDEXABLE unset)",
+      "default": "Vercel, public noindexed staging",
+      "reason": "user: domain registered at Cloudflare; bike-one.dev must not be indexed",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d4",
+      "topic": "excluded paths",
+      "choice": "woo default and German slugs: /shop/ /product/ /product-category/ /product-brand/ /brand/ /cart/ /checkout/ /my-account/ /wishlist/ /produkt/ /produkt-kategorie/ /warenkorb/ /kasse/ /mein-konto/ /wunschliste/",
+      "default": "none",
+      "reason": "real slugs unknown before capture; adjust with --resume --exclude",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d5",
+      "topic": "URL form",
+      "choice": "trailing slash always (54 of 54 pages)",
+      "default": "majority form",
+      "reason": "capture",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d6",
+      "topic": "media",
+      "choice": "live-temporary: 2009 files, 1156.7 MB, 5 over 25 MB (largest 91.9 MB mp4); R2 mode needed, no R2 credentials; staging serves /wp-content/uploads/ from bike-one.org. 4108 unreferenced WordPress sizes listed, not downloaded",
+      "default": "store (r2)",
+      "reason": "over 300 MB limit; no store credentials",
+      "costIfWrong": "high if forgotten: bike-one.org is replaced at launch, so images break. Must move to R2 before DNS",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d7",
+      "topic": "templates",
+      "choice": "10 templates from 55 pages as clustered (template-1 15 portfolio demo, page 10, archive 9 brands, template-2 7 team demo, single-post 5, page-3 4, archive-3 2, archive-2 1, home 1, page-2 1)",
+      "default": "as clustered",
+      "reason": "capture/templates.json",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d8",
+      "topic": "portfolio and team-member pages",
+      "choice": "reproduce live (theme demo content: portfolio-name-N, member-0N, branding-design)",
+      "default": "reproduce live",
+      "reason": "parity; removal is a proposal",
+      "costIfWrong": "none for launch",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d9",
+      "topic": "missing h1",
+      "choice": "reproduce live: 27 pages have no h1 (home, brands, categories, legal, booking, about)",
+      "default": "reproduce live",
+      "reason": "parity; fix is a proposal",
+      "costIfWrong": "SEO stays as today",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d10",
+      "topic": "forms",
+      "choice": "none to rewire: the only POST forms are WooCommerce add-to-cart on /, GET search on /Marke/*; markup reproduced, cart no longer works",
+      "default": "formspree",
+      "reason": "inventory.json forms",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d11",
+      "topic": "WooCommerce links on kept pages",
+      "choice": "home and category pages still show product markup and links into excluded /produkt/ paths; reproduced as is, add-to-cart stops working",
+      "default": "reproduce live",
+      "reason": "user: ignore woocommerce",
+      "costIfWrong": "medium: dead product links on staging until the new shop takes those paths",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d12",
+      "topic": "embeds",
+      "choice": "keep etermin.net booking iframes (/termin-buchen-oldenburg/, -osnabrueck/) and Google Maps iframes (/termin-buchen/)",
+      "default": "reproduce live",
+      "reason": "third-party embeds",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d13",
+      "topic": "third-party scripts",
+      "choice": "none found in capture/scripts.json",
+      "default": "keep all",
+      "reason": "capture",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d14",
+      "topic": "lighthouse",
+      "choice": "skipped, not installed",
+      "default": "skip",
+      "reason": "never install unasked",
+      "costIfWrong": "suggestions list performance as Not covered",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d15",
+      "topic": "WooCommerce add-to-cart forms",
+      "choice": "3 POST forms on / switched off: action=# and listed in inert-forms.json; no form endpoint, no Formspree",
+      "default": "rewire to endpoint",
+      "reason": "cart forms must never post to a form service; shop is out of scope",
+      "costIfWrong": "low: buttons do nothing until the new shop takes over",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d16",
+      "topic": "one shared layout",
+      "choice": "src/layouts/Page.astro (plus Blank.astro for /alle-fahrrader/) for all 10 templates instead of one layout per template; header, mobile header and footer are components from home, pages with a current-menu-item copy use their own file",
+      "default": "one layout per template",
+      "reason": "all templates share the identical #page > .site-inner > header, mobile header, #main, footer skeleton; content moved by tools/extract.mjs",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d17",
+      "topic": "Google Fonts",
+      "choice": "reproduce live: fonts.googleapis.com stylesheet stays linked, the 20 fonts the capture saved under /fonts/ are not shipped",
+      "default": "reproduce live",
+      "reason": "parity; self-hosting is a proposal (German courts treat Google Fonts from Google servers as a GDPR issue)",
+      "costIfWrong": "medium: GDPR exposure until proposed change is approved",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d18",
+      "topic": "dev domain indexing",
+      "choice": "public/_headers adds X-Robots-Tag noindex for https://bike-one.dev/*; builds are noindex and robots Disallow all unless PUBLIC_INDEXABLE=true",
+      "default": "pages.dev rule only",
+      "reason": "user: bike-one.dev must not be indexed",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d19",
+      "topic": "missing favicon link",
+      "choice": "reproduce live: every page links /wp-content/themes/cosy-child/favicon.png, which live answers 404; link kept, links exception per page",
+      "default": "reproduce live",
+      "reason": "parity; the root /favicon.ico is served",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d20",
+      "topic": "sitemaps",
+      "choice": "the live wp-sitemap files are served from tools/sitemaps.mjs: URLs under the excluded WooCommerce prefixes (53) are dropped, the two sitemaps left empty (products, product categories) are dropped from the index, and /portfolio-category/branding-design/page/2/ is added because the sitemaps gate requires every indexable page and live omits it",
+      "default": "reproduce live",
+      "reason": "the sitemaps gate has no exception field; forced difference from live",
+      "costIfWrong": "low: the new shop adds its own sitemap entries",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d21",
+      "topic": "same-origin asset URLs root-relative / local media",
+      "choice": "tools/extract.mjs rewrites live-origin URLs to root-relative in script/img/source/video src, srcset, stylesheet/icon/preload links, import maps, inline style url() and data-* lazy sources (<a href>, canonical, og and other head metadata stay); media mode is repo: 2009 files copied by assets:copy from .conversion/media-cache into public/wp-content/uploads, gitignored",
+      "default": "same-origin asset URLs root-relative; media live-temporary",
+      "reason": "user: serve images locally; live host was unreachable; build-rules default. data-* rewrite goes beyond the rule so the theme lazy loaders and the pager use local files",
+      "costIfWrong": "medium: the 1.1 GB media is not in git; production needs R2 (5 files exceed the 25 MiB Cloudflare Pages limit) or another store",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d22",
+      "topic": "scripts dropped for console errors",
+      "choice": "dropped with their inline config: WooCommerce cart fragments (wc-cart-fragments-js, -extra), YITH add-to-wishlist (yith-wcwl-add-to-wishlist-js, -extra, -translations), WordPress emoji loader (wp-emoji-settings JSON and its module script); dev-host bikeone.cvires.at file URLs (blog images, slider poster) now point at the local copies",
+      "default": "copy every script that drives visible behaviour; drop only scripts that do nothing on a static site",
+      "reason": "user: fix console errors; each script only called endpoints that do not exist on a static host (405 on ?wc-ajax, wp-json/yith, wp-emoji-release.min.js on the live origin); the dev host leaked into live content",
+      "costIfWrong": "low: browsers without flag-emoji support show country letters instead of flags; wishlist and cart widgets were already dead",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d23",
+      "topic": "menu: one Shop item",
+      "choice": "header and footer menus: GravelBikes, RoadBikes and TT/Triathlon replaced by one Shop item (tools/extract.mjs) linking to https://shop.bike-one.dev/ in local, dev and staging builds and to https://shop.bike-one.org/ in the release build (PUBLIC_INDEXABLE=true); SHOP_URL in src/lib/site.mjs; the pages /racebikes/, /tt-triathlon/ and /gravel-bikes/ stay built and unlinked",
+      "default": "reproduce live",
+      "reason": "owner request",
+      "costIfWrong": "low: the shop sites must exist before launch; the three pages could be dropped with redirects if wanted",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d24",
+      "topic": "source maps",
+      "choice": "tools/strip-sourcemaps.mjs removes sourceMappingURL comments from 3 served JS files (lightbox, swiper, yith add-to-wishlist); run it after npm run assets:copy",
+      "default": "copy scripts byte for byte",
+      "reason": "the .map files were never captured, DevTools logs a source map error on every page",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d25",
+      "topic": "hero video autoplay",
+      "choice": "inline script hero-video-autoplay added to / and /main-bike/: every 500 ms it plays the unstarted bg video of the visible Revolution Slider slide (muted); VidOne.mp4 stays at the absolute live URL because the file is not in the capture or the export",
+      "default": "reproduce live",
+      "reason": "owner report: poster shows until a click. Reproduced in WebKit (Safari engine): the slider never calls play() on the first video, a muted play() without gesture succeeds and the slider then fades the video in. Chrome autoplays by itself",
+      "costIfWrong": "low: a no-op where autoplay already works; Safari with Low Power Mode can still block autoplay",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d26",
+      "topic": "hero video",
+      "choice": "VidOne.mp4 (27,844,858 bytes, HEVC hvc1, no audio) is served from this site as /VidOne.mp4 (public/VidOne.mp4); tools/extract.mjs rewrites data-mp4/webm/ogv from the live origin to root-relative; the routes gate gets --allow-extra /VidOne.mp4 baked into the verify scripts in package.json. Supersedes the absolute live URL in d25",
+      "default": "reproduce live",
+      "reason": "owner request: the file lives only on the live host; it was downloaded once with the owner's consent. Not in the baseline, so it is an extra built file",
+      "costIfWrong": "high for hosting: the file is 26.55 MiB, over the 25 MiB Cloudflare Pages limit, so wrangler pages deploy fails until it is shrunk or served from R2; HEVC does not play in Firefox or Chromium without HEVC",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d27",
+      "topic": "no links to the live site",
+      "choice": "tools/extract.mjs makes same-origin URLs root-relative in a/area href, form action, link rel=alternate (feeds), data-* attributes (also WooCommerce variation JSON), inline script config (plain, JSON-escaped and URL-encoded) and <template> contents (the extractor did not enter template.content, which is why the wc-placeholder img stayed absolute); links to WooCommerce paths (/product/, /product-category/, /shop/, /cart/, /checkout/, /my-account/, /wishlist/) stay as paths, no shop URL invented; the redirect map for shop.bike-one.org is in .working-files/bike-one-links/notes.md",
+      "default": "reproduce live (absolute links)",
+      "reason": "owner report: the rebuild still links to bike-one.org; the links gate counts both forms as internal",
+      "costIfWrong": "low: a script that compared an absolute origin would break; the console probe on 5 pages at 2 widths shows no new message",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d28",
+      "topic": "WordPress head links dropped",
+      "choice": "tools/extract.mjs removes link rel=https://api.w.org/, EditURI, pingback, shortlink and rel=alternate links to wp-json (oEmbed, REST) from every page; the 284 WordPress API link records are gone from exceptions.json and npm run links:exceptions passes --skip-api so it does not add them back",
+      "default": "keep the captured head links (d19 exceptions)",
+      "reason": "owner report; a static site has no xmlrpc.php, wp-json or short URL endpoints",
+      "costIfWrong": "low: no oEmbed discovery, no pingbacks; shortlink ?p= URLs still redirect through redirects.csv",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d29",
+      "topic": "dev builds name the dev origin",
+      "choice": "postbuild step tools/dev-origin.mjs: unless PUBLIC_INDEXABLE=true it rewrites every form of https://bike-one.org (http, //, www, JSON-escaped, URL-encoded) in the text files of dist (html xml txt json xsl js css, _redirects, _headers; not wp-content/uploads) to SITE_ORIGIN, default https://bike-one.dev; the release build is untouched; npm run verify goes through tools/verify.mjs, which gives the gates --origin SITE_ORIGIN on a dev build and nothing on the release build",
+      "default": "every build names https://bike-one.org",
+      "reason": "owner: the test deployment on bike-one.dev must not reference bike-one.org; canonical, sitemaps and feeds cannot be root-relative",
+      "costIfWrong": "low: an npx astro build without npm run build skips the step; set SITE_ORIGIN for another test host",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d30",
+      "topic": "build origin from the environment",
+      "choice": "astro.config.mjs sets `site` to https://bike-one.org in the release build (PUBLIC_INDEXABLE=true), else SITE_ORIGIN or https://bike-one.dev; canonical, Open Graph and JSON-LD URLs come from it; tools/dev-origin.mjs stays as a safety net",
+      "default": "site fixed to bike-one.org and rewritten after the build (d29)",
+      "reason": "native components build absolute URLs; the origin should be right at build time, not patched afterwards",
+      "costIfWrong": "low: a build without PUBLIC_INDEXABLE names bike-one.dev, which is the intended dev behaviour",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d31",
+      "topic": "no inline styles or scripts, no data: assets",
+      "choice": "build.inlineStylesheets never and vite assetsInlineLimit 0: every native page links its CSS and JS as files; no style attributes in native components",
+      "default": "Astro inlines small CSS and scripts",
+      "reason": "lets the CSP stay default-src self without unsafe-inline",
+      "costIfWrong": "low: one more request per page, cached immutable under /_astro/",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d32",
+      "topic": "explicit shrinking allowlist of pages still on the old route",
+      "choice": "tools/legacy.mjs lists the 51 paths (plus /404.html) that src/pages/[...path].astro still builds from captured markup, the dist prefixes and src paths only they use; the new checks skip exactly these; migrated pages leave the list; Stage 2 empties it. Layouts and components of the old route moved to src/layouts/legacy and src/components/legacy",
+      "default": "all pages stay on the old route until every page is migrated",
+      "reason": "the build must not break between stages and the checks must not hide new problems",
+      "costIfWrong": "low: an entry that is still listed after its page is native is reported as stale by the checks",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d33",
+      "topic": "native home, Ueber uns, Impressum, Datenschutz",
+      "choice": "src/pages/index.astro, ueber-uns.astro and [legal].astro build the four pages from tokens, Base/Header/Footer/SEO and the content collections; home has a poster-only hero (no video, no slider), the two stores, the five service texts from the captured home page, the seven brand names as text, the three newest posts; product tiles, partner logos and the WooCommerce markup are dropped",
+      "default": "IA table of the plan (hero, stores, services teaser, brands, latest posts)",
+      "reason": "vertical slice that proves the pipeline; text is copied from capture/text/home.txt and ueber-uns.txt",
+      "costIfWrong": "low: Stage 2 adds the video helper and the service page; partner logos need confirmed alt texts and are not on the new home page",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d34",
+      "topic": "content collections",
+      "choice": "src/content.config.ts defines stores (json, two entries with address, phone, e-mail, hours), brands (json, seven names), legal (Markdown, Impressum and Datenschutz text from the capture) and blog (front matter only for the five posts: title, dates, excerpt from capture/wp-rest/posts.json; bodies and pages follow in Stage 2)",
+      "default": "collections for blog, stores, brands",
+      "reason": "one typed source for the footer, the home page, the store cards and the JSON-LD",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d35",
+      "topic": "design basis: shop wireframe tokens",
+      "choice": "src/styles/tokens.css takes the shop wireframes language (accent #e63946, header #121212, surfaces #f8f9fa, ink #212529, line #dee2e6), mobile first, light surfaces with dark header, footer and hero; --accent-strong #c92a37 for buttons and text because #e63946 is 4.2:1 on white; no dark colour scheme yet",
+      "default": "plan assumption: reuse the shop wireframe tokens",
+      "reason": "site and shop look like one brand; WCAG AA text contrast",
+      "costIfWrong": "medium: a different direction means new tokens and component CSS, the markup stays",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d36",
+      "topic": "fonts via @fontsource",
+      "choice": "owner decision: @fontsource/roboto 5.3.0 (400, 700) and @fontsource/roboto-condensed 5.3.0 (700), dev dependencies pinned exactly; hand-written @font-face in src/styles/fonts.css points at the packages woff2 files (latin and latin-ext with unicode-range, font-display swap) so Vite emits them under /_astro/; the Roboto Condensed 700 latin file is the one preload; no request to googleapis or gstatic",
+      "default": "hand-extract woff2 from capture/assets (plan)",
+      "reason": "owner: install the fonts locally with npm; per-weight CSS of the packages adds a woff fallback and has no unicode-range",
+      "costIfWrong": "low: three small packages, only the woff2 files end up in dist",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d37",
+      "topic": "store address spelling on new pages",
+      "choice": "Rheinstraße 16 and Lengericher Landstraße 30 in the footer, store cards and JSON-LD (the capture mixes Rheinstr./Rheinstrasse and Landstr./Landstraße); the legal texts keep their own spelling word for word",
+      "default": "as captured",
+      "reason": "seo-review M10: one NAP spelling",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d38",
+      "topic": "legal pages rendered from Markdown, text unchanged",
+      "choice": "src/content/legal/impressum.md and datenschutz.md hold the captured words; only structure changed: title as h1, section titles as h2, bullets as lists, manual line wraps inside sentences joined with a space, address blocks keep their line breaks; the private-use bullet glyph is dropped; known text defects (TMG, ZugriƯ, IPAdresse, URL cut by a line break) are not touched and are listed in notes-stage1.md",
+      "default": "WordPress markup moved as captured",
+      "reason": "plan: legal text verbatim; native Astro without set:html of captured markup",
+      "costIfWrong": "low: test/legal-verbatim.test.mjs compares the rendered words with capture/text",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d39",
+      "topic": "menu without JavaScript",
+      "choice": "the header menu is a popover (button with popovertarget on narrow screens, always visible from 48rem by author CSS), Shop item links to SHOP_URL (d23)",
+      "default": "details or a script",
+      "reason": "plan: prefer native features; keyboard operable, closes on Escape and outside click",
+      "costIfWrong": "low: popover is baseline since 2024, older browsers show no menu button action",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d40",
+      "topic": "click-to-load embeds",
+      "choice": "src/components/Embed.astro: the iframe sits in a template and is inserted on a click (about 15 lines of script, delegated listener); text names the provider and the IP transfer; the map on Ueber uns uses the key-free https://www.google.com/maps?q=...&output=embed form instead of the captured keyed URL",
+      "default": "keyed Google embed as captured",
+      "reason": "no third-party request before consent by click; the captured API key does not belong in the repository",
+      "costIfWrong": "medium: the key-free embed URL could not be tested offline; the German consent wording is for legal review",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d41",
+      "topic": "checks replace the parity gates",
+      "choice": "npm run verify runs tools/checks/{redirects,links,seo,wp,size,a11y,net}.mjs on dist/ (tools/verify.mjs); native pages are checked in full, pages and files on the tools/legacy.mjs allowlist are skipped, a stale allowlist entry fails; the kit gates under scripts/verify stay as npm run verify:legacy until Stage 4; net runs Chrome and WebKit at 1440 and 390 against the review server and applies the CSP from dist/_headers",
+      "default": "kit parity gates against baseline/",
+      "reason": "owner: redesign, not parity; the gates compare against the live site and fail by design",
+      "costIfWrong": "low: each check is a small script over dist/, no dependency added",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d42",
+      "topic": "redirect map and generator",
+      "choice": "tools/redirect-map.mjs holds the IA redirect rows as data, tools/redirects-build.mjs writes redirects.csv (token {SHOP_URL}) and cloudflare-query-redirects.csv (production shop) and, after astro build, dist/_redirects for the dev or production shop; a row exists only for a URL without a page (pages on tools/legacy.mjs wait), shortlink rows are re-pointed at their final destination; public/_redirects is no longer committed; in Stage 1 the rows cover the shop prefixes (46 known product, category and shop URLs, 15 prefix rules) and the old WordPress sitemap names",
+      "default": "hand-kept redirects.csv through scripts/build-redirects.mjs",
+      "reason": "the shop target differs between dev and production builds and the map must apply itself as pages leave the old route",
+      "costIfWrong": "low: Stage 2 shrinks the allowlist and reruns npm run redirects:build",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d43",
+      "topic": "native robots.txt and sitemap",
+      "choice": "robots.txt: dev Disallow all, release Allow plus a Sitemap line; tools/sitemap-build.mjs (postbuild) lists exactly the indexable native pages in sitemap-0.xml and sitemap-index.xml, release build only (a dev build is noindex and has no sitemap); the old wp-sitemap files stay until Stage 2 redirects them",
+      "default": "captured robots.txt and WordPress sitemaps",
+      "reason": "plan: native sitemap and robots, dev Disallow all, release Allow plus sitemap",
+      "costIfWrong": "low: pages on the old route are not in the sitemap until they are migrated",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d44",
+      "topic": "Content-Security-Policy for the native pages",
+      "choice": "public/_headers: Permissions-Policy (camera, microphone, geolocation off) for every path; a CSP with default-src self, script-src self, style-src self, img-src self data:, font-src self, media-src self, frame-src only the three embed hosts (etermin.net, google.com/maps, bike-leasing-calculator.jobrad.org), object-src none, form-action self, frame-ancestors self, for the four native paths only",
+      "default": "no CSP",
+      "reason": "plan: CSP without third parties; the pages still on the old route use inline scripts and would break, so the rule is per native path until Stage 2 turns it into /*",
+      "costIfWrong": "low: the net check applies the same header in Playwright and fails on any violation",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d45",
+      "topic": "head texts of the four pages",
+      "choice": "titles 30 to 60 characters and descriptions 70 to 160, unique, written from each page own captured text, German; home h1 is the captured footer tagline without its full stop; no E-Bike or Rennrad claim in the home title (seo-review H1 asks the client to confirm the assortment); JSON-LD graph (Organization, WebSite, two BikeStore nodes) on home and Ueber uns, BreadcrumbList with a visible breadcrumb on inner pages, no geo, rating, price range or sameAs",
+      "default": "seo-review proposals",
+      "reason": "plan: SEO section; facts only from the capture",
+      "costIfWrong": "low: copy to be reviewed in Stage 3",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d46",
+      "topic": "blog: collection, pages, RSS",
+      "choice": "src/content/blog/*.md hold the five posts: body converted from the captured entry-content (paragraphs, h2/h3, lists, bold; the WordPress separators dropped; no text changed, a test compares every rendered body with capture/text), plus seoTitle (43 to 47 characters) and description written from each post, one image from the media cache (leasing: ETS16549, safety: DAY2_6THST, service: DAY2_SR39, E-Bike: showroom photo, fatigue: fitting photo) with a plain alt text; /blog/ lists the five newest first; each post has Article + BreadcrumbList JSON-LD (the organisation is author and publisher, the WordPress author had no name), a booking CTA, a link to /service/ and the other posts; native RSS 2.0 at /feed/ (src/pages/feed/index.xml.js, excerpts, served by a 200 rewrite /feed/ -> /feed/index.xml in _redirects); the posts keep their slugs",
+      "default": "keep the WordPress blog markup",
+      "reason": "plan: content collection, verbatim text, Article data, native RSS",
+      "costIfWrong": "low: the Austrian and Vienna statements in two posts are the captured copy (flagged for the owner); the E-Bike title is 115 characters, far over the 110 that Google suggests for an Article headline (the head title is the short seoTitle)",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d47",
+      "topic": "/service/ from /main-bike/",
+      "choice": "New page /service/ built from the service copy of the old /main-bike/ page (capture/text/main-bike.txt): Bike-Fitting, Dienstradleasing (with the JobRad example calculator behind the click-to-load embed), Werkstattservice, the Service paragraph, Canyon Collect&Ride and Canyon Service; text word for word except the typos listed in notes-stage2 (dich sich, den, weitern, Buche), the [/vc_column][/vc_row] leak, the old home greeting (Herzlich Wilkommen) and the three shop category tiles are not copied; h1 \"Service bei BikeOne\" is a page title, not a claim; linked from header, footer, home and the booking and post pages; /main-bike/ redirects 301 to /service/; no partner logos",
+      "default": "keep /main-bike/ as a page",
+      "reason": "plan: new /service/ page from the old copy",
+      "costIfWrong": "low: the 40 % claim and the Canyon partnership are the captured copy and need the owner confirmation",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d48",
+      "topic": "booking pages",
+      "choice": "/termin-buchen/ (both stores from the stores collection, StoreCard), /termin-buchen-oldenburg/ and /termin-buchen-osnabrueck/ (src/pages/[booking].astro): h1, address, hours, phone and e-mail from the collection, etermin.net (https://www.etermin.net/bike-one and /os1, field bookingUrl) in a template behind the click-to-load Embed (new ratio \"app\"), a plain \"bei eTermin öffnen\" link for visitors without JavaScript, links to the other store, /ueber-uns/ and /service/; titles \"Termin buchen in <city> – BikeOne\", descriptions from the store facts, BikeStore + BreadcrumbList JSON-LD; the overview question gets its question mark",
+      "default": "iframe in the page, slug as title",
+      "reason": "plan: click-to-load etermin, titles that are not slugs",
+      "costIfWrong": "low: the consent sentence on the placeholder is ours (legal review)",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d49",
+      "topic": "/stellenangebote/",
+      "choice": "Native page from the captured list, grouped by location (Zentrale Oldenburg, Filiale Oldenburg, Filiale Osnabrück); \"keine stellen\" corrected to \"Stellen\"; no application contact invented, a link to /ueber-uns/ only; no JobPosting data (it would need dates and terms that are not in the capture)",
+      "default": "keep the old page",
+      "reason": "plan: short page from the captured text",
+      "costIfWrong": "low: the list is as old as the capture; the owner must confirm the openings",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d50",
+      "topic": "brand pages",
+      "choice": "All seven /Marke/<brand>/ pages redirect 301 to the shop (also /marke/*, lower case): the capture holds only product listings for them (filter UI, prices, manufacturer copy, leasing rates), no copy of the shop or BikeOne; their feeds go to /feed/. The home page keeps the brand names as plain text",
+      "default": "a native landing page per brand",
+      "reason": "plan: keep a page only where non-product copy exists; none does",
+      "costIfWrong": "medium: seo-review M4 wanted local brand landing pages; that needs new copy from the owner",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d51",
+      "topic": "hero video",
+      "choice": "public/hero.mp4: H.264 (avc1), 1280x720, 13.4 s, no audio track, moov before mdat (faststart), 17.67 MiB, made from the HEVC original with /usr/bin/avconvert Preset1280x720 --multiPass (1920x1080 gave 25.2 MiB, over the limit); the HEVC public/VidOne.mp4 is removed from the tree. src/components/HeroVideo.astro: <video muted loop playsinline preload=\"none\"> over the poster photo, play() only after load, only from 48rem up (17.7 MiB), not with prefers-reduced-motion, not with Save-Data, a pause button (WCAG 2.2.2), a first tap/click/key starts it when the browser refuses autoplay; tools/mp4-info.mjs reads codec, atoms and size; net checks start (Chrome without a click, WebKit with the first click), no request at 390 and with reduced motion",
+      "default": "keep the HEVC file",
+      "reason": "plan: H.264 under 20 MiB, poster plus helper",
+      "costIfWrong": "medium: Playwright WebKit refuses muted autoplay even on a bare test page, so Safari without a click is not proven here; 720p is softer than the 1080p original",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d52",
+      "topic": "old route, allowlist and WordPress files out of dist",
+      "choice": "src/pages/[...path].astro, the legacy layouts and components, tools/legacy.mjs and every allowlist in the checks are deleted; public/{wp-content,wp-includes,Marke,author,category,comments,feed,portfolio-category,wp-sitemap*} moved with git mv to legacy-public/ (outside public/, so nothing of it is published; uploads stay git-ignored there), the sources src/content/{pages,heads,bottoms,parts,index.json} and src/styles/{inline,site.css} stay until Stage 4 and are the only src paths the wp check skips (STAGE4_SOURCES); dist/ no longer holds any WordPress file",
+      "default": "keep the old route until Stage 4",
+      "reason": "plan: Stage 2 empties the allowlist, nothing in dist/ comes from the WordPress files",
+      "costIfWrong": "low: tools/extract.mjs and scripts/copy-assets.mjs still point at public/wp-content (old pipeline, Stage 4 deletes them)",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d53",
+      "topic": "native 404",
+      "choice": "src/pages/404.astro to dist/404.html: German text, links to home, booking, blog and shop, noindex in every build, no canonical and no og:url (it answers for any URL); the seo check expects exactly that",
+      "default": "legacy 404 markup",
+      "reason": "plan: native 404",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d54",
+      "topic": "one CSP for every path",
+      "choice": "public/_headers: one /* rule with the security headers and the CSP (default-src self; frame-src only etermin.net, google.com/maps, the JobRad calculator host; img-src self data:; media-src self); X-Robots-Tag noindex for https://bike-one.dev/* and https://*.pages.dev/* kept",
+      "default": "CSP per page",
+      "reason": "plan: one /* rule",
+      "costIfWrong": "low: the net check applies the rule in both browsers and fails on a violation",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d55",
+      "topic": "redirects and checks without the old route",
+      "choice": "tools/redirect-map.mjs: /Marke/* and /marke/* to the shop, brand feeds to /feed/, wp-sitemap names to /sitemap-index.xml, /main-bike/ to /service/, demo pages to /, author and category pages to /blog/, WooCommerce paths to the shop; the generator writes a row for every old URL the map sends elsewhere (no stillBuilt test), passes only /feed/ as 200 rewrite to build-redirects; the redirects check accepts a 200 rewrite as served, the links check resolves /feed/ through it; the net check also tests the hero video; all checks scan everything with no allowlist",
+      "default": "allowlist",
+      "reason": "plan: every URL in baseline/routes.json resolves in one hop",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d56",
+      "topic": "better photos",
+      "choice": "beratung, konfiguration: the full-size originals of the two screenshots (1280x1042, 1222x994) instead of the 1024 px versions; leasing: ETS16549.jpg (the screenshot was a crop of it) at 2000 px; werkstatt stays (the original is 950 px wide, there is no larger one); new sicherheit.jpg and service.jpg from the DAY2 studio shots for two posts (the werkstatt photo is too small for a 1200x630 share image); no partner logos",
+      "default": "1024 px screenshots",
+      "reason": "owner: use the best originals",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d57",
+      "topic": "navigation",
+      "choice": "Header: Termin buchen, Service, Blog, Über uns, Shop; footer Seiten: Shop, Termin buchen, Service, Blog, Über uns, Stellenangebote; the home page links to /service/; blog posts and booking pages link to /service/ and /termin-buchen/",
+      "default": "menu without Service",
+      "reason": "plan: link /service/ from header or footer and home",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d58",
+      "topic": "Markdown quotes",
+      "choice": "astro.config.mjs: markdown smartypants off, so captured text is rendered as written (the capture HTML already has typographic quotes where the original had them)",
+      "default": "smartypants default",
+      "reason": "plan: text verbatim",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d59",
+      "topic": "structured data on every page",
+      "choice": "src/components/SEO.astro builds one @graph per page: Organization (logo 512x512, brands, department only for the stores in that graph) and WebSite on every page except the 404, plus the page nodes (BikeStore per store, Article, BreadcrumbList); a store node links to its booking page (was /ueber-uns/ for both); article and sitemap dates are written in Berlin time (berlinIso) so the date part is the day on the page (the UTC day was one day early for 01:25 posts); posts carry article:published_time and article:modified_time, the release sitemap gets lastmod for the posts only (no date is guessed for other pages)",
+      "default": "JSON-LD only on home, Ueber uns and the pages with their own nodes; UTC dates",
+      "reason": "every @id reference must resolve inside its page, and Google does not follow an @id to another page; the visible date is the Berlin date",
+      "costIfWrong": "low: Organization and WebSite repeat on each page (about 1.2 KB of HTML)",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d60",
+      "topic": "seo check rules",
+      "choice": "tools/checks/seo.mjs now also checks: slug-like titles; claim words (E-Bike, Rennrad, Gravel, Leasing, Fitting, Werkstatt, Canyon, brands, percentages, prices, ratings) in a title or description must occur in the page own text; Open Graph and Twitter fields agree with title, description and each other, og:image 1200x630 under 300 KB with matching width and height tags, article times; JSON-LD types limited to Organization, WebSite, BikeStore, BreadcrumbList, Article (no JobPosting, Review, Product, FAQPage), the node set per page type, @id references, breadcrumbs equal the visible crumbs and end at the canonical URL, Article equals h1, canonical, visible date and image, BikeStore address, phone, e-mail and hours are in the visible page text; vague anchor text, one link text pointing at two targets, every page except the legal pages linked from the content of another page; sitemap namespace, absolute URLs and lastmod; the RSS feed against the posts; test/seo-data.test.mjs compares the store, hours and brand data with the captured text",
+      "default": "title, description, canonical, Open Graph and JSON-LD parse checks only",
+      "reason": "plan: keep the SEO rules enforced; claims only from the page copy",
+      "costIfWrong": "low: a legitimate new claim word has to be added to the page copy or the CLAIMS list",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d61",
+      "topic": "internal links between related pages",
+      "choice": "home links to /ueber-uns/ (stores section); Ueber uns gets \"Mehr ueber BikeOne\" with links to /service/, /blog/ and /stellenangebote/ (the jobs page had no content link); /service/ gets \"Mehr dazu im Blog\" with the three posts about leasing, workshop and fitting; the blog index links to the booking page and /service/; the 404 button is \"Zum Blog\"; anchor text names the target",
+      "default": "links only through the menu, footer and a few buttons",
+      "reason": "seo-review M2: pages without content links; plan: home to service to booking to blog",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d62",
+      "topic": "titles and descriptions reviewed against seo-review.md",
+      "choice": "all 16 reviewed against section 5 and the page own text; kept: they use only words of the page copy, city names from the stores and no unconfirmed claim (no E-Bike or Rennrad in home, service, booking titles; the review proposal \"Rennrad, Gravel & E-Bike\" needs the owner); changed: the legal titles use the en dash like every other title (\"Impressum – BikeOne GmbH Oldenburg\", \"Datenschutzerklaerung – BikeOne GmbH\": the privacy policy is not about one store), the Impressum description spells Rheinstrasse like the rest of the site (NAP), the E-Bike post description reads \"Ein Vergleich von Unterstuetzung, Gewicht, Wartung und Kosten\", og:image:alt of the default hero reads \"Radfahrer auf einer Bergstrasse vor schneebedeckten Gipfeln\" (what the photo shows); the legal texts themselves are untouched",
+      "default": "titles and descriptions of Stage 1 and 2",
+      "reason": "plan Stage 3: review against seo-review.md",
+      "costIfWrong": "low: copy for the owner to confirm, candidate claims are listed in notes-stage3.md",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d63",
+      "topic": "contrast and the tokens",
+      "choice": "tools/lib/contrast.mjs and the a11y check compute WCAG ratios for every colour pair the stylesheets use (text 4.5:1, control borders and the focus ring 3:1) from tokens.css; --line-strong (ghost button border) #adb5bd (1.97:1) becomes #7b848c (3.4 to 3.8:1); the footer button no longer turns grey on hover (4.0:1 against its hover colour); the hero shade is checked on the real pixels (poster and five video frames, white text 5.5:1 and more) and now runs from the left on wide screens so the photo stays visible",
+      "default": "token values of Stage 1",
+      "reason": "WCAG 2.2 AA 1.4.3 and 1.4.11; owner: 4.5:1 for text and 3:1 for UI",
+      "costIfWrong": "low: the ghost border is darker",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d64",
+      "topic": "touch targets, focus and keyboard",
+      "choice": "links on their own line, footer lists, the logo and breadcrumb links are at least 44 px high (wide: footer rows, breadcrumbs and address links only on a phone or a touch screen, @media (max-width: 47.99rem), (pointer: coarse)); the breadcrumb is one line and cuts a long post title with an ellipsis; the embed hands the focus to the iframe it inserts (the focused button is removed); legal and post text may break inside a long URL (the Impressum ODR link widened the page by 13 px at 390); the click-to-load map keeps a minimum height of 14 rem",
+      "default": "targets of Stage 1 and 2",
+      "reason": "owner: touch targets at least 44 px at 390 wide; keyboard use of embed buttons",
+      "costIfWrong": "low",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d65",
+      "topic": "browser checks ui, embeds, headers in verify",
+      "choice": "tools/checks/ui.mjs (Chrome: focus ring on every Tab stop with the skip link first, 44 px targets at 390, menu and hero pause button with the keyboard, reduced motion, white text on the photos, no horizontal scrolling), embeds.mjs (every click-to-load embed by mouse, Enter and Space in Chrome and WebKit under the real CSP: before the activation no foreign request, after it exactly one, aborted by the test, to the embed host, no CSP error, focus on the iframe), headers.mjs (_headers: nosniff, Referrer-Policy, Permissions-Policy, CSP without unsafe-inline, wildcard or http, frame-src exactly the three hosts, X-Robots-Tag for bike-one.dev and *.pages.dev, Cloudflare limits for _headers and _redirects, no http:// URL in dist); shared tools/lib/browser.mjs; verify runs 10 checks (about 3 minutes)",
+      "default": "seven checks",
+      "reason": "plan Stage 3: CSP verified in the network test, keyboard use, contrast",
+      "costIfWrong": "low: a slower verify",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d66",
+      "topic": "consent text of the three embeds",
+      "choice": "src/components/Embed.astro: \"{Die Karte|Die Terminbuchung|Der Beispielrechner} wird von {Google Maps|eTermin|JobRad} bereitgestellt. Beim Laden verbindet sich dein Browser mit {Anbieter} und deine IP-Adresse wird uebertragen.\" instead of the generic sentence with \"Ihre IP-Adresse\" (Sie) that did not say what is loaded; prop subject added",
+      "default": "Dieser Inhalt wird von ... bereitgestellt ... Ihre IP-Adresse",
+      "reason": "the site speaks du; the sentence names what is loaded from which provider and that the IP address is sent",
+      "costIfWrong": "still for legal review (Datenschutz does not name the three providers yet)",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d67",
+      "topic": "LCP image preloaded",
+      "choice": "src/lib/preload.ts: the LCP image of home, Ueber uns, the posts and /service/ is preloaded as the AVIF srcset with the widths and sizes its picture uses (type image/avif, fetchpriority high), the first service block is eager with fetchpriority high; measured at slow 4G (1.6 Mbit/s, 150 ms) home 1440: LCP 1.17 s to 0.82 s, /service/ 1.30 s to 0.70 s; size checks that the high-priority image is preloaded with exactly its srcset and sizes and that every img has width, height, a srcset and AVIF and WebP sources; net checks that no /_astro file is fetched twice",
+      "default": "fetchpriority high on the image only",
+      "reason": "plan: LCP image preloaded or fetchpriority high; measured gain",
+      "costIfWrong": "low: browsers without AVIF skip the preload and use the picture fallbacks; a merged single stylesheet was measured and rejected (first view slower on slow 4G)",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d68",
+      "topic": "fallback fonts with the metrics of the web fonts",
+      "choice": "src/styles/fonts.css: Roboto Fallback (400, 700) and Roboto Condensed Fallback (700) on local Arial with size-adjust 99.1, 93.5 and 83.3 percent (measured width ratios on German copy) and ascent, descent and gap overrides from the fonts hhea table; tokens.css puts them behind the web fonts; with the font files delayed by 1.8 s the layout shift of the blog page went from 0.0089 to 0",
+      "default": "Arial Narrow and Arial as the fallback",
+      "reason": "plan: no layout shift from fonts",
+      "costIfWrong": "low: where Arial is missing the next family of the stack is used",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d69",
+      "topic": "hero video on a metered or slow connection",
+      "choice": "HeroVideo.astro: after the load event and from 48 rem up the video starts only when navigator.connection is absent (Safari, Firefox: unchanged behaviour) or not saveData, not type cellular and effectiveType not slow-2g, 2g or 3g; the connection is read again on its change event; net tests the five cases with a mocked connection. Real Chrome desktop does not expose type and reports effectiveType 4g also at 1.6 Mbit/s, so the policy protects Android Chrome and Save-Data users, not a slow desktop line. The encode is unchanged (17.67 MiB)",
+      "default": "play after load, not with Save-Data",
+      "reason": "owner: data-conscious loading if safe",
+      "costIfWrong": "low: an iPad on cellular still loads 17.7 MiB (no API); a pointer: fine condition would cover it, owner to decide",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d70",
+      "topic": "measuring tools",
+      "choice": "tools/perf.mjs (LCP element and time, CLS, requests and bytes per page and viewport, Chrome, WebKit, optional CDP throttling) and tools/screens.mjs (full-page screenshots at 390, 768 and 1440 into review/) with npm run perf and npm run screens; not gates",
+      "default": "ad hoc scripts",
+      "reason": "Stage 3 measurements must be repeatable",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d71",
+      "topic": "hero video",
+      "choice": "The home hero is the poster photo only (owner): no <video>, no pause button, no request for a video. HeroVideo.astro and public/hero.mp4 are removed from the tree (history: b85347b, 8ac7df1; removal ea77c8a); the encoded file stays untracked in .local/hero.mp4 (git-ignored). size asserts that dist/ holds no video or audio file and no page has a video, audio or source-in-media element; net fails on any video or audio request; ui keeps the pixel measurement of the poster (h1 9.0:1, eyebrow 5.47:1, ghost button 17.7:1 at 1440; 12.5, 10.2, 17.1 at 390). Supersedes d51, d69 and the video parts of d63 and d65",
+      "default": "H.264 hero video, 720p, from 48 rem up (d51)",
+      "reason": "owner: best performance; the video was 17.7 MiB and 18 MB of the 18.3 MB home transfer at 1440 (now 246 KB)",
+      "costIfWrong": "low: the poster is the first frame; restoring the component is a git show away",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d72",
+      "topic": "old-URL list frozen",
+      "choice": "docs/old-urls.json lists every old URL (131 paths: path, old status, kind, where found, new fate built or redirect, target, hops) generated once from baseline/routes.json and the captured sitemaps; tools/redirects-build.mjs and the redirects check read it; the check also fails when a row disagrees with tools/redirect-map.mjs. redirects.csv, cloudflare-query-redirects.csv and dist/_redirects (dev and release) are byte-identical before and after",
+      "default": "read baseline/routes.json and capture/sitemaps",
+      "reason": "plan Stage 4: delete capture and baseline, keep the list of old URLs",
+      "costIfWrong": "low: uploads and theme files were never content URLs and are not listed",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d73",
+      "topic": "brand spelling",
+      "choice": "The brand is spelled Cervélo (with é) in the brands collection, so in the home brand list and the Organization JSON-LD; slugs, URLs and file names stay ASCII (/Marke/cervelo/). No captured body text spelled it without the accent. test/seo-data.test.mjs expects the é",
+      "default": "Cervelo as captured",
+      "reason": "owner: Cervélo is the correct spelling",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d74",
+      "topic": "WordPress sources, capture and parity pipeline deleted",
+      "choice": "Commit 923ee48 removes legacy-public/, src/content/{pages,heads,bottoms,parts,index.json}, src/styles/{inline,site.css}, tools/{extract,strip-sourcemaps,sitemaps,verify-legacy}.mjs, baseline/, capture/, the kit parity scripts and scripts/lib files, exceptions.json, proposals.json, inert-forms.json, docs/media-plan.json and the npm scripts that served them; kept: scripts/review-serve.mjs (contentTypeFor inlined), scripts/state.mjs, scripts/build-redirects.mjs and scripts/lib/{node-version,redirects-csv,review-routes}.mjs. The wp check has no allowlist. css-tree, pixelmatch and playwright leave devDependencies (the checks load Playwright from the kit). The page-text and seo-data tests compare pages with their content files (legal and blog Markdown, the Ueber uns text), not with the capture; the verbatim-from-old-site guard ends with the capture, git history keeps it. .conversion/media-cache and video-download stay on disk, git-ignored. Supersedes d52 (STAGE4_SOURCES)",
+      "default": "keep capture/ and baseline/ until the migration is signed off",
+      "reason": "plan Stage 4; owner: no WordPress anywhere in the repository",
+      "costIfWrong": "low: git checkout 3b4f544 -- <path> restores any of it (docs/LAUNCH.md)",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d75",
+      "topic": "hero video may return only if performance-compatible",
+      "choice": "A video returns to the hero only after LCP and transfer are measured (npm run perf, slow4g) and it passes: consider 540p, (pointer: fine), Save-Data, a lazy start after load; written into docs/TODO.md with the commit hashes to restore it",
+      "default": "poster only for good",
+      "reason": "owner: future TODO",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d76",
+      "topic": "docs/TODO.md is the owner list",
+      "choice": "docs/TODO.md (tracked) groups every open item: Legal, Content and claims, Hero video, Product and IA, Hosting and launch, Testing gaps, Repository; one line each with who acts and what blocks it; linked from README.md and AGENTS.md/CLAUDE.md. README, AGENTS.md, CLAUDE.md, docs/plan.md (how the site is built now, ledger kept), docs/third-party.md, docs/LAUNCH.md and docs/redesign.md are rewritten for the native site",
+      "default": "notes in the stage files only",
+      "reason": "owner: one place for what is open",
+      "costIfWrong": "none",
+      "date": "2026-11-25"
+    },
+    {
+      "id": "d77",
+      "topic": "image sizes match the rendered width",
+      "choice": "src/lib/preload.ts: SERVICE sizes are (min-width: 74rem) 34.5rem, (min-width: 48rem) calc((100vw - 5rem) / 2), calc(100vw - 2rem) (two columns from 48rem, container 72rem); POST sizes are (min-width: 74rem) 72rem, calc(100vw - 2rem). The preload tags use the same constants. Measured over 216 image renders (390, 768, 1440 at 1x and 2x) and at 12 widths from 600 to 1700: every chosen candidate is the smallest that covers the rendered width; wasted AVIF bytes 54 KB (390 at 2x), 99 KB (768 at 1x and 2x) before, 0 after",
+      "default": "sizes of d67 (34rem from 48rem, 72rem from 64rem, 100vw on phones)",
+      "reason": "owner: apply the plan ranked list; tablets fetched the 768 px file where 480 px suffices, phones the 1024 px post cover where 768 px suffices",
+      "costIfWrong": "none: a too small value would only pick a smaller file; the size check keeps the preload identical to the picture",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d78",
+      "topic": "icons cached for one day",
+      "choice": "public/_headers: /favicon.ico and /apple-touch-icon.png get Cache-Control: public, max-age=86400 (they are not hashed, so not immutable); /_astro/* stays immutable for a year, HTML keeps the Pages default (revalidate). The headers check asserts the two rules",
+      "default": "icons on the Pages default (a conditional request per visit)",
+      "reason": "owner: plan option O9",
+      "costIfWrong": "a changed icon takes up to a day to reach a returning visitor",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d79",
+      "topic": "first-row blog thumbnails stay lazy",
+      "choice": "Tried eager (and eager with fetchpriority low) for the first three thumbnails of /blog/: measured LCP at slow 4G 544 to 596 ms (1440) and 540 to 588 ms (390), 572 ms with fetchpriority low, and at 390 an extra 82 KB before the load event for pictures below the fold. Reverted; all thumbnails remain lazy",
+      "default": "lazy (unchanged)",
+      "reason": "owner asked for eager where in the first view; the measurement shows the text LCP gets slower, so the owner decision is not applied (acceptance: other pages unchanged or better)",
+      "costIfWrong": "none: the thumbnails load a moment after the layout",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d80",
+      "topic": "AVIF quality 45",
+      "choice": "astro.config.mjs image.service.config.avif.quality 45 (sharp default 50; WebP and JPEG stay at 80). All AVIF files of dist/ 1312 KB to 1073 KB (-18 %); the eight photos at the widths the site delivers 942 KB to 765 KB (-18.8 %), PSNR about 1 dB lower; crops of beratung, konfiguration, leasing, fitting looked at 1:1 and magnified 2x next to q50 and the original: only fine spokes are slightly softer at 2x magnification, nothing visible at display size. Astro caches encoded images in node_modules/.astro/assets keyed without the quality, so after a quality change that folder must be deleted once",
+      "default": "quality 50 (sharp default)",
+      "reason": "owner: apply q45 if no visible damage on the photos",
+      "costIfWrong": "a little softness in fine detail; set the value back to 50 and delete node_modules/.astro/assets",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d81",
+      "topic": "German-only font subset",
+      "choice": "src/assets/fonts/{roboto-de-400,roboto-de-700,roboto-condensed-de-700}.woff2: subsets of the @fontsource latin files (U+0020-007E, no-break space, section and copyright signs, guillemets, degree, middle dot, the umlauts, ss, e-acute, en and em dash, typographic quotes, bullet, ellipsis, breadcrumb guillemet, euro, trademark, minus) made with fontTools pyftsubset (a one-off tool in a throwaway venv, not a dependency; docs/fonts.md). Font bytes 64 KB to 43 KB (14.0, 14.3, 14.3 KB instead of 21.9, 22.2, 21.1 KB), kerning kept. fonts.css names exactly those ranges; the latin-ext files stay on demand. size now fails when a page text or a CSS content string shows a character the old latin file covered and the subset does not (proved red by removing U+DF and U+203A). Full-page screenshots of 16 pages at 1440 and 390 are pixel identical to before",
+      "default": "the @fontsource latin files (64 KB)",
+      "reason": "owner: drop unused subsets and glyphs, measure the saving",
+      "costIfWrong": "a character outside the subset falls back to Arial for that glyph; the size check catches it before release",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d82",
+      "topic": "speculation rules: prefetch of internal pages",
+      "choice": "public/speculation-rules.json (prefetch only, eagerness conservative = on pointer down, where href_matches /* and not /feed/*, so the shop and every other host never match) delivered by a Speculation-Rules header in the /* rule of public/_headers, because the CSP script-src self blocks inline rules; the file has Content-Type application/speculationrules+json and a one-day cache. Chrome 158: HTMLScriptElement.supports true, Preload.ruleSetUpdated without error, candidates all same-origin, pointer down on a menu link gives prefetch status Ready, 0 foreign requests; WebKit (Playwright) also fetches the file and logs no error. headers check asserts header, MIME type and the rule content; net asserts the Chrome behaviour (CDP Preload domain); both proved red. The review server applies the Content-Type rule of _headers. Costs one 166 byte request per page",
+      "default": "no speculation rules",
+      "reason": "owner: prefetch the main internal navigation links with conservative eagerness, never the shop",
+      "costIfWrong": "a wasted prefetch of a 20 KB page on pointer down; remove the header line to switch it off",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d83",
+      "topic": "hero film, first frame as poster, phone crop (supersedes d71, completes d75)",
+      "choice": "The home hero plays an 8 s silent loop cut from the HEVC original (in 3.5 s, out 11.5 s, the last 0.5 s dissolves into the 0.5 s before the start, so the loop restarts without a cut). public/hero.webm AV1 1280x720 24 fps 0.49 MiB (listed first) and public/hero.mp4 H.264 High avc1 faststart 0.67 MiB (fallback), BT.709 limited range, no audio; encodes in docs/hero-video.md. The poster is the clip frame 0 from the 1080p source (src/assets/photos/hero-poster.jpg, and a 864x1080 portrait crop for phones below 48rem, art-directed in HeroPoster.astro with one preload per AVIF source and media query); the mountain photo is not shown in the hero any more (hero.jpg stays as the default Open Graph image). HeroVideo.astro (muted, loop, playsinline, preload none, no src until start) sets the src and plays only after the load event and an idle moment, with the hero in view, at 48rem and wider with a fine pointer, not under reduced motion, Save-Data, cellular, 2g or 3g; fades in on the first presented frame (requestVideoFrameCallback); pauses when the tab is hidden or the hero leaves the view; the pause button (accessible German labels Hintergrundvideo anhalten and abspielen, no aria-pressed) works with the keyboard; a refused autoplay (NotAllowedError) leaves the poster, drops the src and logs nothing. Measured (Chrome 158, local server): home 1440 before the load event 170 KB and no video request, LCP 252 ms fast 4G and 660 ms slow 4G (796 before), CLS 0, one 206 request of 0.49 MiB after load, 0 video bytes at 390; poster against the first video frame mean difference 2.8 of 255 (AV1; the H.264 fallback shows 7.7 in Chrome on macOS with hardware decode). Checks: size (each video at most 1.0 MiB and named by the home page, mp4 H.264 faststart without audio, one video element on / only, preload per AVIF source), net (no video request before load, none at 390, reduced motion, touch, Save-Data, cellular, 3g, 2g; exactly one on a good connection, at most 1 MiB, none again over a loop), ui (button with the keyboard, reduced motion, swap difference at most 6, text contrast on the poster and on frames at 5, 25, 50, 75, 95 %), each proved red by hand. Rollback: git revert of the hero commit",
+      "default": "poster photo only (d71), mountain photo",
+      "reason": "owner: option C of docs in .working-files/website-performance/plan.md, the poster is the first frame of the film, a portrait crop for phones, rights for the people in the film are cleared, the SCOTT lettering is accepted for now",
+      "costIfWrong": "about 0.5 MiB more per desktop visit and a moving background; revert the commit; the SCOTT lettering is a brand-consistency point in docs/TODO.md",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d84",
+      "topic": "hero shade retuned for the film",
+      "choice": "src/pages/index.astro: the vertical gradient of the wide-screen shade keeps 12 % (1f) at 35 % instead of 0 (the horizontal gradient is unchanged). Worst white-text contrast over 32 frames of the film (every 0.25 s) at 1440: h1 13.5:1, eyebrow 5.6:1 (4.7:1 before the change, a thin margin), ghost button 17.2:1; at 800 px: 11.5, 6.4, 17.1",
+      "default": "gradient 00 at 35 % (the mountain photo shade)",
+      "reason": "owner: re-tune the shade if needed; the eyebrow came within 0.2 of the 4.5:1 limit on a bright window frame",
+      "costIfWrong": "the picture is slightly darker in the upper middle",
+      "date": "2026-11-27"
+    },
+    {
+      "id": "d85",
+      "topic": "hero film files cached for one day",
+      "choice": "public/_headers: /hero.webm and /hero.mp4 get Cache-Control: public, max-age=86400 (they sit in public/, so they are not hashed and not immutable); the headers check asserts both rules together with the icons",
+      "default": "the Pages default (a conditional request per visit)",
+      "reason": "a returning visitor should not download or even revalidate 0.5 MiB on every page view; a re-encode takes up to a day to reach a returning visitor",
+      "costIfWrong": "a replaced film is served from the browser cache for up to a day; rename the files to bust it",
+      "date": "2026-11-27"
+    }
+  ],
+  "counts": {},
+  "needsYou": [
+    {
+      "item": "bike-one.org unreachable from this machine (IPv6 only, ping6 100% loss, net::ERR_ADDRESS_UNREACHABLE): the all-pages visual review and phases 10-12 wait for it",
+      "command": "fix network, then: npm run review:serve -- --background --port 4321, shoot live-all and new-all, review:diff, review:sheet, review:check",
+      "before": "visual"
+    },
+    {
+      "item": "gh not logged in: push branch and open PR from .conversion/pr-body.md",
+      "command": "! gh auth login",
+      "before": "pr"
+    },
+    {
+      "item": "Cloudflare login for Pages project and bike-one.dev custom domain",
+      "command": "! npx wrangler login",
+      "before": "prelaunch"
+    },
+    {
+      "item": "Create R2 bucket, upload media, regenerate rewrites; live-temporary must be gone before DNS moves",
+      "command": "set R2_ACCOUNT_ID R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY R2_BUCKET",
+      "before": "DNS"
+    },
+    {
+      "item": "Export Search Console data",
+      "command": "Search Console export",
+      "before": "DNS"
+    }
+  ],
+  "intake": {
+    "forms": {
+      "service": "formspree"
+    },
+    "testAddress": null,
+    "domain": "bike-one.org",
+    "stagingDomain": "bike-one.dev",
+    "vercelScope": null,
+    "publicStaging": true,
+    "consent": [],
+    "keepPages": [],
+    "excludePaths": [
+      "/shop/",
+      "/product/",
+      "/product-category/",
+      "/product-brand/",
+      "/brand/",
+      "/cart/",
+      "/checkout/",
+      "/my-account/",
+      "/wishlist/",
+      "/produkt/",
+      "/produkt-kategorie/",
+      "/warenkorb/",
+      "/kasse/",
+      "/mein-konto/",
+      "/wunschliste/"
+    ],
+    "components": false
+  },
+  "trailingSlash": "always"
+}

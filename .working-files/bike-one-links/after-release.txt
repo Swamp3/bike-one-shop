@@ -1,0 +1,4 @@
+  110  55 files a[href] | https://shop.bike-one.org/
+   43  43 files link[rel=canonical] | https://bike-one.org/alle-fahrrader/  ,  https://bike-one.org/blog/
+   22  22 files .xml file | https://bike-one.org/Marke/cervelo/feed/  ,  https://bike-one.org/Marke/factor/feed/
+    1   1 files .txt file | https://bike-one.org/wp-sitemap.xml

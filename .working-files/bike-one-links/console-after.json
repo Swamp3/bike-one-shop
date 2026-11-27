@@ -1,0 +1,66 @@
+{
+ "1440 /": [
+  "blocked: http://fonts.googleapis.com/css?family=Roboto:500%2C400&display=swap",
+  "blocked: https://fonts.googleapis.com/css?family=Roboto%20Condensed:regular|Roboto%20Condensed:regular|Playfair%20Display:regular",
+  "console error: Failed to load resource: net::ERR_FAILED",
+  "console log: JQMIGRATE: Migrate is installed, version 3.4.1",
+  "requestfailed: /VidOne.mp4 net::ERR_ABORTED"
+ ],
+ "1440 /main-bike/": [
+  "blocked: http://fonts.googleapis.com/css?family=Roboto:500%2C400&display=swap",
+  "blocked: https://bike-leasing-calculator.jobrad.org/",
+  "blocked: https://fonts.googleapis.com/css?family=Roboto%20Condensed:regular|Roboto%20Condensed:regular|Playfair%20Display:regular",
+  "console error: Failed to load resource: net::ERR_FAILED",
+  "console log: JQMIGRATE: Migrate is installed, version 3.4.1",
+  "requestfailed: /VidOne.mp4 net::ERR_ABORTED"
+ ],
+ "1440 /blog/": [
+  "blocked: https://fonts.googleapis.com/css?family=Roboto%20Condensed:regular|Roboto%20Condensed:regular|Playfair%20Display:regular",
+  "console error: Failed to load resource: net::ERR_FAILED",
+  "console log: JQMIGRATE: Migrate is installed, version 3.4.1"
+ ],
+ "1440 /termin-buchen/": [
+  "blocked: https://fonts.googleapis.com/css?family=Roboto%20Condensed:regular|Roboto%20Condensed:regular|Playfair%20Display:regular",
+  "blocked: https://www.google.com/maps?q=Lengericher%20Landstra%C3%9Fe%2030,%2049078%20Osnabr%C3%BCck&output=embed",
+  "blocked: https://www.google.com/maps?q=Rheinstr.%2016,%2026135%20Oldenburg&output=embed",
+  "console error: Failed to load resource: net::ERR_FAILED",
+  "console log: JQMIGRATE: Migrate is installed, version 3.4.1"
+ ],
+ "1440 /Marke/trek/": [
+  "blocked: https://fonts.googleapis.com/css?family=Roboto%20Condensed:regular|Roboto%20Condensed:regular|Playfair%20Display:regular",
+  "console error: Failed to load resource: net::ERR_FAILED",
+  "console log: JQMIGRATE: Migrate is installed, version 3.4.1"
+ ],
+ "390 /": [
+  "blocked: http://fonts.googleapis.com/css?family=Roboto:500%2C400&display=swap",
+  "blocked: https://fonts.googleapis.com/css?family=Roboto%20Condensed:regular|Roboto%20Condensed:regular|Playfair%20Display:regular",
+  "console error: Failed to load resource: net::ERR_FAILED",
+  "console log: JQMIGRATE: Migrate is installed, version 3.4.1",
+  "requestfailed: /VidOne.mp4 net::ERR_ABORTED"
+ ],
+ "390 /main-bike/": [
+  "blocked: http://fonts.googleapis.com/css?family=Roboto:500%2C400&display=swap",
+  "blocked: https://bike-leasing-calculator.jobrad.org/",
+  "blocked: https://fonts.googleapis.com/css?family=Roboto%20Condensed:regular|Roboto%20Condensed:regular|Playfair%20Display:regular",
+  "console error: Failed to load resource: net::ERR_FAILED",
+  "console log: JQMIGRATE: Migrate is installed, version 3.4.1",
+  "requestfailed: /VidOne.mp4 net::ERR_ABORTED"
+ ],
+ "390 /blog/": [
+  "blocked: https://fonts.googleapis.com/css?family=Roboto%20Condensed:regular|Roboto%20Condensed:regular|Playfair%20Display:regular",
+  "console error: Failed to load resource: net::ERR_FAILED",
+  "console log: JQMIGRATE: Migrate is installed, version 3.4.1"
+ ],
+ "390 /termin-buchen/": [
+  "blocked: https://fonts.googleapis.com/css?family=Roboto%20Condensed:regular|Roboto%20Condensed:regular|Playfair%20Display:regular",
+  "blocked: https://www.google.com/maps?q=Lengericher%20Landstra%C3%9Fe%2030,%2049078%20Osnabr%C3%BCck&output=embed",
+  "blocked: https://www.google.com/maps?q=Rheinstr.%2016,%2026135%20Oldenburg&output=embed",
+  "console error: Failed to load resource: net::ERR_FAILED",
+  "console log: JQMIGRATE: Migrate is installed, version 3.4.1"
+ ],
+ "390 /Marke/trek/": [
+  "blocked: https://fonts.googleapis.com/css?family=Roboto%20Condensed:regular|Roboto%20Condensed:regular|Playfair%20Display:regular",
+  "console error: Failed to load resource: net::ERR_FAILED",
+  "console log: JQMIGRATE: Migrate is installed, version 3.4.1"
+ ]
+}

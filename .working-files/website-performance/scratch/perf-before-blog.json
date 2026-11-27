@@ -1,0 +1,154 @@
+[
+ {
+  "width": 1440,
+  "url": "/blog/",
+  "th": "none",
+  "lcp": 56,
+  "lcpEl": "p ",
+  "fcp": 56,
+  "cls": 0,
+  "preReq": 7,
+  "preKB": 52,
+  "preBy": {
+   "html": 17,
+   "font": 21,
+   "css": 13,
+   "image": 2
+  },
+  "postReq": 8,
+  "postKB": 83,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "64/56/48"
+ },
+ {
+  "width": 1440,
+  "url": "/blog/",
+  "th": "fast4g",
+  "lcp": 200,
+  "lcpEl": "p ",
+  "fcp": 200,
+  "cls": 0,
+  "preReq": 6,
+  "preKB": 32,
+  "preBy": {
+   "html": 17,
+   "css": 13,
+   "image": 2
+  },
+  "postReq": 9,
+  "postKB": 103,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "200/200/196"
+ },
+ {
+  "width": 1440,
+  "url": "/blog/",
+  "th": "slow4g",
+  "lcp": 544,
+  "lcpEl": "p ",
+  "fcp": 544,
+  "cls": 0,
+  "preReq": 6,
+  "preKB": 32,
+  "preBy": {
+   "html": 17,
+   "css": 13,
+   "image": 2
+  },
+  "postReq": 9,
+  "postKB": 103,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "532/552/544"
+ },
+ {
+  "width": 390,
+  "url": "/blog/",
+  "th": "none",
+  "lcp": 56,
+  "lcpEl": "p ",
+  "fcp": 56,
+  "cls": 0,
+  "preReq": 7,
+  "preKB": 52,
+  "preBy": {
+   "html": 17,
+   "font": 21,
+   "css": 13,
+   "image": 2
+  },
+  "postReq": 6,
+  "postKB": 61,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "56/64/48"
+ },
+ {
+  "width": 390,
+  "url": "/blog/",
+  "th": "fast4g",
+  "lcp": 200,
+  "lcpEl": "p ",
+  "fcp": 200,
+  "cls": 0,
+  "preReq": 6,
+  "preKB": 32,
+  "preBy": {
+   "html": 17,
+   "css": 13,
+   "image": 2
+  },
+  "postReq": 7,
+  "postKB": 82,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "200/200/196"
+ },
+ {
+  "width": 390,
+  "url": "/blog/",
+  "th": "slow4g",
+  "lcp": 540,
+  "lcpEl": "p ",
+  "fcp": 540,
+  "cls": 0,
+  "preReq": 6,
+  "preKB": 32,
+  "preBy": {
+   "html": 17,
+   "css": 13,
+   "image": 2
+  },
+  "postReq": 7,
+  "postKB": 82,
+  "video": [
+   [],
+   [],
+   []
+  ],
+  "foreign": 0,
+  "lcps": "536/544/540"
+ }
+]

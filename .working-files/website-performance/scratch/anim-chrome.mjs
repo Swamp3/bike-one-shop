@@ -1,0 +1,11 @@
+const { chromium } = await import('/Users/timo.alts/dev/astro-conversion-kit/node_modules/playwright/index.mjs');
+const b = await chromium.launch({ channel: 'chrome' });
+const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } }); const page = await ctx.newPage();
+await page.route((u) => !u.href.startsWith('http://127.0.0.1:4401'), (r) => r.abort());
+await page.goto('http://127.0.0.1:4401/b/?start=none', { waitUntil: 'load' });
+const r = await page.evaluate(() => new Promise((res) => { const i = new Image(); i.onload = () => res({ w: i.naturalWidth, h: i.naturalHeight }); i.onerror = () => res('error'); i.src = '/media/a24_45.avif'; document.querySelector('.hero').append(Object.assign(i, { style: 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2' })); }));
+console.log('decoded by Chrome', r);
+const s1 = await page.screenshot({ clip: { x: 0, y: 100, width: 1440, height: 600 } }); await page.waitForTimeout(1500);
+const s2 = await page.screenshot({ clip: { x: 0, y: 100, width: 1440, height: 600 } });
+console.log('frames differ after 1.5 s (animating):', !s1.equals(s2));
+await b.close();

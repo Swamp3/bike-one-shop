@@ -1,0 +1,28 @@
+---
+// One blog post as a card: date, linked title, excerpt, optionally the post image. `level` is the heading level of the title.
+import { Picture } from 'astro:assets';
+import { formatDate, postPath, type Post } from '../lib/posts';
+
+interface Props { post: Post; image?: boolean; level?: 2 | 3 }
+const { post, image = false, level = 3 } = Astro.props;
+const Heading = `h${level}` as 'h2' | 'h3';
+---
+<article class="post-card">
+  {image && <Picture class="thumb" src={post.data.image} alt="" formats={['avif', 'webp']} widths={[360, 540, 720]} sizes="(min-width: 48rem) 22rem, calc(100vw - 2rem)" loading="lazy" decoding="async" pictureAttributes={{ class: 'thumb-pic' }} />}
+  <div class="copy">
+    <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+    <Heading><a href={postPath(post)}>{post.data.title}</a></Heading>
+    <p>{post.data.excerpt}</p>
+  </div>
+</article>
+<style>
+  .post-card { height: 100%; display: flex; flex-direction: column; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+  .post-card :global(.thumb-pic), .post-card :global(.thumb) { display: block; width: 100%; }
+  .post-card :global(.thumb) { aspect-ratio: 3 / 2; object-fit: cover; height: auto; }
+  .copy { padding: var(--space-5); }
+  time { font-size: 0.9rem; color: var(--ink-muted); }
+  h2, h3 { margin: var(--space-2) 0 var(--space-3); font-size: 1.25rem; }
+  h2 a, h3 a { color: var(--ink); text-decoration: none; }
+  h2 a:hover, h3 a:hover { text-decoration: underline; }
+  p { margin: 0; }
+</style>

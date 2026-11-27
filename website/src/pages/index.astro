@@ -1,0 +1,134 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import StoreCard from '../components/StoreCard.astro';
+import ServiceBlock from '../components/ServiceBlock.astro';
+import PostCard from '../components/PostCard.astro';
+import HeroPoster from '../components/HeroPoster.astro';
+import HeroVideo from '../components/HeroVideo.astro';
+import { SHOP_URL, TAGLINE } from '../lib/site.mjs';
+import { getStores } from '../lib/stores';
+import { getPosts } from '../lib/posts';
+import { storeNode } from '../lib/schema';
+import { HERO, HERO_NARROW, HERO_PORTRAIT, HERO_WIDE, preloadAvif } from '../lib/preload';
+import hero from '../assets/photos/hero-poster.jpg';
+import heroPortrait from '../assets/photos/hero-poster-portrait.jpg';
+import beratung from '../assets/photos/beratung.jpg';
+import fitting from '../assets/photos/fitting.jpg';
+import konfiguration from '../assets/photos/konfiguration.jpg';
+import werkstatt from '../assets/photos/werkstatt.jpg';
+import leasing from '../assets/photos/leasing.jpg';
+
+const stores = await getStores();
+const brands = (await getCollection('brands')).map((b) => b.data.name);
+const posts = (await getPosts()).slice(0, 3);
+const origin = Astro.site!.href;
+const nodes = stores.map((s) => storeNode(origin, s));
+
+// Service texts: the old home page, word for word.
+const services = [
+  { title: 'Deine Bedürfnisse im Fokus.', image: beratung, alt: 'Ein rotes Rennrad auf einem Holzpodest im Showroom, dahinter weitere Räder', cta: 'Beratungstermin buchen',
+    text: 'Uns ist es wichtig zu verstehen, wer du bist und was du brauchst. In persönlichen Beratungsgesprächen analysieren wir gemeinsam deine Bedürfnisse, Vorlieben, Gewohnheiten und Ansprüche. Durch eine detaillierte Bedarfsanalyse finden wir gemeinsam das für dich und deine Einsatzzwecke perfekt passende Bike.' },
+  { title: 'Dein Körper ist unser Maß.', image: fitting, alt: 'Bike-Fitting: eine Fahrerin auf dem Rad im Rollentrainer, daneben ein Mann, der zusieht', cta: 'BikeFitting buchen',
+    text: 'Kaum eine Facette des Radfahrens wird derart unterschätzt wie die richtige Sitzposition. Denn was bringt das schönste Fahrrad, wenn es am Ende nicht zum Fahrer passt? Ein individuelles Fitting fördert nicht nur die Effizienz durch eine optimale Kraftentfaltung, sondern lindert Beschwerden und beugt Schmerzen vor.' },
+  { title: 'So Individuell wie du.', image: konfiguration, alt: 'Ein grünes Gravelbike vor dunklem Studiohintergrund',
+    text: 'Du hast genug von Fahrrädern von der Stange? Kein Problem, denn wir arbeiten gerne mit dir an deinem individualisierten Traumbike. Eine enge Kooperation mit ausgewählten Partnern ermöglicht uns dabei eine individuelle Konfiguration deines Wunschfahrrads – vom richtigen Laufradsatz über die perfekte Übersetzung bis hin zur Lackierung deiner Träume. Durch die Kombination aus Bike-Fitting und Individualkonfiguration entsteht so das perfekt auf dich zugeschnittene Bike.' },
+  { title: 'Wellness für dein Rad', image: werkstatt, alt: 'Roter Messständer mit Messuhr', cta: 'Werkstatt Termin buchen',
+    text: 'So wie du braucht auch dein Rad mal etwas Erholung. Die beste Fitness bringt nichts, wenn das Material nicht mitspielt. Eine jährliche Wartung ist essenziell, damit dein Rad leichtgängig fährt, solide bremst und schaltet – und vor allem, damit du sicher auf dem Rad unterwegs bist. Wir reinigen, schmieren und prüfen dein Rad auf Herz und Nieren. Ob Inspektion, Reparatur oder Umbau – wir sind für dich da.' },
+  { title: 'Spare bis zu 40 % beim Fahrradkauf', lead: 'Spare mit Dienstfahrradleasing', image: leasing, alt: 'Zwei Radfahrer auf einer Straße, aus niedriger Perspektive fotografiert', cta: 'Beratungstermin buchen',
+    text: 'Einfach Traumbike aussuchen und bis zu 40 % sparen. Entspannt durch die Rushhour, bergab auf Trails oder mit Speed über den Asphalt. Jedes Rad kann ein Dienstrad werden. Spare bis zu 40 % im Vergleich zum Direktkauf. Lass dich von uns beraten.' },
+];
+---
+<Base
+  title="BikeOne: Bikes, Beratung & Service in Oldenburg & Osnabrück"
+  description="Beratung, Bike-Fitting, individuelle Konfiguration, Werkstatt und Dienstradleasing bei BikeOne in Oldenburg und Osnabrück. Jetzt Termin buchen."
+  nodes={nodes}
+  preload={[await preloadAvif(heroPortrait, HERO_PORTRAIT, HERO_NARROW), await preloadAvif(hero, HERO, HERO_WIDE)]}
+>
+  <section class="hero dark" aria-labelledby="hero-title">
+    <HeroPoster />
+    <HeroVideo />
+    <div class="container copy">
+      <p class="eyebrow-light">BikeOne</p>
+      <h1 id="hero-title">{TAGLINE.replace(/\.$/, '')}</h1>
+      <div class="cta-row">
+        <a class="btn" href="/termin-buchen/">Termin buchen</a>
+        <a class="btn btn--ghost" href={SHOP_URL}>Zum Shop</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="stores-title">
+    <div class="container">
+      <p class="eyebrow">Standorte</p>
+      <h2 id="stores-title">Zweimal in deiner Nähe</h2>
+      <div class="store-grid">
+        {stores.map((s) => <StoreCard store={s} />)}
+      </div>
+      <p class="more"><a class="tap" href="/ueber-uns/">Standorte, Karte und Öffnungszeiten im Überblick</a></p>
+    </div>
+  </section>
+
+  <section class="section alt" aria-labelledby="service-title">
+    <div class="container">
+      <p class="eyebrow">Service</p>
+      <h2 id="service-title">Beratung, Fitting, Werkstatt und Leasing</h2>
+      <div class="services">
+        {services.map((s, i) => (
+          <ServiceBlock image={s.image} alt={s.alt} title={s.title} lead={s.lead} flip={i % 2 === 1}>
+            <p>{s.text}</p>
+            {s.cta && <a class="btn" href="/termin-buchen/">{s.cta}</a>}
+          </ServiceBlock>
+        ))}
+      </div>
+      <p class="more"><a class="tap" href="/service/">Mehr zu unserem Service</a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="brands-title">
+    <div class="container">
+      <p class="eyebrow">Marken</p>
+      <h2 id="brands-title">Starke Marken</h2>
+      <p class="lead">Eine Auswahl, die ihresgleichen sucht. Mit unseren Partnern können wir dir ein breites Angebot von Einsteiger-Bikes bis hin zu exklusiven Sondermodellen bieten.</p>
+      <ul class="brands">
+        {brands.map((b) => <li>{b}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section alt" aria-labelledby="blog-title">
+    <div class="container">
+      <p class="eyebrow">Blog</p>
+      <h2 id="blog-title">Aktuell im Blog</h2>
+      <ul class="posts">
+        {posts.map((p) => <li><PostCard post={p} /></li>)}
+      </ul>
+      <p><a class="tap" href="/blog/">Alle Beiträge im Blog</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; isolation: isolate; background: var(--header-bg); color: #fff; min-height: min(78vh, 46rem); display: grid; align-items: end; overflow: hidden; }
+  .hero :global(.bg-pic), .hero :global(.bg) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero :global(.bg) { object-fit: cover; z-index: -2; }
+  /* the shade is strongest where the text is: from the bottom on a phone, from the bottom left on a wide screen, so the photo stays visible */
+  .hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, #12121250 0%, #121212bb 50%, #121212f0 100%); }
+  @media (min-width: 48rem) { .hero::after { background: linear-gradient(90deg, #121212e6 0%, #121212b3 38%, #12121233 75%), linear-gradient(180deg, #12121233 0%, #1212121f 35%, #121212d9 100%); } }
+  .copy { padding-block: var(--space-8) var(--space-7); }
+  .eyebrow-light { font: 700 0.9rem/1 var(--font-head); letter-spacing: 0.16em; text-transform: uppercase; color: #fff; margin: 0 0 var(--space-3); }
+  .hero h1 { max-width: 18ch; color: #fff; margin-bottom: var(--space-5); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+
+  .alt { background: var(--surface); border-block: 1px solid var(--line); }
+  .store-grid { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); margin-top: var(--space-5); }
+
+  .store-grid + .more { margin: var(--space-5) 0 0; }
+  .services { display: grid; gap: var(--space-7); margin-top: var(--space-6); }
+  .more { margin: var(--space-6) 0 0; }
+
+  .brands { list-style: none; padding: 0; margin: var(--space-5) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .brands li { padding: 0.6rem 1.1rem; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; font: 700 1.1rem/1 var(--font-head); }
+
+  .posts { list-style: none; padding: 0; margin: var(--space-5) 0; display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+</style>

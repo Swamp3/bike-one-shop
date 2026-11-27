@@ -16,6 +16,7 @@ Current status lives in `PLAN.md` (detailed build log, task-by-task) and `TODO.m
 │   ├── apps/backend/        # Medusa.js v2 API server
 │   ├── apps/storefront/     # Next.js storefront
 │   └── apps/tricon-mock/    # stateful TriCon SOAP mock + inspection UI (:3001), see its README
+├── website/                 # static Astro marketing site (bike-one.org), Cloudflare Pages — see website/CLAUDE.md
 ├── docker-compose.yml       # Postgres 16 + Redis 7 for local dev
 ├── .working-files/          # in-progress feature plans and notes, not documentation (see below)
 ├── planning/                # requirements, architecture decisions, DB schema design, local-dev setup notes

@@ -1,0 +1,90 @@
+---
+// The short film behind the home hero (decision d83). Its first frame is the poster photo (HeroPoster.astro), so the swap
+// is invisible. The page makes no video request on its own: the <video> has preload="none" and no src. The script below
+// sets the src and calls play() only when ALL of these hold: the window load event has passed and the browser is idle,
+// the hero is in view, the screen is at least 48rem wide with a fine pointer (no phone, no tablet), the visitor does not
+// prefer reduced motion and the connection is not metered or slow (Save-Data, cellular, 3g or slower). A browser that
+// refuses autoplay (Safari, iOS Low Power Mode) rejects play(): the poster simply stays, nothing is logged.
+// The film fades in on its first presented frame. It pauses when the tab is hidden or the hero leaves the view, and the
+// button lets the visitor stop it (WCAG 2.2.2, the clip is longer than 5 s). Two encodes, how: docs/hero-video.md.
+const WEBM = '/hero.webm';
+const MP4 = '/hero.mp4';
+---
+<video class="hero-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-webm={WEBM} data-mp4={MP4}></video>
+<button class="hero-toggle" type="button" hidden aria-label="Hintergrundvideo anhalten">
+  <svg class="i-pause" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="3.5" height="12" rx="1" /><rect x="9.5" y="2" width="3.5" height="12" rx="1" /></svg>
+  <svg class="i-play" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11a1 1 0 0 0 1.5.86l9-5.5a1 1 0 0 0 0-1.72l-9-5.5A1 1 0 0 0 4 2.5z" /></svg>
+</button>
+
+<style>
+  .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: 0; transition: opacity 0.6s ease; }
+  .hero-video.is-playing { opacity: 1; }
+  .hero-toggle { position: absolute; right: var(--space-4); top: var(--space-4); z-index: 2; display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; background: #121212b3; color: #fff; border: 1px solid #ffffff80; border-radius: 999px; cursor: pointer; }
+  .hero-toggle:hover { background: #121212; border-color: #fff; }
+  .hero-toggle[hidden] { display: none; }
+  .hero-toggle .i-play { display: none; }
+  .hero-toggle[data-paused] .i-pause { display: none; }
+  .hero-toggle[data-paused] .i-play { display: block; }
+</style>
+<script>
+  const video = document.querySelector<HTMLVideoElement>('.hero-video');
+  const toggle = document.querySelector<HTMLButtonElement>('.hero-toggle');
+  const hero = video?.parentElement;
+  if (video && toggle && hero) {
+    type Connection = EventTarget & { saveData?: boolean; type?: string; effectiveType?: string };
+    const connection = (navigator as Navigator & { connection?: Connection }).connection;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    const desktop = matchMedia('(min-width: 48rem) and (pointer: fine)');
+    const metered = () => Boolean(connection && (connection.saveData || connection.type === 'cellular' || ['slow-2g', '2g', '3g'].includes(connection.effectiveType ?? '')));
+    const allowed = () => desktop.matches && !reduced.matches && !metered();
+
+    let ready = false; // the load event has passed and the browser had an idle moment
+    let inView = false;
+    let userPaused = false;
+    let blocked = false; // the browser refused autoplay
+    let revealed = false;
+
+    const play = () => {
+      if (!video.src) {
+        // AV1 in WebM where the browser plays it (about half the bytes), else H.264 in MP4
+        const av1 = video.canPlayType('video/webm; codecs="av01.0.05M.08"') !== '';
+        video.src = (av1 ? video.dataset.webm : video.dataset.mp4) ?? '';
+      }
+      video.play().catch((error: unknown) => {
+        if (!(error instanceof DOMException) || error.name !== 'NotAllowedError') return;
+        blocked = true; // the poster stays; drop the request, ask no more
+        video.removeAttribute('src');
+        video.load();
+      });
+    };
+    const sync = () => {
+      const want = ready && inView && !document.hidden && !userPaused && !blocked && allowed();
+      if (want) play();
+      else if (!video.paused) video.pause();
+      toggle.hidden = !(revealed && allowed());
+    };
+    const reveal = () => { revealed = true; video.classList.add('is-playing'); sync(); };
+
+    // fade in on the first presented frame, so the poster is never replaced by a black frame
+    video.addEventListener('playing', () => {
+      if (revealed) return;
+      if ('requestVideoFrameCallback' in video) video.requestVideoFrameCallback(reveal);
+      else video.addEventListener('timeupdate', reveal, { once: true });
+    });
+    toggle.addEventListener('click', () => {
+      userPaused = !userPaused;
+      toggle.toggleAttribute('data-paused', userPaused);
+      toggle.setAttribute('aria-label', userPaused ? 'Hintergrundvideo abspielen' : 'Hintergrundvideo anhalten');
+      sync();
+    });
+    new IntersectionObserver(([entry]) => { inView = Boolean(entry?.isIntersecting); sync(); }).observe(hero);
+    for (const query of [reduced, desktop]) query.addEventListener('change', sync);
+    connection?.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', sync);
+
+    // the page, its poster and styles first; then the film
+    const idle = () => { ready = true; sync(); };
+    const afterLoad = () => (typeof requestIdleCallback === 'function' ? requestIdleCallback(idle, { timeout: 2000 }) : setTimeout(idle, 200));
+    if (document.readyState === 'complete') afterLoad(); else addEventListener('load', afterLoad, { once: true });
+  }
+</script>

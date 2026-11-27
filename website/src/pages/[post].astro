@@ -1,0 +1,70 @@
+---
+// One blog post: the captured text (src/content/blog/*.md), a header image, Article data and links on to the booking,
+// the service page and the other posts.
+import { Picture, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PostCard from '../components/PostCard.astro';
+import { formatDate, getPosts, postPath } from '../lib/posts';
+import { articleNode, breadcrumbNode } from '../lib/schema';
+import { POST, preloadAvif } from '../lib/preload';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { post: post.id }, props: { post, others: posts.filter((p) => p.id !== post.id) } }));
+}
+const { post, others } = Astro.props;
+const { Content } = await render(post);
+const d = post.data;
+const origin = Astro.site!.href;
+const cover = await getImage({ src: d.image, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Blog', path: '/blog/' }, { name: d.seoTitle, path: postPath(post) }];
+const nodes = [articleNode(origin, { path: postPath(post), headline: d.title, description: d.description, published: d.date, modified: d.modified, image: new URL(cover.src, origin).href }), breadcrumbNode(origin, crumbs)];
+---
+<Base title={d.seoTitle} description={d.description} image={d.image} imageAlt={d.imageAlt} type="article" published={d.date} modified={d.modified} nodes={nodes} preload={await preloadAvif(d.image, POST)}>
+  <article class="container post">
+    <Breadcrumbs crumbs={crumbs} />
+    <header>
+      <h1>{d.title}</h1>
+      <p class="meta"><time datetime={d.date.toISOString()}>{formatDate(d.date)}</time></p>
+    </header>
+    <Picture class="cover" src={d.image} alt={d.imageAlt} formats={['avif', 'webp']} widths={POST.widths} sizes={POST.sizes} loading="eager" fetchpriority="high" decoding="async" pictureAttributes={{ class: 'cover-pic' }} />
+    <div class="prose"><Content /></div>
+    <aside class="next" aria-labelledby="next-title">
+      <h2 id="next-title">Persönlich beraten lassen</h2>
+      <p>Buche direkt einen freien Termin Online.</p>
+      <div class="cta-row">
+        <a class="btn" href="/termin-buchen/">Termin buchen</a>
+        <a class="btn btn--ghost" href="/service/">Unser Service</a>
+      </div>
+    </aside>
+  </article>
+  <section class="more" aria-labelledby="more-title">
+    <div class="container">
+      <h2 id="more-title">Weitere Beiträge</h2>
+      <ul class="posts">
+        {others.slice(0, 3).map((p) => <li><PostCard post={p} level={3} /></li>)}
+      </ul>
+      <p><a class="tap" href="/blog/">Alle Beiträge im Blog</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .post { padding-block: var(--space-6) var(--space-7); }
+  .post header { max-width: 52rem; }
+  .meta { color: var(--ink-muted); margin: 0 0 var(--space-5); }
+  .post :global(.cover-pic), .post :global(.cover) { display: block; width: 100%; }
+  .post :global(.cover) { aspect-ratio: 16 / 9; object-fit: cover; height: auto; border-radius: var(--radius-lg); }
+  .prose { max-width: 46rem; margin-top: var(--space-6); font-size: 1.075rem; overflow-wrap: break-word; }
+  .prose :global(h2) { font-size: 1.6rem; margin: var(--space-7) 0 var(--space-3); }
+  .prose :global(h3) { font-size: 1.25rem; margin: var(--space-5) 0 var(--space-2); }
+  .prose :global(ul) { margin: 0 0 var(--space-4); }
+  .prose :global(li) { margin-bottom: var(--space-2); }
+  .next { max-width: 46rem; margin-top: var(--space-7); padding: var(--space-5); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+  .next h2 { font-size: 1.5rem; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .more { background: var(--surface); border-block: 1px solid var(--line); padding-block: var(--space-7); }
+  .posts { list-style: none; padding: 0; margin: var(--space-4) 0; display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+</style>

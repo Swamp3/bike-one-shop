@@ -1,0 +1,45 @@
+/* Base: reset, typography, layout helpers, focus, buttons. Page and component rules live in the .astro files. */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1rem/1.6 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg, video { display: block; max-width: 100%; height: auto; }
+h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 700; line-height: 1.15; letter-spacing: 0.005em; margin: 0 0 var(--space-3); text-wrap: balance; }
+h1 { font-size: clamp(2rem, 1.2rem + 3.6vw, 3.5rem); }
+h2 { font-size: clamp(1.6rem, 1.1rem + 2vw, 2.4rem); }
+h3 { font-size: 1.35rem; }
+p { margin: 0 0 var(--space-4); }
+a { color: var(--accent-strong); text-underline-offset: 0.15em; }
+a:hover { color: var(--accent-strong-hover); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+.dark :focus-visible { outline-color: #ffffff; }
+ul { padding-left: 1.25rem; }
+address { font-style: normal; }
+
+.container { width: min(100% - 2rem, var(--container)); margin-inline: auto; }
+.section { padding-block: var(--space-7); }
+@media (min-width: 48rem) { .section { padding-block: var(--space-8); } }
+.eyebrow { font: 700 0.85rem/1 var(--font-head); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-strong); margin: 0 0 var(--space-3); }
+/* a link on its own line is a 44 px target on a phone or any touch screen; on a wide screen with a mouse it keeps the text's own height */
+@media (max-width: 47.99rem), (pointer: coarse) { .tap, address a { display: inline-flex; align-items: center; min-height: 2.75rem; } }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.skip-link { position: absolute; left: var(--space-3); top: -4rem; z-index: 100; background: var(--surface); color: var(--ink); padding: var(--space-3) var(--space-4); border-radius: var(--radius); font-weight: 700; }
+.skip-link:focus { top: var(--space-3); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: 3rem; padding: 0.7rem 1.4rem; border: 2px solid var(--accent-strong); border-radius: var(--radius);
+  background: var(--accent-strong); color: var(--accent-ink); font: 700 1rem/1.2 var(--font-body); text-decoration: none; cursor: pointer;
+}
+.btn:hover { background: var(--accent-strong-hover); border-color: var(--accent-strong-hover); color: var(--accent-ink); }
+.btn--ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+.btn--ghost:hover { background: var(--surface-2); color: var(--ink); border-color: var(--ink); }
+.dark .btn--ghost { color: #fff; border-color: #6b6b6b; }
+.dark .btn--ghost:hover { background: #ffffff1a; color: #fff; border-color: #fff; }

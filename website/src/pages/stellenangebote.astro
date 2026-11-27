@@ -1,0 +1,44 @@
+---
+// /stellenangebote/: the job list of the old site, grouped by location. Nothing is added: how to apply is not stated
+// anywhere, so the page links to the location contacts only.
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { breadcrumbNode } from '../lib/schema';
+
+const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Stellenangebote', path: '/stellenangebote/' }];
+const groups = [
+  { place: 'Zentrale Oldenburg', jobs: ['Mitarbeiter im Innendienst – Online M/W/D Vollzeit'] },
+  { place: 'Filiale Oldenburg', jobs: [] },
+  { place: 'Filiale Osnabrück', jobs: ['Zweiradmechaniker Meister M/W/D Vollzeit', 'Zweiradmechaniker M/W/D Vollzeit', 'Verkäufer M/W/D Vollzeit'] },
+];
+---
+<Base
+  title="Stellenangebote bei BikeOne in Oldenburg & Osnabrück"
+  description="Stellenangebote bei BikeOne: Mitarbeiter im Innendienst in der Zentrale Oldenburg sowie Zweiradmechaniker und Verkäufer in der Filiale Osnabrück."
+  nodes={[breadcrumbNode(Astro.site!.href, crumbs)]}
+>
+  <div class="container page">
+    <Breadcrumbs crumbs={crumbs} />
+    <h1>Stellenangebote</h1>
+    <p class="lead">Hier findest du unsere Stellenangebote:</p>
+    <div class="groups">
+      {groups.map((g) => (
+        <section>
+          <h2>{g.place}</h2>
+          {g.jobs.length ? <ul>{g.jobs.map((j) => <li>{j}</li>)}</ul> : <p>Aktuell keine Stellen zu besetzen</p>}
+        </section>
+      ))}
+    </div>
+    <p><a class="tap" href="/ueber-uns/">Standorte und Kontakt</a></p>
+  </div>
+</Base>
+
+<style>
+  .page { padding-block: var(--space-6) var(--space-8); max-width: 52rem; }
+  .lead { font-size: 1.15rem; color: var(--ink-muted); }
+  .groups { display: grid; gap: var(--space-5); margin: var(--space-5) 0; }
+  .groups section { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: var(--space-5); }
+  .groups h2 { font-size: 1.5rem; }
+  .groups ul { margin: 0; }
+  .groups p { margin: 0; }
+</style>

@@ -1,0 +1,10 @@
+const W = '/Users/timo.alts/dev/bike-one-shop/website';
+const { PLAYWRIGHT, BASE, abortForeign } = await import(`${W}/tools/lib/browser.mjs`);
+const { chromium } = await import(PLAYWRIGHT);
+const b = await chromium.launch({ channel: 'chrome' });
+const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3 }); const page = await ctx.newPage();
+await abortForeign(page);
+await page.goto(BASE + '/', { waitUntil: 'load' }); await page.waitForTimeout(500);
+console.log(await page.evaluate(() => { const i = document.querySelector('img.bg'); return { cur: i.currentSrc.split('/').pop(), nat: i.naturalWidth, box: [i.clientWidth, i.clientHeight], dpr: devicePixelRatio }; }));
+await page.screenshot({ path: 'frames/mob-hero-dpr3.png', clip: { x: 0, y: 65, width: 390, height: 520 } });
+await b.close();

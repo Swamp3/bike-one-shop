@@ -1,0 +1,108 @@
+---
+// /service/: the service copy of the old /main-bike/ page, word for word except the typos listed in
+// .working-files/astro-native-redesign/notes-stage2.md. The three category tiles of that page (links into the shop) are not copied; the
+// shop is in the menu. The partner logos are not shown until their names are confirmed.
+import Base from '../layouts/Base.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ServiceBlock from '../components/ServiceBlock.astro';
+import PostCard from '../components/PostCard.astro';
+import Embed from '../components/Embed.astro';
+import { getPosts, postPath } from '../lib/posts';
+import { breadcrumbNode } from '../lib/schema';
+import { preloadAvif, SERVICE } from '../lib/preload';
+import fitting from '../assets/photos/fitting.jpg';
+import leasing from '../assets/photos/leasing.jpg';
+import werkstatt from '../assets/photos/werkstatt.jpg';
+
+const posts = await getPosts();
+const leasingPost = posts.find((p) => p.id.startsWith('fahrrad-leasing'));
+// the posts that belong to the three services: leasing, workshop, fitting
+const related = ['fahrrad-leasing', 'wann-sich-ein-professioneller', 'so-erkennst-du'].map((prefix) => posts.find((p) => p.id.startsWith(prefix))).filter((p) => p !== undefined);
+const crumbs = [{ name: 'Startseite', path: '/' }, { name: 'Service', path: '/service/' }];
+---
+<Base
+  title="Service: Bike-Fitting, Dienstradleasing, Werkstatt"
+  description="Lasergestütztes Bike-Fitting, Dienstradleasing, Werkstattservice für alle Marken und Canyon Collect & Ride bei BikeOne."
+  nodes={[breadcrumbNode(Astro.site!.href, crumbs)]}
+  preload={await preloadAvif(fitting, SERVICE)}
+>
+  <section class="intro container">
+    <Breadcrumbs crumbs={crumbs} />
+    <h1>Service bei BikeOne</h1>
+    <p class="lead">Wir sind dein Ansprechpartner rund um das Thema Zweirad! Erstklassige Bikes, erstklassige Beratung und erstklassiger Service!</p>
+  </section>
+
+  <section class="section alt" aria-labelledby="leistungen">
+    <div class="container">
+      <h2 id="leistungen" class="visually-hidden">Fitting, Leasing und Werkstatt</h2>
+      <div class="blocks">
+        <ServiceBlock level={3} priority image={fitting} alt="Bike-Fitting: eine Fahrerin auf dem Rad im Rollentrainer, daneben ein Mann, der zusieht" title="Smarte Körpervermessung">
+          <p>Nutze unseren Bike-Fitting Service für neue, aber auch vorhandene Fahrräder, um die ideale Sitzposition für deine Bedürfnisse zu ermitteln. Mithilfe lasergestützter Körpervermessung finden wir das optimale Bike in der richtigen Größe für dich. Für eine ergonomische Sitzposition, die für ideale Kraftübertragung und reduzierte Beschwerden sorgt – für Freizeitradler &amp; Profis</p>
+          <a class="btn" href="/termin-buchen/">Termin buchen</a>
+        </ServiceBlock>
+        <ServiceBlock level={3} flip image={leasing} alt="Zwei Radfahrer auf einer Straße, aus niedriger Perspektive fotografiert" title="Spare mit Dienstradleasing">
+          <p>Entspannt durch die Rush Hour und dabei auch noch etwas für die Gesundheit tun – Pendler, die zur Arbeit mit dem Rad fahren, sind im Stadtverkehr klar im Vorteil. Egal für welches Modell du dich interessierst, jedes Modell kann ein Dienstrad werden. Spare bis zu 40 % im Vergleich zum Direktkauf. {leasingPost ? <a href={postPath(leasingPost)}>Informiere dich zum Thema Dienstrad-Leasing</a> : 'Informiere dich zum Thema Dienstrad-Leasing'}</p>
+        </ServiceBlock>
+        <ServiceBlock level={3} image={werkstatt} alt="Roter Messständer mit Messuhr" title="Werkstattservice aus Meisterhand">
+          <p>Alle Bikes &amp; alle Marken – Profitiere vom erstklassigen Bike-Service für alle Radtypen und Marken in unserer Meisterwerkstatt.</p>
+          <p>Wir bieten ein vielseitiges Leistungsspektrum: zuverlässige Inspektion, sichere Funktionskontrollen, erstklassigen Service, klassische Montage &amp; kurzfristige Reparatur.</p>
+        </ServiceBlock>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="leasing-title">
+    <div class="container narrow">
+      <h2 id="leasing-title">Dienstrad-Leasing</h2>
+      <p class="lead strong">Spare bis zu 40 % beim Fahrradkauf</p>
+      <h3>Dienstrad Beispielrechner</h3>
+      <Embed src="https://bike-leasing-calculator.jobrad.org" title="Dienstrad Beispielrechner" provider="JobRad" subject="Der Beispielrechner" label="Beispielrechner laden" ratio="app" openUrl="https://bike-leasing-calculator.jobrad.org" openLabel="Beispielrechner bei JobRad öffnen" />
+    </div>
+  </section>
+
+  <section class="section alt" aria-labelledby="werkstatt-title">
+    <div class="container narrow">
+      <h2 id="werkstatt-title">Service</h2>
+      <h3>Keine Lust auf lange Wartezeiten?</h3>
+      <p>Dann bist du bei uns genau richtig. Buche direkt einen freien Termin Online. Komm 15 Min vor Termin bei uns in den Laden und unsere Meister-Werkstatt kümmert sich um dein Rad, du kannst währenddessen bei einem Kaffee entspannen oder holst dein Rad zu einem späteren Zeitpunkt wieder ab.</p>
+      <p>Sollte aufgrund von unüblichen Fehlern bzw. mangels Ersatzteile eine reine Inspektion nicht möglich sein vereinbaren wir einen Folgetermin.</p>
+      <a class="btn" href="/termin-buchen/">Termin buchen</a>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="canyon-title">
+    <div class="container narrow">
+      <h2 id="canyon-title">Canyon Collect&amp;Ride</h2>
+      <p class="lead strong">Wir sind autorisierter Servicepartner / Collect &amp; Ride Partner von Canyon.</p>
+      <p>Beim Bestellprozess auf der Canyonwebseite kannst du uns als Partner auswählen. Wir nehmen dein neues Rad entgegen und bauen es professionell für dich auf!</p>
+      <h3>Canyon Service</h3>
+      <p>Falls du ein Problem mit deinem Canyon hast, buche am besten einen Termin über unser Termintool.</p>
+      <p>Ob Garantiefall oder Wartung, wir kümmern uns um dein Bike!</p>
+      <p>Kleine Reparaturen innerhalb der Garantie erledigen wir in der Regel sofort.</p>
+      <p>Sollte das nicht möglich sein besprechen wir den weiteren Ablauf vor Ort.</p>
+      <a class="btn" href="/termin-buchen/">Termin buchen</a>
+    </div>
+  </section>
+
+  <section class="section alt" aria-labelledby="blog-title">
+    <div class="container">
+      <h2 id="blog-title">Mehr dazu im Blog</h2>
+      <ul class="posts">
+        {related.map((p) => <li><PostCard post={p} level={3} /></li>)}
+      </ul>
+      <p class="where">Alle Standorte mit Adresse und Öffnungszeiten: <a href="/ueber-uns/">Über uns</a>.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro { padding-block: var(--space-6) var(--space-6); }
+  .lead { font-size: 1.15rem; color: var(--ink-muted); max-width: 62ch; }
+  .lead.strong { font-weight: 700; color: var(--ink); }
+  .alt { background: var(--surface); border-block: 1px solid var(--line); }
+  .blocks { display: grid; gap: var(--space-7); }
+  .posts { list-style: none; padding: 0; margin: var(--space-4) 0; display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+  .where { margin: 0; }
+  .narrow > :global(*) { max-width: 52rem; }
+  .narrow :global(.btn) { margin-top: var(--space-2); }
+</style>
