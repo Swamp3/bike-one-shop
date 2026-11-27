@@ -74,7 +74,7 @@ npm test
 
 ## Hosting
 - Target: Cloudflare Pages, static output. Headers in `public/_headers` (one `/*` rule: security headers, a CSP without third parties, `frame-src`
-  only the three embed hosts, and the `Speculation-Rules` header that names `/speculation-rules.json`; cache rules for `/_astro/*`, the icons and the rules
+  only the three embed hosts, and the `Speculation-Rules` header that names `/speculation-rules.json`; cache rules for `/_astro/*`, the icons, the film files and the rules
   file). Launch steps: `docs/LAUNCH.md`.
 
 ## Files

@@ -5,7 +5,7 @@
 //  - X-Robots-Tag: noindex for https://bike-one.dev/* and https://*.pages.dev/*
 //  - speculation rules: the /* rule names /speculation-rules.json (Speculation-Rules header), the file is typed
 //    application/speculationrules+json and holds prefetch rules only: conservative, same-origin paths, no host, no prerender
-//  - caching: /_astro/* immutable for a year (hashed files), the two unhashed icons one day
+//  - caching: /_astro/* immutable for a year (hashed files), the unhashed icons and hero film files one day
 //  - Cloudflare limits: _headers 100 rules, _redirects 2000 static and 100 dynamic rules, lines under 1000 characters
 //  - no http:// URL in any text file of dist/ (other than XML namespaces): no mixed content
 import fs from 'node:fs';
@@ -59,7 +59,7 @@ export function run() {
   } catch (error) { problems.push(`speculation-rules.json: ${error.message}`); }
   for (const host of ['https://bike-one.dev/*', 'https://*.pages.dev/*']) if (rules.find((r) => r.path === host)?.headers['x-robots-tag'] !== 'noindex') problems.push(`${host} has no X-Robots-Tag: noindex`);
   if (rules.find((r) => r.path === '/_astro/*')?.headers['cache-control'] !== 'public, max-age=31536000, immutable') problems.push('/_astro/* is not immutable');
-  for (const icon of ['/favicon.ico', '/apple-touch-icon.png']) if (rules.find((r) => r.path === icon)?.headers['cache-control'] !== 'public, max-age=86400') problems.push(`${icon} is not cached for one day`);
+  for (const file of ['/favicon.ico', '/apple-touch-icon.png', '/hero.webm', '/hero.mp4']) if (rules.find((r) => r.path === file)?.headers['cache-control'] !== 'public, max-age=86400') problems.push(`${file} is not cached for one day`);
 
   const redirects = fs.readFileSync(path.join(DIST, '_redirects'), 'utf8').split('\n').filter((l) => l.trim() && !l.startsWith('#'));
   const dynamic = redirects.filter((l) => /[*:]/.test(l.split(/\s+/)[0]) ).length;

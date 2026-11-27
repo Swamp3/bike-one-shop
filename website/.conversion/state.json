@@ -798,6 +798,15 @@
       "reason": "owner: re-tune the shade if needed; the eyebrow came within 0.2 of the 4.5:1 limit on a bright window frame",
       "costIfWrong": "the picture is slightly darker in the upper middle",
       "date": "2026-11-27"
+    },
+    {
+      "id": "d85",
+      "topic": "hero film files cached for one day",
+      "choice": "public/_headers: /hero.webm and /hero.mp4 get Cache-Control: public, max-age=86400 (they sit in public/, so they are not hashed and not immutable); the headers check asserts both rules together with the icons",
+      "default": "the Pages default (a conditional request per visit)",
+      "reason": "a returning visitor should not download or even revalidate 0.5 MiB on every page view; a re-encode takes up to a day to reach a returning visitor",
+      "costIfWrong": "a replaced film is served from the browser cache for up to a day; rename the files to bust it",
+      "date": "2026-11-27"
     }
   ],
   "counts": {},
